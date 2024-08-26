@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Inter_Medium";
+  src: url("./assets/fonts/Inter-Medium.ttf");
+}
+
+body {
+  color: #101828;
+  font-family: "Inter_Medium";
+}
