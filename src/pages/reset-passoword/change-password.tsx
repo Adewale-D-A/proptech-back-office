@@ -52,12 +52,10 @@ export default function ChangePassword() {
 
   return (
     <>
-      <main className=" w-full h-screen flex flex-col justify-center items-center">
+      <div className="w-full max-w-md flex flex-col gap-10">
+        {" "}
         <div className="w-full max-w-md flex flex-col items-center gap-5  px-5 md:px-10">
-          <Link to="/">
-            <img src="/logo512.png" alt="jamb logo" className="w-28 h-auto" />
-          </Link>
-          <h1 className=" text-2xl text-primary_green-500 text-center">
+          <h1 className=" text-2xl text-primary text-center">
             Change Password
           </h1>
           <form
@@ -88,7 +86,7 @@ export default function ChangePassword() {
             />
           </form>
         </div>
-      </main>
+      </div>
       <SuccessPasswordChange
         openModal={openSuccess}
         setOpenModal={setOpenSuccess}

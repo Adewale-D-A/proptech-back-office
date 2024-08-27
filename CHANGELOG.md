@@ -1,3 +1,10 @@
+##### 27.08.2024
+
+> Layout responsiveness for web and mobile setup
+> Layout completion
+> Login screen development
+> Forgot password screen development
+
 ##### 26.08.2024
 
 > App route setup

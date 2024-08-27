@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 // import useAxios from "../../hooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import Logo from "../../components/logo";
 
 export default function ResetPassword() {
   // const axios = useAxios();
@@ -75,14 +76,9 @@ export default function ResetPassword() {
   );
 
   return (
-    <main className=" w-full h-screen flex flex-col justify-center items-center">
+    <div className="w-full max-w-md flex flex-col gap-10">
       <div className="w-full max-w-md flex flex-col items-center gap-5  px-5 md:px-10">
-        <Link to="/">
-          <img src="/logo512.png" alt="jamb logo" className="w-28 h-auto" />
-        </Link>
-        <h1 className=" text-2xl text-primary_green-500 text-center">
-          Reset Password
-        </h1>
+        <h1 className=" text-2xl text-primary">Reset Password</h1>
         <form onSubmit={sendOtp} className="flex flex-col items-center gap-5  ">
           <TextInput
             value={email}
@@ -124,6 +120,6 @@ export default function ResetPassword() {
           </form>
         </div>
       )}
-    </main>
+    </div>
   );
 }

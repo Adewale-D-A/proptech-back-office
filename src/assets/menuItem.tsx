@@ -1,5 +1,16 @@
 import { Link, NavLink } from "react-router-dom";
 import { useAppSelector } from "../stores/hooks";
+import MenuIcon from "./icons/menu";
+import BuildingIcon from "./icons/building";
+import CalendarIcon from "./icons/calendar";
+import AdditionIcon from "./icons/addtion";
+import UsersIcon from "./icons/users";
+import ReceiptIcon from "./icons/receipt";
+import PercentageIcon from "./icons/percentage";
+import ChatIcon from "./icons/chat";
+import DocumentIcon from "./icons/document";
+import ClipBoardIcon from "./icons/clipboard";
+import NotificationIcon from "./icons/notification";
 
 export default function NavigationMenuItems() {
   const { data } = useAppSelector((state) => state.userProfile.value);
@@ -17,26 +28,11 @@ export default function NavigationMenuItems() {
       {[
         {
           id: 1,
-          url: "/dashboard",
-          label: "Dashboard",
-          value: "Dashboard",
+          url: "/dashboard-overview",
+          label: "Dashboard Overview",
+          value: "dashboard-overview",
           show: true,
-          icon: (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"
-              />
-            </svg>
-          ),
+          icon: <MenuIcon />,
           hasSubMenu: false,
           subMenu: [
             {
@@ -50,27 +46,183 @@ export default function NavigationMenuItems() {
           ],
         },
         {
-          id: 15,
-          url: "/settings",
-          label: "Settings",
-          value: "settings",
+          id: 2,
+          url: "/apartments",
+          label: "Apartments",
+          value: "apartments",
           show: true,
-          icon: (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"
-              />
-            </svg>
-          ),
+          icon: <BuildingIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 3,
+          url: "/bookings",
+          label: "Bookings",
+          value: "bookings",
+          show: true,
+          icon: <CalendarIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 4,
+          url: "/additional-services",
+          label: "Additional Services",
+          value: "additional services",
+          show: true,
+          icon: <AdditionIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 5,
+          url: "/customers",
+          label: "Customers",
+          value: "customers",
+          show: true,
+          icon: <UsersIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 6,
+          url: "/pricing",
+          label: "Pricing",
+          value: "pricing",
+          show: true,
+          icon: <ReceiptIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 7,
+          url: "/plans-and-promotions",
+          label: "Plans & Promotions",
+          value: "plands-and-promotions",
+          show: true,
+          icon: <PercentageIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 8,
+          url: "/chat",
+          label: "Chat",
+          value: "chat",
+          show: true,
+          icon: <ChatIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 9,
+          url: "/invoices",
+          label: "Invoices",
+          value: "invoices",
+          show: true,
+          icon: <DocumentIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 10,
+          url: "/reports",
+          label: "Reports",
+          value: "reports",
+          show: true,
+          icon: <ClipBoardIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 11,
+          url: "/notification",
+          label: "Notification",
+          value: "notification",
+          show: true,
+          icon: <NotificationIcon />,
           hasSubMenu: false,
           subMenu: [
             {
@@ -86,13 +238,13 @@ export default function NavigationMenuItems() {
       ]?.map((items) => {
         if (items?.show) {
           return (
-            <div key={items?.id} className="w-full group">
+            <div key={items?.id} className="w-full group text-white">
               <NavLink
                 to={items?.url}
                 className={({ isActive }) =>
                   isActive
-                    ? `flex justify-between bg-primary_green-500 text-white rounded-xl w-full p-2 md:p-3 hover:border hover:border-primary_green-500 hover:bg-transparent hover:text-primary_green-500 transition-all`
-                    : "flex justify-between text-gray-500 rounded-xl w-full p-2 md:p-3 hover:bg-primary_green-500 hover:text-white transition-all"
+                    ? `flex justify-between   w-full p-2 md:p-3 transition-all bg-white/15 border-l-4`
+                    : "flex justify-between w-full p-2 md:p-3 transition-all hover:bg-white/15 hover:border-l-4"
                 }
               >
                 <div className="flex items-center gap-4">
@@ -124,7 +276,7 @@ export default function NavigationMenuItems() {
                         <Link
                           to={subItem?.url}
                           key={subItem?.id}
-                          className=" text-gray-500 group-hover:flex hidden hover:text-primary_green-500"
+                          className=" text-gray-500 group-hover:flex hidden hover:text-primary"
                         >
                           <div className="flex items-center">
                             {subItem?.icon}{" "}

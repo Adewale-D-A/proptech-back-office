@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAppSelector } from "../stores/hooks";
+import OnboardingLayout from "../layouts/onboardingLayout";
 
 export default function RedirectHome() {
   const { status } = useAppSelector((state) => state.userProfile.value);
@@ -12,7 +13,9 @@ export default function RedirectHome() {
       {status && authenticated ? (
         <Navigate to={`/dashboard`} replace />
       ) : (
-        <Outlet />
+        <OnboardingLayout>
+          <Outlet />
+        </OnboardingLayout>
       )}
     </>
   );

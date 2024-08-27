@@ -77,7 +77,7 @@ const SuccessPasswordChange = ({
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        className="w-24 h-24 text-primary_green-500"
+                        className="w-24 h-24 text-primary"
                       >
                         <path
                           fillRule="evenodd"
@@ -95,7 +95,7 @@ const SuccessPasswordChange = ({
                       </p>
                       <Link
                         to="/"
-                        className=" text-primary_green-500 p-2 px-4 text-lg font-semibold rounded-md bg-white border-2 border-gray-300 hover:bg-primary_green-500 hover:text-white  transition-all"
+                        className=" text-primary p-2 px-4 text-lg font-semibold rounded-md bg-white border-2 border-gray-300 hover:bg-primary hover:text-white  transition-all"
                       >
                         Login
                       </Link>

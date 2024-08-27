@@ -9,8 +9,18 @@ import { useAppSelector } from "./stores/hooks";
 import Unauthorised from "./pages/unauthorised";
 import AlertModal from "./components/infoModal";
 import RedirectHome from "./routeProtectors/redirectHome";
-import Dashboard from "./pages/dashboard";
 import PersistLogin from "./routeProtectors/persistLogin";
+import Notification from "./pages/notification";
+import Reports from "./pages/reports";
+import Invoices from "./pages/invoices";
+import Chat from "./pages/chat";
+import PlansAndPromotions from "./pages/plans-and-promotions";
+import Pricing from "./pages/pricing";
+import Customers from "./pages/customers";
+import AdditionalServices from "./pages/additional-services";
+import Bookings from "./pages/bookings";
+import Apartments from "./pages/apartments";
+import DashboardOverview from "./pages/dashboard-overview";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -30,7 +40,23 @@ function App() {
             />
           </Route>
           <Route element={<PersistLogin />}>
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard-overview" element={<DashboardOverview />} />
+            <Route path="/apartments" element={<Apartments />} />
+            <Route path="/bookings" element={<Bookings />} />
+            <Route
+              path="/additional-services"
+              element={<AdditionalServices />}
+            />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route
+              path="/plans-and-promotions"
+              element={<PlansAndPromotions />}
+            />
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/invoices" element={<Invoices />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/notification" element={<Notification />} />
           </Route>
         </Routes>
       </BrowserRouter>

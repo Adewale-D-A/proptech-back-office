@@ -19,7 +19,7 @@ const breadCrumb = [
     ),
   },
 ];
-function Dashboard() {
+export default function DashboardOverview() {
   const dispatch = useAppDispatch();
 
   const { data: userProfile } = useAppSelector(
@@ -43,14 +43,10 @@ function Dashboard() {
   }, []);
 
   return (
-    <main className="w-full">
-      <section className="w-full flex flex-col gap-10 items-center justify-center">
-        <div className="max-w-screen-2xl w-full px-5 md:px-10 h-full">
-          <h2 className=" text-2xl font-semibold">Dashboard</h2>
-        </div>
-      </section>
-    </main>
+    <section className="w-full flex flex-col gap-10 items-center justify-center">
+      <div className="w-full">
+        <h2 className=" text-2xl">Dashboard</h2>
+      </div>
+    </section>
   );
 }
-
-export default Dashboard;

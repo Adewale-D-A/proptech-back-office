@@ -78,7 +78,7 @@ export default function OTPInput({ setOtpCode }: { setOtpCode: Function }) {
               handleOtpInput(e);
             }}
             required
-            className="block w-full p-3 text-2xl text-gray-900 border-b border-primary_green-500 bg-gray-50 focus:ring-[#17594F] focus:border-[#17594F]"
+            className="block w-full p-3 text-2xl text-gray-900 border-b border-primary bg-gray-50 focus:ring-[#17594F] focus:border-[#17594F]"
           />
         );
       })}
