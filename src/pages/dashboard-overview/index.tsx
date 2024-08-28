@@ -7,6 +7,8 @@ import CalendarIcon from "../../assets/icons/calendar";
 import UsersIcon from "../../assets/icons/users";
 import UserPlusIcon from "../../assets/icons/user-plus";
 import DashboardCard from "../../components/cards/dashboard-cards";
+import BarChart from "../../components/charts/bar-chart";
+import { DoughnutChart } from "../../components/charts/doughnut";
 
 const breadCrumb = [
   {
@@ -51,6 +53,7 @@ export default function DashboardOverview() {
   return (
     <section className="w-full flex flex-col gap-10">
       <h2 className=" text-2xl font-semibold">Services Breakdown</h2>
+      {/* sales breakdown cards */}
       <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           {
@@ -96,6 +99,133 @@ export default function DashboardOverview() {
             urlLabel={item?.url?.label}
           />
         ))}
+      </div>
+      {/* sales analytics */}
+
+      <div className="h-full w-full rounded-lg border">
+        <div className=" w-full border-b p-4">
+          <h2 className="text-lg font-semibold">Sales Analytics</h2>
+        </div>
+        <div className=" border p-5 rounded-md m-5">
+          <BarChart
+            data={{
+              labels: [
+                "JAN",
+                "FEB",
+                "MAR",
+                "APR",
+                "MAY",
+                "JUN",
+                "JUL",
+                "AUG",
+                "SEP",
+                "OCT",
+                "NOV",
+                "DEC",
+              ],
+              datasets: [
+                {
+                  label: "Sales Analytics",
+                  data: [1.5, 1.9, 2.5, 3.5, 4.5, 4.5, 6.6, 7.5, 0, 0, 0, 0, 0],
+                  backgroundColor: "#2E4393",
+                  indexAxis: "x",
+                  borderRadius: 50,
+                },
+              ],
+            }}
+          />
+        </div>
+      </div>
+
+      {/* top countries and sales channel */}
+      <div className=" w-full flex gap-5 flex-col md:flex-row items-stretch">
+        <div className="w-full  flex-1 md:flex-[0.6] rounded-lg border">
+          <div className=" w-full border-b p-4">
+            <h2 className="text-lg font-semibold">Top Countries</h2>
+          </div>
+          <div className="p-5 m-5">
+            <BarChart
+              data={{
+                labels: [
+                  "582 | 🇳🇬 Nigeria",
+                  "482 | 🇺🇸 United States",
+                  "402 | 🇬🇧 Unted Kingdom",
+                  "350 | 🇨🇦 Canada",
+                  "350 | 🇦🇺 Australia",
+                ],
+                datasets: [
+                  {
+                    label: "Top Countries",
+                    data: [582, 482, 402, 350, 350],
+                    backgroundColor: "#2E4393",
+                    indexAxis: "y",
+                    borderRadius: 50,
+                  },
+                ],
+              }}
+            />
+          </div>
+        </div>
+
+        <div className=" w-full flex-1 md:flex-[0.4] rounded-lg border">
+          <div className=" w-full border-b p-4">
+            <h2 className="text-lg font-semibold">Sales Channel</h2>
+          </div>
+          <div className="p-5 m-5">
+            <DoughnutChart
+              data={{
+                labels: ["Website/IBE", "OTA Commission"],
+                datasets: [
+                  {
+                    label: "",
+                    data: [30, 70],
+                    backgroundColor: ["#FFA500", "#2E4393"],
+                  },
+                ],
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Total  */}
+      <div className="w-full">
+        <div className=" w-full my-3">
+          <h2 className="text-lg font-semibold">Totals</h2>
+        </div>
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            {
+              id: 2,
+              icon: <CalendarIcon className="w-5 h-5" />,
+              label: "Total Gross Income",
+              value: "N419,585,309.78",
+              theme: "text-[#35BD29] bg-[#35BD29]/20",
+            },
+            {
+              id: 3,
+              icon: <UserPlusIcon className="w-5 h-5" />,
+              label: "Total After Commissions",
+              value: "N419,585,309.78",
+              theme: "text-[#017EFF] bg-[#017EFF]/20",
+            },
+            {
+              id: 4,
+              icon: <UsersIcon className="w-5 h-5" />,
+              label: "Total Net Income",
+              value: "N419,585,309.79 Guests",
+              theme: "text-[#7C0DBE] bg-[#7C0DBE]/20",
+            },
+          ].map((item) => (
+            <DashboardCard
+              key={item?.id}
+              theme={item.theme}
+              icon={item?.icon}
+              label={item?.label}
+              value={item?.value}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -1,5 +1,6 @@
 ##### 28.08.2024
 
+> Dashboard Charts intergrations
 > Dashboard card component development
 
 ##### 27.08.2024
