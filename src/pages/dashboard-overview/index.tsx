@@ -213,7 +213,7 @@ export default function DashboardOverview() {
               id: 4,
               icon: <UsersIcon className="w-5 h-5" />,
               label: "Total Net Income",
-              value: "N419,585,309.79 Guests",
+              value: "N419,585,309.79",
               theme: "text-[#7C0DBE] bg-[#7C0DBE]/20",
             },
           ].map((item) => (
