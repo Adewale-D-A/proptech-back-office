@@ -2,6 +2,12 @@ import { useLayoutEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { updatePageProperties } from "../../stores/appFunctionality/pageProperties";
 
+import BuildingIcon from "../../assets/icons/building";
+import CalendarIcon from "../../assets/icons/calendar";
+import UsersIcon from "../../assets/icons/users";
+import UserPlusIcon from "../../assets/icons/user-plus";
+import DashboardCard from "../../components/cards/dashboard-cards";
+
 const breadCrumb = [
   {
     url: "#",
@@ -43,9 +49,53 @@ export default function DashboardOverview() {
   }, []);
 
   return (
-    <section className="w-full flex flex-col gap-10 items-center justify-center">
-      <div className="w-full">
-        <h2 className=" text-2xl">Dashboard</h2>
+    <section className="w-full flex flex-col gap-10">
+      <h2 className=" text-2xl font-semibold">Services Breakdown</h2>
+      <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          {
+            id: 1,
+            icon: <BuildingIcon className="w-5 h-5" />,
+            label: "Number of Apartment",
+            value: "200",
+            theme: "text-[#26397B] bg-[#26397B]/20",
+            url: { src: "#", label: "View Apartment" },
+          },
+          {
+            id: 2,
+            icon: <CalendarIcon className="w-5 h-5" />,
+            label: "Total Bookings",
+            value: "50 Bookings",
+            theme: "text-[#35BD29] bg-[#35BD29]/20",
+            url: { src: "#", label: "View Bookings" },
+          },
+          {
+            id: 3,
+            icon: <UserPlusIcon className="w-5 h-5" />,
+            label: "Additional Requests",
+            value: "50 Requests",
+            theme: "text-[#017EFF] bg-[#017EFF]/20",
+            url: { src: "#", label: "View Requests" },
+          },
+          {
+            id: 4,
+            icon: <UsersIcon className="w-5 h-5" />,
+            label: "Number of Guests",
+            value: "500 Guests",
+            theme: "text-[#7C0DBE] bg-[#7C0DBE]/20",
+            url: { src: "#", label: "View Users" },
+          },
+        ].map((item) => (
+          <DashboardCard
+            key={item?.id}
+            theme={item.theme}
+            icon={item?.icon}
+            label={item?.label}
+            value={item?.value}
+            urlSrc={item?.url.src}
+            urlLabel={item?.url?.label}
+          />
+        ))}
       </div>
     </section>
   );

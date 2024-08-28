@@ -1,3 +1,7 @@
+##### 28.08.2024
+
+> Dashboard card component development
+
 ##### 27.08.2024
 
 > Layout responsiveness for web and mobile setup

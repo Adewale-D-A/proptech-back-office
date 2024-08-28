@@ -19,15 +19,6 @@ export const pageProperties = createSlice({
   },
   reducers: {
     updatePageProperties: (state, action) => {
-      //   const {
-      //     breadCrumb,
-      //     pageTitle,
-      //     pageDescription,
-      //     isLoading,
-      //     failedToLoad,
-      //     setFailedToLoad,
-      //     retryRequest,
-      //   } = action?.payload;
       state.value = action?.payload;
     },
   },
