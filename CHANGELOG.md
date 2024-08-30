@@ -7,6 +7,7 @@
 > Tab component development
 > Dashboards UI completion
 > Apartments UI first tab completion (continuation of screen development)
+> Apartment Flow UI updates (continuation still)
 
 ##### 28.08.2024
 

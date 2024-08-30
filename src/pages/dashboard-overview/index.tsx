@@ -10,7 +10,7 @@ import DashboardCard from "../../components/cards/dashboard-cards";
 import BarChart from "../../components/charts/bar-chart";
 import { DoughnutChart } from "../../components/charts/doughnut";
 import ApartmentTable from "../../components/tables/apartments";
-import Filter from "../../components/filter";
+import Filter from "../../components/filterAndSort";
 import MenuIcon from "../../assets/icons/menu";
 
 const breadCrumb = [
@@ -94,7 +94,7 @@ export default function DashboardOverview() {
         <div className="w-full rounded-lg border">
           <div className=" w-full border-b p-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold">Sales Analytics</h2>
-            <Filter />
+            <Filter sortId="top-apartment" sortLabel="Sort by:" />
           </div>
           <div className=" p-5 md:p-10">
             <div className=" border p-5 rounded-md h-full w-full flex justify-center">
@@ -258,7 +258,7 @@ export default function DashboardOverview() {
               pricePerNight: "N 150,000",
               lastBooking: "29 August, 2024 12:00 AM",
               totalBookings: "15",
-              availabilityStatus: "Occupied",
+              availabilityStatus: "Not Available",
             },
           ]}
           title="Top Apartments"
