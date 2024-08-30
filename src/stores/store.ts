@@ -7,6 +7,11 @@ import networkStatus from "./appFunctionality/networkError";
 import pageProperties from "./appFunctionality/pageProperties";
 //app functionality
 
+// inApp Data interactions
+
+import assignCustomer from "./inAppDataInterations/assignCustomer";
+// inApp Data interactions
+
 //user profile
 import profile from "./authUser/profile";
 import userAuthentication from "./authUser/auth";
@@ -19,6 +24,11 @@ export const adminStore = () => {
       menuFunctions: navMenuFunctions,
       snackbar: snackBar,
       networkStatus: networkStatus,
+
+      // inApp Data interactions
+      assignCustomer: assignCustomer,
+      // inApp Data interactions
+
       //user
       userProfile: profile,
       userAuthentication: userAuthentication,

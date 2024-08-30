@@ -30,7 +30,7 @@ const Select: React.FC<Props> = ({
         value={value}
         required={isRequired}
         onChange={(e) => setValue(e.target.value)}
-        className="w-full p-4 mt-3 rounded-[4px] border border-gray-300 bg-gray-200/15 sm:text-md focus:ring-[#17594F] focus:border-[#17594F]"
+        className="w-full p-3 rounded-[4px] border bg-gray-200/15 sm:text-md focus:ring-[#17594F] focus:border-[#17594F]"
       >
         {children}
       </select>

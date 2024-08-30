@@ -1,7 +1,7 @@
 import { SyntheticEvent, useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import TextInput from "../../components/textInput";
-import Password from "../../components/password";
+import TextInput from "../../components/inputs/textInput";
+import Password from "../../components/inputs/password";
 import LoadingButton from "../../components/button";
 // import useAxios from "../../hooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";

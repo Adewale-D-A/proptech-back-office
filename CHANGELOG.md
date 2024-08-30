@@ -1,3 +1,13 @@
+##### 30.08.2024
+
+> Tables components completion
+> Quick reservation modal development
+> Assign customer modal development
+> Calculate rate modal development
+> Tab component development
+> Dashboards UI completion
+> Apartments UI first tab completion (continuation of screen development)
+
 ##### 28.08.2024
 
 > Dashboard Charts intergrations

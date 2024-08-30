@@ -23,6 +23,18 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 //     },
 //   ],
 // };
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "bottom" as const,
+    },
+    title: {
+      display: false,
+      text: "",
+    },
+  },
+};
 
 export function DoughnutChart({
   data,
@@ -36,5 +48,5 @@ export function DoughnutChart({
     }[];
   };
 }) {
-  return <Doughnut data={data} />;
+  return <Doughnut options={options} data={data} />;
 }

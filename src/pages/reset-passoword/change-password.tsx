@@ -5,7 +5,7 @@ import SuccessPasswordChange from "./successPasswordChange";
 import { useAppDispatch } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 // import useAxios from "../../hooks/useAxios";
-import Password from "../../components/password";
+import Password from "../../components/inputs/password";
 
 export default function ChangePassword() {
   // const axios = useAxios();

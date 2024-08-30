@@ -244,10 +244,14 @@ export default function NavigationMenuItems() {
                 className={({ isActive }) =>
                   isActive
                     ? `flex justify-between   w-full p-2 md:p-3 transition-all bg-white/15 border-l-4`
-                    : "flex justify-between w-full p-2 md:p-3 transition-all hover:bg-white/15 hover:border-l-4"
+                    : `flex justify-between w-full p-2 md:p-3 transition-all hover:bg-white/15 hover:border-l-4`
                 }
               >
-                <div className="flex items-center gap-4">
+                <div
+                  className={`flex items-center gap-4 ${
+                    fullView ? "" : "w-full justify-center"
+                  }`}
+                >
                   {items?.icon}{" "}
                   {fullView && <span className=" ">{items?.label}</span>}{" "}
                 </div>

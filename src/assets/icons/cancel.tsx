@@ -1,4 +1,4 @@
-export default function NextArrowIcon({ className }: { className?: string }) {
+export default function CancelIcon({ className }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,7 +11,7 @@ export default function NextArrowIcon({ className }: { className?: string }) {
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
-        d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
+        d="M6 18 18 6M6 6l12 12"
       />
     </svg>
   );

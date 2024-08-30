@@ -1,4 +1,6 @@
 import { ChangeEvent } from "react";
+import CalendarIcon from "../../../assets/icons/calendar";
+import TimeIcon from "../../../assets/icons/time";
 
 interface Props {
   value: string;
@@ -11,7 +13,7 @@ interface Props {
   readonly?: boolean;
 }
 
-function TextInput({
+export default function TimeInput({
   value,
   setValue,
   inputType,
@@ -25,12 +27,7 @@ function TextInput({
     setValue(e.target.value);
   };
   return (
-    <div className="w-full">
-      {label && (
-        <label htmlFor={id} className=" font-medium">
-          {label}
-        </label>
-      )}
+    <div className="w-full group border rounded-md bg-gray-200/15">
       <input
         id={id}
         readOnly={readonly}
@@ -39,10 +36,19 @@ function TextInput({
         value={value}
         onChange={(e: ChangeEvent<HTMLInputElement>) => handleInput(e)}
         type={inputType}
-        className="w-full p-4 rounded-[4px] mt-3 border border-gray-300 bg-gray-200/15 focus:ring-[#17594F] focus:border-[#17594F]"
+        className={`w-full date-input group-hover:block focus:block ${
+          value ? "block" : "hidden"
+        }  p-3 focus:ring-[#17594F] focus:border-[#17594F]`}
       />
+      {!value && (
+        <label
+          htmlFor={id}
+          className=" group-hover:hidden  p-3 label-input flex w-full justify-between items-center "
+        >
+          <span>{label}</span>
+          <TimeIcon className={`h-6 w-6`} />
+        </label>
+      )}
     </div>
   );
 }
-
-export default TextInput;

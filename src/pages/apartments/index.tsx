@@ -1,32 +1,22 @@
-import { useLayoutEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../stores/hooks";
+import { useLayoutEffect } from "react";
+import { useAppDispatch } from "../../stores/hooks";
 import { updatePageProperties } from "../../stores/appFunctionality/pageProperties";
+import ApartmentTable from "../../components/tables/apartments";
+import BuildingIcon from "../../assets/icons/building";
+import TabView from "../../components/tab";
+import AdjustmentIcon from "../../assets/icons/adjustment";
+import AmenitiesIcon from "../../assets/icons/amenities";
+import ExtraOptionsIcon from "../../assets/icons/extra-options";
 
 const breadCrumb = [
   {
     url: "#",
-    label: "Dashboard",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        className="w-3 h-3"
-      >
-        <path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />
-        <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
-      </svg>
-    ),
+    label: "Apartments",
+    icon: <BuildingIcon />,
   },
 ];
 export default function Apartments() {
   const dispatch = useAppDispatch();
-
-  const { data: userProfile } = useAppSelector(
-    (state) => state.userProfile.value
-  );
-  const [openNewRequestModal, setOpenNewRequestModal] = useState(false);
-
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
@@ -43,9 +33,87 @@ export default function Apartments() {
   }, []);
 
   return (
-    <section className="w-full flex flex-col gap-10 items-center justify-center">
-      <div className="w-full">
-        <h2 className=" text-2xl">Apartment</h2>
+    <section className="w-full flex flex-col items-center">
+      <div className="w-full max-w-screen-xl flex flex-col gap-10">
+        <div>
+          <TabView
+            header={[
+              { id: 1, icon: <BuildingIcon />, label: "Apartment List" },
+              { id: 2, icon: <AdjustmentIcon />, label: "Room Options" },
+              { id: 3, icon: <AmenitiesIcon />, label: "Amenities" },
+              { id: 4, icon: <ExtraOptionsIcon />, label: "Extra Options" },
+            ]}
+            content={[
+              {
+                id: 1,
+                data: (
+                  <ApartmentTable
+                    title="Apartment List"
+                    header={[
+                      "S/N",
+                      "Apartment Info",
+                      "Price per Night",
+                      "Last Booking",
+                      "Total Bookings",
+                      "Availability Status",
+                      "Action",
+                    ]}
+                    data={[
+                      {
+                        id: 1,
+                        apartmentInfo: {
+                          name: "Sunshine -3 Bedroom",
+                          image: "/logo_blue.png",
+                          location: "Lekki Phase II",
+                        },
+                        pricePerNight: "N 100,000",
+                        lastBooking: "28 Mar, 2014 5:33 AM",
+                        totalBookings: "10",
+                        availabilityStatus: "Available",
+                      },
+                      {
+                        id: 2,
+                        apartmentInfo: {
+                          name: "Moonlight - 1 Bedroom",
+                          image: "/logo_blue.png",
+                          location: "Surulere axis",
+                        },
+                        pricePerNight: "N 150,000",
+                        lastBooking: "29 August, 2024 12:00 AM",
+                        totalBookings: "15",
+                        availabilityStatus: "Occupied",
+                      },
+                    ]}
+                  />
+                ),
+              },
+              {
+                id: 2,
+                data: (
+                  <div>
+                    <h1>Room Options</h1>
+                  </div>
+                ),
+              },
+              {
+                id: 3,
+                data: (
+                  <div>
+                    <h1>Amenities</h1>
+                  </div>
+                ),
+              },
+              {
+                id: 4,
+                data: (
+                  <div>
+                    <h1>Extra Options</h1>
+                  </div>
+                ),
+              },
+            ]}
+          />
+        </div>
       </div>
     </section>
   );

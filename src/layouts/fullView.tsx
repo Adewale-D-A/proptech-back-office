@@ -19,7 +19,6 @@ function FullMenuView() {
   const fullView = useAppSelector(
     (state) => state?.menuFunctions?.value?.fullMenuView
   );
-  const { data } = useAppSelector((state) => state.userProfile.value);
 
   //toggle side bar menu using redux dispatcher
   const toggleMenu = useCallback(() => {
@@ -40,7 +39,7 @@ function FullMenuView() {
   return (
     <div
       className={`flex h-screen overflow-y-auto bg-primary text-white flex-col justify-between gap-10 transition-all border-r border-gray-200 ${
-        fullView ? "w-[300px]" : "hidden md:w-24 md:flex"
+        fullView ? "w-[260px]" : "hidden md:w-20 md:flex"
       }`}
     >
       {/* nav items section */}
@@ -76,7 +75,9 @@ function FullMenuView() {
         type="button"
         onClick={() => logOut()}
         title="logout"
-        className={`w-full flex items-center gap-4 p-2 md:p-3 transition-all hover:bg-white/15 hover:border-l-4 my-5`}
+        className={`w-full flex items-center ${
+          fullView ? "" : " justify-center"
+        } gap-4 p-2 md:p-3 transition-all hover:bg-white/15 hover:border-l-4 my-5`}
       >
         <LogoutIcon />
         {fullView && <span className=" ">Log Out</span>}

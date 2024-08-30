@@ -1,11 +1,15 @@
 // import { useCallback } from "react";
 
+import { ReactNode, useCallback } from "react";
+
 interface Props {
   label: string;
   type: "button" | "submit" | "reset" | undefined;
   isLoading: boolean;
   disabled?: boolean;
-  // clickHandler?: Function;
+  clickHandler?: Function;
+  variant?: 1 | 2;
+  startIcon?: ReactNode;
 }
 
 export default function LoadingButton({
@@ -13,23 +17,28 @@ export default function LoadingButton({
   type,
   isLoading,
   disabled,
-}: // clickHandler,
-Props) {
-  // const handleClick = useCallback(() => {
-  //   if (clickHandler) {
-  //     clickHandler();
-  //   }
-  // }, []);
+  clickHandler,
+  variant = 1,
+  startIcon,
+}: Props) {
+  const handleClick = useCallback(() => {
+    if (clickHandler) {
+      clickHandler();
+    }
+  }, []);
   return (
     <button
       type={type}
       disabled={disabled}
-      className={
-        disabled
-          ? "w-full flex justify-center bg-gray-300 p-3 px-6 rounded-md text-white"
-          : "w-full flex justify-center  bg-primary text-white p-3 px-6 rounded-md hover:bg-transparent hover:border hover:border-primary transition-all hover:text-primary"
-      }
-      // onClick={() => handleClick()}
+      className={`w-full flex justify-center p-3 px-6 rounded-full transition-all  
+        ${
+          disabled
+            ? "bg-primary/30 text-white"
+            : variant === 2
+            ? " border hover:border-primary"
+            : "bg-primary hover:bg-transparent hover:border hover:border-primary  hover:text-primary text-white"
+        }`}
+      onClick={() => handleClick()}
     >
       {isLoading ? (
         <svg
@@ -45,7 +54,9 @@ Props) {
           />
         </svg>
       ) : (
-        label
+        <span className=" flex items-center gap-2">
+          {startIcon} {label}
+        </span>
       )}
     </button>
   );

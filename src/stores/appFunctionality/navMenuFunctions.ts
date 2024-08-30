@@ -4,7 +4,7 @@ export const navMenuFunctions = createSlice({
   name: "navigation menu functionality",
   initialState: {
     value: {
-      fullMenuView: false,
+      fullMenuView: true,
     },
   },
   reducers: {

@@ -1,5 +1,5 @@
-import { useLayoutEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../stores/hooks";
+import { useLayoutEffect } from "react";
+import { useAppDispatch } from "../../stores/hooks";
 import { updatePageProperties } from "../../stores/appFunctionality/pageProperties";
 
 import BuildingIcon from "../../assets/icons/building";
@@ -9,31 +9,19 @@ import UserPlusIcon from "../../assets/icons/user-plus";
 import DashboardCard from "../../components/cards/dashboard-cards";
 import BarChart from "../../components/charts/bar-chart";
 import { DoughnutChart } from "../../components/charts/doughnut";
+import ApartmentTable from "../../components/tables/apartments";
+import Filter from "../../components/filter";
+import MenuIcon from "../../assets/icons/menu";
 
 const breadCrumb = [
   {
     url: "#",
     label: "Dashboard",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        className="w-3 h-3"
-      >
-        <path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />
-        <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
-      </svg>
-    ),
+    icon: <MenuIcon />,
   },
 ];
 export default function DashboardOverview() {
   const dispatch = useAppDispatch();
-
-  const { data: userProfile } = useAppSelector(
-    (state) => state.userProfile.value
-  );
-  const [openNewRequestModal, setOpenNewRequestModal] = useState(false);
 
   // update page props on component mount
   useLayoutEffect(() => {
@@ -51,170 +39,43 @@ export default function DashboardOverview() {
   }, []);
 
   return (
-    <section className="w-full flex flex-col gap-10">
-      <h2 className=" text-2xl font-semibold">Services Breakdown</h2>
-      {/* sales breakdown cards */}
-      <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          {
-            id: 1,
-            icon: <BuildingIcon className="w-5 h-5" />,
-            label: "Number of Apartment",
-            value: "200",
-            theme: "text-[#26397B] bg-[#26397B]/20",
-            url: { src: "#", label: "View Apartment" },
-          },
-          {
-            id: 2,
-            icon: <CalendarIcon className="w-5 h-5" />,
-            label: "Total Bookings",
-            value: "50 Bookings",
-            theme: "text-[#35BD29] bg-[#35BD29]/20",
-            url: { src: "#", label: "View Bookings" },
-          },
-          {
-            id: 3,
-            icon: <UserPlusIcon className="w-5 h-5" />,
-            label: "Additional Requests",
-            value: "50 Requests",
-            theme: "text-[#017EFF] bg-[#017EFF]/20",
-            url: { src: "#", label: "View Requests" },
-          },
-          {
-            id: 4,
-            icon: <UsersIcon className="w-5 h-5" />,
-            label: "Number of Guests",
-            value: "500 Guests",
-            theme: "text-[#7C0DBE] bg-[#7C0DBE]/20",
-            url: { src: "#", label: "View Users" },
-          },
-        ].map((item) => (
-          <DashboardCard
-            key={item?.id}
-            theme={item.theme}
-            icon={item?.icon}
-            label={item?.label}
-            value={item?.value}
-            urlSrc={item?.url.src}
-            urlLabel={item?.url?.label}
-          />
-        ))}
-      </div>
-      {/* sales analytics */}
-
-      <div className="h-full w-full rounded-lg border">
-        <div className=" w-full border-b p-4">
-          <h2 className="text-lg font-semibold">Sales Analytics</h2>
-        </div>
-        <div className=" border p-5 rounded-md m-5">
-          <BarChart
-            data={{
-              labels: [
-                "JAN",
-                "FEB",
-                "MAR",
-                "APR",
-                "MAY",
-                "JUN",
-                "JUL",
-                "AUG",
-                "SEP",
-                "OCT",
-                "NOV",
-                "DEC",
-              ],
-              datasets: [
-                {
-                  label: "Sales Analytics",
-                  data: [1.5, 1.9, 2.5, 3.5, 4.5, 4.5, 6.6, 7.5, 0, 0, 0, 0, 0],
-                  backgroundColor: "#2E4393",
-                  indexAxis: "x",
-                  borderRadius: 50,
-                },
-              ],
-            }}
-          />
-        </div>
-      </div>
-
-      {/* top countries and sales channel */}
-      <div className=" w-full flex gap-5 flex-col md:flex-row items-stretch">
-        <div className="w-full  flex-1 md:flex-[0.6] rounded-lg border">
-          <div className=" w-full border-b p-4">
-            <h2 className="text-lg font-semibold">Top Countries</h2>
-          </div>
-          <div className="p-5 m-5">
-            <BarChart
-              data={{
-                labels: [
-                  "582 | 🇳🇬 Nigeria",
-                  "482 | 🇺🇸 United States",
-                  "402 | 🇬🇧 Unted Kingdom",
-                  "350 | 🇨🇦 Canada",
-                  "350 | 🇦🇺 Australia",
-                ],
-                datasets: [
-                  {
-                    label: "Top Countries",
-                    data: [582, 482, 402, 350, 350],
-                    backgroundColor: "#2E4393",
-                    indexAxis: "y",
-                    borderRadius: 50,
-                  },
-                ],
-              }}
-            />
-          </div>
-        </div>
-
-        <div className=" w-full flex-1 md:flex-[0.4] rounded-lg border">
-          <div className=" w-full border-b p-4">
-            <h2 className="text-lg font-semibold">Sales Channel</h2>
-          </div>
-          <div className="p-5 m-5">
-            <DoughnutChart
-              data={{
-                labels: ["Website/IBE", "OTA Commission"],
-                datasets: [
-                  {
-                    label: "",
-                    data: [30, 70],
-                    backgroundColor: ["#FFA500", "#2E4393"],
-                  },
-                ],
-              }}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Total  */}
-      <div className="w-full">
-        <div className=" w-full my-3">
-          <h2 className="text-lg font-semibold">Totals</h2>
-        </div>
-        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
+    <section className="w-full flex flex-col items-center">
+      <div className="w-full max-w-screen-xl flex flex-col gap-16">
+        <h2 className=" text-2xl font-semibold">Services Breakdown</h2>
+        {/* sales breakdown cards */}
+        <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {[
+            {
+              id: 1,
+              icon: <BuildingIcon className="w-5 h-5" />,
+              label: "Number of Apartment",
+              value: "200",
+              theme: "text-[#26397B] bg-[#26397B]/20",
+              url: { src: "#", label: "View Apartment" },
+            },
             {
               id: 2,
               icon: <CalendarIcon className="w-5 h-5" />,
-              label: "Total Gross Income",
-              value: "N419,585,309.78",
+              label: "Total Bookings",
+              value: "50 Bookings",
               theme: "text-[#35BD29] bg-[#35BD29]/20",
+              url: { src: "#", label: "View Bookings" },
             },
             {
               id: 3,
               icon: <UserPlusIcon className="w-5 h-5" />,
-              label: "Total After Commissions",
-              value: "N419,585,309.78",
+              label: "Additional Requests",
+              value: "50 Requests",
               theme: "text-[#017EFF] bg-[#017EFF]/20",
+              url: { src: "#", label: "View Requests" },
             },
             {
               id: 4,
               icon: <UsersIcon className="w-5 h-5" />,
-              label: "Total Net Income",
-              value: "N419,585,309.79",
+              label: "Number of Guests",
+              value: "500 Guests",
               theme: "text-[#7C0DBE] bg-[#7C0DBE]/20",
+              url: { src: "#", label: "View Users" },
             },
           ].map((item) => (
             <DashboardCard
@@ -223,9 +84,185 @@ export default function DashboardOverview() {
               icon={item?.icon}
               label={item?.label}
               value={item?.value}
+              urlSrc={item?.url.src}
+              urlLabel={item?.url?.label}
             />
           ))}
         </div>
+        {/* sales analytics */}
+
+        <div className="w-full rounded-lg border">
+          <div className=" w-full border-b p-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Sales Analytics</h2>
+            <Filter />
+          </div>
+          <div className=" p-5 md:p-10">
+            <div className=" border p-5 rounded-md h-full w-full flex justify-center">
+              <BarChart
+                data={{
+                  labels: [
+                    "JAN",
+                    "FEB",
+                    "MAR",
+                    "APR",
+                    "MAY",
+                    "JUN",
+                    "JUL",
+                    "AUG",
+                    "SEP",
+                    "OCT",
+                    "NOV",
+                    "DEC",
+                  ],
+                  datasets: [
+                    {
+                      label: "Sales Analytics",
+                      data: [
+                        1.5, 1.9, 2.5, 3.5, 4.5, 4.5, 6.6, 7.5, 0, 0, 0, 0, 0,
+                      ],
+                      backgroundColor: "#2E4393",
+                      indexAxis: "x",
+                      borderRadius: 50,
+                    },
+                  ],
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* top countries and sales channel */}
+        <div className=" w-full gap-5 grid grid-cols-1 lg:grid-cols-2">
+          <div className="w-full rounded-lg border">
+            <div className=" w-full border-b p-4">
+              <h2 className="text-lg font-semibold">Top Countries</h2>
+            </div>
+            <div className="w-full p-5 flex justify-center h-full">
+              <BarChart
+                data={{
+                  labels: [
+                    "582 | 🇳🇬 Nigeria",
+                    "482 | 🇺🇸 United States",
+                    "402 | 🇬🇧 Unted Kingdom",
+                    "350 | 🇨🇦 Canada",
+                    "350 | 🇦🇺 Australia",
+                  ],
+                  datasets: [
+                    {
+                      label: "Top Countries",
+                      data: [582, 482, 402, 350, 350],
+                      backgroundColor: "#2E4393",
+                      indexAxis: "y",
+                      borderRadius: 50,
+                    },
+                  ],
+                }}
+              />
+            </div>
+          </div>
+
+          <div className=" w-full rounded-lg border">
+            <div className=" w-full border-b p-4">
+              <h2 className="text-lg font-semibold">Sales Channel</h2>
+            </div>
+            <div className="w-full p-5 flex justify-center">
+              <div className=" max-w-screen-sm">
+                <DoughnutChart
+                  data={{
+                    labels: ["Website/IBE", "OTA Commission"],
+                    datasets: [
+                      {
+                        label: "",
+                        data: [30, 70],
+                        backgroundColor: ["#FFA500", "#2E4393"],
+                      },
+                    ],
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Total  */}
+        <div className="w-full">
+          <div className=" w-full my-3">
+            <h2 className="text-lg font-semibold">Totals</h2>
+          </div>
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                id: 2,
+                icon: <CalendarIcon className="w-5 h-5" />,
+                label: "Total Gross Income",
+                value: "N419,585,309.78",
+                theme: "text-[#35BD29] bg-[#35BD29]/20",
+              },
+              {
+                id: 3,
+                icon: <UserPlusIcon className="w-5 h-5" />,
+                label: "Total After Commissions",
+                value: "N419,585,309.78",
+                theme: "text-[#017EFF] bg-[#017EFF]/20",
+              },
+              {
+                id: 4,
+                icon: <UsersIcon className="w-5 h-5" />,
+                label: "Total Net Income",
+                value: "N419,585,309.79",
+                theme: "text-[#7C0DBE] bg-[#7C0DBE]/20",
+              },
+            ].map((item) => (
+              <DashboardCard
+                key={item?.id}
+                theme={item.theme}
+                icon={item?.icon}
+                label={item?.label}
+                value={item?.value}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* top apartment table */}
+        <ApartmentTable
+          header={[
+            "S/N",
+            "Apartment Info",
+            "Price per Night",
+            "Last Booking",
+            "Total Bookings",
+            "Availability Status",
+            "Action",
+          ]}
+          data={[
+            {
+              id: 1,
+              apartmentInfo: {
+                name: "Sunshine -3 Bedroom",
+                image: "/logo_blue.png",
+                location: "Lekki Phase II",
+              },
+              pricePerNight: "N 100,000",
+              lastBooking: "28 Mar, 2014 5:33 AM",
+              totalBookings: "10",
+              availabilityStatus: "Available",
+            },
+            {
+              id: 2,
+              apartmentInfo: {
+                name: "Moonlight - 1 Bedroom",
+                image: "/logo_blue.png",
+                location: "Surulere axis",
+              },
+              pricePerNight: "N 150,000",
+              lastBooking: "29 August, 2024 12:00 AM",
+              totalBookings: "15",
+              availabilityStatus: "Occupied",
+            },
+          ]}
+          title="Top Apartments"
+        />
       </div>
     </section>
   );

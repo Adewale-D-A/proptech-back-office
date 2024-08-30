@@ -9,7 +9,7 @@ export default function MetaTags({ title, description }: metaProps) {
     <Helmet prioritizeSeoTags>
       <meta charSet="utf-8" />
       <link rel="icon" href="/favicon.ico" />
-      <title>iBASS | {title}</title>
+      <title>{title} | 99Apartment</title>
       <meta name="description" content={description} />
     </Helmet>
   );
