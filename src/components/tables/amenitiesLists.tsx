@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
 import Pagination from "../pagination";
-import { ReactNode, useState } from "react";
+import { ReactNode, useCallback, useState } from "react";
 import Sort from "../filterAndSort/sort";
+import DeleteConfirmation from "../infoModal/delete-confirmation";
+import ModalTemplate from "../modal";
+import AddEditAmenities from "../amenities/create-amenities";
 
 export default function AmenitiesListsTable({
   header,
@@ -18,6 +20,20 @@ export default function AmenitiesListsTable({
   title: string;
 }) {
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [openDelete, setOpenDelete] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [openEditAmenity, setOpenEditAmenity] = useState(false);
+
+  const handleDelete = useCallback(async () => {
+    setIsDeleting(true);
+    try {
+      setOpenDelete(false);
+    } catch (error) {
+    } finally {
+      setIsDeleting(false);
+    }
+  }, []);
 
   return (
     <>
@@ -44,14 +60,16 @@ export default function AmenitiesListsTable({
                   <td className=" group relative">
                     <span className=" p-2 text-lg">...</span>
                     <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                      <Link
-                        to="#"
+                      <button
+                        type="button"
+                        onClick={() => setOpenEditAmenity(true)}
                         className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                       >
                         Edit Amenity
-                      </Link>
+                      </button>
                       <button
                         type="button"
+                        onClick={() => setOpenDelete(true)}
                         className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                       >
                         Delete Amenity
@@ -74,9 +92,27 @@ export default function AmenitiesListsTable({
           }}
           setCurrentPage={setCurrentPage}
           isLoading={false}
-          label="Apartment"
+          label="Amenities"
         />
       </div>
+      <DeleteConfirmation
+        open={openDelete}
+        setOpen={setOpenDelete}
+        isLoading={isDeleting}
+        confirmationHandler={handleDelete}
+        title="Delete Amenity"
+        description="Are you sure you want to delete this amenity?"
+        btnTitle="Yes, I want to"
+      />
+      <ModalTemplate
+        open={openEditAmenity}
+        setOpen={setOpenEditAmenity}
+        showXicon={true}
+        title="Edit Amenity"
+        className=" max-w-md"
+      >
+        <AddEditAmenities setOpen={setOpenEditAmenity} id="1" />
+      </ModalTemplate>
     </>
   );
 }

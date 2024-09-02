@@ -1,3 +1,10 @@
+##### 02.09.2024
+
+> Room Options, Amenities, Extra Options, Safety and Security and Rules tab views UI development
+> Create new modals for these tab views UI development
+> Edit logic temporary placement (till API integration before resolution of final logic)
+> Delete modal UI development
+
 ##### 30.08.2024
 
 > Tables components completion

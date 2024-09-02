@@ -3,9 +3,9 @@ import { useCallback, useState } from "react";
 import Sort from "../filterAndSort/sort";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import ModalTemplate from "../modal";
-import AddEditRoomOption from "../room-extra-options/add-edit-options";
+import AddEditExtraOption from "../room-extra-options/add-edit-options";
 
-export default function RoomOptionTable({
+export default function ExtraOptionTable({
   header,
   data,
   title,
@@ -21,7 +21,7 @@ export default function RoomOptionTable({
   const [currentPage, setCurrentPage] = useState(1);
 
   const [openDelete, setOpenDelete] = useState(false);
-  const [editRoomOption, setEditRoomOption] = useState(false);
+  const [editExtraOption, setExtraOption] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = useCallback(async () => {
@@ -39,7 +39,7 @@ export default function RoomOptionTable({
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-x-auto">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">{title}</h2>
-          <Sort id="room-options" label="Sort Category" />{" "}
+          <Sort id="extra-options" label="Sort List" />{" "}
         </div>
         <table className=" w-full">
           <thead className="">
@@ -60,17 +60,17 @@ export default function RoomOptionTable({
                     <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                       <button
                         type="button"
-                        onClick={() => setEditRoomOption(true)}
+                        onClick={() => setExtraOption(true)}
                         className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                       >
-                        Edit Room Option
+                        Edit Extra Option
                       </button>
                       <button
                         type="button"
                         onClick={() => setOpenDelete(true)}
                         className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                       >
-                        Delete Room Option
+                        Delete Extra Option
                       </button>
                     </span>
                   </td>
@@ -90,7 +90,7 @@ export default function RoomOptionTable({
           }}
           setCurrentPage={setCurrentPage}
           isLoading={false}
-          label="Room Options"
+          label="Exra Options"
         />
       </div>
       <DeleteConfirmation
@@ -98,18 +98,18 @@ export default function RoomOptionTable({
         setOpen={setOpenDelete}
         isLoading={isDeleting}
         confirmationHandler={handleDelete}
-        title="Delete Room Option"
-        description="Are you sure you want to delete this room option?"
+        title="Delete Extra Option"
+        description="Are you sure you want to delete this extra option?"
         btnTitle="Yes, I want to"
       />
       <ModalTemplate
-        open={editRoomOption}
-        setOpen={setEditRoomOption}
+        open={editExtraOption}
+        setOpen={setExtraOption}
         showXicon={true}
-        title="Edit Room Option"
+        title="Edit Extra Option"
         className=" max-w-md"
       >
-        <AddEditRoomOption setOpenOption={setEditRoomOption} id="1" />
+        <AddEditExtraOption setOpenOption={setExtraOption} id="1" />
       </ModalTemplate>
     </>
   );

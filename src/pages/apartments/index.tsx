@@ -8,9 +8,14 @@ import ExtraOptionsIcon from "../../assets/icons/extra-options";
 import ApartmentListsTable from "../../components/tables/apartmentLists";
 import ApartmentTab from "../../components/tab/apartmentTab";
 import RoomOptionTable from "../../components/tables/roomOption";
-import AmenitiesListsTable from "../../components/tables/amenitiesLisits";
+import AmenitiesListsTable from "../../components/tables/amenitiesLists";
 import WifiIcon from "../../assets/icons/wifi";
 import TvIcon from "../../assets/icons/tv";
+import ExtraOptionTable from "../../components/tables/extraOption";
+import SecurityIcon from "../../assets/icons/security";
+import CheckListIcon from "../../assets/icons/check-list";
+import RulesLists from "../../components/tables/rulesLists";
+import SafetyAndSecurityList from "../../components/tables/safetyAndSecurityLists";
 
 const breadCrumb = [
   {
@@ -45,6 +50,8 @@ export default function Apartments() {
             { id: 2, icon: <AdjustmentIcon />, label: "Room Options" },
             { id: 3, icon: <AmenitiesIcon />, label: "Amenities" },
             { id: 4, icon: <ExtraOptionsIcon />, label: "Extra Options" },
+            { id: 5, icon: <SecurityIcon />, label: "Safety and Security" },
+            { id: 6, icon: <CheckListIcon />, label: "Rules" },
           ]}
           content={[
             {
@@ -138,7 +145,68 @@ export default function Apartments() {
             },
             {
               id: 4,
-              data: <div></div>,
+              data: (
+                <ExtraOptionTable
+                  title="Extra Option List"
+                  header={["Name of Option", "Description", "Action"]}
+                  data={[
+                    {
+                      id: 1,
+                      categoryName: "Party house",
+                      description:
+                        "This category represents rooms that are considered party apartments",
+                    },
+                    {
+                      id: 2,
+                      categoryName: "Wale olateju apartment",
+                      description:
+                        "This category represents rooms that are considered party apartments",
+                    },
+                  ]}
+                />
+              ),
+            },
+            {
+              id: 5,
+              data: (
+                <SafetyAndSecurityList
+                  title="Safety and Security List"
+                  header={["Title", "Description", "Action"]}
+                  data={[
+                    {
+                      id: 1,
+                      title: "Security Doors",
+                      description: "Security doors closes at 10:30pm",
+                    },
+                    {
+                      id: 2,
+                      title: "Visitors",
+                      description: "No visitor is allowed to stay past 9:40pm",
+                    },
+                  ]}
+                />
+              ),
+            },
+            {
+              id: 6,
+              data: (
+                <RulesLists
+                  title="Rules Lists"
+                  header={["Title", "Description", "Action"]}
+                  data={[
+                    {
+                      id: 1,
+                      title: "No parties",
+                      description: "No parties of any kind allowed",
+                    },
+                    {
+                      id: 2,
+                      title: "Music",
+                      description: "Music louder than 30Decibel is not allowed",
+                    },
+                  ]}
+                />
+              ),
             },
           ]}
         />
