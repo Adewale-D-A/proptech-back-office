@@ -4,7 +4,6 @@ import LocationPinIcon from "../../assets/icons/location";
 import Pagination from "../pagination";
 import { useState } from "react";
 import Search from "../inputs/search";
-import { useAppSelector } from "../../stores/hooks";
 import Sort from "../filterAndSort/sort";
 
 export default function ApartmentListsTable({

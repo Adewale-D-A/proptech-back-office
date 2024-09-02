@@ -48,14 +48,17 @@ export default function QuickReservationFlow() {
       <h4 className=" font-semibold text-xl mb-8">Quick Reservation</h4>
       <form className=" flex flex-col gap-5" onSubmit={makeReservation}>
         <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-5">
-          <Select
+          {/* <Select
             isRequired={true}
             value={apartment}
             setValue={setApartment}
             id="select-apartment"
           >
-            <option value="">Select Apartment</option>
-          </Select>
+            <option value="">1 Bedroom apartment</option>
+          </Select> */}
+          <span className="w-full p-3 rounded-lg border  bg-gray-200/15 ">
+            1 Bedroom Apartment
+          </span>
           <Select
             isRequired={true}
             value={payment}

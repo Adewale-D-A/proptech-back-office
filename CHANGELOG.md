@@ -1,5 +1,6 @@
 ##### 02.09.2024
 
+> Non editable reservation modal update
 > Room Options, Amenities, Extra Options, Safety and Security and Rules tab views UI development
 > Create new modals for these tab views UI development
 > Edit logic temporary placement (till API integration before resolution of final logic)
