@@ -11,6 +11,7 @@ interface Props {
   clickHandler?: Function;
   variant?: 1 | 2 | 3;
   startIcon?: ReactNode;
+  endIcon?: ReactNode;
   className?: string;
 }
 
@@ -22,6 +23,7 @@ export default function LoadingButton({
   clickHandler,
   variant = 1,
   startIcon,
+  endIcon,
   className,
 }: Props) {
   const handleClick = useCallback(() => {
@@ -49,7 +51,7 @@ export default function LoadingButton({
         <LoaderIcon className="w-6 h-6 animate-spin" />
       ) : (
         <span className=" flex items-center gap-2 text-nowrap">
-          {startIcon} {label}
+          {startIcon} {label} {endIcon}
         </span>
       )}
     </button>

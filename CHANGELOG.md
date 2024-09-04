@@ -1,3 +1,8 @@
+##### 04.09.2024
+
+> Apartment Detail image carousel design
+> Map template and layout initialization (ongoing development)
+
 ##### 02.09.2024
 
 > Non editable reservation modal update

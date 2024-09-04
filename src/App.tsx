@@ -21,6 +21,7 @@ import AdditionalServices from "./pages/additional-services";
 import Bookings from "./pages/bookings";
 import Apartments from "./pages/apartments";
 import DashboardOverview from "./pages/dashboard-overview";
+import ApartmentDetail from "./pages/apartments/apartment-details";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -41,7 +42,14 @@ function App() {
           </Route>
           <Route element={<PersistLogin />}>
             <Route path="/dashboard-overview" element={<DashboardOverview />} />
+            {/* apartment flows */}
             <Route path="/apartments" element={<Apartments />} />
+            <Route
+              path="/apartments-details/:id"
+              element={<ApartmentDetail />}
+            />
+            {/* apartment flows */}
+
             <Route path="/bookings" element={<Bookings />} />
             <Route
               path="/additional-services"
