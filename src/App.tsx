@@ -22,6 +22,8 @@ import Bookings from "./pages/bookings";
 import Apartments from "./pages/apartments";
 import DashboardOverview from "./pages/dashboard-overview";
 import ApartmentDetail from "./pages/apartments/apartment-details";
+import EditApartment from "./pages/apartments/edit-apartment";
+import NewApartment from "./pages/apartments/new-apartment";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -48,6 +50,8 @@ function App() {
               path="/apartments-details/:id"
               element={<ApartmentDetail />}
             />
+            <Route path="/edit-apartment/:id" element={<EditApartment />} />
+            <Route path="/new-apartment" element={<NewApartment />} />
             {/* apartment flows */}
 
             <Route path="/bookings" element={<Bookings />} />

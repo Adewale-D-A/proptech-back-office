@@ -1,3 +1,7 @@
+##### 05.09.2024
+
+> Edit aparment UI development(still in progress)
+
 ##### 04.09.2024
 
 > Apartment Detail image carousel design

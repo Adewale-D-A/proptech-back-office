@@ -1,5 +1,6 @@
 import { GoogleMap } from "@react-google-maps/api";
 import { ReactNode, useMemo } from "react";
+import MapProvider from "../../providers/map-provider";
 
 export default function Map({
   children,
@@ -10,6 +11,7 @@ export default function Map({
   zoom: number;
   center: { lat: number; lng: number };
 }) {
+  
   // default map properties
   const mapFieldsOptions = useMemo(
     () => ({
@@ -22,11 +24,13 @@ export default function Map({
     }),
     []
   );
+
+  
   return (
     <div className="w-full">
+      <MapProvider>
       <GoogleMap
         // ref={mapRef}
-
         zoom={zoom}
         center={center}
         mapContainerClassName="w-full h-96"
@@ -34,6 +38,8 @@ export default function Map({
       >
         {children}
       </GoogleMap>
+      </MapProvider>
+
     </div>
   );
 }
