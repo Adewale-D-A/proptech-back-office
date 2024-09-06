@@ -10,6 +10,7 @@ import pageProperties from "./appFunctionality/pageProperties";
 // inApp Data interactions
 
 import assignCustomer from "./inAppDataInterations/assignCustomer";
+import addEditApartmentInfo from "./inAppDataInterations/addEditApartmentInfo";
 // inApp Data interactions
 
 //user profile
@@ -27,6 +28,7 @@ export const adminStore = () => {
 
       // inApp Data interactions
       assignCustomer: assignCustomer,
+      addEditApartmentInfo: addEditApartmentInfo,
       // inApp Data interactions
 
       //user

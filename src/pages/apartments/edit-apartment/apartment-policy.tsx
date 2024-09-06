@@ -4,8 +4,9 @@ import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import { useParams } from "react-router-dom";
 import Timeline from "../../../components/timeline";
+import AddEditApartmentPolicies from "../../../components/add-edit-apartment/apartment-policies";
 
-export default function EditApartment() {
+export default function EditApartmentPolicies() {
   const { id } = useParams();
   const breadCrumb = useMemo(
     () => [
@@ -21,7 +22,7 @@ export default function EditApartment() {
       },
       {
         url: "#",
-        label: "Edit Apartment",
+        label: "Edit Apartment Policies",
         icon: "",
       },
     ],
@@ -33,8 +34,8 @@ export default function EditApartment() {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "Edit Apartment",
-        pageDescription: "Edit apartment details",
+        pageTitle: "Edit Apartment Policies",
+        pageDescription: "Edit apartment policies",
         isLoading: false,
         failedToLoad: false,
         setFailedToLoad: false,
@@ -45,8 +46,13 @@ export default function EditApartment() {
   return (
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
-        <div className=" w-full rounded-md border">
-          <Timeline currentStep={3} />
+        <div className=" w-full rounded-md border flex flex-col items-center justify-center">
+          <div className=" w-full flex items-center max-w-xl py-10">
+            <Timeline currentStep={3} />
+          </div>
+          <div className="w-full border-t py-10 px-5">
+            <AddEditApartmentPolicies id={id} />
+          </div>
         </div>
       </div>
     </section>

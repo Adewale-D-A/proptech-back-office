@@ -86,7 +86,7 @@ export default function ApartmentListsTable({
                         View Apartment
                       </Link>
                       <Link
-                        to="#"
+                        to={`/edit-apartment/apartment-details/${request?.id}`}
                         className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                       >
                         Edit Apartment

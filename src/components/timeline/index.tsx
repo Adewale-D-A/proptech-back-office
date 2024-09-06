@@ -6,7 +6,7 @@ export default function Timeline({ currentStep }: { currentStep: number }) {
       <div className="w-full flex flex-col">
         <div className="w-full flex items-center ml-10">
           <CheckIcon
-            className={`border-4 text-primary border-primary   h-6 w-6 rounded-full`}
+            className={`border-4 text-primary border-primary min-h-6 min-w-6 h-6 w-6 rounded-full`}
           />
           <div
             className={`w-full h-1  ${
@@ -51,7 +51,7 @@ export default function Timeline({ currentStep }: { currentStep: number }) {
               currentStep === 3
                 ? "text-primary border-primary "
                 : "text-gray-300 border-gray-300"
-            }  border-4  h-6 w-6 rounded-full`}
+            }  border-4  min-h-6 min-w-6 h-6 w-6 rounded-full`}
           />
         </div>
         <h6 className="  text-sm md:text-md">Apartment Policy</h6>

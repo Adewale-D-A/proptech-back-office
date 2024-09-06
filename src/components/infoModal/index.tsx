@@ -63,7 +63,7 @@ const AlertModal = ({ openModal }: { openModal: boolean }) => {
                   </div>
                   <div
                     className={`${
-                      isError ? "text-red-500" : "text-primary_green-500"
+                      isError ? "text-red-500" : "text-primary"
                     } w-full flex items-center flex-col gap-5`}
                   >
                     {isError ? (
@@ -86,7 +86,7 @@ const AlertModal = ({ openModal }: { openModal: boolean }) => {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         fill="currentColor"
-                        className="w-24 h-24 text-primary_green-500"
+                        className="w-24 h-24 text-green-500"
                       >
                         <path
                           fillRule="evenodd"
@@ -106,7 +106,7 @@ const AlertModal = ({ openModal }: { openModal: boolean }) => {
                       className={`${
                         isError
                           ? "border-red-300 hover:bg-red-500"
-                          : "border-primary_green-300 hover:bg-primary_green-500"
+                          : "border-primary hover:bg-primary"
                       } p-2 px-4 text-lg font-semibold rounded-md bg-white border-2   hover:text-white  transition-all`}
                     >
                       Okay

@@ -1,3 +1,8 @@
+##### 06.09.2024
+
+> Apartment details timeline development
+> Edit apartment flow completion, routes integration and state management logic definition
+
 ##### 05.09.2024
 
 > Edit aparment UI development(still in progress)

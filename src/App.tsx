@@ -22,8 +22,10 @@ import Bookings from "./pages/bookings";
 import Apartments from "./pages/apartments";
 import DashboardOverview from "./pages/dashboard-overview";
 import ApartmentDetail from "./pages/apartments/apartment-details";
-import EditApartment from "./pages/apartments/edit-apartment";
 import NewApartment from "./pages/apartments/new-apartment";
+import EditApartmentDetails from "./pages/apartments/edit-apartment/apartment-detail";
+import EditApartmentFeatures from "./pages/apartments/edit-apartment/apartment-features";
+import EditApartmentPolicies from "./pages/apartments/edit-apartment/apartment-policy";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -46,11 +48,38 @@ function App() {
             <Route path="/dashboard-overview" element={<DashboardOverview />} />
             {/* apartment flows */}
             <Route path="/apartments" element={<Apartments />} />
+            {/* view single apartment  */}
             <Route
               path="/apartments-details/:id"
               element={<ApartmentDetail />}
             />
-            <Route path="/edit-apartment/:id" element={<EditApartment />} />
+            {/* add */}
+            <Route
+              path="/add-apartment/apartment-details"
+              element={<EditApartmentDetails />}
+            />
+            <Route
+              path="/add-apartment/apartment-features"
+              element={<EditApartmentFeatures />}
+            />
+            <Route
+              path="/add-apartment/apartment-policies"
+              element={<EditApartmentPolicies />}
+            />
+            {/* edits */}
+            <Route
+              path="/edit-apartment/apartment-details/:id"
+              element={<EditApartmentDetails />}
+            />
+            <Route
+              path="/edit-apartment/apartment-features/:id"
+              element={<EditApartmentFeatures />}
+            />
+            <Route
+              path="/edit-apartment/apartment-policies/:id"
+              element={<EditApartmentPolicies />}
+            />
+
             <Route path="/new-apartment" element={<NewApartment />} />
             {/* apartment flows */}
 
