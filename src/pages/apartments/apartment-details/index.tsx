@@ -272,7 +272,7 @@ export default function ApartmentDetail() {
         confirmationHandler={deleteApartment}
         isLoading={isDeleting}
         btnTitle="Yes, I want to"
-        title="Delete Aaprtment"
+        title="Delete Apartment"
         description="Are you sure you want to delete this apartment"
         open={openDeleteConfirmation}
         setOpen={setOpenDeleteConfirmation}

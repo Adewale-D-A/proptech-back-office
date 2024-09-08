@@ -7,6 +7,7 @@ interface Props {
   label?: string;
   isRequired?: boolean;
   id: string;
+  readOnly?: boolean;
 }
 
 const Select: React.FC<Props> = ({
@@ -15,6 +16,7 @@ const Select: React.FC<Props> = ({
   setValue,
   label,
   isRequired = false,
+  readOnly = false,
   id,
 }) => {
   return (
@@ -27,6 +29,7 @@ const Select: React.FC<Props> = ({
       <select
         id={id}
         title={label}
+        aria-readonly={readOnly}
         value={value}
         required={isRequired}
         onChange={(e) => setValue(e.target.value)}

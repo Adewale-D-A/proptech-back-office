@@ -2,11 +2,14 @@ import { Link } from "react-router-dom";
 import Status from "../status";
 import LocationPinIcon from "../../assets/icons/location";
 import Pagination from "../pagination";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Search from "../inputs/search";
 import Sort from "../filterAndSort/sort";
 import useGetAllApartmentLists from "../../services-hooks/useGetAllApartmentLists";
 import NoResult from "../noResult";
+import { useAppDispatch } from "../../stores/hooks";
+import { removeApartmentInList } from "../../stores/apiData/apartment-lists";
+import DeleteConfirmation from "../infoModal/delete-confirmation";
 
 export default function ApartmentListsTable({
   header,
@@ -29,12 +32,24 @@ export default function ApartmentListsTable({
   // }[];
   title: string;
 }) {
-  const [openReservation, setOpenReservation] = useState(false);
-
+  const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetAllApartmentLists({ page: currentPage });
+  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteId, setDeleteId] = useState("1");
 
+  const deleteApartment = useCallback(() => {
+    setIsDeleting(true);
+    try {
+      dispatch(removeApartmentInList({ id: deleteId }));
+      setOpenDeleteConfirmation(false);
+    } catch (error) {
+    } finally {
+      setIsDeleting(false);
+    }
+  }, [deleteId]);
   return (
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-x-auto">
@@ -98,7 +113,7 @@ export default function ApartmentListsTable({
                           Edit Apartment
                         </Link>
                         <Link
-                          to="#"
+                          to={`/apartment-caledar/${request?.id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Check Calender
@@ -111,7 +126,10 @@ export default function ApartmentListsTable({
                         </Link>
                         <button
                           type="button"
-                          onClick={() => setOpenReservation(true)}
+                          onClick={() => {
+                            setDeleteId(request?.id);
+                            setOpenDeleteConfirmation(true);
+                          }}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Delete Apartment
@@ -131,6 +149,15 @@ export default function ApartmentListsTable({
           setCurrentPage={setCurrentPage}
           isLoading={false}
           label="Apartment"
+        />
+        <DeleteConfirmation
+          confirmationHandler={deleteApartment}
+          isLoading={isDeleting}
+          btnTitle="Yes, I want to"
+          title="Delete Apartment"
+          description="Are you sure you want to delete this apartment"
+          open={openDeleteConfirmation}
+          setOpen={setOpenDeleteConfirmation}
         />
       </div>
     </>

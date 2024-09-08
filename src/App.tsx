@@ -28,6 +28,7 @@ import EditApartmentPolicies from "./pages/apartments/edit-apartment/apartment-p
 import AddNewApartmentDetails from "./pages/apartments/new-apartment/apartment-detail";
 import AddNewApartmentFeatures from "./pages/apartments/new-apartment/apartment-features";
 import AddNewApartmentPolicies from "./pages/apartments/new-apartment/apartment-policy";
+import CheckCalendar from "./pages/apartments/check-calendar";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -55,6 +56,7 @@ function App() {
               path="/apartments-details/:id"
               element={<ApartmentDetail />}
             />
+            <Route path="/apartment-caledar/:id" element={<CheckCalendar />} />
             {/* add */}
             <Route
               path="/add-apartment/apartment-details"

@@ -10,7 +10,11 @@ import TimeInput from "../inputs/timeInput";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { openAssignToCustomerView } from "../../stores/inAppDataInterations/assignCustomer";
 
-export default function QuickReservationFlow() {
+export default function QuickReservationFlow({
+  variant = 1,
+}: {
+  variant?: number;
+}) {
   const dispatch = useAppDispatch();
 
   const { data } = useAppSelector((state) => state.assignCustomer.value);
@@ -45,14 +49,21 @@ export default function QuickReservationFlow() {
 
   return (
     <div className="w-full">
-      <h4 className=" font-semibold text-xl mb-8">Quick Reservation</h4>
+      {variant === 1 && (
+        <h4 className=" font-semibold text-xl mb-8">Quick Reservation</h4>
+      )}
       <form className=" flex flex-col gap-5" onSubmit={makeReservation}>
-        <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div
+          className={`w-full grid ${
+            variant === 1 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1"
+          }  gap-5`}
+        >
           {/* <Select
             isRequired={true}
             value={apartment}
             setValue={setApartment}
             id="select-apartment"
+            readOnly={true}
           >
             <option value="">1 Bedroom apartment</option>
           </Select> */}

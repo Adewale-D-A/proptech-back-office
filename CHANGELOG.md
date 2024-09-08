@@ -1,5 +1,6 @@
 ##### 08.09.2024
 
+> Apartment calendar view (screen development in progress)
 > Add new apartment flow and redux persistence
 > Apartment flow api structuring
 
