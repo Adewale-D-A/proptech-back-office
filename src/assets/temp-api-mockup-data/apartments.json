@@ -1,0 +1,116 @@
+{
+  "pagination": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 20,
+    "total": 4,
+    "from": 1,
+    "to": 1
+  },
+  "data": [
+    {
+      "id": "abs2_14422",
+      "name": "Sunshine - 3 Bedroom",
+      "image": "/temp/temp_apartment_1.jpg",
+      "roomOption": "2-bedroom",
+      "images": [
+        { "url": "/temp/temp_apartment_1.jpg" },
+        { "url": "/temp/temp_apartment_2.jpg" },
+        { "url": "/temp/temp_apartment_2.jpg" }
+      ],
+      "amount": "140000",
+      "aboutLocation": "Nice environment",
+      "noBeds": "2",
+      "noBaths": "2",
+      "whatToExpect": "Good environment",
+      "pointOfInterest": "Beach and resort",
+      "safetyAndSecurity": "Gate closes by 10pm",
+      "rules": "no-loud-music",
+      "location": "Lekki Phase II",
+      "noOfGuests": 4,
+      "cancellationPolicies": "No refunds allowed",
+      "category": "2 Bedroom Apartment",
+      "characteristicss": "3 characteristicss",
+      "units": 1,
+      "availabilityStatus": "Available"
+    },
+    {
+      "id": "a2as2_14asa22",
+      "name": "Moonlight - 2 Bedroom",
+      "image": "/temp/temp_apartment_2.jpg",
+      "roomOption": "2-bedroom",
+      "images": [
+        { "url": "/temp/temp_apartment_1.jpg" },
+        { "url": "/temp/temp_apartment_2.jpg" },
+        { "url": "/temp/temp_apartment_2.jpg" }
+      ],
+      "amount": "140000",
+      "aboutLocation": "Nice environment",
+      "noBeds": "2",
+      "noBaths": "2",
+      "whatToExpect": "Good environment",
+      "pointOfInterest": "Beach and resort",
+      "safetyAndSecurity": "Gate closes by 10pm",
+      "rules": "no-loud-music",
+      "location": "Lekki Phase II",
+      "noOfGuests": 4,
+      "cancellationPolicies": "No refunds allowed",
+      "category": "2 Bedroom Apartment",
+      "characteristicss": "3 characteristicss",
+      "units": 1,
+      "availabilityStatus": "Available"
+    },
+    {
+      "id": "abs2_144asasaxx22",
+      "name": "Ray Apartments - 3 Bedroom",
+      "image": "/temp/temp_apartment_3.jpg",
+      "roomOption": "2-bedroom",
+      "images": [
+        { "url": "/temp/temp_apartment_1.jpg" },
+        { "url": "/temp/temp_apartment_2.jpg" },
+        { "url": "/temp/temp_apartment_2.jpg" }
+      ],
+      "amount": "140000",
+      "aboutLocation": "Nice environment",
+      "noBeds": "2",
+      "noBaths": "2",
+      "whatToExpect": "Good environment",
+      "pointOfInterest": "Beach and resort",
+      "safetyAndSecurity": "Gate closes by 10pm",
+      "rules": "no-loud-music",
+      "location": "Lekki Phase II",
+      "noOfGuests": 4,
+      "cancellationPolicies": "No refunds allowed",
+      "category": "2 Bedroom Apartment",
+      "characteristicss": "3 characteristicss",
+      "units": 1,
+      "availabilityStatus": "Available"
+    },
+    {
+      "id": "abs2_1442sacbg2",
+      "name": "Lagos Resort - 2 Bedroom",
+      "image": "/temp/temp_apartment_1.jpg",
+      "roomOption": "2-bedroom",
+      "images": [
+        { "url": "/temp/temp_apartment_1.jpg" },
+        { "url": "/temp/temp_apartment_2.jpg" },
+        { "url": "/temp/temp_apartment_2.jpg" }
+      ],
+      "amount": "140000",
+      "aboutLocation": "Nice environment",
+      "noBeds": "2",
+      "noBaths": "2",
+      "whatToExpect": "Good environment",
+      "pointOfInterest": "Beach and resort",
+      "safetyAndSecurity": "Gate closes by 10pm",
+      "rules": "no-loud-music",
+      "location": "Lekki Phase II",
+      "noOfGuests": 4,
+      "cancellationPolicies": "No refunds allowed",
+      "category": "2 Bedroom Apartment",
+      "characteristicss": "3 characteristicss",
+      "units": 1,
+      "availabilityStatus": "Available"
+    }
+  ]
+}

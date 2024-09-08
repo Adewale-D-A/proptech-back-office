@@ -6,6 +6,7 @@ import ModalTemplate from "../modal";
 import AddEditOption from "../room-extra-options/add-edit-options";
 import AddEditAmenities from "../amenities/create-amenities";
 import AddEdit from "../amenities/addEdit";
+import LinkButton from "../button/linkButton";
 
 export default function ApartmentTab({
   header,
@@ -23,7 +24,7 @@ export default function ApartmentTab({
     <>
       <TabGroup>
         <TabList className={"flex items-center gap-5 flex-col md:flex-row"}>
-          <div className="w-full flex flex-col md:flex-row gap-5 md:gap-x-10 flex-wrap ">
+          <div className="w-full flex flex-col md:flex-row gap-5 md:gap-x-8 flex-wrap ">
             {header.map((item, index) => (
               <Tab
                 key={item?.id}
@@ -38,10 +39,9 @@ export default function ApartmentTab({
           </div>
           <div className="w-fit whitespace-nowrap">
             {trackTab === 1 ? (
-              <LoadingButton
+              <LinkButton
+                url="/add-apartment/apartment-details"
                 label="Add New Apartment"
-                isLoading={false}
-                type="button"
                 startIcon={<PlusIcon />}
               />
             ) : trackTab === 2 ? (

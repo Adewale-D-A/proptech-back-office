@@ -1,3 +1,8 @@
+##### 08.09.2024
+
+> Add new apartment flow and redux persistence
+> Apartment flow api structuring
+
 ##### 06.09.2024
 
 > Apartment details timeline development

@@ -15,6 +15,7 @@ import LoadingButton from "../button";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { updateApartmentDetails } from "../../stores/inAppDataInterations/addEditApartmentInfo";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import LinkButton from "../button/linkButton";
 
 export default function AddEditApartmentDetails({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
@@ -40,7 +41,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
     setPrice(amount);
     setLocation(location);
     setAboutLocation(aboutLocation);
-  }, []);
+  }, [storeAptDetails]);
 
   //update redux store and naviagte to next timeline
   const addApartmentDetails = useCallback(
@@ -108,7 +109,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
           <option value="" disabled>
             Room options
           </option>
-          <option value="1-bedroom">2 Bedroom Apartment</option>
+          <option value="2-bedroom">2 Bedroom Apartment</option>
         </Select>
       </div>
       {/* apartment image */}
@@ -182,12 +183,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
       {/* submit and cancel buttons */}
       <div className=" w-full flex justify-end mt-10">
         <div className=" flex items-center justify-between w-full max-w-sm gap-4">
-          <LoadingButton
-            label="Cancel"
-            variant={2}
-            type="button"
-            isLoading={false}
-          />
+          <LinkButton url="/apartments" label="Cancel" variant={2} />
           <LoadingButton
             label="Save and continue"
             type="submit"

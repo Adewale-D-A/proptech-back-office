@@ -17,6 +17,9 @@ import addEditApartmentInfo from "./inAppDataInterations/addEditApartmentInfo";
 import profile from "./authUser/profile";
 import userAuthentication from "./authUser/auth";
 
+// api data
+import apartmentListsData from "./apiData/apartment-lists";
+
 export const adminStore = () => {
   return configureStore({
     reducer: {
@@ -34,6 +37,9 @@ export const adminStore = () => {
       //user
       userProfile: profile,
       userAuthentication: userAuthentication,
+
+      // api data
+      allAparmentLists: apartmentListsData,
     },
     middleware: (getDefaultMiddleware: any) =>
       getDefaultMiddleware({

@@ -5,9 +5,11 @@ import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import Timeline from "../../../components/timeline";
 import AddEditApartmentDetails from "../../../components/add-edit-apartment/apartment-details";
+import useGetApartmentById from "../../../services-hooks/useGetApartmentById";
 
 export default function EditApartmentDetails() {
   const { id } = useParams();
+  const dispatch = useAppDispatch();
   const breadCrumb = useMemo(
     () => [
       {
@@ -28,7 +30,7 @@ export default function EditApartmentDetails() {
     ],
     [id]
   );
-  const dispatch = useAppDispatch();
+
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
@@ -42,7 +44,11 @@ export default function EditApartmentDetails() {
         retryRequest: false,
       })
     );
-  }, []);
+  }, [breadCrumb]);
+
+  const { data, isLoading, isFailed, setIsFailed, retryFunction } =
+    useGetApartmentById(id);
+
   return (
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">

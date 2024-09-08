@@ -68,34 +68,6 @@ export default function Apartments() {
                     "Status",
                     "Action",
                   ]}
-                  data={[
-                    {
-                      id: 1,
-                      apartmentInfo: {
-                        name: "Sunshine -3 Bedroom",
-                        image: "/logo_blue.png",
-                        location: "Lekki Phase II",
-                      },
-                      noOfGuests: "4",
-                      category: "2 Bedroom Apartment",
-                      characteristics: "3",
-                      units: "1",
-                      status: "Available",
-                    },
-                    {
-                      id: 2,
-                      apartmentInfo: {
-                        name: "Moonlight - 1 Bedroom",
-                        image: "/logo_blue.png",
-                        location: "Surulere axis",
-                      },
-                      noOfGuests: "2",
-                      category: "3 Bedroom Apartment",
-                      characteristics: "4",
-                      units: "1",
-                      status: "Not Available",
-                    },
-                  ]}
                 />
               ),
             },

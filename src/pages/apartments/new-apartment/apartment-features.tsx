@@ -1,12 +1,12 @@
-import BuildingIcon from "../../../assets/icons/building";
+import { useParams } from "react-router-dom";
 import { useLayoutEffect, useMemo } from "react";
+import BuildingIcon from "../../../assets/icons/building";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import { useParams } from "react-router-dom";
 import Timeline from "../../../components/timeline";
-import AddEditApartmentPolicies from "../../../components/add-edit-apartment/apartment-policies";
+import AddApartmentFeatures from "../../../components/add-edit-apartment/apartment-features";
 
-export default function EditApartmentPolicies() {
+export default function AddNewApartmentFeatures() {
   const { id } = useParams();
   const breadCrumb = useMemo(
     () => [
@@ -16,13 +16,8 @@ export default function EditApartmentPolicies() {
         icon: <BuildingIcon />,
       },
       {
-        url: `/apartments-details/${id}`,
-        label: "Apartment Details",
-        icon: "",
-      },
-      {
         url: "#",
-        label: "Edit Apartment Policies",
+        label: "New Apartment Features",
         icon: "",
       },
     ],
@@ -34,25 +29,24 @@ export default function EditApartmentPolicies() {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "Edit Apartment Policies",
-        pageDescription: "Edit apartment policies",
+        pageTitle: "Add New Apartment Features",
+        pageDescription: "Add a new apartment features",
         isLoading: false,
         failedToLoad: false,
         setFailedToLoad: false,
         retryRequest: false,
       })
     );
-  }, [breadCrumb]);
-
+  }, []);
   return (
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
         <div className=" w-full rounded-md border flex flex-col items-center justify-center">
           <div className=" w-full flex items-center max-w-xl py-10">
-            <Timeline currentStep={3} />
+            <Timeline currentStep={2} />
           </div>
           <div className="w-full border-t py-10 px-5">
-            <AddEditApartmentPolicies id={id} />
+            <AddApartmentFeatures />
           </div>
         </div>
       </div>

@@ -22,10 +22,12 @@ import Bookings from "./pages/bookings";
 import Apartments from "./pages/apartments";
 import DashboardOverview from "./pages/dashboard-overview";
 import ApartmentDetail from "./pages/apartments/apartment-details";
-import NewApartment from "./pages/apartments/new-apartment";
 import EditApartmentDetails from "./pages/apartments/edit-apartment/apartment-detail";
 import EditApartmentFeatures from "./pages/apartments/edit-apartment/apartment-features";
 import EditApartmentPolicies from "./pages/apartments/edit-apartment/apartment-policy";
+import AddNewApartmentDetails from "./pages/apartments/new-apartment/apartment-detail";
+import AddNewApartmentFeatures from "./pages/apartments/new-apartment/apartment-features";
+import AddNewApartmentPolicies from "./pages/apartments/new-apartment/apartment-policy";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -56,15 +58,15 @@ function App() {
             {/* add */}
             <Route
               path="/add-apartment/apartment-details"
-              element={<EditApartmentDetails />}
+              element={<AddNewApartmentDetails />}
             />
             <Route
               path="/add-apartment/apartment-features"
-              element={<EditApartmentFeatures />}
+              element={<AddNewApartmentFeatures />}
             />
             <Route
               path="/add-apartment/apartment-policies"
-              element={<EditApartmentPolicies />}
+              element={<AddNewApartmentPolicies />}
             />
             {/* edits */}
             <Route
@@ -79,8 +81,6 @@ function App() {
               path="/edit-apartment/apartment-policies/:id"
               element={<EditApartmentPolicies />}
             />
-
-            <Route path="/new-apartment" element={<NewApartment />} />
             {/* apartment flows */}
 
             <Route path="/bookings" element={<Bookings />} />

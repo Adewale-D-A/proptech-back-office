@@ -10,6 +10,10 @@ import LinkButton from "../button/linkButton";
 import LoadingButton from "../button";
 import TextAreaInput from "../inputs/textArea";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import {
+  addApartmentToList,
+  replaceApartmentInList,
+} from "../../stores/apiData/apartment-lists";
 
 export default function AddEditApartmentPolicies({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
@@ -34,13 +38,19 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
     (e: SyntheticEvent) => {
       e.preventDefault();
       setIsSubmitting(true);
+      const { apartmentDetails, apartmentFeatures } = storeAptDataset;
       const payload = {
-        ...storeAptDataset.apartmentDetails,
-        ...storeAptDataset.apartmentFeatures,
+        ...apartmentDetails,
+        ...apartmentFeatures,
         rules,
         cancellationPolicy,
       };
-      dispatch(updateApartmentPolicies({ rules, cancellationPolicy }));
+      dispatch(
+        updateApartmentPolicies({
+          rules,
+          cancellationPolicies: cancellationPolicy,
+        })
+      );
       try {
         if (id) {
           console.log({ payload });
@@ -50,11 +60,37 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
               isError: false,
             })
           );
+          dispatch(
+            replaceApartmentInList({
+              id: id,
+              image: apartmentDetails?.images[0],
+              name: apartmentDetails?.name,
+              location: apartmentDetails?.location,
+              noOfGuests: 0,
+              category: 3,
+              characteristics: 2,
+              units: 2,
+              status: apartmentFeatures?.availabilityStatus,
+            })
+          );
         } else {
           dispatch(
             openSnackbar({
               message: "Apartment informaton successfully created",
               isError: false,
+            })
+          );
+          dispatch(
+            addApartmentToList({
+              id: "random-data",
+              image: apartmentDetails?.images[0],
+              name: apartmentDetails?.name,
+              location: apartmentDetails?.location,
+              noOfGuests: 0,
+              category: 3,
+              characteristics: 2,
+              units: 2,
+              status: apartmentFeatures?.availabilityStatus,
             })
           );
         }

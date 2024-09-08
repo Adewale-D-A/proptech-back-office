@@ -5,30 +5,35 @@ import Pagination from "../pagination";
 import { useState } from "react";
 import Search from "../inputs/search";
 import Sort from "../filterAndSort/sort";
+import useGetAllApartmentLists from "../../services-hooks/useGetAllApartmentLists";
+import NoResult from "../noResult";
 
 export default function ApartmentListsTable({
   header,
-  data,
+  // data,
   title,
 }: {
   header: string[];
-  data: {
-    id: number;
-    apartmentInfo: {
-      name: string;
-      image: string;
-      location: string;
-    };
-    noOfGuests: string;
-    category: string;
-    characteristics: string;
-    units: string;
-    status: string;
-  }[];
+  // data: {
+  //   id: number;
+  //   apartmentInfo: {
+  //     name: string;
+  //     image: string;
+  //     location: string;
+  //   };
+  //   noOfGuests: string;
+  //   category: string;
+  //   characteristics: string;
+  //   units: string;
+  //   status: string;
+  // }[];
   title: string;
 }) {
-  const [currentPage, setCurrentPage] = useState(1);
   const [openReservation, setOpenReservation] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
+    useGetAllApartmentLists({ page: currentPage });
 
   return (
     <>
@@ -41,91 +46,88 @@ export default function ApartmentListsTable({
           />
           <Sort id="apartment-lists" label="Sort Category" />{" "}
         </div>
-        <table className=" w-full">
-          <thead className="">
-            <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-              {header.map((head) => (
-                <th key={head}>{head}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="">
-            {data.map((request, index) => {
-              return (
-                <tr key={request?.id} className=" border-b">
-                  <td className=" flex gap-2 items-center min-w-36">
-                    <img
-                      src={request?.apartmentInfo?.image}
-                      alt={request?.apartmentInfo?.name}
-                      className=" h-10 w-10 rounded aspect-square"
-                    />
-                    <span className=" flex flex-col gap-1">
-                      <span>{request?.apartmentInfo?.name}</span>
-                      <span className=" text-xs text-gray-500 flex items-center gap-1">
-                        <LocationPinIcon className=" h-3 w-3" />
-                        {request?.apartmentInfo?.location}
+        {data && data.length > 0 ? (
+          <table className=" w-full">
+            <thead className="">
+              <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+                {header.map((head) => (
+                  <th key={head}>{head}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="">
+              {data.map((request, index) => {
+                return (
+                  <tr key={request?.id} className=" border-b">
+                    <td className=" flex gap-2 items-center min-w-36">
+                      <img
+                        src={request?.image ? request?.image : "/logo_blue.png"}
+                        alt={request?.name}
+                        className=" h-10 w-10 rounded aspect-square"
+                      />
+                      <span className=" flex flex-col gap-1">
+                        <span>{request?.name}</span>
+                        <span className=" text-xs text-gray-500 flex items-center gap-1">
+                          <LocationPinIcon className=" h-3 w-3" />
+                          {request?.location}
+                        </span>
                       </span>
-                    </span>
-                  </td>
-                  <td className=" text-lg  min-w-36">
-                    {request?.noOfGuests} Guests
-                  </td>
-                  <td>{request?.category}</td>
-                  <td>{request?.characteristics} Characteristics</td>
-                  <td>{request?.units}</td>
-                  <td>
-                    <Status status={request?.status} />
-                  </td>
-                  <td className=" group relative">
-                    <span className=" p-2 text-lg">...</span>
-                    <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                      <Link
-                        to={`/apartments-details/${request?.id}`}
-                        className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                      >
-                        View Apartment
-                      </Link>
-                      <Link
-                        to={`/edit-apartment/apartment-details/${request?.id}`}
-                        className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                      >
-                        Edit Apartment
-                      </Link>
-                      <Link
-                        to="#"
-                        className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                      >
-                        Check Calender
-                      </Link>
-                      <Link
-                        to="#"
-                        className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                      >
-                        View Rates
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => setOpenReservation(true)}
-                        className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                      >
-                        Delete Apartment
-                      </button>
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                    </td>
+                    <td className=" text-lg  min-w-36">
+                      {request?.noOfGuests} Guests
+                    </td>
+                    <td>{request?.category}</td>
+                    <td>{request?.characteristics}</td>
+                    <td>{request?.units}</td>
+                    <td>
+                      <Status status={request?.availabilityStatus} />
+                    </td>
+                    <td className=" group relative">
+                      <span className=" p-2 text-lg">...</span>
+                      <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
+                        <Link
+                          to={`/apartments-details/${request?.id}`}
+                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          View Apartment
+                        </Link>
+                        <Link
+                          to={`/edit-apartment/apartment-details/${request?.id}`}
+                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit Apartment
+                        </Link>
+                        <Link
+                          to="#"
+                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Check Calender
+                        </Link>
+                        <Link
+                          to="#"
+                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          View Rates
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => setOpenReservation(true)}
+                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete Apartment
+                        </button>
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <NoResult />
+        )}
         <Pagination
-          pagination={{
-            current_page: 1,
-            last_page: 2,
-            per_page: 20,
-            total: 24,
-            from: 1,
-            to: 1,
-          }}
+          pagination={pagination}
           setCurrentPage={setCurrentPage}
           isLoading={false}
           label="Apartment"

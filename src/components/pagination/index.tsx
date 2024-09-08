@@ -37,8 +37,7 @@ export default function Pagination({
   return (
     <div className="w-full flex items-center justify-end gap-2 my-8">
       <span>
-        showing {pagination?.current_page * pagination?.per_page} of{" "}
-        {pagination?.total} {label}{" "}
+        showing {pagination?.total} {label}{" "}
       </span>
       <button
         title="previous"

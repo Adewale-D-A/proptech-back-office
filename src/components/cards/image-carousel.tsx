@@ -4,31 +4,35 @@ import NavigatePrevIcon from "../../assets/icons/navigate-prev";
 
 const imageArray = ["/temp/temp_apartment_1.jpg"] as string[];
 
-export default function ImageCarousel() {
-  const data = {
-    images: [
-      {
-        id: 1,
-        path: "/temp/temp_apartment_1.jpg",
-      },
-      {
-        id: 2,
-        path: "/temp/temp_apartment_2.jpg",
-      },
-      {
-        id: 3,
-        path: "/temp/temp_apartment_3.jpg",
-      },
-    ],
-  };
+export default function ImageCarousel({
+  images,
+}: {
+  images: { url: string }[];
+}) {
+  // const data = {
+  //   images: [
+  //     {
+  //       id: 1,
+  //       path: "/temp/temp_apartment_1.jpg",
+  //     },
+  //     {
+  //       id: 2,
+  //       path: "/temp/temp_apartment_2.jpg",
+  //     },
+  //     {
+  //       id: 3,
+  //       path: "/temp/temp_apartment_3.jpg",
+  //     },
+  //   ],
+  // };
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
 
   // productsArray next function
   const showNextImage = useCallback(() => {
-    if (currentImgIndex + 1 < data?.images.length) {
+    if (currentImgIndex + 1 < images?.length) {
       setCurrentImgIndex((prev) => prev + 1);
     }
-  }, [data, currentImgIndex]);
+  }, [images, currentImgIndex]);
 
   // productsArray next previous
   const showPrevImage = useCallback(() => {
@@ -45,15 +49,15 @@ export default function ImageCarousel() {
       <div className="w-full h-96 bg-gray-500/30 rounded-md relative">
         <img
           src={
-            data?.images?.length > 0
-              ? data?.images[currentImgIndex]?.path
+            images?.length > 0
+              ? images[currentImgIndex]?.url
               : imageArray[currentImgIndex]
           }
           alt={"shirt"}
           className="w-full h-full object-cover rounded-md"
         />
         <div className="w-full flex gap-5 justify-center items-center my-2 absolute bottom-3 left-0">
-          {Array.from({ length: data?.images?.length }, (_, index) => {
+          {Array.from({ length: images?.length }, (_, index) => {
             return (
               <button
                 type="button"
@@ -85,7 +89,7 @@ export default function ImageCarousel() {
             title="next"
             onClick={() => showNextImage()}
             className={`${
-              currentImgIndex + 1 < data?.images?.length
+              currentImgIndex + 1 < images?.length
                 ? "bg-white text-black"
                 : "bg-gray-300 cursor-not-allowed text-gray-400"
             }  p-3 rounded-full shadow-md `}

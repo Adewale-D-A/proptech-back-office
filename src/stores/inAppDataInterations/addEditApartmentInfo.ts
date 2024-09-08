@@ -5,6 +5,7 @@ export const addEditApartmentInfo = createSlice({
   initialState: {
     value: {
       data: {
+        id: "",
         apartmentDetails: {
           name: "",
           roomOption: "",
@@ -29,6 +30,9 @@ export const addEditApartmentInfo = createSlice({
     },
   },
   reducers: {
+    updateApartmentInfoId: (state, action) => {
+      state.value.data.id = action.payload?.id;
+    },
     updateApartmentDetails: (state, action) => {
       state.value.data.apartmentDetails = action?.payload;
     },
@@ -40,6 +44,7 @@ export const addEditApartmentInfo = createSlice({
     },
     clearAllApartmentInfo: (state) => {
       state.value.data = {
+        id: "",
         apartmentDetails: {
           name: "",
           roomOption: "",
@@ -66,6 +71,7 @@ export const addEditApartmentInfo = createSlice({
 });
 
 export const {
+  updateApartmentInfoId,
   updateApartmentDetails,
   updateApartmentFeatures,
   updateApartmentPolicies,
