@@ -243,7 +243,7 @@ export default function NavigationMenuItems() {
                 to={items?.url}
                 className={({ isActive }) =>
                   isActive
-                    ? `flex justify-between   w-full p-2 md:p-3 transition-all bg-white/15 border-l-4`
+                    ? `flex justify-between w-full p-2 md:p-3 transition-all bg-white/15 border-l-4`
                     : `flex justify-between w-full p-2 md:p-3 transition-all hover:bg-white/15 hover:border-l-4`
                 }
               >

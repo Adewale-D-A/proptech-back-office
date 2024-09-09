@@ -9,6 +9,7 @@ import ImageCarousel from "../../../components/cards/image-carousel";
 import ModalTemplate from "../../../components/modal";
 import AssignCustomer from "../../../components/quickReservationFlow/assignToCustomer";
 import { closeAssignToCustomerView } from "../../../stores/inAppDataInterations/assignCustomer";
+import CalendarView from "../../../components/calendar";
 
 const breadCrumb = [
   {
@@ -67,13 +68,30 @@ export default function CheckCalendar() {
                 </h4>
                 <Filter />
               </div>
-              <div className="w-full p-2">
+              <div className="w-full p-2 flex flex-col gap-5">
                 <ImageCarousel
                   images={[
                     { url: "/temp/temp_apartment_1.jpg" },
                     { url: "/temp/temp_apartment_2.jpg" },
                   ]}
                 />
+                <div className="w-full flex justify-center flex-col gap-5">
+                  <div className=" flex items-center justify-center gap-4">
+                    <div className=" flex gap-2 items-center">
+                      <div className=" h-5 w-5 aspect-square bg-green-500 rounded-sm"></div>
+                      <span>Booked Date</span>
+                    </div>
+                    <div className=" flex gap-2 items-center">
+                      <div className=" h-5 w-5 aspect-square bg-gray-400 rounded-sm"></div>
+                      <span>Available Date</span>
+                    </div>
+                  </div>
+                  <div className="w-full flex flex-wrap gap-4 justify-center">
+                    {[1, 2, 4, 5, 6, 7, 8].map((item) => (
+                      <CalendarView key={item} />
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -1,3 +1,7 @@
+##### 09.09.2024
+
+> Apartment flow completion (calendar view not satisfactory yet, will be revisited in upcoming iterations)
+
 ##### 08.09.2024
 
 > Apartment calendar view (screen development in progress)
