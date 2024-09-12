@@ -1,22 +1,22 @@
 import { useLayoutEffect } from "react";
-import BuildingIcon from "../../../assets/icons/building";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
+import CalendarIcon from "../../../assets/icons/calendar";
 import ApartmentCalendarView from "../../../components/calendar/apartment-calendar-view";
 
 const breadCrumb = [
   {
-    url: "/apartments",
-    label: "Apartments",
-    icon: <BuildingIcon />,
+    url: "/bookings",
+    label: "Bookings",
+    icon: <CalendarIcon />,
   },
   {
     url: "#",
-    label: "Check Calendar",
+    label: "Calendar",
     icon: "",
   },
 ];
-export default function CheckCalendar() {
+export default function BookingsCalendar() {
   const dispatch = useAppDispatch();
 
   // update page props on component mount
@@ -24,8 +24,8 @@ export default function CheckCalendar() {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "Check Calendar",
-        pageDescription: "Check apartment's calendar",
+        pageTitle: "Bookings Calendar",
+        pageDescription: "Apartment's bookings calendar",
         isLoading: false,
         failedToLoad: false,
         setFailedToLoad: false,

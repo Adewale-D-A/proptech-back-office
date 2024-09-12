@@ -1,3 +1,8 @@
+##### 12.09.2024
+
+> Bookings calendar UI development
+> Bookings overview screen development (in progress)
+
 ##### 09.09.2024
 
 > Apartment flow completion (calendar view not satisfactory yet, will be revisited in upcoming iterations)

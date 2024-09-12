@@ -37,7 +37,7 @@ export default function Pagination({
   return (
     <div className="w-full flex items-center justify-end gap-2 my-8">
       <span>
-        showing {pagination?.total} {label}{" "}
+        showing {pagination?.per_page} of {pagination?.total} {label}{" "}
       </span>
       <button
         title="previous"
@@ -62,7 +62,7 @@ export default function Pagination({
             key={index}
             type="button"
             onClick={() => setCurrentPage(index + 1)}
-            className={`border aspect-square flex items-center justify-center rounded-full p-3 hover:border-primary transition-all cursor-pointer ${
+            className={` border aspect-square flex items-center justify-center rounded-full p-3 hover:border-primary transition-all cursor-pointer ${
               index + 1 === pagination?.current_page
                 ? "border-primary bg-primary text-white "
                 : ""

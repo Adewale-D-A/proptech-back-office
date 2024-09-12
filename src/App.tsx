@@ -29,6 +29,7 @@ import AddNewApartmentDetails from "./pages/apartments/new-apartment/apartment-d
 import AddNewApartmentFeatures from "./pages/apartments/new-apartment/apartment-features";
 import AddNewApartmentPolicies from "./pages/apartments/new-apartment/apartment-policy";
 import CheckCalendar from "./pages/apartments/check-calendar";
+import BookingsCalendar from "./pages/bookings/bookings-calendar";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -85,7 +86,9 @@ function App() {
             />
             {/* apartment flows */}
 
+            {/* bookings flow */}
             <Route path="/bookings" element={<Bookings />} />
+            {/* <Route path="/bookings-calendar" element={<BookingsCalendar />} /> */}
             <Route
               path="/additional-services"
               element={<AdditionalServices />}

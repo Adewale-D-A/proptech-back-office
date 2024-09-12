@@ -4,7 +4,7 @@ import Select from "../inputs/select";
 export default function Sort({ id, label }: { id: string; label: string }) {
   const [selectSort, setSelectSort] = useState("");
   return (
-    <div className=" flex items-center gap-2 text-gray-500">
+    <div className=" flex items-center gap-2 text-gray-500 text-xs">
       <label htmlFor={id} className=" text-nowrap">
         {label}
       </label>
