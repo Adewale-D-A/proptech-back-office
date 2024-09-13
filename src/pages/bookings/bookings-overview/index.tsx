@@ -16,6 +16,7 @@ import Search from "../../../components/inputs/search";
 import BookingsListTable from "../../../components/tables/bookingsLists";
 import BarChart from "../../../components/charts/bar-chart";
 import RoomOccupancyListTable from "../../../components/tables/roomOccupancy";
+import WeatherIcon from "../../../assets/icons/weather";
 
 export default function BookingsOverview() {
   return (
@@ -77,7 +78,7 @@ export default function BookingsOverview() {
           {/* Bookings Calendar */}
           <div className="flex items-center justify-between gap-2 border-b p-3">
             <h4 className="text-lg font-semibold  flex items-center gap-2">
-              <CalendarIcon /> <span>House Rules</span>{" "}
+              <CalendarIcon /> <span>Bookings Calendar</span>{" "}
             </h4>
             <div className=" w-fit">
               <LinkButton
@@ -261,7 +262,7 @@ export default function BookingsOverview() {
       <div className=" w-full flex flex-col gap-4 border rounded-md">
         <div className="flex  flex-col md:flex-row items-center justify-between gap-2 border-b p-3">
           <h4 className="text-lg font-semibold  flex items-center gap-2">
-            <CalendarIcon /> <span>Forcast</span>{" "}
+            <WeatherIcon /> <span>Forcast</span>{" "}
           </h4>
           <div className=" w-fit">
             <Filter />

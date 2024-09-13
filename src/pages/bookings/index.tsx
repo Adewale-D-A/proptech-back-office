@@ -7,6 +7,7 @@ import CalendarIcon from "../../assets/icons/calendar";
 import UserPlusIcon from "../../assets/icons/user-plus";
 import BookingsOverview from "./bookings-overview";
 import BookingsCalendar from "./bookings-calendar";
+import AllBookings from "./all-bookings";
 
 const breadCrumb = [
   {
@@ -59,7 +60,7 @@ export default function Bookings() {
             },
             {
               id: 4,
-              data: <div></div>,
+              data: <AllBookings />,
             },
             {
               id: 5,

@@ -1,3 +1,10 @@
+##### 13.09.2024
+
+> Bookings detail administrative assignment UI (in progress)
+> Bookings detailed view development
+> Bookings list view UI development
+> Bookings detail modal development
+
 ##### 12.09.2024
 
 > Bookings calendar UI development
