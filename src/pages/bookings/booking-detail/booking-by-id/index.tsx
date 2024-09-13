@@ -47,7 +47,7 @@ export default function BookingDetailsById() {
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
         <div className=" p-3 rounded-lg border">
-          <table className=" w-full text-xs">
+          <table className=" w-full text-xs overflow-x-auto">
             <thead className="">
               <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
                 {[
