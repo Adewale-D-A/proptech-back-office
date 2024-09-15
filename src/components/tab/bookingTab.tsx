@@ -1,5 +1,5 @@
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 
 export default function BookingTab({
   header,
@@ -8,7 +8,7 @@ export default function BookingTab({
   header: { id: string | number; label: string; icon: ReactNode }[];
   content: { id: string | number; data: ReactNode }[];
 }) {
-  const [trackTab, setTrackTab] = useState(1);
+  // const [trackTab, setTrackTab] = useState(1);
   return (
     <>
       <TabGroup>
@@ -17,7 +17,7 @@ export default function BookingTab({
             {header.map((item, index) => (
               <Tab
                 key={item?.id}
-                onClick={() => setTrackTab(index + 1)}
+                // onClick={() => setTrackTab(index + 1)}
                 className={
                   "flex items-center justify-center md:justify-start gap-2 md:gap-3 py-3 border-primary text-gray-400 focus:outline-none data-[selected]:text-primary data-[selected]:border-b-4 data-[hover]:border-b-4 data-[selected]:data-[hover]:border-b-4 data-[hover]:text-primary data-[focus]:outline-1 data-[focus]:outline-white"
                 }
@@ -29,7 +29,7 @@ export default function BookingTab({
         </TabList>
         <TabPanels>
           {content?.map((item) => (
-            <TabPanel key={item?.id} className="my-5">
+            <TabPanel key={item?.id} className="">
               {item.data}
             </TabPanel>
           ))}

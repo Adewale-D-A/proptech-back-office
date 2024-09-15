@@ -20,6 +20,7 @@ import userAuthentication from "./authUser/auth";
 // api data
 import apartmentListsData from "./apiData/apartment-lists";
 import bookingsListsData from "./apiData/bookings-lists";
+import requestListsData from "./apiData/requests-lists";
 
 export const adminStore = () => {
   return configureStore({
@@ -42,6 +43,7 @@ export const adminStore = () => {
       // api data
       allAparmentLists: apartmentListsData,
       allBookingsLists: bookingsListsData,
+      allRequestLists: requestListsData,
     },
     middleware: (getDefaultMiddleware: any) =>
       getDefaultMiddleware({

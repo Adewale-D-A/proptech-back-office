@@ -1,9 +1,20 @@
 import { Link, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../../../stores/hooks";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 import { updatePageProperties } from "../../../../stores/appFunctionality/pageProperties";
 import CalendarIcon from "../../../../assets/icons/calendar";
 import Status from "../../../../components/status";
+import Search from "../../../../components/inputs/search";
+import LoadingButton from "../../../../components/button";
+import PlusIcon from "../../../../assets/icons/plus";
+import Select from "../../../../components/inputs/select";
+import BookingTab from "../../../../components/tab/bookingTab";
+import MenuIcon from "../../../../assets/icons/menu";
+import AdminNotes from "./notes/page";
+import GuestMessaging from "./guest-messaging/page";
+import InvoiceNotes from "./invoice-notes/page";
+import BookingHistory from "./booking-history/page";
+import BookingByIdList from "../../../../components/tables/bookingList";
 
 const breadCrumb = [
   {
@@ -35,103 +46,87 @@ export default function BookingAdministrationById() {
     );
   }, []);
 
+  const [payment, setPayment] = useState("");
+
   return (
-    <section className="w-full flex flex-col items-center">
+    <section className="w-full flex flex-col items-center my-5">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
         <div className=" p-3 rounded-lg border">
-          <table className=" w-full text-xs overflow-x-auto">
-            <thead className="">
-              <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                {[
-                  "ID",
-                  "Customer Name",
-                  "Date of Booking",
-                  "No of Rooms",
-                  "Amount",
-                  "Check-in Date",
-                  "Check-out Date",
-                  "Status",
-                  "Action",
-                ].map((head) => (
-                  <th key={head}>{head}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="">
-              {[
-                {
-                  id: "asasas",
-                  customerName: "Jola Samson",
-                  apartnmentName: "Sunshine - 2 Bedroom",
-                  bookingDate: "15-02-2024",
-                  noOfRooms: "4 Rooms",
-                  amount: "N150,000",
-                  checkIn: "15-02-2024",
-                  checkOut: "15-02-2024",
-                  status: "Confirmed",
-                },
-              ].map((request, index) => {
-                return (
-                  <tr key={request?.id} className=" border-b">
-                    <td>{request?.id}</td>
-                    <td>{request?.customerName}</td>
-                    <td>{request?.bookingDate}</td>
-                    <td>{request?.noOfRooms}</td>
-                    <td>{request?.amount}</td>
-                    <td>{request?.checkIn}</td>
-                    <td>{request?.checkOut}</td>
-                    <td>
-                      <Status status={request?.status} />
-                    </td>
-                    <td className=" group relative">
-                      <span className=" p-2 text-lg">...</span>
-                      <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                        <button
-                          type="button"
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Resend Email
-                        </button>
-                        <Link
-                          to={`/edit-apartment/apartment-details/${request?.id}`}
-                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Edit Reservation
-                        </Link>
-                        <Link
-                          to={`/apartment-caledar/${request?.id}`}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          View In Front Site
-                        </Link>
-                        <button
-                          type="button"
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Delete Reservation
-                        </button>
-                        <button
-                          type="button"
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Set To Be Confirmed
-                        </button>
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <BookingByIdList />
         </div>
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div className=" w-full flex flex-col gap-4 border rounded-md">
-            {/* Assign Customer */}
-            <h4 className="text-lg font-semibold border-b p-3">
-              Assign Customer
-            </h4>
+        <div className="w-full flex flex-col md:flex-row gap-5 items-start">
+          <div className=" w-full flex-1 md:flex-[0.4]">
+            <div className=" w-full flex flex-col gap-4 border rounded-md">
+              {/* Assign Customer */}
+              <h4 className="text-lg font-semibold border-b p-3">
+                Assign Customer
+              </h4>
+              <div className=" p-3 flex flex-col gap-2">
+                <label htmlFor="search-pin-name">Exisiting Customer</label>
+                <Search
+                  id="search-pin-name"
+                  placeholder="Search by PIN or Name"
+                />
+                <div className=" flex justify-end">
+                  <div className=" w-fit">
+                    <LoadingButton
+                      isLoading={false}
+                      label="Create new Customer"
+                      startIcon={<PlusIcon />}
+                      type="button"
+                      variant={2}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className=" w-full flex flex-col gap-4 border rounded-md">
+              {/* Method of payment */}
+              <h4 className="text-lg font-semibold border-b p-3">
+                Method of Payment
+              </h4>
+              <div className=" p-3 flex flex-col gap-2">
+                <Select
+                  isRequired={true}
+                  value={payment}
+                  setValue={setPayment}
+                  id="method-of-payment"
+                  label="Payment Method"
+                >
+                  <option value="">Flutterwave</option>
+                  <option value="bank-transfer">Bank Transfer</option>
+                </Select>
+              </div>
+            </div>
           </div>
-          <div className=" w-full rounded-md border flex flex-col gap-3"></div>
+          <div className=" w-full flex-1 md:flex-[0.6] rounded-md border flex flex-col gap-3">
+            <BookingTab
+              header={[
+                { id: 1, icon: <MenuIcon />, label: "Notes" },
+                { id: 2, icon: <MenuIcon />, label: "Guest Messaging" },
+                { id: 3, icon: <MenuIcon />, label: "Invoice Note" },
+                { id: 4, icon: <MenuIcon />, label: "Booking History" },
+              ]}
+              content={[
+                {
+                  id: 1,
+                  data: <AdminNotes />,
+                },
+                {
+                  id: 2,
+                  data: <GuestMessaging />,
+                },
+                {
+                  id: 3,
+                  data: <InvoiceNotes />,
+                },
+                {
+                  id: 4,
+                  data: <BookingHistory />,
+                },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </section>

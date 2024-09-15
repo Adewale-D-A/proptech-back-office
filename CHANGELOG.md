@@ -1,3 +1,10 @@
+##### 15.09.2024
+
+> Booking Admin
+> Add new booking request modal setup
+> Edit reservation UI development
+> Booking request table UI development
+
 ##### 13.09.2024
 
 > Bookings detail administrative assignment UI (in progress)

@@ -6,17 +6,18 @@ import Search from "../inputs/search";
 import FilterSearch from "../filterAndSort/filter-search";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import Status from "../status";
-import useGetAllBookingsLists from "../../services-hooks/useGetAllBookingsLists";
 import { useAppDispatch } from "../../stores/hooks";
 import { removeBookingsInList } from "../../stores/apiData/bookings-lists";
 import ModalTemplate from "../modal";
 import BookingDetailSummary from "../booking-detail";
+import useGetAllRequestLists from "../../services-hooks/useGetAllRequestLists";
+import { removeRequestsInList } from "../../stores/apiData/requests-lists";
 
-export default function AllBookingsListTable({ header }: { header: string[] }) {
+export default function RequestsListTable({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllBookingsLists({ page: currentPage });
+    useGetAllRequestLists({ page: currentPage });
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [openBookingDetailSummary, setOpenBookingDetailSummary] =
     useState(false);
@@ -26,8 +27,7 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
   const deleteApartment = useCallback(() => {
     setIsDeleting(true);
     try {
-      dispatch(removeBookingsInList({ id: selectedId }));
-
+      dispatch(removeRequestsInList({ id: selectedId }));
       setOpenDeleteConfirmation(false);
     } catch (error) {
     } finally {
@@ -57,45 +57,30 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
               {data.map((request, index) => {
                 return (
                   <tr key={request?.id} className=" border-b">
-                    <td>
-                      <span className=" rounded-full p-2 border border-primary">
-                        {request?.id}
-                      </span>
-                    </td>
                     <td>{request?.customerName}</td>
                     <td>{request?.apartnmentName}</td>
-                    <td>{request?.bookingDate}</td>
-                    <td>{request?.amount}</td>
-                    <td>{request?.exchangeRate}</td>
-                    <td>{request?.checkIn}</td>
-                    <td>{request?.checkOut}</td>
+                    <td>{request?.date}</td>
+                    <td>{request?.type}</td>
+                    <td>{request?.description}</td>
+                    <td>{request?.isEscalated}</td>
                     <td>
                       <Status status={request?.status} />
                     </td>
                     <td className=" group relative">
                       <span className=" p-2 text-lg">...</span>
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
+                        <Link
+                          to={`/request-details/${request?.id}`}
+                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          View Details
+                        </Link>
                         <button
-                          onClick={() => {
-                            setSelectedId(request?.id);
-                            setOpenBookingDetailSummary(true);
-                          }}
+                          type="button"
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
-                          View Booking
+                          Mark As Resolved
                         </button>
-                        <Link
-                          to={`/edit-apartment/apartment-details/${request?.id}`}
-                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Edit Booking
-                        </Link>
-                        <Link
-                          to={`/apartment-caledar/${request?.id}`}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Generate Invoice
-                        </Link>
                         <button
                           type="button"
                           onClick={() => {
@@ -104,7 +89,7 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
                           }}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
-                          Delete Apartment
+                          Delete Request
                         </button>
                       </span>
                     </td>

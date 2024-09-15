@@ -22,7 +22,7 @@ export default function ApartmentCalendarView() {
 
   return (
     <>
-      <section className="w-full flex flex-col items-center">
+      <section className="w-full flex flex-col items-center my-5">
         <div className="w-full max-w-screen-xl flex flex-col gap-10">
           <div className="w-full flex flex-col md:flex-row gap-5 items-start">
             <div className=" w-full rounded-md border flex-1 md:flex-[0.3] flex flex-col gap-3">

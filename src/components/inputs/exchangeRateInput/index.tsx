@@ -2,21 +2,21 @@ import React from "react";
 import countries from "../../../assets/Countries.json";
 
 interface Props {
-  coutryCode: string;
-  setCountryCode: Function;
-  number: string;
-  setNumber: Function;
-  label: string;
+  country: string;
+  setCountry: Function;
+  amount: string;
+  setAmount: Function;
+  label?: string;
   isRequired?: boolean;
   id: string;
   readOnly?: boolean;
 }
 
-const PhoneInput: React.FC<Props> = ({
-  coutryCode,
-  setCountryCode,
-  number,
-  setNumber,
+const ExchangeRateInput: React.FC<Props> = ({
+  country,
+  setCountry,
+  amount,
+  setAmount,
   label,
   isRequired = false,
   id,
@@ -24,16 +24,18 @@ const PhoneInput: React.FC<Props> = ({
 }) => {
   return (
     <div className="w-full">
-      <label htmlFor={id} className=" text-sm font-medium">
-        {label}
-      </label>
+      {label && (
+        <label htmlFor={id} className=" text-sm font-medium">
+          {label}
+        </label>
+      )}
       <div className="w-full flex pl-4 border rounded-lg bg-gray-200/15">
         <select
           id="country-code"
           title={label}
-          value={coutryCode}
+          value={country}
           disabled={readOnly}
-          onChange={(e) => setCountryCode(e.target.value)}
+          onChange={(e) => setCountry(e.target.value)}
           className=" max-w-28 bg-transparent"
         >
           {countries.map((country) => (
@@ -41,18 +43,18 @@ const PhoneInput: React.FC<Props> = ({
               key={country.code}
               value={`${country?.dial_code}+${country?.name}`}
             >
-              {`${country?.flag} ${country?.dial_code} - ${country?.name}`}
+              {`${country?.flag} - ${country?.name}`}
             </option>
           ))}
         </select>
         <input
           type="number"
           id={id}
-          value={number}
+          value={amount}
           readOnly={readOnly}
           required={isRequired}
-          onChange={(e) => setNumber(e.target.value)}
-          placeholder="000-000-0000"
+          onChange={(e) => setAmount(e.target.value)}
+          placeholder="Enter amount"
           className="w-full p-3 bg-transparent rounded-r-lg focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
@@ -60,4 +62,4 @@ const PhoneInput: React.FC<Props> = ({
   );
 };
 
-export default PhoneInput;
+export default ExchangeRateInput;
