@@ -43,7 +43,7 @@ export default function AllBookings() {
         <div className=" w-full flex justify-between">
           <h2 className="text-xl font-semibold">All Bookings List</h2>
           <div className=" flex items-center gap-4">
-            <ExportSelect />
+            <ExportSelect id="bookings" />
             <LinkButton
               url="#"
               label="Add New Booking"

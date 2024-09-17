@@ -1,3 +1,9 @@
+##### 17.09.2024
+
+> Customers UI flow journey development
+> Customers list view completion
+> Add/edit customer UI journey development (in progress)
+
 ##### 15.09.2024
 
 > Booking Admin
