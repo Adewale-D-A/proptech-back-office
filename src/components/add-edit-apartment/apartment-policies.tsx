@@ -151,21 +151,26 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
 
       {/* submit and cancel buttons */}
       <div className=" w-full flex justify-end mt-10">
-        <div className=" flex items-center justify-between w-full max-w-sm gap-4">
-          <LinkButton
-            url={
-              id
-                ? `/add-apartment/apartment-features`
-                : `/edit-apartment/apartment-features/${id}`
-            }
-            label="Previous Page"
-            variant={2}
-          />
-          <LoadingButton
-            label="Save and upload"
-            type="submit"
-            isLoading={isSubmitting}
-          />
+        <div className=" flex items-center justify-between gap-4">
+          <div className=" w-fit">
+            <LinkButton
+              url={
+                id
+                  ? `/edit-apartment/apartment-features/${id}`
+                  : `/add-apartment/apartment-features`
+              }
+              label="Previous Page"
+              variant={2}
+            />
+          </div>
+
+          <div className=" w-fit">
+            <LoadingButton
+              label="Save and upload"
+              type="submit"
+              isLoading={isSubmitting}
+            />
+          </div>
         </div>
       </div>
     </form>

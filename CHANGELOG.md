@@ -1,5 +1,6 @@
 ##### 17.09.2024
 
+> Customers flow completion
 > Customers UI flow journey development
 > Customers list view completion
 > Add/edit customer UI journey development (in progress)

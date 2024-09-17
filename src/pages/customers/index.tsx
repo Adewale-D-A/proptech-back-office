@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import UsersIcon from "../../assets/icons/users";
 import { useAppDispatch } from "../../stores/hooks";
 import { updatePageProperties } from "../../stores/appFunctionality/pageProperties";
@@ -7,6 +7,7 @@ import ExportSelect from "../../components/inputs/select/exportSelect";
 import LinkButton from "../../components/button/linkButton";
 import PlusIcon from "../../assets/icons/plus";
 import CustomersListTable from "../../components/tables/customer";
+import { clearAllCustomerInfo } from "../../stores/inAppDataInterations/addEditCustomerInfo";
 
 const breadCrumb = [
   {
@@ -32,6 +33,12 @@ export default function Customers() {
       })
     );
   }, []);
+
+  // clear customer info fields
+  useEffect(() => {
+    dispatch(clearAllCustomerInfo());
+  }, []);
+
   return (
     <section className="w-full flex flex-col items-center my-5">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
@@ -40,7 +47,7 @@ export default function Customers() {
           <div className=" flex items-center gap-4">
             <ExportSelect id="customers" />
             <LinkButton
-              url="#"
+              url="/add-customer/customer-details"
               label="Add New Customer"
               startIcon={<PlusIcon />}
             />

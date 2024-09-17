@@ -10,11 +10,37 @@
   "data": [
     {
       "id": "asasas",
-      "firstName": "Jola",
-      "lastName": "Samuel",
-      "phoneNumber": "07033284932",
-      "country": "Nigeria",
-      "bookings": "20"
+      "bookings": "20",
+      "firstname": "Fiona",
+      "lastname": "James",
+      "email": "f.james@gmail.com",
+      "phoneNumber": "07023455693",
+      "profileImg": "/logo_blue.png",
+      "gender": "female",
+      "dob": "1998-09-04",
+      "country": "nigeria",
+      "state": "Lagos",
+      "city": "Lagos",
+      "address": "Surulere, Lagos",
+      "placeOfBirth": "Abuja",
+      "idType": "National",
+      "idNumber": "1212i9i93s",
+      "idImage": "/logo_blue.png",
+      "pinGenerated": "12132321",
+      "notes": "Just writing",
+      "companyName": "99Apartments",
+      "VATid": "hksakhw23",
+      "companyEmail": "99apt@apt.com",
+      "companyId": "asjno2nig",
+      "companyCountry": "Nigeria",
+      "companyState": "Lagos",
+      "companyCity": "Lagos",
+      "companyAddress": "Leki, Lagos",
+      "isSalesChannel": false,
+      "salesChannelName": "ayo",
+      "salesChannelCommision": "new",
+      "calculateCommissionOn": "bill",
+      "applyCommissionOn": "rent"
     }
   ]
 }

@@ -2,10 +2,10 @@ import { useEffect, useLayoutEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import Timeline from "../../../components/timeline";
 import UsersIcon from "../../../assets/icons/users";
 import { clearAllCustomerInfo } from "../../../stores/inAppDataInterations/addEditCustomerInfo";
 import AddCustomerDetails from "../../../components/add-edit-customer/customer-details";
+import Timeline from "../../../components/timeline";
 
 export default function AddNewCustomerDetails() {
   const { id } = useParams();
@@ -44,18 +44,18 @@ export default function AddNewCustomerDetails() {
     );
   }, []);
 
-  useEffect(() => {
-    if (!(storeCustomerDetails?.id === "updated")) {
-      dispatch(clearAllCustomerInfo());
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!(storeCustomerDetails?.id === "updated")) {
+  //     dispatch(clearAllCustomerInfo());
+  //   }
+  // }, []);
 
   return (
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
         <div className=" w-full rounded-md border flex flex-col items-center justify-center">
-          <div className=" w-full flex items-center max-w-xl py-10">
-            <Timeline currentStep={1} />
+          <div className=" w-full flex items-center max-w-screen-lg justify-center py-10">
+            <Timeline currentStep={1} id="customer" />
           </div>
           <div className="w-full border-t py-10 px-5">
             <AddCustomerDetails />

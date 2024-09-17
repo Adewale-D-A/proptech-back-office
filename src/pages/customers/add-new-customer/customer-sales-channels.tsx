@@ -54,8 +54,8 @@ export default function AddNewCustomerSalesChannel() {
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
         <div className=" w-full rounded-md border flex flex-col items-center justify-center">
-          <div className=" w-full flex items-center max-w-xl py-10">
-            <Timeline currentStep={2} />
+          <div className=" w-full flex items-center max-w-screen-lg justify-center py-10">
+            <Timeline currentStep={4} id="customer" />
           </div>
           <div className="w-full border-t py-10 px-5">
             <AddCustomerSalesChannel />

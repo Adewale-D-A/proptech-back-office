@@ -1,18 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import {
-  ChangeEvent,
-  SyntheticEvent,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import TextInput from "../inputs/textInput";
 import AddressAutocompleteInput from "../inputs/addressAutocompleteInout";
 import LoadingButton from "../button";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import LinkButton from "../button/linkButton";
-import { updateCustomerDetails } from "../../stores/inAppDataInterations/addEditCustomerInfo";
+import {
+  updateCustomerDetails,
+  updateCustomerInfoId,
+} from "../../stores/inAppDataInterations/addEditCustomerInfo";
+import PhoneInput from "../inputs/phoneInput";
+import FileInput from "../inputs/fileInput";
+import Select from "../inputs/select";
+import DateInput from "../inputs/dateInput";
+import countries from "../../assets/Countries.json";
 
 export default function AddEditCustomerDetails({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
@@ -25,7 +27,12 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [profileImg, setProfileImg] = useState("");
+  const [countryCode, setCountryCode] = useState("");
+  const [profileImg, setProfileImg] = useState<{
+    name: string;
+    size: number;
+    preview: string;
+  }>({} as any);
   const [gender, setGender] = useState("");
   const [dob, setDob] = useState("");
   const [country, setCountry] = useState("");
@@ -62,7 +69,7 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
   }, [storeAptDetails]);
 
   //update redux store and naviagte to next timeline
-  const addCustoemrDetails = useCallback(
+  const addCustomerDetails = useCallback(
     (e: SyntheticEvent) => {
       e.preventDefault();
       if (profileImg) {
@@ -80,10 +87,11 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
           address,
         };
         dispatch(updateCustomerDetails(payload));
+        dispatch(updateCustomerInfoId({ id: "updated" }));
         if (id) {
-          navigate(`/edit-customer/customer-features/${id}`);
+          navigate(`/edit-customer/customer-verification/${id}`);
         } else {
-          navigate(`/add-customer/customer-features`);
+          navigate(`/add-customer/customer-verification`);
         }
       } else {
         dispatch(
@@ -106,51 +114,142 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
       id,
     ]
   );
-
   return (
-    <form className=" flex flex-col gap-5" onSubmit={addCustoemrDetails}>
-      {/* apartment name */}
-      <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
-        <TextInput
-          inputType="text"
-          isRequired={true}
-          value={firstname}
-          setValue={setFirstname}
-          id="first-name"
-          placeholder="First name"
-          label="First Name*"
-        />
-        <TextInput
-          inputType="text"
-          isRequired={true}
-          value={lastname}
-          setValue={setLastname}
-          id="last-name"
-          placeholder="Last name"
-          label="Last Name*"
-        />
-        <TextInput
-          inputType="email"
-          isRequired={true}
-          value={email}
-          setValue={setLastname}
-          id="email"
-          placeholder="Email address"
-          label="Email Address*"
+    <form
+      className="w-full flex flex-col gap-5 items-center"
+      onSubmit={addCustomerDetails}
+    >
+      <div className="w-full flex flex-col gap-5 max-w-screen-lg">
+        <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
+          <TextInput
+            inputType="text"
+            isRequired={true}
+            value={firstname}
+            setValue={setFirstname}
+            id="first-name"
+            placeholder=""
+            label="First Name*"
+          />
+          <TextInput
+            inputType="text"
+            isRequired={true}
+            value={lastname}
+            setValue={setLastname}
+            id="last-name"
+            placeholder=""
+            label="Last Name*"
+          />
+          <TextInput
+            inputType="email"
+            isRequired={true}
+            value={email}
+            setValue={setEmail}
+            id="email"
+            placeholder=""
+            label="Email Address*"
+          />
+          <PhoneInput
+            isRequired={true}
+            number={phoneNumber}
+            setNumber={setPhoneNumber}
+            coutryCode={countryCode}
+            setCountryCode={setCountryCode}
+            id="phone-number"
+            label="Phone number*"
+          />
+          <FileInput
+            value={profileImg}
+            setValue={setProfileImg}
+            label="Profile Image"
+            isRequired={false}
+            id="profile-image"
+          />
+          <Select
+            isRequired={true}
+            value={gender}
+            setValue={setGender}
+            id="gender"
+            label="Gender"
+          >
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </Select>
+          <DateInput
+            inputType="date"
+            isRequired={true}
+            value={dob}
+            setValue={setDob}
+            id="dob"
+            placeholder=""
+            label="Date of Birth"
+          />
+          <Select
+            isRequired={true}
+            value={country}
+            setValue={setCountry}
+            id="country"
+            label="Country *"
+          >
+            <option value="" disabled>
+              Country
+            </option>
+            {countries.map((country) => (
+              <option key={country.code} value={`${country?.name}`}>
+                {`${country?.flag} - ${country?.name}`}
+              </option>
+            ))}
+          </Select>
+          <TextInput
+            inputType="text"
+            isRequired={false}
+            value={state}
+            setValue={setState}
+            id="state"
+            placeholder=""
+            label="State/Province"
+          />
+          <TextInput
+            inputType="text"
+            isRequired={false}
+            value={city}
+            setValue={setCity}
+            id="city"
+            placeholder=""
+            label="City"
+          />
+        </div>
+        <AddressAutocompleteInput
+          label="Address"
+          placeholder="Search Address"
+          value={address}
+          setValue={setAddress}
         />
       </div>
-      <AddressAutocompleteInput value={address} setValue={setAddress} />
 
       {/* submit and cancel buttons */}
       <div className=" w-full flex justify-end mt-10">
-        <div className=" flex items-center justify-between w-full max-w-sm gap-4">
-          <LinkButton url="/customers" label="Back" variant={2} />
-          <LinkButton url="#" label="Skip & Continue" variant={2} />
-          <LoadingButton
-            label="Save and continue"
-            type="submit"
-            isLoading={false}
-          />
+        <div className=" flex items-center gap-4">
+          <div className=" w-fit">
+            <LinkButton url="/customers" label="Back" variant={2} />
+          </div>
+          <div className=" w-fit">
+            <LinkButton
+              url={
+                id
+                  ? `/edit-customer/customer-verification/${id}`
+                  : "/add-customer/customer-verification"
+              }
+              label="Skip & Continue"
+              variant={2}
+            />
+          </div>
+          <div className=" w-fit">
+            <LoadingButton
+              label="Save and continue"
+              type="submit"
+              isLoading={false}
+            />
+          </div>
         </div>
       </div>
     </form>

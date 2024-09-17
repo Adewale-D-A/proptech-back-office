@@ -4,6 +4,7 @@ import { apartmentById } from "../types/apiData/apartment";
 import tempAptData from "../assets/temp-api-mockup-data/apartments.json";
 import { useAppDispatch } from "../stores/hooks";
 import {
+  clearAllApartmentInfo,
   updateApartmentDetails,
   updateApartmentFeatures,
   updateApartmentInfoId,
@@ -45,6 +46,7 @@ export default function useGetApartmentById(id?: string) {
           cancellationPolicies,
         } = found;
         setData(found);
+        dispatch(clearAllApartmentInfo());
         dispatch(updateApartmentInfoId({ id: id }));
         dispatch(
           updateApartmentDetails({

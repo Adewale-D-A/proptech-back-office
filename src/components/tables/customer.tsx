@@ -35,7 +35,7 @@ export default function CustomersListTable({ header }: { header: string[] }) {
             </tr>
           </thead>
           <tbody className="">
-            {data.map((request, index) => {
+            {data.map((request) => {
               return (
                 <tr key={request?.id} className=" border-b">
                   <td>
@@ -43,8 +43,8 @@ export default function CustomersListTable({ header }: { header: string[] }) {
                       {request?.id}
                     </span>
                   </td>
-                  <td>{request?.firstName}</td>
-                  <td>{request?.lastName}</td>
+                  <td>{request?.firstname}</td>
+                  <td>{request?.lastname}</td>
                   <td>{request?.phoneNumber}</td>
                   <td>{request?.country}</td>
                   <td>{request?.bookings}</td>
@@ -72,16 +72,12 @@ export default function CustomersListTable({ header }: { header: string[] }) {
                       >
                         Generate Invoice
                       </Link>
-                      <button
-                        type="button"
-                        //   onClick={() => {
-                        //     setSelectedId(request?.id);
-                        //     setOpenDeleteConfirmation(true);
-                        //   }}
+                      <Link
+                        to={`/edit-customer/customer-details/${request?.id}`}
                         className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                       >
                         Edit Customer
-                      </button>
+                      </Link>
                     </span>
                   </td>
                 </tr>

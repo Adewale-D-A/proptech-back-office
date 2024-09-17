@@ -4,7 +4,7 @@ import PhotoIcon from "../../../assets/icons/photo";
 import CancelIcon from "../../../assets/icons/cancel";
 
 interface Props {
-  value: { name: string; size: number };
+  value: { name: string; size: number; preview: string };
   setValue: Function;
   label?: string;
   isRequired?: boolean;

@@ -32,6 +32,14 @@ import CheckCalendar from "./pages/apartments/check-calendar";
 import BookingById from "./pages/bookings/booking-detail";
 import EditBookingReservation from "./pages/bookings/booking-detail/edit-reservation";
 import RequestDetailsById from "./pages/bookings/requests/request-details";
+import AddNewCustomerDetails from "./pages/customers/add-new-customer/customer-details";
+import AddNewCustomerVerifiation from "./pages/customers/add-new-customer/customer-verification";
+import AddNewCustomerCompany from "./pages/customers/add-new-customer/customer-company";
+import AddNewCustomerSalesChannel from "./pages/customers/add-new-customer/customer-sales-channels";
+import EditCustomerDetailsPage from "./pages/customers/edit-customer/customer-details";
+import EditCustomerVerifiationPage from "./pages/customers/edit-customer/customer-verification";
+import EditCustomerCompanyPage from "./pages/customers/edit-customer/customer-company";
+import EditCustomerSalesChannelPage from "./pages/customers/edit-customer/customer-sales-channels";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -104,7 +112,42 @@ function App() {
               path="/additional-services"
               element={<AdditionalServices />}
             />
+            {/* customers flows  */}
             <Route path="/customers" element={<Customers />} />
+            {/* add */}
+            <Route
+              path="/add-customer/customer-details"
+              element={<AddNewCustomerDetails />}
+            />
+            <Route
+              path="/add-customer/customer-verification"
+              element={<AddNewCustomerVerifiation />}
+            />
+            <Route
+              path="/add-customer/customer-company"
+              element={<AddNewCustomerCompany />}
+            />
+            <Route
+              path="/add-customer/customer-sales-channel"
+              element={<AddNewCustomerSalesChannel />}
+            />
+            <Route
+              path="/edit-customer/customer-details/:id"
+              element={<EditCustomerDetailsPage />}
+            />
+            <Route
+              path="/edit-customer/customer-verification/:id"
+              element={<EditCustomerVerifiationPage />}
+            />
+            <Route
+              path="/edit-customer/customer-company/:id"
+              element={<EditCustomerCompanyPage />}
+            />
+            <Route
+              path="/edit-customer/customer-sales-channel/:id"
+              element={<EditCustomerSalesChannelPage />}
+            />
+
             <Route path="/pricing" element={<Pricing />} />
             <Route
               path="/plans-and-promotions"

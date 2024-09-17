@@ -13,7 +13,10 @@ import MultipleFileInput from "../inputs/fileInput/multipleFile";
 import AddressAutocompleteInput from "../inputs/addressAutocompleteInout";
 import LoadingButton from "../button";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
-import { updateApartmentDetails } from "../../stores/inAppDataInterations/addEditApartmentInfo";
+import {
+  updateApartmentDetails,
+  updateApartmentInfoId,
+} from "../../stores/inAppDataInterations/addEditApartmentInfo";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import LinkButton from "../button/linkButton";
 
@@ -57,6 +60,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
           aboutLocation: aboutLocation,
         };
         dispatch(updateApartmentDetails(payload));
+        dispatch(updateApartmentInfoId({ id: "updated" }));
         if (id) {
           navigate(`/edit-apartment/apartment-features/${id}`);
         } else {
@@ -182,13 +186,17 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
 
       {/* submit and cancel buttons */}
       <div className=" w-full flex justify-end mt-10">
-        <div className=" flex items-center justify-between w-full max-w-sm gap-4">
-          <LinkButton url="/apartments" label="Cancel" variant={2} />
-          <LoadingButton
-            label="Save and continue"
-            type="submit"
-            isLoading={false}
-          />
+        <div className=" flex items-center justify-between gap-4">
+          <div className=" w-fit">
+            <LinkButton url="/apartments" label="Cancel" variant={2} />
+          </div>
+          <div className=" w-fit">
+            <LoadingButton
+              label="Save and continue"
+              type="submit"
+              isLoading={false}
+            />
+          </div>
         </div>
       </div>
     </form>

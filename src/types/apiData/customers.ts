@@ -1,7 +1,7 @@
 export type customersists = {
   id: string;
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   phoneNumber: string;
   country: string;
   bookings: string;
@@ -9,9 +9,34 @@ export type customersists = {
 
 export type customersById = {
   id: string;
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
+  email: string;
   phoneNumber: string;
+  profileImg: string;
+  gender: string;
+  dob: string;
   country: string;
-  bookings: string;
+  state: string;
+  city: string;
+  address: string;
+  placeOfBirth: string;
+  idType: string;
+  idNumber: string;
+  idImage: string;
+  pinGenerated: string;
+  notes: string;
+  companyName: string;
+  VATid: string;
+  companyEmail: string;
+  companyId: string;
+  companyCountry: string;
+  companyState: string;
+  companyCity: string;
+  companyAddress: string;
+  isSalesChannel: boolean;
+  salesChannelName: string;
+  salesChannelCommision: string;
+  calculateCommissionOn: string;
+  applyCommissionOn: string;
 };

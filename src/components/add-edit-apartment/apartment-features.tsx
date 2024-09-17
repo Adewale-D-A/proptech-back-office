@@ -205,21 +205,26 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
 
       {/* previous and continue buttons */}
       <div className=" w-full flex justify-end mt-10">
-        <div className=" flex items-center justify-between w-full max-w-sm gap-4">
-          <LinkButton
-            url={
-              id
-                ? `/add-apartment/apartment-details`
-                : `/edit-apartment/apartment-details/${id}`
-            }
-            label="Previous Page"
-            variant={2}
-          />
-          <LoadingButton
-            label="Save and continue"
-            type="submit"
-            isLoading={false}
-          />
+        <div className=" flex items-center justify-between gap-4">
+          <div className=" w-fit">
+            <LinkButton
+              url={
+                id
+                  ? `/edit-apartment/apartment-details/${id}`
+                  : `/add-apartment/apartment-details`
+              }
+              label="Previous Page"
+              variant={2}
+            />
+          </div>
+
+          <div className=" w-fit">
+            <LoadingButton
+              label="Save and continue"
+              type="submit"
+              isLoading={false}
+            />
+          </div>
         </div>
       </div>
     </form>

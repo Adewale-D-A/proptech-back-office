@@ -43,7 +43,7 @@ export default function AddNewApartmentFeatures() {
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
         <div className=" w-full rounded-md border flex flex-col items-center justify-center">
           <div className=" w-full flex items-center max-w-xl py-10">
-            <Timeline currentStep={2} />
+            <Timeline currentStep={2} id="apartment" />
           </div>
           <div className="w-full border-t py-10 px-5">
             <AddApartmentFeatures />

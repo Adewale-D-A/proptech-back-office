@@ -1,58 +1,51 @@
+import { useLayoutEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useLayoutEffect, useMemo } from "react";
-import BuildingIcon from "../../../assets/icons/building";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import Timeline from "../../../components/timeline";
-import AddEditApartmentFeatures from "../../../components/add-edit-apartment/apartment-features";
+import UsersIcon from "../../../assets/icons/users";
+import EditCustomerSalesChannel from "../../../components/add-edit-customer/customer-sales-channel";
+const breadCrumb = [
+  {
+    url: "/customers",
+    label: "Customers",
+    icon: <UsersIcon />,
+  },
+  {
+    url: "#",
+    label: "Edit Customer Sales Channel",
+    icon: "",
+  },
+];
 
-export default function EditApartmentFeatures() {
+export default function EditCustomerSalesChannelPage() {
   const { id } = useParams();
-  const breadCrumb = useMemo(
-    () => [
-      {
-        url: "/apartments",
-        label: "Apartments",
-        icon: <BuildingIcon />,
-      },
-      {
-        url: `/apartments-details/${id}`,
-        label: "Apartment Details",
-        icon: "",
-      },
-      {
-        url: "#",
-        label: "Edit Apartment Features",
-        icon: "",
-      },
-    ],
-    [id]
-  );
   const dispatch = useAppDispatch();
+
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "Edit Apartment Features",
-        pageDescription: "Edit apartment features",
+        pageTitle: "Edit Customer Sales Channel",
+        pageDescription: "Edit customer's sales channel",
         isLoading: false,
         failedToLoad: false,
         setFailedToLoad: false,
         retryRequest: false,
       })
     );
-  }, [breadCrumb]);
+  }, []);
 
   return (
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
         <div className=" w-full rounded-md border flex flex-col items-center justify-center">
-          <div className=" w-full flex items-center max-w-xl py-10">
-            <Timeline currentStep={2} id="apartment" />
+          <div className=" w-full flex items-center max-w-screen-lg justify-center py-10">
+            <Timeline currentStep={4} id="customer" />
           </div>
           <div className="w-full border-t py-10 px-5">
-            <AddEditApartmentFeatures id={id} />
+            <EditCustomerSalesChannel id={id} />
           </div>
         </div>
       </div>

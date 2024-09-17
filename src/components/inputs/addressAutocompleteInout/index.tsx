@@ -5,10 +5,14 @@ import LoaderIcon from "../../../assets/icons/loader";
 export default function AddressAutocompleteInput({
   value,
   setValue,
+  label,
+  placeholder,
 }: // setAddress,
 {
   value: string;
   setValue: any;
+  label?: string;
+  placeholder?: string;
   // setAddress: Function;
 }) {
   const extractCoordinates = async (address: string) => {
@@ -42,13 +46,14 @@ export default function AddressAutocompleteInput({
           loading: boolean;
         }) => (
           <div className="w-full">
+            {label && <label htmlFor="address-searcher">{label}</label>}
             <input
               required={true}
               id="location-search"
               type="text"
               {...getInputProps({
                 id: "location-search",
-                placeholder: "apartment location",
+                placeholder: placeholder ? placeholder : "apartment location",
               })}
               className="w-full p-3 rounded-lg border  bg-gray-200/15 focus:ring-[#17594F] focus:border-[#17594F]"
             />

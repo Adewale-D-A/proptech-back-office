@@ -1,10 +1,12 @@
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useMemo } from "react";
+import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import Timeline from "../../../components/timeline";
 import UsersIcon from "../../../assets/icons/users";
 import { clearAllCustomerInfo } from "../../../stores/inAppDataInterations/addEditCustomerInfo";
-import AddCustomerCompany from "../../../components/add-edit-customer/customer-company";
+import EditCustomerDetails from "../../../components/add-edit-customer/customer-details";
+import Timeline from "../../../components/timeline";
+import useGetCustomerById from "../../../services-hooks/useGetCustomerById";
 
 const breadCrumb = [
   {
@@ -14,11 +16,13 @@ const breadCrumb = [
   },
   {
     url: "#",
-    label: "New Customer Company",
+    label: "Edit Customer Details",
     icon: "",
   },
 ];
-export default function AddNewCustomerCompany() {
+
+export default function EditCustomerDetailsPage() {
+  const { id } = useParams();
   const dispatch = useAppDispatch();
   const storeCustomerDetails = useAppSelector(
     (state) => state.addEditCustomerInfo.value.data
@@ -29,8 +33,8 @@ export default function AddNewCustomerCompany() {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "Add New Customer Company",
-        pageDescription: "Add a new customer's company",
+        pageTitle: "Edit Customer Details",
+        pageDescription: "Edit a customer's details",
         isLoading: false,
         failedToLoad: false,
         setFailedToLoad: false,
@@ -39,21 +43,19 @@ export default function AddNewCustomerCompany() {
     );
   }, []);
 
-  useEffect(() => {
-    if (!(storeCustomerDetails?.id === "updated")) {
-      dispatch(clearAllCustomerInfo());
-    }
-  }, []);
+  const customer = useGetCustomerById(
+    storeCustomerDetails?.id === "updated" ? undefined : id
+  );
 
   return (
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
         <div className=" w-full rounded-md border flex flex-col items-center justify-center">
           <div className=" w-full flex items-center max-w-screen-lg justify-center py-10">
-            <Timeline currentStep={3} id="customer" />
+            <Timeline currentStep={1} id="customer" />
           </div>
           <div className="w-full border-t py-10 px-5">
-            <AddCustomerCompany />
+            <EditCustomerDetails id={id} />
           </div>
         </div>
       </div>

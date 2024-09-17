@@ -12,7 +12,11 @@ export default function AddEditAmenities({
   setOpen: Function;
 }) {
   const [title, setTitle] = useState("");
-  const [file, setFile] = useState<{ name: string; size: number }>({} as any);
+  const [file, setFile] = useState<{
+    name: string;
+    size: number;
+    preview: string;
+  }>({} as any);
   const [preInstalledCharacters, setPreInstralledCharacters] = useState("");
 
   const [fontIconHTML, setFontIconHTML] = useState("");
@@ -33,7 +37,7 @@ export default function AddEditAmenities({
         ordering,
       } = {
         title: "title",
-        file: { name: "tv.png", size: 1644 },
+        file: { name: "tv.png", size: 1644, preview: "" },
         preInstalledCharacters: "tv",
         fontIconHTML: "<i>bi tv</i>",
         room: "1-bedroom",
