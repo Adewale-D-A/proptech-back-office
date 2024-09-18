@@ -6,13 +6,17 @@ import AddressAutocompleteInput from "../inputs/addressAutocompleteInout";
 
 export default function CheckAvailability({
   variant = 1,
+  className,
 }: {
   variant?: number;
+  className?: string;
 }) {
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [noRooms, setNoRooms] = useState("");
   const [location, setLocation] = useState("");
+  const [apartment, setApartment] = useState("");
+  const [noGuests, setNoGuests] = useState("");
 
   const [calculating, setCalculating] = useState(false);
 
@@ -29,7 +33,22 @@ export default function CheckAvailability({
   return (
     <div className="w-full">
       <form className=" flex flex-col gap-5" onSubmit={checkAvailability}>
-        <div className=" w-full grid grid-cols-1 gap-5">
+        <div className={className || " w-full grid grid-cols-1 gap-5"}>
+          {variant === 3 && (
+            <Select
+              isRequired={true}
+              value={apartment}
+              setValue={setApartment}
+              id="apartment"
+            >
+              <option value="" disabled>
+                Select Apartment
+              </option>
+              <option value="Sunshine - 2 Bedroom" disabled>
+                Select Apartment
+              </option>
+            </Select>
+          )}
           <DateInput
             inputType="date"
             isRequired={true}
@@ -48,7 +67,7 @@ export default function CheckAvailability({
             placeholder="Check-out Date"
             label="Check-out Date"
           />
-          {!(variant === 1) && (
+          {variant === 2 && (
             <div className="w-full grid grid-cols-1 gap-5">
               <Select
                 isRequired={true}
@@ -70,6 +89,23 @@ export default function CheckAvailability({
                 setValue={setLocation}
               />
             </div>
+          )}
+          {variant === 3 && (
+            <Select
+              isRequired={true}
+              value={noGuests}
+              setValue={setNoGuests}
+              id="no-of-guests"
+            >
+              <option value="" disabled>
+                Select number of guests
+              </option>
+              {Array.from({ length: 8 }, (_, index) => (
+                <option key={index} value={`${index + 1}`}>
+                  {index + 1}
+                </option>
+              ))}
+            </Select>
           )}
         </div>
         <LoadingButton

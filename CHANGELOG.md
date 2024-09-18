@@ -1,3 +1,7 @@
+##### 17.18.2024
+
+> Pricing flow completion
+
 ##### 17.09.2024
 
 > Customers flow completion

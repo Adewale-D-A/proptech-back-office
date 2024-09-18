@@ -1,9 +1,8 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useAppDispatch } from "../../../../stores/hooks";
 import { useLayoutEffect, useState } from "react";
 import { updatePageProperties } from "../../../../stores/appFunctionality/pageProperties";
 import CalendarIcon from "../../../../assets/icons/calendar";
-import Status from "../../../../components/status";
 import CustomerInfoCard from "../../../../components/booking-detail/customer-info-card";
 import ImageCarousel from "../../../../components/cards/image-carousel";
 import UserPlusIcon from "../../../../assets/icons/user-plus";
