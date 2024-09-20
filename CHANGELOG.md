@@ -1,4 +1,8 @@
-##### 17.18.2024
+##### 20.09.2024
+
+> Calendar View modification and custom implementation
+
+##### 18.09.2024
 
 > Pricing flow completion
 

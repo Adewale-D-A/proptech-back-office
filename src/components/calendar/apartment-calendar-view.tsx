@@ -10,6 +10,12 @@ import CalendarView from ".";
 import ModalTemplate from "../modal";
 import AssignCustomer from "../quickReservationFlow/assignToCustomer";
 
+const sampleBookedDates = [
+  new Date(2024, 8, 27),
+  new Date(2024, 8, 29),
+  new Date(2024, 8, 30),
+];
+
 export default function ApartmentCalendarView() {
   const dispatch = useAppDispatch();
   const { open: openAssignToCustomerView } = useAppSelector(
@@ -49,9 +55,40 @@ export default function ApartmentCalendarView() {
                 />
                 <div className="w-full flex justify-center flex-col gap-5">
                   <CalendarAvailabilitySymbol />
-                  <div className="w-full flex flex-wrap gap-4 justify-center items-start">
-                    {[1, 2, 4, 5, 6, 7, 8].map((item) => (
-                      <CalendarView key={item} />
+                  <div className="w-full flex flex-wrap gap-8 gap-y-16 justify-center items-start">
+                    {[
+                      {
+                        id: 5,
+                        date: new Date(2024, 7, 1),
+                        highlights: sampleBookedDates,
+                      },
+                      {
+                        id: 1,
+                        date: new Date(2024, 8, 1),
+                        highlights: sampleBookedDates,
+                      },
+                      {
+                        id: 2,
+                        date: new Date(2024, 9, 1),
+                        highlights: sampleBookedDates,
+                      },
+                      {
+                        id: 3,
+                        date: new Date(2024, 10, 1),
+                        highlights: sampleBookedDates,
+                      },
+                      {
+                        id: 4,
+                        date: new Date(2024, 11, 1),
+                        highlights: sampleBookedDates,
+                      },
+                    ].map((item) => (
+                      <div key={item?.id} className=" border-r px-3">
+                        <CalendarView
+                          date={item?.date}
+                          highlights={item?.highlights}
+                        />
+                      </div>
                     ))}
                   </div>
                 </div>
