@@ -36,11 +36,17 @@ const ApartmentSingleSelect: React.FC<Props> = ({
         className="w-full p-3 rounded-lg border  bg-gray-200/15 sm:text-md focus:ring-[#17594F] focus:border-[#17594F]"
       >
         {placeholder && <option value={""}>{placeholder}</option>}
+        <option value={"all"}>All</option>
         {[
           {
             id: 1,
             label: "Sunshine - 2 Bedroom",
             value: "sunshine-2-bed",
+          },
+          {
+            id: 2,
+            label: "Moonlight - 2 Bedroom",
+            value: "moonlight-2-bed",
           },
         ].map((item) => (
           <option key={item.id} value={item.value}>

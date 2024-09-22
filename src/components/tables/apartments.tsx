@@ -19,7 +19,7 @@ export default function ApartmentTable({
 }: {
   header: string[];
   data: {
-    id: number;
+    id: string;
     apartmentInfo: {
       name: string;
       image: string;
@@ -94,7 +94,7 @@ export default function ApartmentTable({
                     </span>
                     <span className="z-10 group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                       <Link
-                        to="#"
+                        to={`/apartments-details/${request?.id}`}
                         className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                       >
                         View Details
@@ -113,9 +113,12 @@ export default function ApartmentTable({
                       >
                         Calculate Rate
                       </button>
-                      <span className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg">
+                      <Link
+                        to={`/edit-apartment/apartment-details/${request?.id}`}
+                        className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                      >
                         Edit Apartment
-                      </span>
+                      </Link>
                     </span>
                   </td>
                 </tr>

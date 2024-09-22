@@ -1,8 +1,13 @@
 import React, { useCallback, useState } from "react";
 import ModalTemplate from "../../modal";
 import CustomersInfoExport from "../../export-options/customers-export";
+import CSVIcon from "../../../assets/icons/csv";
 
-export default function ExportSelect({ id }: { id: "customers" | "bookings" }) {
+export default function ExportSelect({
+  id,
+}: {
+  id: "customers" | "bookings" | "report";
+}) {
   const [openModal, setOpenModal] = useState(false);
   const [value, setValue] = useState("");
 
@@ -20,8 +25,9 @@ export default function ExportSelect({ id }: { id: "customers" | "bookings" }) {
         className="w-full p-3 rounded-full  bg-primary/20 sm:text-md focus:ring-primary focus:border-primary"
       >
         <option value="">Export Report</option>
-        <option value="csv">Export CSV Report</option>
-        <option value="ics">Export ICS Report</option>
+        <option value="csv"> CSV</option>
+        <option value="excel">Excel</option>
+        <option value="print">Print</option>
       </select>
 
       <ModalTemplate

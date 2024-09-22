@@ -51,7 +51,7 @@ export default function DashboardOverview() {
               label: "Number of Apartment",
               value: "200",
               theme: "text-[#26397B] bg-[#26397B]/20",
-              url: { src: "#", label: "View Apartment" },
+              url: { src: "/apartments", label: "View Apartment" },
             },
             {
               id: 2,
@@ -59,7 +59,7 @@ export default function DashboardOverview() {
               label: "Total Bookings",
               value: "50 Bookings",
               theme: "text-[#35BD29] bg-[#35BD29]/20",
-              url: { src: "#", label: "View Bookings" },
+              url: { src: "/bookings", label: "View Bookings" },
             },
             {
               id: 3,
@@ -75,7 +75,7 @@ export default function DashboardOverview() {
               label: "Number of Guests",
               value: "500 Guests",
               theme: "text-[#7C0DBE] bg-[#7C0DBE]/20",
-              url: { src: "#", label: "View Users" },
+              url: { src: "/customers", label: "View Users" },
             },
           ].map((item) => (
             <DashboardCard
@@ -237,7 +237,7 @@ export default function DashboardOverview() {
           ]}
           data={[
             {
-              id: 1,
+              id: "abs2_144asasaxx22",
               apartmentInfo: {
                 name: "Sunshine -3 Bedroom",
                 image: "/logo_blue.png",
@@ -249,7 +249,7 @@ export default function DashboardOverview() {
               availabilityStatus: "Available",
             },
             {
-              id: 2,
+              id: "abs2_1442sacbg2",
               apartmentInfo: {
                 name: "Moonlight - 1 Bedroom",
                 image: "/logo_blue.png",

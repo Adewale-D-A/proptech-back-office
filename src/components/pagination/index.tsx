@@ -47,7 +47,7 @@ export default function Pagination({
           pagination?.current_page < 2
             ? "border-gray-500 cursor-not-allowed"
             : "hover:bg-primary hover:text-white border-primary cursor-pointer "
-        } md:w-fit aspect-square  p-2 flex items-center justify-center border rounded-full transition-all `}
+        } md:w-fit aspect-square min-h-fit min-w-fit  p-2 flex items-center justify-center border rounded-full transition-all `}
         onClick={() => showPrevproductsArray()}
       >
         {isLoading ? (
@@ -62,7 +62,7 @@ export default function Pagination({
             key={index}
             type="button"
             onClick={() => setCurrentPage(index + 1)}
-            className={` border aspect-square flex items-center justify-center rounded-full p-3 hover:border-primary transition-all cursor-pointer ${
+            className={` border min-h-fit min-w-fit aspect-square flex items-center justify-center rounded-full p-3 hover:border-primary transition-all cursor-pointer ${
               index + 1 === pagination?.current_page
                 ? "border-primary bg-primary text-white "
                 : ""
