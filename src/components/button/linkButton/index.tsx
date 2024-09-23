@@ -28,7 +28,7 @@ export default function LinkButton({
           disabled
             ? "bg-primary/30 text-white"
             : variant === 2
-            ? " border hover:border-primary"
+            ? " border hover:border-primary/60 border-primary text-primary"
             : variant === 3
             ? className
             : "bg-primary hover:bg-transparent hover:border hover:border-primary  hover:text-primary text-white"

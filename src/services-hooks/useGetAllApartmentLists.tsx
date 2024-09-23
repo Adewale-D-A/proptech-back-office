@@ -31,7 +31,7 @@ export default function useGetAllApartmentLists({
     from: number;
     to: number;
   }>({} as any);
-  const getAllInstitution = useCallback(async () => {
+  const getAllApartmentList = useCallback(async () => {
     setIsLoading(true);
     try {
       //check store if this requested data has been saved previously and retirve it
@@ -79,7 +79,7 @@ export default function useGetAllApartmentLists({
   }, [page]);
 
   useEffect(() => {
-    getAllInstitution();
+    getAllApartmentList();
   }, [page]);
 
   return {
@@ -87,7 +87,7 @@ export default function useGetAllApartmentLists({
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getAllInstitution,
+    retryFunction: getAllApartmentList,
     pagination,
   };
 }

@@ -1,3 +1,7 @@
+##### 23.09.2024
+
+> Invoice flow completion
+
 ##### 22.09.2024
 
 > Reports Flow completion

@@ -21,8 +21,8 @@ export default function BookingsListTable({
   const [currentPage, setCurrentPage] = useState(1);
 
   return (
-    <div className="w-full flex flex-col gap-5 overflow-x-auto">
-      <table className=" w-full text-xs">
+    <div className="w-full flex flex-col gap-5">
+      <table className=" w-full text-xs overflow-x-auto">
         <thead className="">
           <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
             {header.map((head) => (

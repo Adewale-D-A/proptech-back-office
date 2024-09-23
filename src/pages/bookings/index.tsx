@@ -1,5 +1,5 @@
-import { useLayoutEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../stores/hooks";
+import { useLayoutEffect } from "react";
+import { useAppDispatch } from "../../stores/hooks";
 import { updatePageProperties } from "../../stores/appFunctionality/pageProperties";
 import BookingTab from "../../components/tab/bookingTab";
 import MenuIcon from "../../assets/icons/menu";

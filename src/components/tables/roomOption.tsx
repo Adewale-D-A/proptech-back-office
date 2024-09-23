@@ -41,7 +41,7 @@ export default function RoomOptionTable({
           <h2 className="text-xl font-semibold">{title}</h2>
           <Sort id="room-options" label="Sort Category" />{" "}
         </div>
-        <table className=" w-full">
+        <table className=" w-full overflow-x-auto">
           <thead className="">
             <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
               {header.map((head) => (

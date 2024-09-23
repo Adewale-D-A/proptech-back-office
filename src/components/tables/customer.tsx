@@ -13,7 +13,7 @@ export default function CustomersListTable({ header }: { header: string[] }) {
     useGetAllCustomersLists({ page: currentPage });
   //   const [selectedId, setSelectedId] = useState("1");
   return (
-    <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-x-auto">
+    <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
       <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
         <h2 className="text-xl font-semibold">Customers Lists</h2>
         <Search
@@ -26,7 +26,7 @@ export default function CustomersListTable({ header }: { header: string[] }) {
         </div>
       </div>
       {data && data.length > 0 ? (
-        <table className=" w-full text-xs">
+        <table className=" w-full text-xs  overflow-x-auto">
           <thead className="">
             <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
               {header.map((head) => (

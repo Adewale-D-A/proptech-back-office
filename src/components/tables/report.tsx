@@ -29,9 +29,9 @@ export default function ReportListTable({
       }
     >
       {!(type === "occupancy-ranking" && view === "chart") && (
-        <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-x-auto">
+        <div className="w-full rounded-lg border p-5 flex flex-col gap-5 ">
           {data && data.length > 0 ? (
-            <table className=" w-full text-xs">
+            <table className=" w-full text-xs overflow-x-auto">
               <thead className="">
                 <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
                   {[

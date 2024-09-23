@@ -31,7 +31,7 @@ export default function useGetAllBookingsLists({
     from: number;
     to: number;
   }>({} as any);
-  const getAllInstitution = useCallback(async () => {
+  const getAllBookingstList = useCallback(async () => {
     setIsLoading(true);
     try {
       //check store if this requested data has been saved previously and retirve it
@@ -79,7 +79,7 @@ export default function useGetAllBookingsLists({
   }, [page]);
 
   useEffect(() => {
-    getAllInstitution();
+    getAllBookingstList();
   }, [page]);
 
   return {
@@ -87,7 +87,7 @@ export default function useGetAllBookingsLists({
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getAllInstitution,
+    retryFunction: getAllBookingstList,
     pagination,
   };
 }

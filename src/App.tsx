@@ -40,6 +40,7 @@ import EditCustomerDetailsPage from "./pages/customers/edit-customer/customer-de
 import EditCustomerVerifiationPage from "./pages/customers/edit-customer/customer-verification";
 import EditCustomerCompanyPage from "./pages/customers/edit-customer/customer-company";
 import EditCustomerSalesChannelPage from "./pages/customers/edit-customer/customer-sales-channels";
+import AddNewInvoice from "./pages/invoices/add-new-invoice";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -154,7 +155,13 @@ function App() {
               element={<PlansAndPromotions />}
             />
             <Route path="/chat" element={<Chat />} />
+            {/* invoice flow */}
             <Route path="/invoices" element={<Invoices />} />
+            <Route
+              path="/invoices/add-new-invoice"
+              element={<AddNewInvoice />}
+            />
+
             <Route path="/reports" element={<Reports />} />
             <Route path="/notification" element={<Notification />} />
           </Route>

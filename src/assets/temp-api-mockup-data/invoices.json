@@ -1,0 +1,21 @@
+{
+  "pagination": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 20,
+    "total": 4,
+    "from": 1,
+    "to": 1
+  },
+  "data": [
+    {
+      "id": "asasas",
+      "number": "2/WEB",
+      "bookingId": "4401",
+      "email": "yinka.taiwo@gmail.com",
+      "createdOn": "05/24/2024",
+      "createdBy": "Yinka Taiwo",
+      "status": "confirmed"
+    }
+  ]
+}

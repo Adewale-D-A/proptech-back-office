@@ -13,7 +13,7 @@ export default function OccupanyTimeReportListTable() {
     <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
       {data && data.length > 0 ? (
         <>
-          <table className=" w-full text-xs  overflow-x-auto">
+          <table className=" w-full text-xs overflow-x-auto">
             <thead className="">
               <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
                 {[

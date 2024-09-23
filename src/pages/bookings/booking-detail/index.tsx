@@ -1,4 +1,5 @@
 import CalendarIcon from "../../../assets/icons/calendar";
+import SuitcaseIcon from "../../../assets/icons/suitcase";
 import BookingTab from "../../../components/tab/bookingTab";
 import BookingAdministrationById from "./adminstration-by-id";
 import BookingDetailsById from "./booking-by-id";
@@ -10,7 +11,7 @@ export default function BookingById() {
         <BookingTab
           header={[
             { id: 1, icon: <CalendarIcon />, label: "Booking Details" },
-            { id: 2, icon: <CalendarIcon />, label: "Administations" },
+            { id: 2, icon: <SuitcaseIcon />, label: "Administations" },
           ]}
           content={[
             {

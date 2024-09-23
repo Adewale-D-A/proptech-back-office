@@ -31,7 +31,7 @@ export default function useGetAllCustomersLists({
     from: number;
     to: number;
   }>({} as any);
-  const getAllInstitution = useCallback(async () => {
+  const getAllCustomerstList = useCallback(async () => {
     setIsLoading(true);
     try {
       //check store if this requested data has been saved previously and retirve it
@@ -79,7 +79,7 @@ export default function useGetAllCustomersLists({
   }, [page]);
 
   useEffect(() => {
-    getAllInstitution();
+    getAllCustomerstList();
   }, [page]);
 
   return {
@@ -87,7 +87,7 @@ export default function useGetAllCustomersLists({
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getAllInstitution,
+    retryFunction: getAllCustomerstList,
     pagination,
   };
 }

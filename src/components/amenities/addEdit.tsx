@@ -62,7 +62,7 @@ export default function AddEdit({
             isRequired={true}
             value={title}
             setValue={setTitle}
-            id="Title"
+            id="title"
             placeholder="Enter Title"
           />
           <TextAreaInput

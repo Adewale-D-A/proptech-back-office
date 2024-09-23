@@ -23,6 +23,7 @@ import apartmentListsData from "./apiData/apartment-lists";
 import bookingsListsData from "./apiData/bookings-lists";
 import requestListsData from "./apiData/requests-lists";
 import customersListData from "./apiData/customers-lists";
+import invoiceListsData from "./apiData/invoice-lists";
 
 export const adminStore = () => {
   return configureStore({
@@ -48,6 +49,7 @@ export const adminStore = () => {
       allBookingsLists: bookingsListsData,
       allRequestLists: requestListsData,
       allCustomersLists: customersListData,
+      allInvoiceLists: invoiceListsData,
     },
     middleware: (getDefaultMiddleware: any) =>
       getDefaultMiddleware({

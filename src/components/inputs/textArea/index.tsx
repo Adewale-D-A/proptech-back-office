@@ -35,7 +35,7 @@ const TextAreaInput: React.FC<Props> = ({
         required={isRequired}
         value={value}
         onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleInput(e)}
-        className="w-full p-3 rounded-lg border  bg-gray-200/15 focus:ring-[#17594F] focus:border-[#17594F]"
+        className="w-full p-3 rounded-lg border  bg-gray-100/15 focus:ring-[#17594F] focus:border-[#17594F]"
         rows={4}
       />
     </div>

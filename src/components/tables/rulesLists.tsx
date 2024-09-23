@@ -37,12 +37,12 @@ export default function RulesLists({
 
   return (
     <>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-x-auto">
+      <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">{title}</h2>
           <Sort id="extra-options" label="Sort List" />{" "}
         </div>
-        <table className=" w-full">
+        <table className=" w-full overflow-x-auto">
           <thead className="">
             <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
               {header.map((head) => (
