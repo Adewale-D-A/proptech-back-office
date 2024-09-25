@@ -116,6 +116,26 @@ export default function AddNewInvoice() {
     });
   }, []);
 
+  const addNewServiceTax = useCallback(
+    (item: {
+      id: string;
+      name: string;
+      amount: string;
+      isCompound: boolean;
+    }) => {
+      setServiceTaxes((prev) => [
+        ...prev,
+        {
+          id: item?.id,
+          name: item?.name,
+          amount: `${item?.amount}%`,
+          isCompound: item?.isCompound,
+        },
+      ]);
+    },
+    []
+  );
+
   // summary
   const [invoiceStartingNumber, setInvoiceStartingNumber] = useState("");
   const [customerNote, setCustomerNote] = useState("");
@@ -398,9 +418,10 @@ export default function AddNewInvoice() {
         className=" max-w-md"
       >
         <AddTax
-          value={serviceTaxes}
-          setValue={setServiceTaxes}
           setOpen={setOpenAddTax}
+          submitHandler={addNewServiceTax}
+          isSubmitting={false}
+          componentId="service-tax"
         />
       </ModalTemplate>
     </>

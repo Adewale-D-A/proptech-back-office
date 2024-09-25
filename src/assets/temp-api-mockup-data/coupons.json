@@ -1,0 +1,21 @@
+{
+  "pagination": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 20,
+    "total": 4,
+    "from": 1,
+    "to": 1
+  },
+  "data": [
+    {
+      "id": "is21",
+      "name": "reward-coupon",
+      "type": "Permanent, 8.00%",
+      "validityDates": "08/10/24-08/15/24",
+      "rooms": "All Rooms",
+      "bookingTotal": "1.00",
+      "numberOfUsers": "15 Users"
+    }
+  ]
+}

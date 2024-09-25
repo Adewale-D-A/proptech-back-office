@@ -24,6 +24,11 @@ import bookingsListsData from "./apiData/bookings-lists";
 import requestListsData from "./apiData/requests-lists";
 import customersListData from "./apiData/customers-lists";
 import invoiceListsData from "./apiData/invoice-lists";
+// api data - plans and promotions
+import taxRateListsData from "./apiData/tax-rate-lists";
+import priceTypeListsData from "./apiData/price-type-lists";
+import couponListsData from "./apiData/coupons-lists";
+import packagesAndOffersListsData from "./apiData/packages-and-offers";
 
 export const adminStore = () => {
   return configureStore({
@@ -50,6 +55,11 @@ export const adminStore = () => {
       allRequestLists: requestListsData,
       allCustomersLists: customersListData,
       allInvoiceLists: invoiceListsData,
+      // api data - plans and promotions
+      allTaxRates: taxRateListsData,
+      allPriceTypes: priceTypeListsData,
+      allCoupons: couponListsData,
+      allPackagesAndOffers: packagesAndOffersListsData,
     },
     middleware: (getDefaultMiddleware: any) =>
       getDefaultMiddleware({

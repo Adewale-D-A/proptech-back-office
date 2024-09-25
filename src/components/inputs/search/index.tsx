@@ -8,11 +8,11 @@ export default function Search({
   placeholder: string;
 }) {
   return (
-    <div className=" flex text-gray-400 gap-2 items-center border rounded-lg">
+    <div className=" flex text-gray-400 gap-2 items-center border rounded-lg text-sm">
       <label htmlFor={id} className=" p-2">
         <SearchIcon />
       </label>
-      <input id={id} placeholder={placeholder} className="" />
+      <input id={id} placeholder={placeholder} className=" w-full" />
     </div>
   );
 }

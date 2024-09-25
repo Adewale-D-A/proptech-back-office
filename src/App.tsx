@@ -41,6 +41,7 @@ import EditCustomerVerifiationPage from "./pages/customers/edit-customer/custome
 import EditCustomerCompanyPage from "./pages/customers/edit-customer/customer-company";
 import EditCustomerSalesChannelPage from "./pages/customers/edit-customer/customer-sales-channels";
 import AddNewInvoice from "./pages/invoices/add-new-invoice";
+import AddNewPackageAndOffer from "./pages/plans-and-promotions/package-and-offers/add-new-package-and-offer";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -153,6 +154,10 @@ function App() {
             <Route
               path="/plans-and-promotions"
               element={<PlansAndPromotions />}
+            />
+            <Route
+              path="/plans-and-promotions/package-and-offer/add-new-package-and-offer"
+              element={<AddNewPackageAndOffer />}
             />
             <Route path="/chat" element={<Chat />} />
             {/* invoice flow */}

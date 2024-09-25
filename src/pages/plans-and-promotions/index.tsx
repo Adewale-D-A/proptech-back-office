@@ -1,6 +1,15 @@
-import { useLayoutEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../stores/hooks";
+import { useLayoutEffect } from "react";
+import { useAppDispatch } from "../../stores/hooks";
 import { updatePageProperties } from "../../stores/appFunctionality/pageProperties";
+import PlansAndPromotionsTab from "../../components/tab/plans-promotionsTab";
+import GiftIcon from "../../assets/icons/gift";
+import PercentageBadgeIcon from "../../assets/icons/percentage-badge";
+import TagsIcon from "../../assets/icons/tags";
+import BuildingIcon from "../../assets/icons/building";
+import TaxRates from "./tax-rates";
+import PricesTypes from "./price-types";
+import Coupons from "./coupons";
+import PackagesAndOffers from "./package-and-offers";
 
 const breadCrumb = [
   {
@@ -22,11 +31,6 @@ const breadCrumb = [
 export default function PlansAndPromotions() {
   const dispatch = useAppDispatch();
 
-  const { data: userProfile } = useAppSelector(
-    (state) => state.userProfile.value
-  );
-  const [openNewRequestModal, setOpenNewRequestModal] = useState(false);
-
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
@@ -43,9 +47,34 @@ export default function PlansAndPromotions() {
   }, []);
 
   return (
-    <section className="w-full flex flex-col gap-10 items-center justify-center">
-      <div className="w-full">
-        <h2 className=" text-2xl">Plans and Promotions</h2>
+    <section className="w-full flex flex-col items-center">
+      <div className="w-full max-w-screen-xl flex flex-col gap-10">
+        <PlansAndPromotionsTab
+          header={[
+            { id: 1, icon: <BuildingIcon />, label: "Tax Rates" },
+            { id: 2, icon: <TagsIcon />, label: "Types of Prices" },
+            { id: 3, icon: <PercentageBadgeIcon />, label: "Coupons" },
+            { id: 4, icon: <GiftIcon />, label: "Package & Offers" },
+          ]}
+          content={[
+            {
+              id: 1,
+              data: <TaxRates />,
+            },
+            {
+              id: 2,
+              data: <PricesTypes />,
+            },
+            {
+              id: 3,
+              data: <Coupons />,
+            },
+            {
+              id: 4,
+              data: <PackagesAndOffers />,
+            },
+          ]}
+        />
       </div>
     </section>
   );
