@@ -1,0 +1,22 @@
+{
+  "pagination": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 20,
+    "total": 4,
+    "from": 1,
+    "to": 1
+  },
+  "data": [
+    {
+      "id": "skaks",
+      "customerName": "Saleem Ibrahim",
+      "apartmentName": "Sunshine - 2 Bedroom",
+      "requestDate": "18/6/2024 10:00",
+      "serviceType": "Service Type",
+      "description": "Description",
+      "escalateStatus": "YES",
+      "status": "resolved"
+    }
+  ]
+}

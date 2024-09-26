@@ -1,21 +1,25 @@
 import { useCallback, useEffect, useState } from "react";
 import useAxios from "../useHooks/useAxios";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
-import tempAptData from "../assets/temp-api-mockup-data/requestList.json";
+import tempAptData from "../assets/temp-api-mockup-data/vendorService.json";
 import {
-  updateRequestsLists,
   addToPaginationHistory,
-} from "../stores/apiData/requests-lists";
+  updateVendorServicesList,
+} from "../stores/apiData/vendor-services-lists";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetAllRequestLists({ page = 1 }: { page?: number }) {
+export default function useGetAllVendorServiceLists({
+  page = 1,
+}: {
+  page?: number;
+}) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
   const {
     status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.allRequestLists.value);
+  } = useAppSelector((state) => state.allVendorServices.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
@@ -27,7 +31,7 @@ export default function useGetAllRequestLists({ page = 1 }: { page?: number }) {
     from: number;
     to: number;
   }>({} as any);
-  const getAllRequestList = useCallback(async () => {
+  const getAllVendorServiceList = useCallback(async () => {
     setIsLoading(true);
     try {
       //check store if this requested data has been saved previously and retirve it
@@ -37,12 +41,12 @@ export default function useGetAllRequestLists({ page = 1 }: { page?: number }) {
       );
       if (foundPage) {
         setPagination(foundPage?.pagination_data);
-        dispatch(updateRequestsLists({ data: foundPage?.data }));
+        dispatch(updateVendorServicesList({ data: foundPage?.data }));
       } else {
         // const response = await axios.post(`/institution-list?page=${page}`);
         // const responseData = response?.data?.data;
         // const institutions = response?.data?.institution;
-        dispatch(updateRequestsLists({ data: tempAptData.data }));
+        dispatch(updateVendorServicesList({ data: tempAptData.data }));
 
         // TODO: UPDATE based on backend pagination response
         //CURRENTLY: Pagination is not being returned for this dataset,
@@ -75,7 +79,7 @@ export default function useGetAllRequestLists({ page = 1 }: { page?: number }) {
   }, [page]);
 
   useEffect(() => {
-    getAllRequestList();
+    getAllVendorServiceList();
   }, [page]);
 
   return {
@@ -83,7 +87,7 @@ export default function useGetAllRequestLists({ page = 1 }: { page?: number }) {
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getAllRequestList,
+    retryFunction: getAllVendorServiceList,
     pagination,
   };
 }

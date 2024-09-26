@@ -104,7 +104,7 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
                           }}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
-                          Delete Apartment
+                          Delete Booking
                         </button>
                       </span>
                     </td>

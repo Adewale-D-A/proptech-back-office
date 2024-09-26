@@ -4,47 +4,48 @@ import Pagination from "../pagination";
 import NoResult from "../noResult";
 import Search from "../inputs/search";
 import FilterSearch from "../filterAndSort/filter-search";
-import DeleteConfirmation from "../infoModal/delete-confirmation";
+import useGetAllAdditionalServiceLists from "../../services-hooks/useGetAllAdditionalServiceLists";
 import Status from "../status";
 import { useAppDispatch } from "../../stores/hooks";
-import ModalTemplate from "../modal";
-import BookingDetailSummary from "../booking-detail";
-import useGetAllRequestLists from "../../services-hooks/useGetAllRequestLists";
-import { removeRequestsInList } from "../../stores/apiData/requests-lists";
+import { removeAdditionalServicesInList } from "../../stores/apiData/additional-services-lists";
+import DeleteConfirmation from "../infoModal/delete-confirmation";
 
-export default function RequestsListTable({ header }: { header: string[] }) {
+export default function AdditionalServiceListTable({
+  header,
+}: {
+  header: string[];
+}) {
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllRequestLists({ page: currentPage });
+    useGetAllAdditionalServiceLists({ page: currentPage });
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
-  const [openBookingDetailSummary, setOpenBookingDetailSummary] =
-    useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [selectedId, setSelectedId] = useState("1");
+  const [deleteId, setDeleteId] = useState("1");
 
   const deleteApartment = useCallback(() => {
     setIsDeleting(true);
     try {
-      dispatch(removeRequestsInList({ id: selectedId }));
+      dispatch(removeAdditionalServicesInList({ id: deleteId }));
       setOpenDeleteConfirmation(false);
     } catch (error) {
     } finally {
       setIsDeleting(false);
     }
-  }, [selectedId]);
+  }, [deleteId]);
+
   return (
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <Search
-            placeholder="Apartment name, type, location..."
+            placeholder="Apartment name, customer name..."
             id="apartment-search"
           />
           <FilterSearch />
         </div>
         {data && data.length > 0 ? (
-          <table className=" w-full text-xs overflow-x-auto">
+          <table className=" w-full text-xs  overflow-x-auto">
             <thead className="">
               <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
                 {header.map((head) => (
@@ -53,15 +54,15 @@ export default function RequestsListTable({ header }: { header: string[] }) {
               </tr>
             </thead>
             <tbody className="">
-              {data.map((request, index) => {
+              {data.map((request) => {
                 return (
                   <tr key={request?.id} className=" border-b">
                     <td>{request?.customerName}</td>
-                    <td>{request?.apartnmentName}</td>
-                    <td>{request?.date}</td>
-                    <td>{request?.type}</td>
+                    <td>{request?.apartmentName}</td>
+                    <td>{request?.requestDate}</td>
+                    <td>{request?.serviceType}</td>
                     <td>{request?.description}</td>
-                    <td>{request?.isEscalated}</td>
+                    <td>{request?.escalateStatus}</td>
                     <td>
                       <Status status={request?.status} />
                     </td>
@@ -69,26 +70,26 @@ export default function RequestsListTable({ header }: { header: string[] }) {
                       <span className=" p-2 text-lg">...</span>
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                         <Link
-                          to={`/request-details/${request?.id}`}
+                          to={`/additional-services/service-details/${request?.id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           View Details
                         </Link>
-                        <button
-                          type="button"
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        <Link
+                          to={`#`}
+                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Mark As Resolved
-                        </button>
+                        </Link>
                         <button
                           type="button"
                           onClick={() => {
-                            setSelectedId(request?.id);
+                            setDeleteId(request?.id);
                             setOpenDeleteConfirmation(true);
                           }}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
-                          Delete Request
+                          Delete Service
                         </button>
                       </span>
                     </td>
@@ -111,28 +112,19 @@ export default function RequestsListTable({ header }: { header: string[] }) {
           }}
           setCurrentPage={setCurrentPage}
           isLoading={false}
-          label="requests"
+          label="Requests"
         />
       </div>
+
       <DeleteConfirmation
         confirmationHandler={deleteApartment}
         isLoading={isDeleting}
         btnTitle="Yes, I want to"
-        title="Delete Booking"
-        description="Are you sure you want to delete this booking"
+        title="Delete Service"
+        description="Are you sure you want to delete this service"
         open={openDeleteConfirmation}
         setOpen={setOpenDeleteConfirmation}
       />
-
-      <ModalTemplate
-        open={openBookingDetailSummary}
-        setOpen={setOpenBookingDetailSummary}
-        showXicon={true}
-        title="Booking Detail"
-        className=" max-w-md"
-      >
-        <BookingDetailSummary id={selectedId} />
-      </ModalTemplate>
     </>
   );
 }

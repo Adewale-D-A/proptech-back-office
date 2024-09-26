@@ -1,28 +1,24 @@
 import { useParams } from "react-router-dom";
-import { useAppDispatch } from "../../../stores/hooks";
 import { useLayoutEffect, useState } from "react";
+import AdditionIcon from "../../../assets/icons/addtion";
+import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import CalendarIcon from "../../../assets/icons/calendar";
-import PlusIcon from "../../../assets/icons/plus";
 import ExportSelect from "../../../components/inputs/select/exportSelect";
-import RequestsListTable from "../../../components/tables/requestsLists";
-import ModalTemplate from "../../../components/modal";
-import NewRequest from "../../../components/booking-detail/new-request";
+import PlusIcon from "../../../assets/icons/plus";
+import AdditionalServiceListTable from "../../../components/tables/additionalServices";
 import LoadingButton from "../../../components/button";
+import ModalTemplate from "../../../components/modal";
+import NewAdventure from "../../../components/booking-detail/add-adventure";
+import VendorServiceListTable from "../../../components/tables/vendorServices";
 
 const breadCrumb = [
   {
-    url: "/bookings",
-    label: "Bookings",
-    icon: <CalendarIcon />,
-  },
-  {
     url: "#",
-    label: "Requests",
-    icon: "",
+    label: "Additional Services",
+    icon: <AdditionIcon />,
   },
 ];
-export default function Requests() {
+export default function VendorServicesList() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   // update page props on component mount
@@ -30,8 +26,8 @@ export default function Requests() {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "Requests",
-        pageDescription: "Requests",
+        pageTitle: "Vendor Services",
+        pageDescription: "All vendor services",
         isLoading: false,
         failedToLoad: false,
         setFailedToLoad: false,
@@ -43,31 +39,31 @@ export default function Requests() {
   const [openNewRequest, setOpenNewRequest] = useState(false);
   return (
     <>
-      <section className="w-full flex flex-col items-center">
+      <section className="w-full flex flex-col items-center my-5">
         <div className="w-full max-w-screen-xl flex flex-col gap-10">
           <div className=" w-full flex justify-between">
-            <h2 className="text-xl font-semibold">All Requests List</h2>
+            <h2 className="text-xl font-semibold"> All Vendor Services</h2>
             <div className=" flex items-center gap-4">
-              <ExportSelect id="bookings" />
+              <ExportSelect id="customers" />
               <LoadingButton
                 clickHandler={() => setOpenNewRequest(true)}
                 isLoading={false}
                 type="button"
-                label="Add Request"
+                label="Add New Adventure"
                 startIcon={<PlusIcon />}
               />
             </div>
           </div>
           <div>
-            <RequestsListTable
+            <VendorServiceListTable
               header={[
-                "Customer Name",
-                "Apartment Name",
-                "Date of Request",
-                "Request Type",
+                "S/N",
+                "Vendor Name",
+                "Service Type",
                 "Description",
-                "Escalated Status",
-                "Status",
+                "Date Created",
+                "Price Per Person",
+                "No of Bookings",
                 "Action",
               ]}
             />
@@ -79,10 +75,10 @@ export default function Requests() {
         open={openNewRequest}
         setOpen={setOpenNewRequest}
         showXicon={true}
-        title="Add New Request"
+        title="Add New Service"
         className=" max-w-md"
       >
-        <NewRequest setValue={setOpenNewRequest} />
+        <NewAdventure setValue={setOpenNewRequest} />
       </ModalTemplate>
     </>
   );

@@ -1,8 +1,10 @@
+##### 26.09.2024
+
+> Additional Services Flow completion
+
 ##### 23.09.2024
 
 > Plans and promotions flow completion
-
-##### 23.09.2024
 
 > Invoice flow completion
 

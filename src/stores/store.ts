@@ -29,6 +29,8 @@ import taxRateListsData from "./apiData/tax-rate-lists";
 import priceTypeListsData from "./apiData/price-type-lists";
 import couponListsData from "./apiData/coupons-lists";
 import packagesAndOffersListsData from "./apiData/packages-and-offers";
+import additionalServiceListData from "./apiData/additional-services-lists";
+import vendorServiceListData from "./apiData/vendor-services-lists";
 
 export const adminStore = () => {
   return configureStore({
@@ -55,6 +57,8 @@ export const adminStore = () => {
       allRequestLists: requestListsData,
       allCustomersLists: customersListData,
       allInvoiceLists: invoiceListsData,
+      allAdditionalServices: additionalServiceListData,
+      allVendorServices: vendorServiceListData,
       // api data - plans and promotions
       allTaxRates: taxRateListsData,
       allPriceTypes: priceTypeListsData,

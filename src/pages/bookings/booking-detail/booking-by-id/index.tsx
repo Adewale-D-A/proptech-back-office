@@ -126,7 +126,7 @@ export default function BookingDetailsById() {
                   <h4 className="text-lg font-semibold">Amount Details</h4>
                 </div>
                 <div className=" flex items-start justify-between gap-4 pb-2 border-b  text-gray-500 ">
-                  <span className="">Catution Fee</span>
+                  <span className="">Caution Fee</span>
                   <span>N50,000</span>
                 </div>
                 <div className=" flex items-start justify-between gap-4 pb-2">

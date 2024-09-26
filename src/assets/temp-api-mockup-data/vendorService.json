@@ -1,0 +1,21 @@
+{
+  "pagination": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 20,
+    "total": 4,
+    "from": 1,
+    "to": 1
+  },
+  "data": [
+    {
+      "id": "skaks",
+      "vendorName": "Saleem Ibrahim",
+      "serviceType": "Service Type",
+      "description": "Description",
+      "date": "04/08/2024 10:00pm",
+      "price": "N30,000",
+      "bookingNo": "4/10"
+    }
+  ]
+}
