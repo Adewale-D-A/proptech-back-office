@@ -11,7 +11,7 @@ export default function BookingById() {
         <BookingTab
           header={[
             { id: 1, icon: <CalendarIcon />, label: "Booking Details" },
-            { id: 2, icon: <SuitcaseIcon />, label: "Administations" },
+            { id: 2, icon: <SuitcaseIcon />, label: "Administrations" },
           ]}
           content={[
             {

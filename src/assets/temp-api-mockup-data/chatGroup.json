@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "image": "/temp/temp_apartment_1.jpg",
+    "groupName": "House Keeper Group",
+    "username": "Ifeoluwa",
+    "message": "Hello, how are you?",
+    "time": "10:00 AM",
+    "read": true,
+    "unread": 0
+  },
+  {
+    "id": 2,
+    "image": "/temp/temp_apartment_2.jpg",
+    "groupName": "Laundry Team",
+    "username": "James",
+    "message": "I just arrived, I notice that most of the items listed are not in the rooms",
+    "time": "10:00 AM",
+    "read": false,
+    "unread": 2
+  }
+]

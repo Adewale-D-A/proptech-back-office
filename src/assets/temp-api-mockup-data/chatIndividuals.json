@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "image": "/temp/temp_apartment_1.jpg",
+    "username": "John Doe",
+    "message": "Hello, how are you?",
+    "time": "10:00 AM",
+    "read": true,
+    "unread": 0
+  },
+  {
+    "id": 2,
+    "image": "/temp/temp_apartment_2.jpg",
+    "username": "Abayomi Babatunde",
+    "message": "I just arrived, I notice that most of the items listed are not in the rooms",
+    "time": "10:00 AM",
+    "read": false,
+    "unread": 2
+  }
+]

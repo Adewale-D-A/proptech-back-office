@@ -1,39 +1,34 @@
-import { useLayoutEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../stores/hooks";
+import { useLayoutEffect } from "react";
+import { useAppDispatch } from "../../stores/hooks";
 import { updatePageProperties } from "../../stores/appFunctionality/pageProperties";
+import Tab from "../../components/tab/bookingTab";
+import MenuIcon from "../../assets/icons/menu";
+import CalendarIcon from "../../assets/icons/calendar";
+import UserPlusIcon from "../../assets/icons/user-plus";
+import ChatIcon from "../../assets/icons/chat";
+import GuestChatModule from "./guest";
+import CustomerSuccessChatModule from "./customer-success.tsx";
+import OwnersChatModule from "./owners";
+import OtherStaffChatModule from "./other-staff";
+import VendorChatModule from "./vendor";
 
 const breadCrumb = [
   {
     url: "#",
-    label: "Dashboard",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        className="w-3 h-3"
-      >
-        <path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.69 8.69a.75.75 0 1 0 1.06-1.061l-8.689-8.69a2.25 2.25 0 0 0-3.182 0l-8.69 8.69a.75.75 0 1 0 1.061 1.06l8.69-8.689Z" />
-        <path d="m12 5.432 8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 0 1-.75-.75v-4.5a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75V21a.75.75 0 0 1-.75.75H5.625a1.875 1.875 0 0 1-1.875-1.875v-6.198a2.29 2.29 0 0 0 .091-.086L12 5.432Z" />
-      </svg>
-    ),
+    label: "Chats",
+    icon: <ChatIcon />,
   },
 ];
-export default function Chat() {
+export default function Chats() {
   const dispatch = useAppDispatch();
-
-  const { data: userProfile } = useAppSelector(
-    (state) => state.userProfile.value
-  );
-  const [openNewRequestModal, setOpenNewRequestModal] = useState(false);
 
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "Chat",
-        pageDescription: "Chat",
+        pageTitle: "Chats",
+        pageDescription: "Chats",
         isLoading: false,
         failedToLoad: false,
         setFailedToLoad: false,
@@ -43,9 +38,39 @@ export default function Chat() {
   }, []);
 
   return (
-    <section className="w-full flex flex-col gap-10 items-center justify-center">
-      <div className="w-full">
-        <h2 className=" text-2xl">Chat</h2>
+    <section className="w-full flex flex-col items-center">
+      <div className="w-full max-w-screen-xl flex flex-col gap-10">
+        <Tab
+          header={[
+            { id: 1, icon: <MenuIcon />, label: "Guest" },
+            { id: 2, icon: <CalendarIcon />, label: "Customer Success" },
+            { id: 3, icon: <CalendarIcon />, label: "Owners" },
+            { id: 4, icon: <CalendarIcon />, label: "Other staff users" },
+            { id: 5, icon: <UserPlusIcon />, label: "Vendor" },
+          ]}
+          content={[
+            {
+              id: 1,
+              data: <GuestChatModule />,
+            },
+            {
+              id: 2,
+              data: <CustomerSuccessChatModule />,
+            },
+            {
+              id: 3,
+              data: <OwnersChatModule />,
+            },
+            {
+              id: 4,
+              data: <OtherStaffChatModule />,
+            },
+            {
+              id: 5,
+              data: <VendorChatModule />,
+            },
+          ]}
+        />
       </div>
     </section>
   );
