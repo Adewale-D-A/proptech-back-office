@@ -12,7 +12,11 @@ export default function Search({
       <label htmlFor={id} className=" p-2">
         <SearchIcon />
       </label>
-      <input id={id} placeholder={placeholder} className=" w-full" />
+      <input
+        id={id}
+        placeholder={placeholder}
+        className=" w-full focus:outline-none"
+      />
     </div>
   );
 }

@@ -22,8 +22,8 @@ export type apartmentById = {
   noBaths: string;
   whatToExpect: string;
   pointOfInterest: string;
-  safetyAndSecurity: string;
+  safetyAndSecurity: string[];
   availabilityStatus: string;
-  rules: string;
-  cancellationPolicies: string;
+  rules: string[];
+  cancellationPolicies: string[];
 };

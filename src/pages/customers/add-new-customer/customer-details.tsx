@@ -1,9 +1,8 @@
-import { useEffect, useLayoutEffect, useMemo } from "react";
+import { useLayoutEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import UsersIcon from "../../../assets/icons/users";
-import { clearAllCustomerInfo } from "../../../stores/inAppDataInterations/addEditCustomerInfo";
 import AddCustomerDetails from "../../../components/add-edit-customer/customer-details";
 import Timeline from "../../../components/timeline";
 

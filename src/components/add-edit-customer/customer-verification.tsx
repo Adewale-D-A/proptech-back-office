@@ -40,6 +40,11 @@ export default function AddEditCustomerVerification({ id }: { id?: string }) {
     setNotes(notes);
   }, [storeAptDetails]);
 
+  const generatePassword = useCallback(() => {
+    const randomString = Math.random().toString(20).substr(2, 8);
+    console.log({ randomString });
+    setPinGenerated(randomString);
+  }, []);
   //update redux store and naviagte to next timeline
   const addCustoemrDetails = useCallback(
     (e: SyntheticEvent) => {
@@ -121,9 +126,9 @@ export default function AddEditCustomerVerification({ id }: { id?: string }) {
                 isRequired={true}
                 value={pinGenerated}
                 setValue={setPinGenerated}
-                id="pin-generated"
+                id="pin-password"
                 placeholder=""
-                label="Pin"
+                label="Password"
               />
               <div className=" w-fit">
                 <LoadingButton
@@ -131,7 +136,8 @@ export default function AddEditCustomerVerification({ id }: { id?: string }) {
                   variant={3}
                   className="border border-primary rounded-md hover:border-primary/30 hover:text-primary transition-all"
                   isLoading={false}
-                  label="Generate Pin"
+                  label="Generate Password"
+                  clickHandler={() => generatePassword()}
                 />
               </div>
             </div>

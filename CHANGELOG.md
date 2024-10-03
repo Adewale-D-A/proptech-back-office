@@ -1,3 +1,7 @@
+##### 03.10.2024
+
+> Multiple seclect UI development
+
 ##### 27.09.2024
 
 > Chat module ui completion

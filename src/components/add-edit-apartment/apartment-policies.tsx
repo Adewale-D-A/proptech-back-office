@@ -1,5 +1,4 @@
 import { SyntheticEvent, useCallback, useEffect, useState } from "react";
-import Select from "../inputs/select";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { useNavigate } from "react-router-dom";
 import {
@@ -8,12 +7,14 @@ import {
 } from "../../stores/inAppDataInterations/addEditApartmentInfo";
 import LinkButton from "../button/linkButton";
 import LoadingButton from "../button";
-import TextAreaInput from "../inputs/textArea";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import {
   addApartmentToList,
   replaceApartmentInList,
 } from "../../stores/apiData/apartment-lists";
+import ruleOptions from "../../assets/temp-api-mockup-data/ruleOptions.json";
+import cancellationOptions from "../../assets/temp-api-mockup-data/cancellationOptions.json";
+import MultipleSelect from "../inputs/select/multipleSelect";
 
 export default function AddEditApartmentPolicies({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
@@ -22,8 +23,8 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
     (state) => state.addEditApartmentInfo.value.data
   );
 
-  const [rules, setRules] = useState("");
-  const [cancellationPolicy, setCancellationPolicy] = useState("");
+  const [rules, setRules] = useState<string[]>([]);
+  const [cancellationPolicy, setCancellationPolicy] = useState<string[]>([]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   // populate apartment details interface
@@ -118,18 +119,12 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
             labore.
           </p>
         </div>
-        <Select
-          isRequired={true}
+        <MultipleSelect
           value={rules}
           setValue={setRules}
-          id="no-of-baths"
-        >
-          <option value="" disabled>
-            Select Apartment Rules
-          </option>
-          <option value="no-smoking">No Smoking</option>
-          <option value="no-loud-music">No Loud music</option>
-        </Select>
+          options={ruleOptions}
+          label="Select Rules"
+        />
       </div>
       {/* cancellation policies */}
       <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-start">
@@ -140,12 +135,11 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
             labore.
           </p>
         </div>
-        <TextAreaInput
-          isRequired={true}
+        <MultipleSelect
           value={cancellationPolicy}
           setValue={setCancellationPolicy}
-          id="cancellation-policies"
-          placeholder="Cancellation Policies"
+          options={cancellationOptions}
+          label="Select Cancellation Policies"
         />
       </div>
 

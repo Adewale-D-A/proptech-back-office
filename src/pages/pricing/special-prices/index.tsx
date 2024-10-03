@@ -65,7 +65,7 @@ export default function SpecialPrices() {
         <div className=" rounded-md border">
           <div className=" w-full flex items-center justify-between gap-3  border-b  p-3">
             <h4 className="text-lg font-semibold flex items-center gap-3">
-              <span>Seasons and Wekk Days</span> <TimeIcon />
+              <span>Seasons and Week Days</span> <TimeIcon />
             </h4>
           </div>
           <form onSubmit={submitSpecialPrices}>

@@ -67,7 +67,7 @@ export default function DashboardOverview() {
               label: "Additional Requests",
               value: "50 Requests",
               theme: "text-[#017EFF] bg-[#017EFF]/20",
-              url: { src: "#", label: "View Requests" },
+              url: { src: "/bookings?page=requests", label: "View Requests" },
             },
             {
               id: 4,

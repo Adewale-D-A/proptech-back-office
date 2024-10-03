@@ -1,0 +1,14 @@
+[
+  {
+    "id": "no_refunds_7_days",
+    "label": "No refunds after 7 days"
+  },
+  {
+    "id": "no_refunds",
+    "label": "No refunds"
+  },
+  {
+    "id": "no_refunds_14_days",
+    "label": "No refunds after 14 days"
+  }
+]

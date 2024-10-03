@@ -1,0 +1,14 @@
+[
+  {
+    "id": "no_illegal_substance",
+    "label": "No illegal activities"
+  },
+  {
+    "id": "no_smoking",
+    "label": "No smoking"
+  },
+  {
+    "id": "close_by_10pm",
+    "label": "Gate clode by 10pm"
+  }
+]

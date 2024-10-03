@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { updateApartmentFeatures } from "../../stores/inAppDataInterations/addEditApartmentInfo";
 import LinkButton from "../button/linkButton";
 import LoadingButton from "../button";
+import MultipleSelect from "../inputs/select/multipleSelect";
+import securityOptions from "../../assets/temp-api-mockup-data/securityOptions.json";
 
 export default function AddEditApartmentFeatures({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
@@ -18,7 +20,7 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
   const [noBeds, setNoBeds] = useState("");
   const [whatToExpect, setWhatToExpect] = useState("");
   const [pointOfInterest, setPointOfInterest] = useState("");
-  const [safetyAndSecurity, setSafetyAndSecurity] = useState("");
+  const [safetyAndSecurity, setSafetyAndSecurity] = useState<string[]>([]);
   const [availabilityStatus, setAvailabilityStatus] = useState("");
 
   // populate apartment details interface
@@ -169,17 +171,12 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
             labore.
           </p>
         </div>
-        <Select
-          isRequired={true}
+        <MultipleSelect
           value={safetyAndSecurity}
           setValue={setSafetyAndSecurity}
-          id="safety-and-security"
-        >
-          <option value="" disabled>
-            Select Security Options
-          </option>
-          <option value={`security-door`}>Gate close at 10pm</option>
-        </Select>
+          options={securityOptions}
+          label="Select Security Options"
+        />
       </div>
       {/* savailability status */}
       <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
@@ -199,7 +196,8 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
           <option value="" disabled>
             Select Option
           </option>
-          <option value={`availablle-25th`}>December 25th</option>
+          <option value={`yes`}>Yes</option>
+          <option value={`no`}>No</option>
         </Select>
       </div>
 

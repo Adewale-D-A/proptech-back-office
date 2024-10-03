@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useAppDispatch } from "../../stores/hooks";
 import { updatePageProperties } from "../../stores/appFunctionality/pageProperties";
 import BookingTab from "../../components/tab/bookingTab";
@@ -9,6 +9,7 @@ import BookingsOverview from "./bookings-overview";
 import BookingsCalendar from "./bookings-calendar";
 import AllBookings from "./all-bookings";
 import Requests from "./requests";
+import { useSearchParams } from "react-router-dom";
 
 const breadCrumb = [
   {
@@ -19,7 +20,8 @@ const breadCrumb = [
 ];
 export default function Bookings() {
   const dispatch = useAppDispatch();
-
+  const [searchParams] = useSearchParams();
+  const queryTab = searchParams.get("page");
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
@@ -34,11 +36,11 @@ export default function Bookings() {
       })
     );
   }, []);
-
   return (
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
         <BookingTab
+          defaultIndex={queryTab === "requests" ? 4 : 0}
           header={[
             { id: 1, icon: <MenuIcon />, label: "Overview" },
             { id: 2, icon: <CalendarIcon />, label: "Calendar" },
