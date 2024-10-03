@@ -45,7 +45,7 @@ export default function AllBookings() {
           <div className=" flex items-center gap-4">
             <ExportSelect id="bookings" />
             <LinkButton
-              url="#"
+              url="/new-booking"
               label="Add New Booking"
               startIcon={<PlusIcon />}
             />

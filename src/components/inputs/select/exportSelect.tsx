@@ -22,7 +22,7 @@ export default function ExportSelect({
         id={"export-report"}
         value={value}
         onChange={(e) => onChange(e)}
-        className="w-full p-3 rounded-full  bg-primary/20 sm:text-md focus:ring-primary focus:border-primary"
+        className="w-full p-3 px-6 rounded-full  bg-primary/20 sm:text-md focus:ring-primary focus:border-primary"
       >
         <option value="">Export Report</option>
         <option value="csv"> CSV</option>

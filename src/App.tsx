@@ -44,6 +44,7 @@ import AddNewInvoice from "./pages/invoices/add-new-invoice";
 import AddNewPackageAndOffer from "./pages/plans-and-promotions/package-and-offers/add-new-package-and-offer";
 import AdditionalServiceDetailsById from "./pages/additional-services/services-list/service-details";
 import VendorServiceDetailsById from "./pages/additional-services/vendor-services/vendor-details";
+import NewBookings from "./pages/bookings/new-booking";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -103,6 +104,7 @@ function App() {
             {/* bookings flow */}
             <Route path="/bookings" element={<Bookings />} />
             <Route path="/booking-details/:id" element={<BookingById />} />
+            <Route path="/new-booking" element={<NewBookings />} />
             <Route
               path="/booking-details/edit-reservation/:id"
               element={<EditBookingReservation />}

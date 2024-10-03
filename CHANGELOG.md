@@ -1,5 +1,6 @@
 ##### 03.10.2024
 
+> Clarification meeting UI adjustments
 > Multiple seclect UI development
 
 ##### 27.09.2024

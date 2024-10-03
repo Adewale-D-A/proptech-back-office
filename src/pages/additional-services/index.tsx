@@ -39,17 +39,17 @@ export default function Bookings() {
         <BookingTab
           header={[
             { id: 1, icon: <DoorIcon />, label: "99 Apartment Services" },
-            { id: 2, icon: <StallIcon />, label: "Vendor Services" },
+            // { id: 2, icon: <StallIcon />, label: "Vendor Services" },
           ]}
           content={[
             {
               id: 1,
               data: <AdditionalServicesList />,
             },
-            {
-              id: 2,
-              data: <VendorServicesList />,
-            },
+            // {
+            //   id: 2,
+            //   data: <VendorServicesList />,
+            // },
           ]}
         />
       </div>

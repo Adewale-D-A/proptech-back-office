@@ -21,6 +21,7 @@ export default function AssignCustomer() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
 
+  const [searchedUser, setSearcchedUser] = useState({} as any);
   const [isAssigning, setIsAssigning] = useState(false);
 
   useEffect(() => {
@@ -42,6 +43,18 @@ export default function AssignCustomer() {
       setPhoneNumber(phoneNumber);
     }
   }, [data]);
+
+  useEffect(() => {
+    const { firstname, lastname, email, phoneNumber, address } = searchedUser;
+    if (firstname) {
+      setFirstName(firstname);
+      setLastname(lastname);
+      setEmail(email);
+      setAddress(address);
+      setSelectedCountryCode("+234+Nigeria");
+      setPhoneNumber(phoneNumber);
+    }
+  }, [searchedUser]);
 
   const close = useCallback(() => {
     dispatch(closeAssignToCustomerView());
@@ -82,6 +95,8 @@ export default function AssignCustomer() {
           <Search
             id="exisitng-customer"
             placeholder="Exisitng customer name, ID, etc..."
+            componentId="customer"
+            setValue={setSearcchedUser}
           />
         </div>
         <div className=" w-full grid grid-cols-1 gap-5">

@@ -221,8 +221,14 @@ export default function ApartmentDetail() {
                 <div className=" flex items-start gap-4 p-3">
                   <span>
                     <CautionIcon />
-                  </span>{" "}
-                  <p className=" text-gray-600">{data?.cancellationPolicies}</p>
+                  </span>
+                  <div className=" flex items-center gap-3 flex-wrap">
+                    {data?.cancellationPolicies?.map((item) => (
+                      <span key={item} className=" text-gray-600">
+                        {item},
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
               {/* Points of Interest */}

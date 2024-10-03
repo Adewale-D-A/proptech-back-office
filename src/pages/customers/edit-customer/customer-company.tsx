@@ -4,7 +4,7 @@ import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import Timeline from "../../../components/timeline";
 import UsersIcon from "../../../assets/icons/users";
-import EditCustomerCompany from "../../../components/add-edit-customer/customer-company";
+import EditCustomerFinalStep from "../../../components/add-edit-customer/customer-final-step";
 
 const breadCrumb = [
   {
@@ -44,7 +44,7 @@ export default function EditCustomerCompanyPage() {
             <Timeline currentStep={3} id="customer" />
           </div>
           <div className="w-full border-t py-10 px-5">
-            <EditCustomerCompany id={id} />
+            <EditCustomerFinalStep id={id} />
           </div>
         </div>
       </div>

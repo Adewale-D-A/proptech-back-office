@@ -31,7 +31,7 @@ export default function FilterSearch() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className=" flex items-center p-2 rounded-full border border-primary text-primary"
+        className=" flex items-center p-3 px-6 rounded-full border border-primary text-primary"
       >
         <span>Filter Search </span> <FunnelIcon />
       </button>

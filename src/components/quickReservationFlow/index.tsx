@@ -9,6 +9,7 @@ import DateInput from "../inputs/dateInput";
 import TimeInput from "../inputs/timeInput";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { openAssignToCustomerView } from "../../stores/inAppDataInterations/assignCustomer";
+import Search from "../inputs/search";
 
 export default function QuickReservationFlow({
   variant = 1,
@@ -18,7 +19,7 @@ export default function QuickReservationFlow({
   const dispatch = useAppDispatch();
 
   const { data } = useAppSelector((state) => state.assignCustomer.value);
-  const [apartment, setApartment] = useState("");
+  const [apartment, setApartment] = useState({} as any);
   const [payment, setPayment] = useState("");
   const [checkInDate, setCheckInDate] = useState("");
   const [rate, setRate] = useState("");
@@ -67,9 +68,18 @@ export default function QuickReservationFlow({
           >
             <option value="">1 Bedroom apartment</option>
           </Select> */}
-          <span className="w-full p-3 rounded-lg border  bg-gray-200/15 ">
-            1 Bedroom Apartment
-          </span>
+          {variant === 2 ? (
+            <Search
+              id="apartment-search"
+              placeholder="Search apartment by name"
+              componentId="apartment"
+              setValue={setApartment}
+            />
+          ) : (
+            <span className="w-full p-3 rounded-lg border  bg-gray-200/15 ">
+              1 Bedroom Apartment
+            </span>
+          )}
           <Select
             isRequired={true}
             value={payment}
