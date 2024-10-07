@@ -1,15 +1,14 @@
 import { SyntheticEvent, useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import TextInput from "../../components/inputs/textInput";
 import LoadingButton from "../../components/button";
 import OTPInput from "../../components/inputs/otpInput";
-import { Link, useNavigate } from "react-router-dom";
-// import useAxios from "../../hooks/useAxios";
+import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-import Logo from "../../components/logo";
 
 export default function ResetPassword() {
-  // const axios = useAxios();
+  const axios = useAxios();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [isSendingCode, setIsSendingCode] = useState(false);
@@ -37,24 +36,19 @@ export default function ResetPassword() {
       e.preventDefault();
       setIsSendingCode(true);
       try {
-        // const response = await axios.post("/forgot-password", {
-        //   email: email,
-        // });
-        // console.log({ response });
-
+        const response = await axios.post("/auth/admin/forgot-password", {
+          email: email,
+        });
+        const { message } = response?.data;
+        dispatch(
+          openSnackbar({
+            message: message || "Reset code sent to your email",
+            isError: false,
+          })
+        );
         setIsCodeSent(true);
         setIsCountdownDone(false);
         setSeconds(60);
-      } catch (error: any) {
-        const error_message = error?.response?.data?.message;
-        dispatch(
-          openSnackbar({
-            message: error_message
-              ? error_message
-              : "Failed to send reset password link, please try again later",
-            isError: true,
-          })
-        );
       } finally {
         setIsSendingCode(false);
       }
@@ -63,8 +57,15 @@ export default function ResetPassword() {
   );
 
   const verifyOtp = useCallback(
-    (e: SyntheticEvent) => {
+    async (e: SyntheticEvent) => {
       try {
+        const response = await axios.post(
+          "/auth/admin/forgot-password/verify",
+          {
+            email: email,
+            otp: otp,
+          }
+        );
         setIsVerifyingCode(true);
         navigate(`/change-password/${email}/${otp}`);
       } catch (error) {
@@ -88,6 +89,7 @@ export default function ResetPassword() {
             isRequired={true}
             id={"email"}
             placeholder={"Enter your registered email"}
+            readonly={isCodeSent}
           />
           <LoadingButton
             label={

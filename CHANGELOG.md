@@ -1,3 +1,8 @@
+##### 07.10.2024 (API Integrations)
+
+> Onboarding Api Integrations (Login, Logout, Forgot Password)
+> Dashboard API (Sales Analytics, Service Breakdown)
+
 ##### 03.10.2024
 
 > Clarification meeting UI adjustments

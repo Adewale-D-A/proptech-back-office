@@ -10,8 +10,8 @@
       <th>Use In App</th>
     </tr>
     <tr>
-      <td>@reduxjs/toolkit</td>
-      <td>Store data management is done using Redux</td>
+      <td>react-redux @reduxjs/toolkit</td>
+      <td>Store data management is done using Redux <a href="https://redux-toolkit.js.org/introduction/getting-started">DOCUMENTATION</a></td>
     </tr>
     <tr>
       <td>tailwindcss</td>
@@ -19,7 +19,7 @@
     </tr>
     <tr>
       <td>@headlessui/react</td>
-      <td>Ready made library for modals</td>
+      <td>Ready to use component library (main installed for modals)</td>
     </tr>  
     <tr>
       <td>react-helmet-async</td>
@@ -29,6 +29,18 @@
       <td>chart.js react-chartjs-2</td>
       <td>Charts UI <a href="https://react-chartjs-2.js.org/examples/doughnut-chart">DOCUMENTATION</a></td>
     </tr>
+    <tr>
+      <td>@react-google-maps/api</td>
+      <td>Map UI redering</td>
+    </tr>
+    <tr>
+      <td>react-places-autocomplete</td>
+      <td>Address search using google api key</td>
+    </tr>
+    <tr>
+      <td>axios</td>
+      <td>HTTP requests handler</td>
+    </tr>
   </table>
 
 step 1:
@@ -37,3 +49,5 @@ step 2:
 run **npm start** (start application on port :3000)
 
 > mime types documentation : <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types">MIME TYPES</a> > <a href="https://www.figma.com/design/foJk9S0rCJImkVXY0EgxId/proptech?node-id=4400-64&node-type=&t=ZI2UUvFyHO0J3pWZ-0">FIGMA File</a>
+
+<a href="https://documenter.getpostman.com/view/36930652/2sAXjNXAMk" targt="_blank">backend main api doc</a>

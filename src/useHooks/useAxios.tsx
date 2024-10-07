@@ -4,10 +4,14 @@ import { useAppDispatch, useAppSelector } from "../stores/hooks";
 // import { updateAuthentication } from "../stores/users/auth";
 // import { updateNetworkError } from "../stores/appFunctionality/networkError";
 import { useNavigate } from "react-router-dom";
-import { clearAuthentication } from "../stores/authUser/auth";
+import {
+  clearAuthentication,
+  // updateAuthentication,
+} from "../stores/authUser/auth";
+import { openSnackbar } from "../stores/appFunctionality/snackbar";
 
 //axios instace interceptor for access token integration and refresh tokens
-const useAxios = () => {
+const useAxios = (disableErrorPrompt?: boolean) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { access_token } = useAppSelector(
@@ -27,21 +31,45 @@ const useAxios = () => {
     const responseIntercept = axiosInstance.interceptors.response.use(
       (response) => response,
       async (error) => {
-        const prevRequest = error?.config;
-        if (error?.response?.status === 401) {
-          const hadUnauthenticated = error?.response?.data?.message
-            ?.toLowerCase()
-            .includes("unauthenticated");
+        // const prevRequest = error?.config;
+
+        // ----log error message using snackbar---
+        const errorMessage = error?.response?.data?.message;
+        if (!disableErrorPrompt) {
+          dispatch(
+            openSnackbar({
+              message: errorMessage || "Please try again later",
+              isError: true,
+            })
+          );
+        }
+        console.log({ error });
+        // ----log error message using snackbar---
+        if (
+          error?.response?.status === 401 ||
+          error?.response?.status === 422
+        ) {
+          const statusMessage = error?.response?.data?.status;
+          const hadUnauthenticated =
+            error?.response?.data?.message
+              ?.toLowerCase()
+              .includes("unauthenticated") ||
+            statusMessage?.toLowerCase().includes("token");
           if (hadUnauthenticated) {
             sessionStorage.removeItem(`${process.env.REACT_APP_SESSION_KEY}`);
             dispatch(clearAuthentication());
             navigate("/");
           }
-          return Promise.reject(error);
-          // const newAccessToken = await axiosInstance.post("/", {
-          //   refresh_token: "",
-          // });
-          // console.log({ oldToken: userAuth?.accessToken, newAccessToken });
+          // allow snackbar error message prompt from axios middleware
+
+          // return Promise.reject(error);
+          // const newAccessToken = await axiosInstance.post(
+          //   "/auth/admin/refresh",
+          //   {
+          //     refresh_token: "",
+          //   }
+          // );
+          // console.log({ oldToken: access_token, newAccessToken });
           // dispatch(
           //   updateAuthentication({
           //     access_token: "",

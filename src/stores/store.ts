@@ -19,6 +19,11 @@ import profile from "./authUser/profile";
 import userAuthentication from "./authUser/auth";
 
 // api data
+
+// dahsboard
+import serviceBreakdownData from "./apiData/dahsboards/services-breakdown";
+import salesAnalyticsData from "./apiData/dahsboards/sales-analytics";
+
 import apartmentListsData from "./apiData/apartment-lists";
 import bookingsListsData from "./apiData/bookings-lists";
 import requestListsData from "./apiData/requests-lists";
@@ -52,6 +57,10 @@ export const adminStore = () => {
       userAuthentication: userAuthentication,
 
       // api data
+      // dashboard
+      serviceBreakdown: serviceBreakdownData,
+      salesAnalytics: salesAnalyticsData,
+
       allAparmentLists: apartmentListsData,
       allBookingsLists: bookingsListsData,
       allRequestLists: requestListsData,

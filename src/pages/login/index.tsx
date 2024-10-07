@@ -3,16 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import TextInput from "../../components/inputs/textInput";
 import Password from "../../components/inputs/password";
 import LoadingButton from "../../components/button";
-// import useAxios from "../../hooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { updateAuthentication } from "../../stores/authUser/auth";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-import Logo from "../../components/logo";
+import useAxios from "../../useHooks/useAxios";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  // const axios = useAxios();
+  const axios = useAxios();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,17 +22,24 @@ function Login() {
       e.preventDefault();
       setIsSubmitting(true);
       try {
-        // const response = await axios.post("/login", {
-        //   email: email,
-        //   password: password,
-        // token: _token,
-        // });
-        // const { token } = response?.data;
-        const token = "random-tokenizer";
+        const response = await axios.post("/auth/admin/login", {
+          email: email,
+          password: password,
+        });
+        console.log({ response });
+        const { access_token } = response?.data?.data;
+        console.log({ access_token });
+        // const token = "random-tokenizer";
         dispatch(
-          updateAuthentication({ access_token: token, refresh_token: "" })
+          updateAuthentication({
+            access_token: access_token,
+            refresh_token: "",
+          })
         );
-        sessionStorage.setItem(`${process.env.REACT_APP_SESSION_KEY}`, token);
+        sessionStorage.setItem(
+          `${process.env.REACT_APP_SESSION_KEY}`,
+          access_token
+        );
         navigate("/dashboard-overview");
       } catch (error: any) {
         const error_message = error?.response?.data?.message;

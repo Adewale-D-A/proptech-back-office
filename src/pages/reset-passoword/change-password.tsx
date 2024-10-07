@@ -1,14 +1,15 @@
 import { SyntheticEvent, useCallback, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import LoadingButton from "../../components/button";
 import SuccessPasswordChange from "./successPasswordChange";
 import { useAppDispatch } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 // import useAxios from "../../hooks/useAxios";
 import Password from "../../components/inputs/password";
+import useAxios from "../../useHooks/useAxios";
 
 export default function ChangePassword() {
-  // const axios = useAxios();
+  const axios = useAxios();
   const dispatch = useAppDispatch();
   const { email, otp } = useParams();
   const [newPassword, setNewPassword] = useState("");
@@ -23,21 +24,21 @@ export default function ChangePassword() {
       if (newPassword === confirmPassword) {
         setIsSubmitting(true);
         try {
-          // const respose = await axios.post("/reset-password", {
-          //   token: otp,
-          //   email: email,
-          //   password: newPassword,
-          //   password_confirmation: confirmPassword,
-          // });
+          await axios.post("/auth/admin/reset-password", {
+            token: otp,
+            email: email,
+            password: newPassword,
+            password_confirmation: confirmPassword,
+          });
           setOpenSuccess(true);
         } catch (error: any) {
-          const error_message = error?.response?.data?.message;
-          dispatch(
-            openSnackbar({
-              message: error_message ? error_message : "Password reset failed",
-              isError: true,
-            })
-          );
+          // const error_message = error?.response?.data?.message;
+          // dispatch(
+          //   openSnackbar({
+          //     message: error_message ? error_message : "Password reset failed",
+          //     isError: true,
+          //   })
+          // );
         } finally {
           setIsSubmitting(false);
         }
@@ -47,7 +48,7 @@ export default function ChangePassword() {
         );
       }
     },
-    [newPassword, confirmPassword]
+    [newPassword, confirmPassword, email, otp]
   );
 
   return (

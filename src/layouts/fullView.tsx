@@ -5,15 +5,16 @@ import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import { toggleMenuView } from "../stores/appFunctionality/navMenuFunctions";
 import { clearAuthentication } from "../stores/authUser/auth";
 import { clearProfile } from "../stores/authUser/profile";
-import { openSnackbar } from "../stores/appFunctionality/snackbar";
 import NavigationMenuItems from "../assets/menuItem";
 import LogoutIcon from "../assets/icons/logout";
 import MenuIcon from "../assets/icons/menu";
+import useAxios from "../useHooks/useAxios";
 
 //full view
 function FullMenuView() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const axios = useAxios();
 
   //get side bar meny status from redux store
   const fullView = useAppSelector(
@@ -27,12 +28,13 @@ function FullMenuView() {
 
   const logOut = useCallback(async () => {
     try {
+      // await axios.post("/admin/logout");
       dispatch(clearAuthentication());
       dispatch(clearProfile());
       window.location.href = "/";
       navigate("/");
     } catch (error) {
-      dispatch(openSnackbar({ message: "logout failed", isError: true }));
+      // dispatch(openSnackbar({ message: "logout failed", isError: true }));
     }
   }, []);
 

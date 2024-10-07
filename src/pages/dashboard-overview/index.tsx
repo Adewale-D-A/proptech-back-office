@@ -12,6 +12,8 @@ import { DoughnutChart } from "../../components/charts/doughnut";
 import ApartmentTable from "../../components/tables/apartments";
 import Filter from "../../components/filterAndSort";
 import MenuIcon from "../../assets/icons/menu";
+import useGetServicesBreakdown from "../../services-hooks/dashboards/useGetServicesBreakdown";
+import useGetSalesAnalytics from "../../services-hooks/dashboards/useGetSalesAnalytics";
 
 const breadCrumb = [
   {
@@ -38,6 +40,10 @@ export default function DashboardOverview() {
     );
   }, []);
 
+  const { data } = useGetServicesBreakdown();
+  const {
+    data: { stats },
+  } = useGetSalesAnalytics();
   return (
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-16">
@@ -49,7 +55,7 @@ export default function DashboardOverview() {
               id: 1,
               icon: <BuildingIcon className="w-5 h-5" />,
               label: "Number of Apartment",
-              value: "200",
+              value: data?.number_of_shortlets,
               theme: "text-[#26397B] bg-[#26397B]/20",
               url: { src: "/apartments", label: "View Apartment" },
             },
@@ -57,7 +63,7 @@ export default function DashboardOverview() {
               id: 2,
               icon: <CalendarIcon className="w-5 h-5" />,
               label: "Total Bookings",
-              value: "50 Bookings",
+              value: `${data?.number_of_bookings} Bookings`,
               theme: "text-[#35BD29] bg-[#35BD29]/20",
               url: { src: "/bookings", label: "View Bookings" },
             },
@@ -65,7 +71,7 @@ export default function DashboardOverview() {
               id: 3,
               icon: <UserPlusIcon className="w-5 h-5" />,
               label: "Additional Requests",
-              value: "50 Requests",
+              value: `${data?.no_of_additional_request} Requests`,
               theme: "text-[#017EFF] bg-[#017EFF]/20",
               url: { src: "/bookings?page=requests", label: "View Requests" },
             },
@@ -73,7 +79,7 @@ export default function DashboardOverview() {
               id: 4,
               icon: <UsersIcon className="w-5 h-5" />,
               label: "Number of Guests",
-              value: "500 Guests",
+              value: `${data?.number_of_guests} Guests`,
               theme: "text-[#7C0DBE] bg-[#7C0DBE]/20",
               url: { src: "/customers", label: "View Users" },
             },
@@ -117,9 +123,7 @@ export default function DashboardOverview() {
                   datasets: [
                     {
                       label: "Sales Analytics",
-                      data: [
-                        1.5, 1.9, 2.5, 3.5, 4.5, 4.5, 6.6, 7.5, 0, 0, 0, 0, 0,
-                      ],
+                      data: stats,
                       backgroundColor: "#2E4393",
                       indexAxis: "x",
                       borderRadius: 50,

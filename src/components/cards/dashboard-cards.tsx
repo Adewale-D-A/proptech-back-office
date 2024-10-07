@@ -13,7 +13,7 @@ export default function DashboardCard({
   theme: string;
   icon: ReactNode;
   label: string;
-  value: string;
+  value: string | number;
   urlSrc?: string;
   urlLabel?: string;
 }) {
