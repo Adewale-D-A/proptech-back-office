@@ -1,3 +1,27 @@
+export type apartment = {
+  id: number;
+  name: string;
+  slug: string;
+  description: string;
+  location: string;
+  currency: string;
+  price: number;
+  caution_fee: number;
+  tax_fee: number;
+  no_of_bedrooms: number;
+  no_of_bathrooms: number;
+  min_guests: string;
+  max_guests: number;
+  point_of_interest: string;
+  cancellation_policy: string;
+  availability_status: string;
+  created_at: string;
+  updated_at: string;
+  room_option_id: number;
+  bookings_count: number;
+  last_booking_date: string;
+  no_of_bookings: number;
+};
 export type apartmentLists = {
   id: string;
   image: string;

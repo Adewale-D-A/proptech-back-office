@@ -26,9 +26,9 @@ function Login() {
           email: email,
           password: password,
         });
-        console.log({ response });
         const { access_token } = response?.data?.data;
-        console.log({ access_token });
+        // console.log({ response });
+        // console.log({ access_token });
         // const token = "random-tokenizer";
         dispatch(
           updateAuthentication({

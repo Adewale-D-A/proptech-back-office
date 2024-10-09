@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import NextArrowIcon from "../../assets/icons/next-arrow";
 import LoaderIcon from "../../assets/icons/loader";
 import PreviousArrowIcon from "../../assets/icons/previous-arrow";
+import { pagination } from "../../types/pagination";
 
 export default function Pagination({
   pagination,
@@ -9,14 +10,7 @@ export default function Pagination({
   isLoading,
   label,
 }: {
-  pagination: {
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    from: number;
-    to: number;
-  };
+  pagination: pagination;
   setCurrentPage: Function;
   isLoading: boolean;
   label?: string;
@@ -37,7 +31,7 @@ export default function Pagination({
   return (
     <div className="w-full flex items-center justify-end gap-2 my-8">
       <span>
-        showing {pagination?.per_page} of {pagination?.total} {label}{" "}
+        showing {pagination?.to} of {pagination?.total} {label}{" "}
       </span>
       <button
         title="previous"

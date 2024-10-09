@@ -76,7 +76,7 @@ export default function ApartmentListsTable({
                   <tr key={request?.id} className=" border-b">
                     <td className=" flex gap-2 items-center min-w-36">
                       <img
-                        src={request?.image ? request?.image : "/logo_blue.png"}
+                        src={"/logo_blue.png"}
                         alt={request?.name}
                         className=" h-10 w-10 rounded aspect-square"
                       />
@@ -88,14 +88,12 @@ export default function ApartmentListsTable({
                         </span>
                       </span>
                     </td>
-                    <td className=" text-lg  min-w-36">
-                      {request?.noOfGuests} Guests
-                    </td>
-                    <td>{request?.category}</td>
-                    <td>{request?.characteristics}</td>
-                    <td>{request?.units}</td>
+                    <td className=" text-lg  min-w-36">** Guests</td>
+                    <td>**</td>
+                    <td>**</td>
+                    <td>**</td>
                     <td>
-                      <Status status={request?.availabilityStatus} />
+                      <Status status={request?.availability_status} />
                     </td>
                     <td className=" group relative">
                       <span className=" p-2 text-lg">...</span>
@@ -127,7 +125,7 @@ export default function ApartmentListsTable({
                         <button
                           type="button"
                           onClick={() => {
-                            setDeleteId(request?.id);
+                            setDeleteId(String(request?.id));
                             setOpenDeleteConfirmation(true);
                           }}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"

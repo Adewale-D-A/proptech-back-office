@@ -23,6 +23,7 @@ import userAuthentication from "./authUser/auth";
 // dahsboard
 import serviceBreakdownData from "./apiData/dahsboards/services-breakdown";
 import salesAnalyticsData from "./apiData/dahsboards/sales-analytics";
+import salesChannelData from "./apiData/dahsboards/sales-channels";
 
 import apartmentListsData from "./apiData/apartment-lists";
 import bookingsListsData from "./apiData/bookings-lists";
@@ -60,6 +61,7 @@ export const adminStore = () => {
       // dashboard
       serviceBreakdown: serviceBreakdownData,
       salesAnalytics: salesAnalyticsData,
+      salesChannels: salesChannelData,
 
       allAparmentLists: apartmentListsData,
       allBookingsLists: bookingsListsData,

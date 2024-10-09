@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import { useAppDispatch } from "../../stores/hooks";
 import { updatePageProperties } from "../../stores/appFunctionality/pageProperties";
 
@@ -10,10 +10,12 @@ import DashboardCard from "../../components/cards/dashboard-cards";
 import BarChart from "../../components/charts/bar-chart";
 import { DoughnutChart } from "../../components/charts/doughnut";
 import ApartmentTable from "../../components/tables/apartments";
-import Filter from "../../components/filterAndSort";
 import MenuIcon from "../../assets/icons/menu";
 import useGetServicesBreakdown from "../../services-hooks/dashboards/useGetServicesBreakdown";
 import useGetSalesAnalytics from "../../services-hooks/dashboards/useGetSalesAnalytics";
+import Sort from "../../components/filterAndSort/sort";
+import Filter from "../../components/filterAndSort/filter";
+import useGetSalesChannels from "../../services-hooks/dashboards/useGetSalesChannels";
 
 const breadCrumb = [
   {
@@ -40,10 +42,41 @@ export default function DashboardOverview() {
     );
   }, []);
 
+  const [filterDates, setFilterDates] = useState<{
+    start_date: string;
+    end_date: string;
+  }>();
+  const [filterSalesChannelDates, setFilterSalesChannelDates] = useState<{
+    start_date: string;
+    end_date: string;
+  }>();
+  // service breakdown
   const { data } = useGetServicesBreakdown();
+  // sales analytics
   const {
     data: { stats },
-  } = useGetSalesAnalytics();
+  } = useGetSalesAnalytics({
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+  });
+  // sales channels
+  const { data: pieChart } = useGetSalesChannels({
+    start_date: filterSalesChannelDates?.start_date,
+    end_date: filterSalesChannelDates?.end_date,
+  });
+
+  const handleSalesFiltering = useCallback(
+    (start_date: string, end_date: string) => {
+      setFilterDates({ start_date, end_date });
+    },
+    []
+  );
+  const handleSalesChannelFiltering = useCallback(
+    (start_date: string, end_date: string) => {
+      setFilterSalesChannelDates({ start_date, end_date });
+    },
+    []
+  );
   return (
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-16">
@@ -100,7 +133,10 @@ export default function DashboardOverview() {
         <div className="w-full rounded-lg border">
           <div className=" w-full border-b p-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold">Sales Analytics</h2>
-            <Filter sortId="top-apartment" sortLabel="Sort by:" />
+            <div className=" flex items-center gap-3 text-sm text-gray-500">
+              <Filter actionHandler={handleSalesFiltering} />
+              <Sort id={"sales-analytics"} label={"Sort by:"} />
+            </div>
           </div>
           <div className=" p-5 md:p-10">
             <div className=" border p-5 rounded-md h-full w-full flex justify-center">
@@ -166,18 +202,23 @@ export default function DashboardOverview() {
           </div>
 
           <div className=" w-full rounded-lg border">
-            <div className=" w-full border-b p-4">
+            <div className=" w-full border-b p-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold">Sales Channel</h2>
+              <div className=" flex items-center gap-3 text-sm text-gray-500">
+                <Filter actionHandler={handleSalesChannelFiltering} />
+              </div>
             </div>
             <div className="w-full p-5 flex justify-center">
               <div className=" max-w-screen-sm">
                 <DoughnutChart
                   data={{
-                    labels: ["Website/IBE", "OTA Commission"],
+                    labels: pieChart.map((item) => item?.channel) || [
+                      "Website",
+                    ],
                     datasets: [
                       {
                         label: "",
-                        data: [30, 70],
+                        data: pieChart.map((item) => item?.percentage) || [0],
                         backgroundColor: ["#FFA500", "#2E4393"],
                       },
                     ],
@@ -199,21 +240,21 @@ export default function DashboardOverview() {
                 id: 2,
                 icon: <CalendarIcon className="w-5 h-5" />,
                 label: "Total Gross Income",
-                value: "N419,585,309.78",
+                value: "N0",
                 theme: "text-[#35BD29] bg-[#35BD29]/20",
               },
               {
                 id: 3,
                 icon: <UserPlusIcon className="w-5 h-5" />,
                 label: "Total After Commissions",
-                value: "N419,585,309.78",
+                value: "N0",
                 theme: "text-[#017EFF] bg-[#017EFF]/20",
               },
               {
                 id: 4,
                 icon: <UsersIcon className="w-5 h-5" />,
                 label: "Total Net Income",
-                value: "N419,585,309.79",
+                value: "N0",
                 theme: "text-[#7C0DBE] bg-[#7C0DBE]/20",
               },
             ].map((item) => (
@@ -238,32 +279,6 @@ export default function DashboardOverview() {
             "Total Bookings",
             "Availability Status",
             "Action",
-          ]}
-          data={[
-            {
-              id: "abs2_144asasaxx22",
-              apartmentInfo: {
-                name: "Sunshine -3 Bedroom",
-                image: "/logo_blue.png",
-                location: "Lekki Phase II",
-              },
-              pricePerNight: "N 100,000",
-              lastBooking: "28 Mar, 2014 5:33 AM",
-              totalBookings: "10",
-              availabilityStatus: "Available",
-            },
-            {
-              id: "abs2_1442sacbg2",
-              apartmentInfo: {
-                name: "Moonlight - 1 Bedroom",
-                image: "/logo_blue.png",
-                location: "Surulere axis",
-              },
-              pricePerNight: "N 150,000",
-              lastBooking: "29 August, 2024 12:00 AM",
-              totalBookings: "15",
-              availabilityStatus: "Not Available",
-            },
           ]}
           title="Top Apartments"
         />

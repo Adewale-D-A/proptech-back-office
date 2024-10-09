@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { apartmentLists } from "../../types/apiData/apartment";
+import { apartment } from "../../types/apiData/apartment";
+import { pagination } from "../../types/pagination";
 
 export const apartmentListsData = createSlice({
   name: "all apartments",
@@ -7,17 +8,10 @@ export const apartmentListsData = createSlice({
     value: {
       status: false,
       pagination: [] as {
-        pagination_data: {
-          current_page: number;
-          last_page: number;
-          per_page: number;
-          total: number;
-          from: number;
-          to: number;
-        };
-        data: apartmentLists;
+        pagination_data: pagination;
+        data: apartment[];
       }[],
-      data: [] as apartmentLists,
+      data: [] as apartment[],
     },
   },
   reducers: {
@@ -62,7 +56,7 @@ export const apartmentListsData = createSlice({
       const { id } = action?.payload;
       const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
-        (v: { id: string }) => v.id === id
+        (v: { id: number }) => v.id === id
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1);
@@ -85,7 +79,7 @@ export const apartmentListsData = createSlice({
       const { id } = action?.payload;
       const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
-        (v: { id: string }) => v.id === id
+        (v: { id: number }) => v.id === id
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1, action?.payload);

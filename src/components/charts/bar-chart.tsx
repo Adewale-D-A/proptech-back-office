@@ -29,6 +29,20 @@ export const options = {
       text: "",
     },
   },
+  // scales: {
+  //   y: {
+  //     title: {
+  //       display: true,
+  //       text: "Your Title",
+  //     },
+  //   },
+  //   x: {
+  //     title: {
+  //       display: true,
+  //       text: "Your Title",
+  //     },
+  //   },
+  // },
 };
 
 export default function BarChart({

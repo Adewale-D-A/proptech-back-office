@@ -1,17 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
-import useAxios from "../useHooks/useAxios";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import {
   addToPaginationHistory,
   updateApartmentList,
 } from "../stores/apiData/apartment-lists";
-import tempAptData from "../assets/temp-api-mockup-data/apartments.json";
+import useAxios from "../useHooks/useAxios";
+import { pagination } from "../types/pagination";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetAllApartmentLists({
   page = 1,
+  start_date,
+  end_date,
+  sort = "desc",
 }: {
   page?: number;
+  start_date?: string;
+  end_date?: string;
+  sort?: "desc" | "asc" | string;
 }) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
@@ -23,14 +29,7 @@ export default function useGetAllApartmentLists({
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const [pagination, setPagination] = useState<{
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    from: number;
-    to: number;
-  }>({} as any);
+  const [pagination, setPagination] = useState<pagination>({} as any);
   const getAllApartmentList = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -39,36 +38,35 @@ export default function useGetAllApartmentLists({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage) {
+      if (foundPage && !(start_date && end_date) && !(sort === "asc")) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateApartmentList({ data: foundPage?.data }));
       } else {
-        // const response = await axios.post(`/institution-list?page=${page}`);
-        // const responseData = response?.data?.data;
-        // const institutions = response?.data?.institution;
-        dispatch(updateApartmentList({ data: tempAptData.data }));
-
-        // TODO: UPDATE based on backend pagination response
-        //CURRENTLY: Pagination is not being returned for this dataset,
-        //TEMPORARY SOLUTION: Hardcoding pagination
-        // const { data, current_page, last_page, per_page, total, from, to } =
-        //   responseData;
-        // const paginationDataset = {
-        //   current_page: 1,
-        //   last_page: 1,
-        //   per_page: 20,
-        //   total: 4,
-        //   from: 1,
-        //   to: 1,
-        // };
-        // dispatch(update_institution({data}));
+        const response = await axios.get(
+          start_date && end_date
+            ? `/admin/dashboard/top-shortlets?sort=${sort}&limit=20&page=${page}&start_date=${start_date}&end_date=${end_date}`
+            : `/admin/dashboard/top-shortlets?sort=${sort}&limit=20&page=${page}`
+        );
+        const responseData = response?.data?.data;
+        const { data, current_page, last_page, per_page, total, from, to } =
+          responseData;
+        const paginationDataset = {
+          current_page,
+          last_page,
+          per_page,
+          total,
+          from,
+          to,
+          length: data?.length,
+        };
+        dispatch(updateApartmentList({ data }));
         dispatch(
           addToPaginationHistory({
-            pagination_data: tempAptData.pagination,
-            data: tempAptData.data,
+            pagination_data: paginationDataset,
+            data: data,
           })
         );
-        setPagination(tempAptData.pagination);
+        setPagination(paginationDataset);
       }
       setIsLoading(false);
     } catch (error) {
@@ -76,11 +74,11 @@ export default function useGetAllApartmentLists({
     } finally {
       setIsLoading(false);
     }
-  }, [page]);
+  }, [page, start_date, end_date, sort]);
 
   useEffect(() => {
     getAllApartmentList();
-  }, [page]);
+  }, [page, start_date, end_date, sort]);
 
   return {
     data,

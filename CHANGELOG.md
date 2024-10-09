@@ -1,3 +1,8 @@
+##### 09.10.2024
+
+> Dashboard apartment lists API integration, pagination api logic definition, types reformed
+> Dashboard Sales channel pie chart api integration
+
 ##### 07.10.2024 (API Integrations)
 
 > Onboarding Api Integrations (Login, Logout, Forgot Password)
