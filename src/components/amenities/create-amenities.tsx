@@ -3,6 +3,12 @@ import TextInput from "../inputs/textInput";
 import LoadingButton from "../button";
 import FileInput from "../inputs/fileInput";
 import Select from "../inputs/select";
+import useGetAmenity from "../../services-hooks/useGetAmenity";
+import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
+import { useAppDispatch } from "../../stores/hooks";
+import { addAmenity, replaceAmenity } from "../../stores/apiData/amenities";
+import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import TextAreaInput from "../inputs/textArea";
 
 export default function AddEditAmenities({
   id,
@@ -11,48 +17,37 @@ export default function AddEditAmenities({
   id?: string;
   setOpen: Function;
 }) {
+  const axios = useAxiosMultipart();
+  const dispatch = useAppDispatch();
+  const { data } = useGetAmenity({ id });
   const [title, setTitle] = useState("");
   const [file, setFile] = useState<{
     name: string;
     size: number;
     preview: string;
   }>({} as any);
-  const [preInstalledCharacters, setPreInstralledCharacters] = useState("");
-
-  const [fontIconHTML, setFontIconHTML] = useState("");
-  const [room, setRoom] = useState("");
+  // const [preInstalledCharacters, setPreInstralledCharacters] = useState("");
+  // const [fontIconHTML, setFontIconHTML] = useState("");
+  // const [room, setRoom] = useState("");
+  const [description, setDescription] = useState("");
   const [ordering, setOrdering] = useState("");
 
   const [isCreating, setIsCreating] = useState(false);
-
   //auto update fields
   useEffect(() => {
     if (id) {
-      const {
-        title,
-        file,
-        preInstalledCharacters,
-        fontIconHTML,
-        room,
-        ordering,
-      } = {
-        title: "title",
-        file: { name: "tv.png", size: 1644, preview: "" },
-        preInstalledCharacters: "tv",
-        fontIconHTML: "<i>bi tv</i>",
-        room: "1-bedroom",
-        ordering: "2",
-      };
-      if (title) {
-        setTitle(title);
-        setFile(file);
-        setPreInstralledCharacters(preInstalledCharacters);
-        setFontIconHTML(fontIconHTML);
-        setRoom(room);
-        setOrdering(ordering);
+      const { name, image, ordering_position, description } = data;
+      if (name) {
+        setTitle(name);
+        setFile({ name, size: 100, preview: image || "" });
+        setDescription(description || "");
+        // setPreInstralledCharacters(preInstalledCharacters);
+        // setFontIconHTML(fontIconHTML);
+        // setRoom(room);
+        setOrdering(String(ordering_position || "1"));
       }
     }
-  }, [id]);
+  }, [id, data]);
 
   const close = useCallback(() => {
     setOpen(false);
@@ -62,27 +57,43 @@ export default function AddEditAmenities({
     async (e: SyntheticEvent) => {
       e.preventDefault();
       setIsCreating(true);
+      const payload = {
+        name: title,
+        desciption: description,
+        image: file,
+        ordering_position: ordering,
+      };
       try {
         if (id) {
           //run update endpoint
+          const response = await axios.post(`/admin/amenity/${id}`, payload);
+          const { amenity } = response?.data?.data;
+          dispatch(
+            openSnackbar({
+              message: "Amenity successfully updated",
+              isError: false,
+            })
+          );
+          dispatch(replaceAmenity(amenity));
         } else {
           //run create enpoint
+          const response = await axios.post("/admin/amenity", payload);
+          const { amenity } = response?.data?.data;
+          dispatch(
+            openSnackbar({
+              message: "Amenity successfully added",
+              isError: false,
+            })
+          );
+          dispatch(addAmenity(amenity));
         }
-        console.log({
-          title,
-          file,
-          preInstalledCharacters,
-          fontIconHTML,
-          room,
-          ordering,
-        });
         setOpen(false);
       } catch (error) {
       } finally {
         setIsCreating(false);
       }
     },
-    [title, file, preInstalledCharacters, fontIconHTML, room, ordering, id]
+    [title, file, description, ordering, id]
   );
 
   return (
@@ -104,7 +115,14 @@ export default function AddEditAmenities({
             isRequired={true}
             id="amenity-image"
           />
-          <Select
+          <TextAreaInput
+            isRequired
+            placeholder="description"
+            id="description"
+            setValue={setDescription}
+            value={description}
+          />
+          {/* <Select
             isRequired={true}
             value={preInstalledCharacters}
             setValue={setPreInstralledCharacters}
@@ -133,7 +151,7 @@ export default function AddEditAmenities({
               Select room to be assigned to
             </option>
             <option value="1-bedroom">One bedroom</option>
-          </Select>
+          </Select> */}
           <Select
             isRequired={true}
             value={ordering}
@@ -163,7 +181,7 @@ export default function AddEditAmenities({
           <LoadingButton
             type="submit"
             label={id ? "Save Changes" : "Create Characteristics"}
-            disabled={false}
+            disabled={isCreating}
             isLoading={isCreating}
           />
         </div>

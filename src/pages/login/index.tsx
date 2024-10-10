@@ -1,5 +1,5 @@
 import { SyntheticEvent, useCallback, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import TextInput from "../../components/inputs/textInput";
 import Password from "../../components/inputs/password";
 import LoadingButton from "../../components/button";
@@ -9,9 +9,11 @@ import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import useAxios from "../../useHooks/useAxios";
 
 function Login() {
+  const axios = useAxios();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const axios = useAxios();
+  const [searchParams] = useSearchParams();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -27,7 +29,6 @@ function Login() {
           password: password,
         });
         const { access_token } = response?.data?.data;
-        // console.log({ response });
         // console.log({ access_token });
         // const token = "random-tokenizer";
         dispatch(
@@ -40,7 +41,7 @@ function Login() {
           `${process.env.REACT_APP_SESSION_KEY}`,
           access_token
         );
-        navigate("/dashboard-overview");
+        navigate(`${searchParams?.get("redirect")}` || "/dashboard-overview");
       } catch (error: any) {
         const error_message = error?.response?.data?.message;
         dispatch(

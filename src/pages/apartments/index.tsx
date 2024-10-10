@@ -9,8 +9,6 @@ import ApartmentListsTable from "../../components/tables/apartmentLists";
 import ApartmentTab from "../../components/tab/apartmentTab";
 import RoomOptionTable from "../../components/tables/roomOption";
 import AmenitiesListsTable from "../../components/tables/amenitiesLists";
-import WifiIcon from "../../assets/icons/wifi";
-import TvIcon from "../../assets/icons/tv";
 import ExtraOptionTable from "../../components/tables/extraOption";
 import SecurityIcon from "../../assets/icons/security";
 import CheckListIcon from "../../assets/icons/check-list";
@@ -98,20 +96,6 @@ export default function Apartments() {
                 <AmenitiesListsTable
                   title="Amenities List"
                   header={["Amenities Name", "Icon", "Text", "Action"]}
-                  data={[
-                    {
-                      id: 1,
-                      amentiesName: "Television",
-                      icon: <TvIcon />,
-                      text: "This icon represents a Television",
-                    },
-                    {
-                      id: 2,
-                      amentiesName: "internet",
-                      icon: <WifiIcon />,
-                      text: "This icon represents a Television",
-                    },
-                  ]}
                 />
               ),
             },

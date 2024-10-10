@@ -31,7 +31,6 @@ export default function DateInput({
         id={id}
         readOnly={readonly}
         placeholder={placeholder}
-        required={isRequired}
         value={value}
         onChange={(e: ChangeEvent<HTMLInputElement>) => handleInput(e)}
         type={inputType}

@@ -1,36 +1,24 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
-import {
-  addToPaginationHistory,
-  updateApartmentList,
-} from "../stores/apiData/apartment-lists";
+import { addToPaginationHistory } from "../stores/apiData/apartment-lists";
 import useAxios from "../useHooks/useAxios";
 import { pagination } from "../types/pagination";
+import { updateAmenities } from "../stores/apiData/amenities";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetAllApartmentLists({
-  page = 1,
-  start_date,
-  end_date,
-  sort = "desc",
-}: {
-  page?: number;
-  start_date?: string;
-  end_date?: string;
-  sort?: "desc" | "asc" | string;
-}) {
+export default function useGetAmenities({ page = 1 }: { page?: number }) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
   const {
     status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.allAparmentLists.value);
+  } = useAppSelector((state) => state.allAmenities.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const [pagination, setPagination] = useState<pagination>({} as any);
-  const getAllApartmentList = useCallback(async () => {
+  const getAmenities = useCallback(async () => {
     try {
       setIsLoading(true);
       //check store if this requested data has been saved previously and retirve it
@@ -38,18 +26,16 @@ export default function useGetAllApartmentLists({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage && !(start_date && end_date) && !(sort === "asc")) {
+      if (foundPage) {
         setPagination(foundPage?.pagination_data);
-        dispatch(updateApartmentList({ data: foundPage?.data }));
+        dispatch(updateAmenities({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          start_date && end_date
-            ? `/admin/dashboard/top-shortlets?sort=${sort}&limit=20&page=${page}&start_date=${start_date}&end_date=${end_date}`
-            : `/admin/dashboard/top-shortlets?sort=${sort}&limit=20&page=${page}`
+          `/admin/amenity?limit=20&page=${page}`
         );
-        const responseData = response?.data?.data;
+        const { amenity } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
-          responseData;
+          amenity;
         const paginationDataset = {
           current_page,
           last_page,
@@ -59,7 +45,7 @@ export default function useGetAllApartmentLists({
           to,
           length: data?.length,
         };
-        dispatch(updateApartmentList({ data }));
+        dispatch(updateAmenities({ data }));
         dispatch(
           addToPaginationHistory({
             pagination_data: paginationDataset,
@@ -72,18 +58,18 @@ export default function useGetAllApartmentLists({
     } catch (error) {
       setIsFailed(true);
     }
-  }, [page, start_date, end_date, sort]);
+  }, [page]);
 
   useEffect(() => {
-    getAllApartmentList();
-  }, [page, start_date, end_date, sort]);
+    getAmenities();
+  }, [page]);
 
   return {
     data,
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getAllApartmentList,
+    retryFunction: getAmenities,
     pagination,
   };
 }

@@ -85,9 +85,9 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
           dispatch(
             replaceCustomersInList({
               id: id,
-              firstname: customerDetails?.firstname,
-              lastname: customerDetails?.lastname,
-              phoneNumber: customerDetails?.phoneNumber,
+              firstname: customerDetails?.first_name,
+              lastname: customerDetails?.last_name,
+              phoneNumber: customerDetails?.phone,
               country: customerDetails?.country,
               bookings: "nil",
             })
@@ -102,9 +102,9 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
           dispatch(
             addCustomersToList({
               id: "randomized",
-              firstname: customerDetails?.firstname,
-              lastname: customerDetails?.lastname,
-              phoneNumber: customerDetails?.phoneNumber,
+              firstname: customerDetails?.first_name,
+              lastname: customerDetails?.last_name,
+              phoneNumber: customerDetails?.phone,
               country: customerDetails?.country,
               bookings: "nil",
             })

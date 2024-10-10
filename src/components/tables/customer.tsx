@@ -1,28 +1,47 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../pagination";
 import NoResult from "../noResult";
-import Search from "../inputs/search";
 import Filter from "../filterAndSort/filter";
 import Sort from "../filterAndSort/sort";
 import useGetAllCustomersLists from "../../services-hooks/useGetAllCustomersList";
+import TableSearch from "../inputs/search/table-search";
 
 export default function CustomersListTable({ header }: { header: string[] }) {
+  const [filterDates, setFilterDates] = useState<{
+    start_date: string;
+    end_date: string;
+  }>();
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllCustomersLists({ page: currentPage });
-  //   const [selectedId, setSelectedId] = useState("1");
+    useGetAllCustomersLists({
+      page: currentPage,
+      start_date: filterDates?.start_date,
+      end_date: filterDates?.end_date,
+      sort: sort,
+      search,
+    });
+  const handleCustomersFiltering = useCallback(
+    (start_date: string, end_date: string) => {
+      setFilterDates({ start_date, end_date });
+    },
+    []
+  );
   return (
     <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
       <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
         <h2 className="text-xl font-semibold">Customers Lists</h2>
-        <Search
-          placeholder="First name, last name, email, phone number..."
-          id="apartment-search"
-        />
+        <div className=" max-w-md">
+          <TableSearch
+            setValue={setSearch}
+            placeholder="First name, last name, email, phone number..."
+          />
+        </div>
         <div className=" flex items-center gap-2">
-          <Filter />
-          <Sort id="sort-by" label="Sort by" />
+          <Filter actionHandler={handleCustomersFiltering} />
+          <Sort setSort={setSort} id="sort-by" label="Sort by" />
         </div>
       </div>
       {data && data.length > 0 ? (
@@ -43,11 +62,11 @@ export default function CustomersListTable({ header }: { header: string[] }) {
                       {request?.id}
                     </span>
                   </td>
-                  <td>{request?.firstname}</td>
-                  <td>{request?.lastname}</td>
-                  <td>{request?.phoneNumber}</td>
-                  <td>{request?.country}</td>
-                  <td>{request?.bookings}</td>
+                  <td>{request?.first_name}</td>
+                  <td>{request?.last_name}</td>
+                  <td>{request?.phone}</td>
+                  <td>***</td>
+                  <td>***</td>
                   <td className=" group relative">
                     <span className=" p-2 text-lg">...</span>
                     <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
@@ -89,14 +108,7 @@ export default function CustomersListTable({ header }: { header: string[] }) {
         <NoResult />
       )}
       <Pagination
-        pagination={{
-          current_page: 1,
-          last_page: 2,
-          per_page: 20,
-          total: 24,
-          from: 1,
-          to: 1,
-        }}
+        pagination={pagination}
         setCurrentPage={setCurrentPage}
         isLoading={false}
         label="customers"

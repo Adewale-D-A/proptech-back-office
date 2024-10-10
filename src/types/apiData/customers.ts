@@ -1,3 +1,17 @@
+export type customers = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  address: string;
+  email_verified_at: string;
+  created_at: string;
+  updated_at: string;
+  is_deleted: number;
+  deleted_at: string;
+};
+
 export type customersists = {
   id: string;
   firstname: string;

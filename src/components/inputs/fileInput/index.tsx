@@ -59,7 +59,6 @@ export default function FileInput({
       </label>
       <input
         id={id}
-        required={isRequired}
         type="file"
         accept="image/jpg, image/png, image/jpeg"
         onChange={(e) => addUpload(e)}

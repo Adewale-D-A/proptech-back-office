@@ -1,4 +1,3 @@
-import { ChangeEvent, useCallback, useState } from "react";
 import {
   Combobox,
   ComboboxInput,
@@ -6,10 +5,11 @@ import {
   ComboboxOptions,
 } from "@headlessui/react";
 import SearchIcon from "../../../assets/icons/search";
+import { ChangeEvent, useCallback, useState } from "react";
 import customers from "../../../assets/temp-api-mockup-data/customers.json";
 import apartments from "../../../assets/temp-api-mockup-data/apartments.json";
 
-export default function Search({
+export default function DropdownSearch({
   id,
   placeholder,
   componentId,

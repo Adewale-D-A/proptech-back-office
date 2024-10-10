@@ -3,9 +3,10 @@ import { axiosInstance } from "../services-hooks/base";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
 // import { updateAuthentication } from "../stores/users/auth";
 // import { updateNetworkError } from "../stores/appFunctionality/networkError";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   clearAuthentication,
+  updateAuthentication,
   // updateAuthentication,
 } from "../stores/authUser/auth";
 import { openSnackbar } from "../stores/appFunctionality/snackbar";
@@ -13,6 +14,7 @@ import { openSnackbar } from "../stores/appFunctionality/snackbar";
 //axios instace interceptor for access token integration and refresh tokens
 const useAxios = (disableErrorPrompt?: boolean) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const { access_token } = useAppSelector(
     (state) => state.userAuthentication.value
@@ -31,7 +33,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
     const responseIntercept = axiosInstance.interceptors.response.use(
       (response) => response,
       async (error) => {
-        // const prevRequest = error?.config;
+        const prevRequest = error?.config;
 
         // ----log error message using snackbar---
         const errorMessage = error?.response?.data?.message;
@@ -43,11 +45,10 @@ const useAxios = (disableErrorPrompt?: boolean) => {
             })
           );
         }
-        console.log({ error });
         // ----log error message using snackbar---
         if (
-          error?.response?.status === 401 ||
-          error?.response?.status === 422
+          error?.response?.status === 422 ||
+          error?.response?.status === 500
         ) {
           const statusMessage = error?.response?.data?.status;
           const hadUnauthenticated =
@@ -55,29 +56,29 @@ const useAxios = (disableErrorPrompt?: boolean) => {
               ?.toLowerCase()
               .includes("unauthenticated") ||
             statusMessage?.toLowerCase().includes("token");
-          if (hadUnauthenticated) {
+          if (hadUnauthenticated && !prevRequest?.sent) {
+            // If the request was already sent, we don't want to refresh the token
+            prevRequest.sent = true;
+            const refreshResponse = await axiosInstance.post(
+              "/auth/admin/refresh"
+            );
+            const { access_token: new_access_token } =
+              refreshResponse?.data?.data;
+            console.log({ oldToken: access_token, new_access_token });
+            dispatch(
+              updateAuthentication({
+                access_token: new_access_token,
+                refresh_token: "",
+              })
+            );
+            prevRequest.headers["Authorization"] = `Bearer ${new_access_token}`;
+            return axiosInstance(prevRequest);
+          } else {
             sessionStorage.removeItem(`${process.env.REACT_APP_SESSION_KEY}`);
             dispatch(clearAuthentication());
-            navigate("/");
+            navigate(`/?redirect=${location?.pathname}`);
+            return Promise.reject(error);
           }
-          // allow snackbar error message prompt from axios middleware
-
-          // return Promise.reject(error);
-          // const newAccessToken = await axiosInstance.post(
-          //   "/auth/admin/refresh",
-          //   {
-          //     refresh_token: "",
-          //   }
-          // );
-          // console.log({ oldToken: access_token, newAccessToken });
-          // dispatch(
-          //   updateAuthentication({
-          //     access_token: "",
-          //     refresh_token: "",
-          //   })
-          // );
-          // prevRequest.headers["Authorization"] = `Bearer ${""}`;
-          // return axiosInstance(prevRequest);
         }
         return Promise.reject(error);
       }

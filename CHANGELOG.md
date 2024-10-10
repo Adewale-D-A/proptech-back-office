@@ -1,3 +1,8 @@
+##### 10.10.2024
+
+> Amenities CRUDE operation API integration
+> Customers list, filtering, and table search API integrations
+
 ##### 09.10.2024
 
 > Dashboard apartment lists API integration, pagination api logic definition, types reformed

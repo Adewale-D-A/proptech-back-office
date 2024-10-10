@@ -1,31 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { customers } from "../../types/apiData/customers";
+import { pagination } from "../../types/pagination";
+import { amenity } from "../../types/apiData/amenities";
 
-export const customersListData = createSlice({
-  name: "all customers",
+export const amenitiesData = createSlice({
+  name: "all amenities",
   initialState: {
     value: {
       status: false,
       pagination: [] as {
-        pagination_data: {
-          current_page: number;
-          last_page: number;
-          per_page: number;
-          total: number;
-          from: number;
-          to: number;
-        };
-        data: customers[];
+        pagination_data: pagination;
+        data: amenity[];
       }[],
-      data: [] as customers[],
+      data: [] as amenity[],
     },
   },
   reducers: {
-    updateCustomersList: (state, action) => {
+    updateAmenities: (state, action) => {
       state.value.status = true;
       state.value.data = action?.payload?.data;
     },
-    addCustomersToList: (state, action) => {
+    addAmenity: (state, action) => {
       state.value.data = [...state.value.data, action?.payload];
       //include in pagination data
       const pagination_data = [...state.value.pagination];
@@ -58,7 +52,7 @@ export const customersListData = createSlice({
         ];
       }
     },
-    removeCustomersInList: (state, action) => {
+    removeAmenity: (state, action) => {
       const { id } = action?.payload;
       const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
@@ -81,7 +75,7 @@ export const customersListData = createSlice({
       });
       state.value.pagination = removed;
     },
-    replaceCustomersInList: (state, action) => {
+    replaceAmenity: (state, action) => {
       const { id } = action?.payload;
       const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
@@ -108,7 +102,7 @@ export const customersListData = createSlice({
       });
       state.value.pagination = replacedItem;
     },
-    clearCustomersList: (state) => {
+    clearAmenities: (state) => {
       state.value.status = false;
       state.value.data = [];
     },
@@ -116,12 +110,12 @@ export const customersListData = createSlice({
 });
 
 export const {
-  updateCustomersList,
-  addCustomersToList,
+  updateAmenities,
+  addAmenity,
   addToPaginationHistory,
-  removeCustomersInList,
-  replaceCustomersInList,
-  clearCustomersList,
-} = customersListData.actions;
+  removeAmenity,
+  replaceAmenity,
+  clearAmenities,
+} = amenitiesData.actions;
 
-export default customersListData.reducer;
+export default amenitiesData.reducer;

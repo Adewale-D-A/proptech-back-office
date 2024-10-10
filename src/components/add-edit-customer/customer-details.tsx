@@ -27,7 +27,7 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [countryCode, setCountryCode] = useState("");
+  const [countryCode, setCountryCode] = useState("+234+Nigeria");
   const [profileImg, setProfileImg] = useState<{
     name: string;
     size: number;
@@ -43,10 +43,10 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
   // populate apartment details interface
   useEffect(() => {
     const {
-      firstname,
-      lastname,
+      first_name,
+      last_name,
       email,
-      phoneNumber,
+      phone,
       profileImg,
       gender,
       dob,
@@ -55,13 +55,13 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
       city,
       address,
     } = storeAptDetails;
-    setFirstname(firstname);
-    setLastname(lastname);
-    setEmail(email);
-    setPhoneNumber(phoneNumber);
+    setFirstname(first_name || "");
+    setLastname(last_name || "");
+    setEmail(email || "");
+    setPhoneNumber(phone || "");
     setProfileImg(profileImg);
-    setGender(gender);
-    setDob(dob);
+    setGender(gender || "");
+    setDob(dob || "");
     setCountry(country);
     setState(state);
     setCity(city);
@@ -74,10 +74,10 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
       e.preventDefault();
       if (profileImg) {
         const payload = {
-          firstname,
-          lastname,
+          first_name: firstname,
+          last_name: lastname,
           email,
-          phoneNumber,
+          phone: phoneNumber,
           profileImg,
           gender,
           dob,
@@ -171,8 +171,8 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
             id="gender"
             label="Gender"
           >
-            <option value="male">Male</option>
-            <option value="female">Female</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
           </Select>
           <DateInput
             inputType="date"

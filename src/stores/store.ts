@@ -30,6 +30,7 @@ import bookingsListsData from "./apiData/bookings-lists";
 import requestListsData from "./apiData/requests-lists";
 import customersListData from "./apiData/customers-lists";
 import invoiceListsData from "./apiData/invoice-lists";
+import amenitiesData from "./apiData/amenities";
 // api data - plans and promotions
 import taxRateListsData from "./apiData/tax-rate-lists";
 import priceTypeListsData from "./apiData/price-type-lists";
@@ -64,6 +65,7 @@ export const adminStore = () => {
       salesChannels: salesChannelData,
 
       allAparmentLists: apartmentListsData,
+      allAmenities: amenitiesData,
       allBookingsLists: bookingsListsData,
       allRequestLists: requestListsData,
       allCustomersLists: customersListData,
