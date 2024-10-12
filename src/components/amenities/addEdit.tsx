@@ -2,6 +2,14 @@ import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import LoadingButton from "../button";
 import TextInput from "../inputs/textInput";
 import TextAreaInput from "../inputs/textArea";
+import useGetSafetyAndSecurity from "../../services-hooks/useGetSafetyAndSecurity";
+import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
+import { useAppDispatch } from "../../stores/hooks";
+import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import {
+  addSafetyAndSecurity,
+  replaceSafetyAndSecurity,
+} from "../../stores/apiData/safety-and-security";
 
 export default function AddEdit({
   id,
@@ -10,6 +18,9 @@ export default function AddEdit({
   id?: string;
   setOpen: Function;
 }) {
+  const axios = useAxiosMultipart();
+  const dispatch = useAppDispatch();
+  const { data } = useGetSafetyAndSecurity({ id });
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -18,16 +29,13 @@ export default function AddEdit({
   //auto update fields
   useEffect(() => {
     if (id) {
-      const { title, description } = {
-        title: "title",
-        description: "description",
-      };
-      if (title) {
-        setTitle(title);
-        setDescription(description);
+      const { name, description } = data;
+      if (name) {
+        setTitle(name || "");
+        setDescription(description || "");
       }
     }
-  }, [id]);
+  }, [id, data]);
 
   const close = useCallback(() => {
     setOpen(false);
@@ -37,13 +45,36 @@ export default function AddEdit({
     async (e: SyntheticEvent) => {
       e.preventDefault();
       setIsAdding(true);
+      const payload = {
+        name: title,
+        desciption: description,
+        image: "",
+      };
       try {
         if (id) {
           //run update endpoint
+          const response = await axios.put(`/admin/safety/${id}`, payload);
+          console.log({ response });
+          const { safety } = response?.data?.data;
+          dispatch(
+            openSnackbar({
+              message: "Safety and security successfully updated",
+              isError: false,
+            })
+          );
+          dispatch(replaceSafetyAndSecurity(safety));
         } else {
           //run create enpoint
+          const response = await axios.post("/admin/safety", payload);
+          const { safety } = response?.data?.data;
+          dispatch(
+            openSnackbar({
+              message: "Safety and Security successfully added",
+              isError: false,
+            })
+          );
+          dispatch(addSafetyAndSecurity(safety));
         }
-        console.log({ title, description });
         setOpen(false);
       } catch (error) {
       } finally {

@@ -12,7 +12,7 @@ import {
 import { openSnackbar } from "../stores/appFunctionality/snackbar";
 
 //axios instace interceptor for access token integration and refresh tokens
-const useAxios = (disableErrorPrompt?: boolean) => {
+const useAxiosMultipart = (disableErrorPrompt?: boolean) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -73,7 +73,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
             );
             prevRequest.headers["Authorization"] = `Bearer ${new_access_token}`;
             return axiosMultipartInstance(prevRequest);
-          } else {
+          } else if (hadUnauthenticated) {
             sessionStorage.removeItem(`${process.env.REACT_APP_SESSION_KEY}`);
             dispatch(clearAuthentication());
             navigate(`/?redirect=${location?.pathname}`);
@@ -87,8 +87,8 @@ const useAxios = (disableErrorPrompt?: boolean) => {
       axiosMultipartInstance.interceptors.request.eject(requestIntercept);
       axiosMultipartInstance.interceptors.response.eject(responseIntercept);
     };
-  }, []);
+  }, [location]);
   return axiosMultipartInstance;
 };
 
-export default useAxios;
+export default useAxiosMultipart;

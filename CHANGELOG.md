@@ -1,3 +1,7 @@
+##### 12.10.2024
+
+> Safety and security CRUDE operation API integration
+
 ##### 10.10.2024
 
 > Amenities CRUDE operation API integration

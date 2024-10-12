@@ -128,18 +128,6 @@ export default function Apartments() {
                 <SafetyAndSecurityList
                   title="Safety and Security List"
                   header={["Title", "Description", "Action"]}
-                  data={[
-                    {
-                      id: 1,
-                      title: "Security Doors",
-                      description: "Security doors closes at 10:30pm",
-                    },
-                    {
-                      id: 2,
-                      title: "Visitors",
-                      description: "No visitor is allowed to stay past 9:40pm",
-                    },
-                  ]}
                 />
               ),
             },

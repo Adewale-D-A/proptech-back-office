@@ -3,24 +3,28 @@ import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import useAxios from "../useHooks/useAxios";
 import { pagination } from "../types/pagination";
 import {
-  updateAmenities,
+  updateSafetyAndSecurity,
   addToPaginationHistory,
-} from "../stores/apiData/amenities";
+} from "../stores/apiData/safety-and-security";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetAmenities({ page = 1 }: { page?: number }) {
+export default function useGetSafetyAndSecurities({
+  page = 1,
+}: {
+  page?: number;
+}) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
   const {
     status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.allAmenities.value);
+  } = useAppSelector((state) => state.allSaeftyAndSecurity.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const [pagination, setPagination] = useState<pagination>({} as any);
-  const getAmenities = useCallback(async () => {
+  const getSafetyAndSecurity = useCallback(async () => {
     try {
       setIsLoading(true);
       //check store if this requested data has been saved previously and retirve it
@@ -30,14 +34,12 @@ export default function useGetAmenities({ page = 1 }: { page?: number }) {
       );
       if (foundPage) {
         setPagination(foundPage?.pagination_data);
-        dispatch(updateAmenities({ data: foundPage?.data }));
+        dispatch(updateSafetyAndSecurity({ data: foundPage?.data }));
       } else {
-        const response = await axios.get(
-          `/admin/amenity?limit=20&page=${page}`
-        );
-        const { amenity } = response?.data?.data;
+        const response = await axios.get(`/admin/safety?limit=20&page=${page}`);
+        const { safety } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
-          amenity;
+          safety;
         const paginationDataset = {
           current_page,
           last_page,
@@ -47,7 +49,7 @@ export default function useGetAmenities({ page = 1 }: { page?: number }) {
           to,
           length: data?.length,
         };
-        dispatch(updateAmenities({ data }));
+        dispatch(updateSafetyAndSecurity({ data }));
         dispatch(
           addToPaginationHistory({
             pagination_data: paginationDataset,
@@ -63,7 +65,7 @@ export default function useGetAmenities({ page = 1 }: { page?: number }) {
   }, [page]);
 
   useEffect(() => {
-    getAmenities();
+    getSafetyAndSecurity();
   }, [page]);
 
   return {
@@ -71,7 +73,7 @@ export default function useGetAmenities({ page = 1 }: { page?: number }) {
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getAmenities,
+    retryFunction: getSafetyAndSecurity,
     pagination,
   };
 }

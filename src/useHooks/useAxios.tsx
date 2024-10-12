@@ -73,7 +73,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
             );
             prevRequest.headers["Authorization"] = `Bearer ${new_access_token}`;
             return axiosInstance(prevRequest);
-          } else {
+          } else if (hadUnauthenticated) {
             sessionStorage.removeItem(`${process.env.REACT_APP_SESSION_KEY}`);
             dispatch(clearAuthentication());
             navigate(`/?redirect=${location?.pathname}`);
@@ -87,7 +87,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
       axiosInstance.interceptors.request.eject(requestIntercept);
       axiosInstance.interceptors.response.eject(responseIntercept);
     };
-  }, []);
+  }, [location]);
   return axiosInstance;
 };
 

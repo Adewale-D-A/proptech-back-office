@@ -41,7 +41,11 @@ function Login() {
           `${process.env.REACT_APP_SESSION_KEY}`,
           access_token
         );
-        navigate(`${searchParams?.get("redirect")}` || "/dashboard-overview");
+        navigate(
+          searchParams?.get("redirect")
+            ? `${searchParams?.get("redirect")}`
+            : "/dashboard-overview"
+        );
       } catch (error: any) {
         const error_message = error?.response?.data?.message;
         dispatch(
