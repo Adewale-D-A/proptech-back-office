@@ -32,6 +32,9 @@ import customersListData from "./apiData/customers-lists";
 import invoiceListsData from "./apiData/invoice-lists";
 import amenitiesData from "./apiData/amenities";
 import safetyAndSecurityData from "./apiData/safety-and-security";
+import extraOptionData from "./apiData/extra-options";
+import roomOptionsData from "./apiData/room-options";
+import houseRulesData from "./apiData/house-rules";
 // api data - plans and promotions
 import taxRateListsData from "./apiData/tax-rate-lists";
 import priceTypeListsData from "./apiData/price-type-lists";
@@ -68,6 +71,9 @@ export const adminStore = () => {
       allAparmentLists: apartmentListsData,
       allAmenities: amenitiesData,
       allSaeftyAndSecurity: safetyAndSecurityData,
+      allExtraOptions: extraOptionData,
+      allRoomOptions: roomOptionsData,
+      allHouseRules: houseRulesData,
       allBookingsLists: bookingsListsData,
       allRequestLists: requestListsData,
       allCustomersLists: customersListData,

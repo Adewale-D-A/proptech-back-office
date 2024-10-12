@@ -106,7 +106,7 @@ export default function ApartmentTab({
       >
         <AddEditOption
           setOpenOption={setOpenAddOption}
-          option={trackTab === 2 ? "room" : "extra"}
+          componentId={trackTab === 2 ? "room" : "extra"}
         />
       </ModalTemplate>
 
@@ -129,7 +129,10 @@ export default function ApartmentTab({
         title="New Addition"
         className=" max-w-md"
       >
-        <AddEdit setOpen={setOpenAddEdit} />
+        <AddEdit
+          setOpen={setOpenAddEdit}
+          componentId={trackTab === 5 ? "safety" : "rule"}
+        />
       </ModalTemplate>
     </>
   );

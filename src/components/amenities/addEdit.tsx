@@ -10,17 +10,29 @@ import {
   addSafetyAndSecurity,
   replaceSafetyAndSecurity,
 } from "../../stores/apiData/safety-and-security";
+import useGetHouseRule from "../../services-hooks/useGetHouseRule";
+import {
+  addHouseRule,
+  replaceHouseRule,
+} from "../../stores/apiData/house-rules";
 
 export default function AddEdit({
   id,
   setOpen,
+  componentId = "safety",
 }: {
   id?: string;
   setOpen: Function;
+  componentId?: "safety" | "rule";
 }) {
   const axios = useAxiosMultipart();
   const dispatch = useAppDispatch();
-  const { data } = useGetSafetyAndSecurity({ id });
+  const { data: safety } = useGetSafetyAndSecurity({
+    id: componentId === "safety" ? id : undefined,
+  });
+  const { data: houseRule } = useGetHouseRule({
+    id: componentId === "rule" ? id : undefined,
+  });
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -29,13 +41,14 @@ export default function AddEdit({
   //auto update fields
   useEffect(() => {
     if (id) {
-      const { name, description } = data;
+      const { name, description } =
+        componentId === "safety" ? safety : houseRule;
       if (name) {
         setTitle(name || "");
         setDescription(description || "");
       }
     }
-  }, [id, data]);
+  }, [id, componentId, safety, houseRule]);
 
   const close = useCallback(() => {
     setOpen(false);
@@ -53,27 +66,46 @@ export default function AddEdit({
       try {
         if (id) {
           //run update endpoint
-          const response = await axios.put(`/admin/safety/${id}`, payload);
-          console.log({ response });
-          const { safety } = response?.data?.data;
+          const response = await axios.put(
+            `/admin/${componentId === "safety" ? "safety" : "rule"}/${id}`,
+            payload
+          );
+          const { safety, rule } = response?.data?.data;
           dispatch(
             openSnackbar({
-              message: "Safety and security successfully updated",
+              message:
+                componentId === "safety"
+                  ? "Safety and security successfully updated"
+                  : "Rule successfully updated",
               isError: false,
             })
           );
-          dispatch(replaceSafetyAndSecurity(safety));
+          dispatch(
+            componentId === "safety"
+              ? replaceSafetyAndSecurity(safety)
+              : replaceHouseRule(rule)
+          );
         } else {
           //run create enpoint
-          const response = await axios.post("/admin/safety", payload);
-          const { safety } = response?.data?.data;
+          const response = await axios.post(
+            `/admin/${componentId === "safety" ? "safety" : "rule"}`,
+            payload
+          );
+          const { safety, rule } = response?.data?.data;
           dispatch(
             openSnackbar({
-              message: "Safety and Security successfully added",
+              message:
+                componentId === "safety"
+                  ? "Safety and security successfully added"
+                  : "Rule successfully added",
               isError: false,
             })
           );
-          dispatch(addSafetyAndSecurity(safety));
+          dispatch(
+            componentId === "safety"
+              ? addSafetyAndSecurity(safety)
+              : addHouseRule(rule)
+          );
         }
         setOpen(false);
       } catch (error) {
@@ -81,7 +113,7 @@ export default function AddEdit({
         setIsAdding(false);
       }
     },
-    [title, description, id]
+    [title, description, componentId, id]
   );
 
   return (

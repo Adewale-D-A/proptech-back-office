@@ -4,22 +4,20 @@ import Sort from "../filterAndSort/sort";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import ModalTemplate from "../modal";
 import AddEditRoomOption from "../room-extra-options/add-edit-options";
+import useGetRoomOptions from "../../services-hooks/useGetRoomOptions";
 
 export default function RoomOptionTable({
   header,
-  data,
   title,
 }: {
   header: string[];
-  data: {
-    id: number;
-    categoryName: string;
-    description: string;
-  }[];
   title: string;
 }) {
   const [currentPage, setCurrentPage] = useState(1);
 
+  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
+    useGetRoomOptions({ page: currentPage });
+  const [selectedId, setSelectedId] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
   const [editRoomOption, setEditRoomOption] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -53,14 +51,17 @@ export default function RoomOptionTable({
             {data.map((request, index) => {
               return (
                 <tr key={request?.id} className=" border-b">
-                  <td>{request?.categoryName}</td>
+                  <td>{request?.name}</td>
                   <td>{request?.description}</td>
                   <td className=" group relative">
                     <span className=" p-2 text-lg">...</span>
                     <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                       <button
                         type="button"
-                        onClick={() => setEditRoomOption(true)}
+                        onClick={() => {
+                          setSelectedId(String(request?.id));
+                          setEditRoomOption(true);
+                        }}
                         className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                       >
                         Edit Room Option
@@ -80,14 +81,7 @@ export default function RoomOptionTable({
           </tbody>
         </table>
         <Pagination
-          pagination={{
-            current_page: 1,
-            last_page: 2,
-            per_page: 20,
-            total: 24,
-            from: 1,
-            to: 1,
-          }}
+          pagination={pagination}
           setCurrentPage={setCurrentPage}
           isLoading={false}
           label="Room Options"
@@ -109,7 +103,11 @@ export default function RoomOptionTable({
         title="Edit Room Option"
         className=" max-w-md"
       >
-        <AddEditRoomOption setOpenOption={setEditRoomOption} id="1" />
+        <AddEditRoomOption
+          setOpenOption={setEditRoomOption}
+          id={selectedId}
+          componentId="room"
+        />
       </ModalTemplate>
     </>
   );

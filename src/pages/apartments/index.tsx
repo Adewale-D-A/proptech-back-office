@@ -75,18 +75,6 @@ export default function Apartments() {
                 <RoomOptionTable
                   title="Room Options List"
                   header={["Category Name", "Description", "Action"]}
-                  data={[
-                    {
-                      id: 1,
-                      categoryName: "1 Bedroom Apartment",
-                      description: "This is a one bedroom apartment",
-                    },
-                    {
-                      id: 2,
-                      categoryName: "2 Bedroom Apartment",
-                      description: "This is a two bedroom apartment",
-                    },
-                  ]}
                 />
               ),
             },
@@ -105,20 +93,6 @@ export default function Apartments() {
                 <ExtraOptionTable
                   title="Extra Option List"
                   header={["Name of Option", "Description", "Action"]}
-                  data={[
-                    {
-                      id: 1,
-                      categoryName: "Party house",
-                      description:
-                        "This category represents rooms that are considered party apartments",
-                    },
-                    {
-                      id: 2,
-                      categoryName: "Wale olateju apartment",
-                      description:
-                        "This category represents rooms that are considered party apartments",
-                    },
-                  ]}
                 />
               ),
             },
@@ -137,18 +111,6 @@ export default function Apartments() {
                 <RulesLists
                   title="Rules Lists"
                   header={["Title", "Description", "Action"]}
-                  data={[
-                    {
-                      id: 1,
-                      title: "No parties",
-                      description: "No parties of any kind allowed",
-                    },
-                    {
-                      id: 2,
-                      title: "Music",
-                      description: "Music louder than 30Decibel is not allowed",
-                    },
-                  ]}
                 />
               ),
             },

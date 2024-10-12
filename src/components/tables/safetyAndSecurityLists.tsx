@@ -109,7 +109,11 @@ export default function SafetyAndSecurityList({
         title="Edit"
         className=" max-w-md"
       >
-        <AddEdit setOpen={setEditSafetyAndSecurity} id={selectedId} />
+        <AddEdit
+          setOpen={setEditSafetyAndSecurity}
+          id={selectedId}
+          componentId="safety"
+        />
       </ModalTemplate>
     </>
   );
