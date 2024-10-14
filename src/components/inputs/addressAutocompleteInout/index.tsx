@@ -55,7 +55,7 @@ export default function AddressAutocompleteInput({
                 id: "location-search",
                 placeholder: placeholder ? placeholder : "apartment location",
               })}
-              className="w-full p-3 rounded-lg border  bg-gray-200/15 focus:ring-[#17594F] focus:border-[#17594F]"
+              className="w-full p-3 rounded-lg border outline-none  bg-gray-200/15 focus:ring-[#17594F] focus:border-[#17594F]"
             />
             <div>
               {loading && (

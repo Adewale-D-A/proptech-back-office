@@ -32,6 +32,8 @@ const breadCrumb = [
 export default function ApartmentDetail() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const { data, isLoading, isFailed, setIsFailed, retryFunction } =
+    useGetApartmentById(id ? id : "1");
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
@@ -39,16 +41,13 @@ export default function ApartmentDetail() {
         breadCrumb,
         pageTitle: "Apartment Detail",
         pageDescription: "Apartment details",
-        isLoading: false,
-        failedToLoad: false,
-        setFailedToLoad: false,
-        retryRequest: false,
+        isLoading: isLoading,
+        failedToLoad: isFailed,
+        setFailedToLoad: setIsFailed,
+        retryRequest: retryFunction,
       })
     );
-  }, []);
-
-  const { data, isLoading, isFailed, setIsFailed, retryFunction } =
-    useGetApartmentById(id ? id : "1");
+  }, [isLoading]);
 
   const [isDeleting, setIsDeleting] = useState(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
@@ -89,12 +88,14 @@ export default function ApartmentDetail() {
           </div>
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className=" w-full rounded-md border p-2 flex flex-col gap-3">
-              <ImageCarousel images={data?.images} />
+              <ImageCarousel
+                images={data?.images?.map((item) => ({ url: item?.path }))}
+              />
               <div className=" flex flex-col gap-2 border-b py-3">
                 <div className=" flex items-center justify-between gap-4">
                   <h4 className="text-xl font-semibold">{data?.name}</h4>
                   <h4 className=" text-primary text-xl font-semibold">
-                    {data?.amount}
+                    {data?.currency} {data?.price}
                     <span className=" font-thin text-black text-sm">
                       /Night
                     </span>
@@ -105,7 +106,8 @@ export default function ApartmentDetail() {
                     <LocationPinIcon className=" h-4 w-4" /> {data?.location}
                   </span>
                   <span className="flex items-center gap-1">
-                    <BathIcon className=" h-4 w-4" /> {data?.noBeds} Bathrooms
+                    <BathIcon className=" h-4 w-4" /> {data?.no_of_bathrooms}{" "}
+                    Bathrooms
                   </span>
                 </div>
               </div>
@@ -121,13 +123,11 @@ export default function ApartmentDetail() {
                   </div>
                   <div>
                     <h4 className="text-lg font-semibold">{data?.location}</h4>
-                    <span className=" text-sm text-gray-500">
-                      Lagos State, Nigeria
-                    </span>
+                    <span className=" text-sm text-gray-500">***</span>
                   </div>
                 </div>
-                <h6 className=" font-semibold">The Neighborhood : Oniru</h6>
-                <p className=" text-gray-500">{data?.aboutLocation}</p>
+                <h6 className=" font-semibold">The Neighborhood : ***</h6>
+                <p className=" text-gray-500">***</p>
                 <Map zoom={17} center={{ lat: 9.082, lng: 8.6753 }} />
                 <div className=" w-fit">
                   <LoadingButton
@@ -145,39 +145,19 @@ export default function ApartmentDetail() {
                   House Rules
                 </h4>
                 <div className=" flex items-center gap-4 p-3 flex-wrap">
-                  {[
-                    {
-                      id: "1-house-rules",
-                      label: "No structural changes without host permission",
-                    },
-                    {
-                      id: "2-house-rules",
-                      label: "No loud music after 10pm",
-                    },
-                    {
-                      id: "3-house-rules",
-                      label: "No illegal activities",
-                    },
-                    {
-                      id: "4-house-rules",
-                      label: "No smoking",
-                    },
-                    {
-                      id: "5-house-rules",
-                      label: "No Inflammables",
-                    },
-                    {
-                      id: "6-house-rules",
-                      label: "8 guests maximum",
-                    },
-                  ].map((item) => (
+                  {data?.rules?.map((item) => (
                     <label
                       key={item?.id}
-                      htmlFor={item?.id}
+                      htmlFor={String(item?.id)}
                       className=" flex items-center gap-3"
                     >
-                      <input type="checkbox" checked id={item?.id} readOnly />{" "}
-                      <span className=" text-gray-600">{item?.label}</span>
+                      <input
+                        type="checkbox"
+                        checked
+                        id={String(item?.id)}
+                        readOnly
+                      />{" "}
+                      <span className=" text-gray-600">{item?.name}</span>
                     </label>
                   ))}
                 </div>
@@ -188,27 +168,19 @@ export default function ApartmentDetail() {
                   Safety & Security
                 </h4>
                 <div className=" flex items-center gap-4 p-3 flex-wrap">
-                  {[
-                    {
-                      id: "1-safety-and-security",
-                      label: "Carbon monoxide alarm",
-                    },
-                    {
-                      id: "2-safety-and-security",
-                      label: "Smoke Alarm",
-                    },
-                    {
-                      id: "3-safety-and-security",
-                      label: "A must-climb stairs",
-                    },
-                  ].map((item) => (
+                  {data?.safeties?.map((item) => (
                     <label
                       key={item?.id}
-                      htmlFor={item?.id}
+                      htmlFor={String(item?.id)}
                       className=" flex items-center gap-3"
                     >
-                      <input type="checkbox" checked id={item?.id} readOnly />{" "}
-                      <span className=" text-gray-600">{item?.label}</span>
+                      <input
+                        type="checkbox"
+                        checked
+                        id={String(item?.id)}
+                        readOnly
+                      />{" "}
+                      <span className=" text-gray-600">{item?.name}</span>
                     </label>
                   ))}
                 </div>
@@ -223,11 +195,14 @@ export default function ApartmentDetail() {
                     <CautionIcon />
                   </span>
                   <div className=" flex items-center gap-3 flex-wrap">
-                    {data?.cancellationPolicies?.map((item) => (
+                    <span className=" text-gray-600">
+                      {data?.cancellation_policy}
+                    </span>
+                    {/* {data?.cancellationPolicies?.map((item) => (
                       <span key={item} className=" text-gray-600">
                         {item},
                       </span>
-                    ))}
+                    ))} */}
                   </div>
                 </div>
               </div>
@@ -237,7 +212,17 @@ export default function ApartmentDetail() {
                   Points of Interest
                 </h4>
                 <div className=" flex items-center gap-4 p-3 flex-wrap text-gray-600">
-                  {[
+                  <div className="w-full flex items-center gap-3 justify-between">
+                    <div className=" flex items-center gap-3">
+                      <LocationPinIcon />
+                      {data?.point_of_interest}
+                    </div>
+                    <div className=" flex items-center gap-3">
+                      <VehicleIcon />
+                      <span className=" ">***</span>
+                    </div>
+                  </div>
+                  {/* {[
                     {
                       id: "1-safety-and-security",
                       label: "Carbon monoxide alarm",
@@ -267,7 +252,7 @@ export default function ApartmentDetail() {
                         <span className=" ">{item?.distance}</span>
                       </div>
                     </div>
-                  ))}
+                  ))} */}
                 </div>
               </div>
             </div>

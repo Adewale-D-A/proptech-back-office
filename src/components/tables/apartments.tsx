@@ -11,10 +11,10 @@ import Search from "../inputs/search";
 import AssignCustomer from "../quickReservationFlow/assignToCustomer";
 import { useAppSelector } from "../../stores/hooks";
 import formatDate, { formatTime } from "../../utils/isoDateConverter";
-import useGetAllApartmentLists from "../../services-hooks/useGetAllApartmentLists";
 import NoResult from "../noResult";
 import Filter from "../filterAndSort/filter";
 import Sort from "../filterAndSort/sort";
+import useGetTopApartmentLists from "../../services-hooks/dashboards/useGetTopApartment";
 
 export default function ApartmentTable({
   header,
@@ -36,7 +36,7 @@ export default function ApartmentTable({
   const [openReservation, setOpenReservation] = useState(false);
   const [openAvailability, setOpenAvailability] = useState(false);
 
-  const { data, pagination } = useGetAllApartmentLists({
+  const { data, pagination } = useGetTopApartmentLists({
     page: currentPage,
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,

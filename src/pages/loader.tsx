@@ -21,9 +21,9 @@ export default function Loader({
         <div className="flex flex-col gap-4 items-center text-center text-red-500">
           <div className="flex items-center justify-center">
             <img
-              src={"/logo192.png"}
-              className=" w-16 jamb-loader-img"
-              alt="Jamb logo"
+              src={"/logo_blue.png"}
+              className=" w-16 loader-img"
+              alt="99Apt logo"
             />
           </div>
           <h5 className=" text-lg font-semibold">
@@ -40,9 +40,9 @@ export default function Loader({
       ) : (
         <div className="flex items-center justify-center">
           <img
-            src={"/logo192.png"}
-            className=" w-16 jamb-loader-img"
-            alt="Jamb logo"
+            src={"/logo_blue.png"}
+            className=" w-16 loader-img"
+            alt="99Apt logo"
           />
         </div>
       )}

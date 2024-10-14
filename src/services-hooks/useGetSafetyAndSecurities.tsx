@@ -10,8 +10,10 @@ import {
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetSafetyAndSecurities({
   page = 1,
+  limit = 20,
 }: {
   page?: number;
+  limit?: number;
 }) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
@@ -32,11 +34,13 @@ export default function useGetSafetyAndSecurities({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage) {
+      if (foundPage && limit === 20) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateSafetyAndSecurity({ data: foundPage?.data }));
       } else {
-        const response = await axios.get(`/admin/safety?limit=20&page=${page}`);
+        const response = await axios.get(
+          `/admin/safety?limit=${limit}&page=${page}`
+        );
         const { safety } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
           safety;
@@ -62,11 +66,11 @@ export default function useGetSafetyAndSecurities({
     } catch (error) {
       setIsFailed(true);
     }
-  }, [page]);
+  }, [page, limit]);
 
   useEffect(() => {
     getSafetyAndSecurity();
-  }, [page]);
+  }, [page, limit]);
 
   return {
     data,

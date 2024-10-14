@@ -8,7 +8,13 @@ import {
 } from "../stores/apiData/house-rules";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetHouseRules({ page = 1 }: { page?: number }) {
+export default function useGetHouseRules({
+  page = 1,
+  limit = 20,
+}: {
+  page?: number;
+  limit?: number;
+}) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
   const {
@@ -28,7 +34,7 @@ export default function useGetHouseRules({ page = 1 }: { page?: number }) {
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage) {
+      if (foundPage && limit === 20) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateHouseRules({ data: foundPage?.data }));
       } else {
@@ -43,7 +49,6 @@ export default function useGetHouseRules({ page = 1 }: { page?: number }) {
           total,
           from,
           to,
-          length: data?.length,
         };
         dispatch(updateHouseRules({ data }));
         dispatch(
@@ -58,11 +63,11 @@ export default function useGetHouseRules({ page = 1 }: { page?: number }) {
     } catch (error) {
       setIsFailed(true);
     }
-  }, [page]);
+  }, [page, limit]);
 
   useEffect(() => {
     getHouseRules();
-  }, [page]);
+  }, [page, limit]);
 
   return {
     data,

@@ -1,4 +1,10 @@
-import { SyntheticEvent, useCallback, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { useNavigate } from "react-router-dom";
 import {
@@ -12,88 +18,118 @@ import {
   addApartmentToList,
   replaceApartmentInList,
 } from "../../stores/apiData/apartment-lists";
-import ruleOptions from "../../assets/temp-api-mockup-data/ruleOptions.json";
-import cancellationOptions from "../../assets/temp-api-mockup-data/cancellationOptions.json";
 import MultipleSelect from "../inputs/select/multipleSelect";
+import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
+import useGetHouseRules from "../../services-hooks/useGetAllRules";
+import Select from "../inputs/select";
 
 export default function AddEditApartmentPolicies({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const axios = useAxiosMultipart();
   const storeAptDataset = useAppSelector(
     (state) => state.addEditApartmentInfo.value.data
   );
+  const {
+    data: houseRules,
+    isLoading,
+    isFailed,
+    setIsFailed,
+    retryFunction,
+    pagination,
+  } = useGetHouseRules({ page: 1, limit: 20 });
 
   const [rules, setRules] = useState<string[]>([]);
-  const [cancellationPolicy, setCancellationPolicy] = useState<string[]>([]);
-
+  const [cancellationPolicy, setCancellationPolicy] = useState("");
+  const [maxGuest, setMaxGuests] = useState("");
+  const [cautionFee, setCautionFee] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   // populate apartment details interface
   useEffect(() => {
-    const { rules, cancellationPolicies } = storeAptDataset.apartmentPolicy;
-    setRules(rules);
-    setCancellationPolicy(cancellationPolicies);
+    const { rules, cancellationPolicies, maxGuest, cautionFee } =
+      storeAptDataset.apartmentPolicy;
+    setRules(rules || []);
+    setCancellationPolicy(cancellationPolicies || "");
+    setMaxGuests(maxGuest || "");
+    setCautionFee(cautionFee || "");
   }, []);
 
   //update redux store and naviagte to next timeline
   const uploadApartmentInformation = useCallback(
-    (e: SyntheticEvent) => {
+    async (e: SyntheticEvent) => {
       e.preventDefault();
       setIsSubmitting(true);
       const { apartmentDetails, apartmentFeatures } = storeAptDataset;
-      const payload = {
-        ...apartmentDetails,
-        ...apartmentFeatures,
-        rules,
-        cancellationPolicy,
+      const { name, roomOption, images, amount, location, aboutLocation } =
+        apartmentDetails;
+      const {
+        noBeds,
+        noBaths,
+        whatToExpect,
+        pointOfInterest,
+        extraOptions,
+        safetyAndSecurity,
+        availabilityStatus,
+      } = apartmentFeatures;
+      const uploadPayload = {
+        name,
+        description: aboutLocation,
+        location: location,
+        currency: "NGN",
+        price: amount,
+        caution_fee: cautionFee,
+        tax_fee: "",
+        no_of_bedrooms: noBeds,
+        no_of_bathrooms: noBaths,
+        max_guests: maxGuest,
+        point_of_interest: pointOfInterest,
+        cancellation_policy: cancellationPolicy,
+        availability_status: availabilityStatus,
+        rules: rules,
+        amenities: whatToExpect,
+        room_option: roomOption,
+        // extra_option: [],
+        safeties: safetyAndSecurity,
+        images: images,
+        // rules: []
+        // amenities:[],
+        extra_option_items: extraOptions,
+        // safeties: []
       };
       dispatch(
         updateApartmentPolicies({
           rules,
+          cautionFee: cautionFee,
+          maxGuest: maxGuest,
           cancellationPolicies: cancellationPolicy,
         })
       );
       try {
         if (id) {
-          console.log({ payload });
+          //run update endpoint
+          const response = await axios.put(
+            `/admin/shortlet/${id}`,
+            uploadPayload
+          );
+          const { shortlet } = response?.data?.data;
           dispatch(
             openSnackbar({
               message: "Apartment informaton successfully updated",
               isError: false,
             })
           );
-          dispatch(
-            replaceApartmentInList({
-              id: id,
-              image: apartmentDetails?.images[0],
-              name: apartmentDetails?.name,
-              location: apartmentDetails?.location,
-              noOfGuests: 0,
-              category: 3,
-              characteristics: 2,
-              units: 2,
-              status: apartmentFeatures?.availabilityStatus,
-            })
-          );
+          dispatch(replaceApartmentInList(shortlet));
         } else {
+          //run update endpoint
+          const response = await axios.post(`/admin/shortlet`, uploadPayload);
+          const { shortlet } = response?.data?.data;
           dispatch(
             openSnackbar({
               message: "Apartment informaton successfully created",
               isError: false,
             })
           );
-          dispatch(
-            addApartmentToList({
-              id: "random-data",
-              image: apartmentDetails?.images[0],
-              name: apartmentDetails?.name,
-              location: apartmentDetails?.location,
-              noOfGuests: 0,
-              category: 3,
-              characteristics: 2,
-              units: 2,
-              status: apartmentFeatures?.availabilityStatus,
-            })
-          );
+          dispatch(addApartmentToList(shortlet));
         }
         dispatch(clearAllApartmentInfo());
         navigate("/apartments");
@@ -102,7 +138,7 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
         setIsSubmitting(false);
       }
     },
-    [rules, cancellationPolicy, storeAptDataset, id]
+    [rules, cancellationPolicy, maxGuest, cautionFee, storeAptDataset, id]
   );
 
   return (
@@ -110,6 +146,56 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
       className=" flex flex-col gap-5"
       onSubmit={uploadApartmentInformation}
     >
+      {/* apartment caution fee */}
+      <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
+        <div className=" max-w-md">
+          <h6 className=" text-lg font-semibold">Caution Fee</h6>
+          <p className=" text-gray-500">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
+            labore.
+          </p>
+        </div>
+        <div className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between">
+          <input
+            placeholder={"Amount"}
+            required
+            value={cautionFee}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setCautionFee(e.target.value)
+            }
+            type={"text"}
+            className=" w-full outline-none"
+          />
+          <span className=" bg-gray-200 rounded-md px-3 py-1 whitespace-nowrap">
+            Per Night
+          </span>
+        </div>
+      </div>
+      {/* apartment max guests */}
+      <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
+        <div className=" max-w-md">
+          <h6 className=" text-lg font-semibold">Maximum Number of Guest</h6>
+          <p className=" text-gray-500">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
+            labore.
+          </p>
+        </div>
+        <Select
+          isRequired={true}
+          value={maxGuest}
+          setValue={setMaxGuests}
+          id="no-of-baths"
+        >
+          <option value="" disabled>
+            Select maximum number of guests
+          </option>
+          {Array.from({ length: 8 }, (_, index) => (
+            <option key={index} value={`${index + 1}`}>
+              {index + 1}
+            </option>
+          ))}
+        </Select>
+      </div>
       {/* number of bathroom*/}
       <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
         <div className=" max-w-md">
@@ -122,7 +208,10 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
         <MultipleSelect
           value={rules}
           setValue={setRules}
-          options={ruleOptions}
+          options={houseRules?.map((item) => ({
+            id: String(item?.id),
+            label: item?.name,
+          }))}
           label="Select Rules"
         />
       </div>
@@ -135,12 +224,24 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
             labore.
           </p>
         </div>
-        <MultipleSelect
+        {/* <MultipleSelect
           value={cancellationPolicy}
           setValue={setCancellationPolicy}
           options={cancellationOptions}
           label="Select Cancellation Policies"
-        />
+        /> */}
+        <Select
+          isRequired={true}
+          value={cancellationPolicy}
+          setValue={setCancellationPolicy}
+          id="cancellation-policy"
+        >
+          <option value="" disabled>
+            Select cancellation policy
+          </option>
+          <option value="2 days notice">2 days notice</option>
+          <option value="7 days notice">7 days notice</option>
+        </Select>
       </div>
 
       {/* submit and cancel buttons */}

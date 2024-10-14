@@ -1,25 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { apartmentById } from "../../types/apiData/apartment";
+import { apartment } from "../../types/apiData/apartment";
 import { pagination } from "../../types/pagination";
 
-export const apartmentListsData = createSlice({
-  name: "all apartments",
+export const topApartmentListsData = createSlice({
+  name: "all top apartments",
   initialState: {
     value: {
       status: false,
       pagination: [] as {
         pagination_data: pagination;
-        data: apartmentById[];
+        data: apartment[];
       }[],
-      data: [] as apartmentById[],
+      data: [] as apartment[],
     },
   },
   reducers: {
-    updateApartmentList: (state, action) => {
+    updateTopApartmentList: (state, action) => {
       state.value.status = true;
       state.value.data = action?.payload?.data;
     },
-    addApartmentToList: (state, action) => {
+    addApartmentToTopApartmentList: (state, action) => {
       state.value.data = [...state.value.data, action?.payload];
       //include in pagination data
       const pagination_data = [...state.value.pagination];
@@ -52,7 +52,7 @@ export const apartmentListsData = createSlice({
         ];
       }
     },
-    removeApartmentInList: (state, action) => {
+    removeApartmentInTopApartmentList: (state, action) => {
       const { id } = action?.payload;
       const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
@@ -75,7 +75,7 @@ export const apartmentListsData = createSlice({
       });
       state.value.pagination = removed;
     },
-    replaceApartmentInList: (state, action) => {
+    replaceApartmentInTopApartmentList: (state, action) => {
       const { id } = action?.payload;
       const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
@@ -102,7 +102,7 @@ export const apartmentListsData = createSlice({
       });
       state.value.pagination = replacedItem;
     },
-    clearApartmentList: (state) => {
+    clearTopApartmentList: (state) => {
       state.value.status = false;
       state.value.data = [];
     },
@@ -110,12 +110,12 @@ export const apartmentListsData = createSlice({
 });
 
 export const {
-  updateApartmentList,
-  addApartmentToList,
+  updateTopApartmentList,
+  addApartmentToTopApartmentList,
   addToPaginationHistory,
-  removeApartmentInList,
-  replaceApartmentInList,
-  clearApartmentList,
-} = apartmentListsData.actions;
+  removeApartmentInTopApartmentList,
+  replaceApartmentInTopApartmentList,
+  clearTopApartmentList,
+} = topApartmentListsData.actions;
 
-export default apartmentListsData.reducer;
+export default topApartmentListsData.reducer;

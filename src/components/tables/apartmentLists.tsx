@@ -88,7 +88,9 @@ export default function ApartmentListsTable({
                         </span>
                       </span>
                     </td>
-                    <td className=" text-lg  min-w-36">** Guests</td>
+                    <td className=" text-lg  min-w-36">
+                      {request?.max_guests} Guests
+                    </td>
                     <td>**</td>
                     <td>**</td>
                     <td>**</td>

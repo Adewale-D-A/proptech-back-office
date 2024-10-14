@@ -82,7 +82,7 @@ const useAxiosMultipart = (disableErrorPrompt?: boolean) => {
       axiosMultipartInstance.interceptors.request.eject(requestIntercept);
       axiosMultipartInstance.interceptors.response.eject(responseIntercept);
     };
-  }, []);
+  }, [access_token]);
   return axiosMultipartInstance;
 };
 

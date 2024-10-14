@@ -8,7 +8,13 @@ import {
 } from "../stores/apiData/extra-options";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetExtraOptions({ page = 1 }: { page?: number }) {
+export default function useGetExtraOptions({
+  page = 1,
+  limit = 20,
+}: {
+  page?: number;
+  limit?: number;
+}) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
   const {
@@ -28,12 +34,12 @@ export default function useGetExtraOptions({ page = 1 }: { page?: number }) {
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage) {
+      if (foundPage && limit === 20) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateExtraOptions({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          `/admin/extra-option?limit=20&page=${page}`
+          `/admin/extra-option?limit=${limit}&page=${page}`
         );
         const { extraOption } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
@@ -60,11 +66,11 @@ export default function useGetExtraOptions({ page = 1 }: { page?: number }) {
     } catch (error) {
       setIsFailed(true);
     }
-  }, [page]);
+  }, [page, limit]);
 
   useEffect(() => {
     getExtraOptions();
-  }, [page]);
+  }, [page, limit]);
 
   return {
     data,

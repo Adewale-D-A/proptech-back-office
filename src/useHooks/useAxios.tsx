@@ -82,7 +82,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
       axiosInstance.interceptors.request.eject(requestIntercept);
       axiosInstance.interceptors.response.eject(responseIntercept);
     };
-  }, []);
+  }, [access_token]);
   return axiosInstance;
 };
 

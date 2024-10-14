@@ -35,19 +35,94 @@ export type apartmentLists = {
 }[];
 
 export type apartmentById = {
-  id: string;
+  id: number;
   name: string;
-  roomOption: string;
-  images: { url: string }[];
-  amount: string;
+  description: string;
   location: string;
-  aboutLocation: string;
-  noBeds: string;
-  noBaths: string;
-  whatToExpect: string;
-  pointOfInterest: string;
-  safetyAndSecurity: string[];
-  availabilityStatus: string;
-  rules: string[];
-  cancellationPolicies: string[];
+  currency: string;
+  price: number;
+  caution_fee: number;
+  tax_fee: number;
+  no_of_bedrooms: number;
+  no_of_bathrooms: number;
+  max_guests: number;
+  room_option: string;
+  extra_option: string;
+  safety_and_security: string;
+  point_of_interest: string;
+  cancellation_policy: string;
+  availability_status: string;
+  created_at: string;
+  updated_at: string;
+  amenities: {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
+    image: string;
+    ordering_position: number;
+    created_at: string;
+    updated_at: string;
+    pivot: {
+      shortlet_id: number;
+      amenity_id: number;
+    };
+  }[];
+  images: {
+    id: number;
+    shortlet_id: number;
+    path: string;
+    order: number;
+    created_at: string;
+    updated_at: string;
+  }[];
+  rules: {
+    id: number;
+    name: string;
+    slug: string;
+    ordering_position: number;
+    created_at: string;
+    updated_at: string;
+    pivot: {
+      shortlet_id: number;
+      rule_id: number;
+    };
+  }[];
+  room_options: {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
+    created_at: string;
+    updated_at: string;
+    pivot: {
+      shortlet_id: number;
+      room_option_id: number;
+    };
+  }[];
+  extra_options: {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
+    created_at: string;
+    updated_at: string;
+    pivot: {
+      shortlet_id: number;
+      extra_option_id: number;
+    };
+  }[];
+  safeties: {
+    id: number;
+    name: string;
+    slug: string;
+    description: string;
+    image: string;
+    created_at: string;
+    updated_at: string;
+    pivot: {
+      shortlet_id: number;
+      safety_id: number;
+    };
+  }[];
 };

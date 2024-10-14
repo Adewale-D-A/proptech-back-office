@@ -7,7 +7,9 @@ import { updateApartmentFeatures } from "../../stores/inAppDataInterations/addEd
 import LinkButton from "../button/linkButton";
 import LoadingButton from "../button";
 import MultipleSelect from "../inputs/select/multipleSelect";
-import securityOptions from "../../assets/temp-api-mockup-data/securityOptions.json";
+import useGetSafetyAndSecurities from "../../services-hooks/useGetSafetyAndSecurities";
+import useGetAmenities from "../../services-hooks/useGetAmenities";
+import useGetExtraOptions from "../../services-hooks/useGetExtraOptions";
 
 export default function AddEditApartmentFeatures({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
@@ -16,9 +18,34 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
     (state) => state.addEditApartmentInfo.value.data.apartmentFeatures
   );
 
+  const {
+    data: safetyAndSecurityOptions,
+    isLoading,
+    isFailed,
+    setIsFailed,
+    retryFunction,
+    pagination,
+  } = useGetSafetyAndSecurities({ page: 1, limit: 20 });
+  const {
+    data: amenitiesOptions,
+    isLoading: amenitiesLoading,
+    isFailed: amenitiesFailed,
+    setIsFailed: amenitiesSetFailed,
+    retryFunction: amenitiesRetry,
+    pagination: amenitiesPagination,
+  } = useGetAmenities({ page: 1, limit: 20 });
+  const {
+    data: extraOptionsItems,
+    isLoading: extraOptionLoading,
+    isFailed: extraOptionFailed,
+    setIsFailed: extraOptionSetFailed,
+    retryFunction: extraOptionRetry,
+  } = useGetExtraOptions({ page: 1, limit: 20 });
+
   const [noBaths, setNoBaths] = useState("");
   const [noBeds, setNoBeds] = useState("");
-  const [whatToExpect, setWhatToExpect] = useState("");
+  const [whatToExpect, setWhatToExpect] = useState<string[]>([]);
+  const [extraOptions, setExtraOptions] = useState<string[]>([]);
   const [pointOfInterest, setPointOfInterest] = useState("");
   const [safetyAndSecurity, setSafetyAndSecurity] = useState<string[]>([]);
   const [availabilityStatus, setAvailabilityStatus] = useState("");
@@ -30,15 +57,17 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
       noBaths,
       whatToExpect,
       pointOfInterest,
+      extraOptions,
       safetyAndSecurity,
       availabilityStatus,
     } = storeAptFeatures;
-    setNoBaths(noBaths);
-    setNoBeds(noBeds);
-    setWhatToExpect(whatToExpect);
-    setPointOfInterest(pointOfInterest);
-    setSafetyAndSecurity(safetyAndSecurity);
-    setAvailabilityStatus(availabilityStatus);
+    setNoBaths(noBaths || "");
+    setNoBeds(noBeds || "");
+    setWhatToExpect(whatToExpect || []);
+    setExtraOptions(extraOptions || []);
+    setPointOfInterest(pointOfInterest || "");
+    setSafetyAndSecurity(safetyAndSecurity || []);
+    setAvailabilityStatus(availabilityStatus || "available");
   }, []);
 
   //update redux store and naviagte to next timeline
@@ -50,6 +79,7 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
         noBaths,
         whatToExpect,
         pointOfInterest,
+        extraOptions,
         safetyAndSecurity,
         availabilityStatus,
       };
@@ -65,6 +95,7 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
       noBaths,
       whatToExpect,
       pointOfInterest,
+      extraOptions,
       safetyAndSecurity,
       availabilityStatus,
       id,
@@ -132,17 +163,34 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
             labore.
           </p>
         </div>
-        <Select
-          isRequired={true}
+        <MultipleSelect
           value={whatToExpect}
           setValue={setWhatToExpect}
-          id="what-to-expect"
-        >
-          <option value="" disabled>
-            Select
-          </option>
-          <option value={`huge-space`}>Expect a huge living space</option>
-        </Select>
+          options={amenitiesOptions?.map((item) => ({
+            id: String(item?.id),
+            label: item?.name,
+          }))}
+          label="Select Security Options"
+        />
+      </div>
+      {/* extra options */}
+      <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
+        <div className=" max-w-md">
+          <h6 className=" text-lg font-semibold">Extra Options</h6>
+          <p className=" text-gray-500">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
+            labore.
+          </p>
+        </div>
+        <MultipleSelect
+          value={extraOptions}
+          setValue={setExtraOptions}
+          options={extraOptionsItems?.map((item) => ({
+            id: String(item?.id),
+            label: item?.name,
+          }))}
+          label="Select Extra Options"
+        />
       </div>
       {/* point of interest*/}
       <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
@@ -174,7 +222,10 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
         <MultipleSelect
           value={safetyAndSecurity}
           setValue={setSafetyAndSecurity}
-          options={securityOptions}
+          options={safetyAndSecurityOptions?.map((item) => ({
+            id: String(item?.id),
+            label: item?.name,
+          }))}
           label="Select Security Options"
         />
       </div>
@@ -196,8 +247,8 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
           <option value="" disabled>
             Select Option
           </option>
-          <option value={`yes`}>Yes</option>
-          <option value={`no`}>No</option>
+          <option value={`available`}>Yes</option>
+          <option value={`unavailable`}>No</option>
         </Select>
       </div>
 

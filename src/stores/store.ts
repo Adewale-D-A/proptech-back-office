@@ -26,6 +26,7 @@ import salesAnalyticsData from "./apiData/dahsboards/sales-analytics";
 import salesChannelData from "./apiData/dahsboards/sales-channels";
 
 import apartmentListsData from "./apiData/apartment-lists";
+import topApartmentListsData from "./apiData/top-apartment-list";
 import bookingsListsData from "./apiData/bookings-lists";
 import requestListsData from "./apiData/requests-lists";
 import customersListData from "./apiData/customers-lists";
@@ -69,6 +70,7 @@ export const adminStore = () => {
       salesChannels: salesChannelData,
 
       allAparmentLists: apartmentListsData,
+      topAparmentLists: topApartmentListsData,
       allAmenities: amenitiesData,
       allSaeftyAndSecurity: safetyAndSecurityData,
       allExtraOptions: extraOptionData,

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import useAxios from "../useHooks/useAxios";
 import { apartmentById } from "../types/apiData/apartment";
-import tempAptData from "../assets/temp-api-mockup-data/apartments.json";
 import { useAppDispatch } from "../stores/hooks";
 import {
   clearAllApartmentInfo,
@@ -15,7 +14,6 @@ import {
 export default function useGetApartmentById(id?: string) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
-
   const [isLoading, setIsLoading] = useState(true);
   const [isFailed, setIsFailed] = useState(false);
 
@@ -24,55 +22,65 @@ export default function useGetApartmentById(id?: string) {
   const getApartment = useCallback(async () => {
     setIsLoading(true);
     try {
-      // const response = await axios.get(`/show_apartment/${id}`);
-      // const responseData = response?.data?.data;
-      // setData(responseData);
-      const found = tempAptData.data.find((item) => item?.id === id);
-      if (found) {
-        const {
-          name,
-          roomOption,
-          images,
-          amount,
-          location,
-          aboutLocation,
-          noBeds,
-          noBaths,
-          whatToExpect,
-          pointOfInterest,
-          safetyAndSecurity,
-          availabilityStatus,
+      setIsLoading(true);
+      const response = await axios.get(`/admin/shortlet/${id}`);
+      const { shortlet } = response?.data?.data;
+      const {
+        name,
+        description,
+        location,
+        currency,
+        price,
+        caution_fee,
+        tax_fee,
+        no_of_bedrooms,
+        no_of_bathrooms,
+        max_guests,
+        room_option,
+        extra_option,
+        safety_and_security,
+        point_of_interest,
+        cancellation_policy,
+        availability_status,
+        amenities,
+        images,
+        rules,
+        safeties,
+      } = shortlet;
+      dispatch(clearAllApartmentInfo());
+      dispatch(updateApartmentInfoId({ id: id }));
+      dispatch(
+        updateApartmentDetails({
+          name: name,
+          roomOption: room_option,
+          images: images,
+          amount: price,
+          location: location,
+          aboutLocation: description,
+        })
+      );
+      dispatch(
+        updateApartmentFeatures({
+          noBeds: no_of_bedrooms,
+          noBaths: no_of_bathrooms,
+          whatToExpect: amenities,
+          extraOptions: extra_option,
+          pointOfInterest: point_of_interest,
+          safetyAndSecurity: safeties,
+          availabilityStatus: availability_status,
+        })
+      );
+      dispatch(
+        updateApartmentPolicies({
           rules,
-          cancellationPolicies,
-        } = found;
-        setData(found);
-        dispatch(clearAllApartmentInfo());
-        dispatch(updateApartmentInfoId({ id: id }));
-        dispatch(
-          updateApartmentDetails({
-            name: name,
-            roomOption: roomOption,
-            images: images,
-            amount: amount,
-            location: location,
-            aboutLocation: aboutLocation,
-          })
-        );
-        dispatch(
-          updateApartmentFeatures({
-            noBeds,
-            noBaths,
-            whatToExpect,
-            pointOfInterest,
-            safetyAndSecurity,
-            availabilityStatus,
-          })
-        );
-        dispatch(updateApartmentPolicies({ rules, cancellationPolicies }));
-      }
+          cautionFee: caution_fee,
+          maxGuest: max_guests,
+          cancellationPolicies: cancellation_policy,
+        })
+      );
+      setData(shortlet);
       setIsLoading(false);
     } catch (error) {
-      //   console.log({ error });
       setIsFailed(true);
     }
   }, [id]);

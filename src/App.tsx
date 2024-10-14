@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-
+import "./App.css";
 import PageNotFound from "./pages/404";
 import Login from "./pages/login";
 import ResetPassword from "./pages/reset-passoword";

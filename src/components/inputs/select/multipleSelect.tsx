@@ -25,8 +25,8 @@ export default function MultipleSelect({
   const [displayedPreference, setDisplayedPreference] = useState<string[]>([]);
 
   const filterArray = useCallback(() => {
-    const inclusive = options.filter((item) => {
-      const foundItem = value.find((result) => result === item?.id);
+    const inclusive = options?.filter((item) => {
+      const foundItem = value?.find((result) => result === item?.id);
       if (foundItem) {
         return true;
       } else {
@@ -86,7 +86,7 @@ export default function MultipleSelect({
           className="flex items-start gap-3 bg-white border-4 p-3 rounded-md shadow-md"
         >
           <div className=" flex items-center gap-4 p-3 flex-wrap max-w-80">
-            {options.map((item) => (
+            {options?.map((item) => (
               <label
                 key={item?.id}
                 htmlFor={item?.id}

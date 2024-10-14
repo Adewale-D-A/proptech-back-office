@@ -1,3 +1,8 @@
+##### 14.10.2024
+
+> Apartment CRUDE operation api integration (TODO: Display backend validation error messages)
+> TODO: Troubleshoot refresh token logic
+
 ##### 12.10.2024
 
 > CRUDE operation for House rules, Room option, extra option API integrations

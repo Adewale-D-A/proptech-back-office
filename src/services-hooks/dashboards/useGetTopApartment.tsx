@@ -1,19 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../stores/hooks";
-import useAxios from "../useHooks/useAxios";
-import { pagination } from "../types/pagination";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
+import useAxios from "../../useHooks/useAxios";
+import { pagination } from "../../types/pagination";
 import {
-  updateAmenities,
+  updateTopApartmentList,
   addToPaginationHistory,
-} from "../stores/apiData/amenities";
+} from "../../stores/apiData/top-apartment-list";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetAmenities({
+export default function useGetTopApartmentLists({
   page = 1,
-  limit = 20,
+  start_date,
+  end_date,
+  sort = "desc",
 }: {
   page?: number;
-  limit?: number;
+  start_date?: string;
+  end_date?: string;
+  sort?: "desc" | "asc" | string;
 }) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
@@ -21,12 +25,12 @@ export default function useGetAmenities({
     status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.allAmenities.value);
+  } = useAppSelector((state) => state.topAparmentLists.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const [pagination, setPagination] = useState<pagination>({} as any);
-  const getAmenities = useCallback(async () => {
+  const getTopApartmentList = useCallback(async () => {
     try {
       setIsLoading(true);
       //check store if this requested data has been saved previously and retirve it
@@ -34,16 +38,18 @@ export default function useGetAmenities({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage && limit === 20) {
+      if (foundPage && !(start_date && end_date) && !(sort === "asc")) {
         setPagination(foundPage?.pagination_data);
-        dispatch(updateAmenities({ data: foundPage?.data }));
+        dispatch(updateTopApartmentList({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          `/admin/amenity?limit=${limit}&page=${page}`
+          start_date && end_date
+            ? `/admin/dashboard/top-shortlets?sort=${sort}&limit=20&page=${page}&start_date=${start_date}&end_date=${end_date}`
+            : `/admin/dashboard/top-shortlets?sort=${sort}&limit=20&page=${page}`
         );
-        const { amenity } = response?.data?.data;
+        const responseData = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
-          amenity;
+          responseData;
         const paginationDataset = {
           current_page,
           last_page,
@@ -53,7 +59,7 @@ export default function useGetAmenities({
           to,
           length: data?.length,
         };
-        dispatch(updateAmenities({ data }));
+        dispatch(updateTopApartmentList({ data }));
         dispatch(
           addToPaginationHistory({
             pagination_data: paginationDataset,
@@ -66,18 +72,18 @@ export default function useGetAmenities({
     } catch (error) {
       setIsFailed(true);
     }
-  }, [page, limit]);
+  }, [page, start_date, end_date, sort]);
 
   useEffect(() => {
-    getAmenities();
-  }, [page, limit]);
+    getTopApartmentList();
+  }, [page, start_date, end_date, sort]);
 
   return {
     data,
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getAmenities,
+    retryFunction: getTopApartmentList,
     pagination,
   };
 }

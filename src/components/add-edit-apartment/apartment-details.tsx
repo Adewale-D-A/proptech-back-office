@@ -19,6 +19,7 @@ import {
 } from "../../stores/inAppDataInterations/addEditApartmentInfo";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import LinkButton from "../button/linkButton";
+import useGetRoomOptions from "../../services-hooks/useGetRoomOptions";
 
 export default function AddEditApartmentDetails({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
@@ -75,6 +76,9 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
     [name, roomOption, images, price, location, aboutLocation, id]
   );
 
+  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
+    useGetRoomOptions({ page: 1, limit: 20 });
+
   return (
     <form className=" flex flex-col gap-5" onSubmit={addApartmentDetails}>
       {/* apartment name */}
@@ -113,7 +117,9 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
           <option value="" disabled>
             Room options
           </option>
-          <option value="2-bedroom">2 Bedroom Apartment</option>
+          {data?.map((item) => (
+            <option value={item?.id}>{item?.name}</option>
+          ))}
         </Select>
       </div>
       {/* apartment image */}
@@ -151,8 +157,11 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
               setPrice(e.target.value)
             }
             type={"text"}
+            className=" w-full outline-none"
           />
-          <span className=" bg-gray-200 rounded-md px-3 py-1">Per Night</span>
+          <span className=" bg-gray-200 rounded-md px-3 py-1 whitespace-nowrap">
+            Per Night
+          </span>
         </div>
       </div>
       {/* apartment location */}

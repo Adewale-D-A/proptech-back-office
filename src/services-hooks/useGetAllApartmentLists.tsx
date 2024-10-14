@@ -42,14 +42,14 @@ export default function useGetAllApartmentLists({
         setPagination(foundPage?.pagination_data);
         dispatch(updateApartmentList({ data: foundPage?.data }));
       } else {
-        const response = await axios.get(
+        const response = await axios.post(
           start_date && end_date
-            ? `/admin/dashboard/top-shortlets?sort=${sort}&limit=20&page=${page}&start_date=${start_date}&end_date=${end_date}`
-            : `/admin/dashboard/top-shortlets?sort=${sort}&limit=20&page=${page}`
+            ? `/admin/shortlet/get-all?sort=${sort}&limit=20&page=${page}&start_date=${start_date}&end_date=${end_date}`
+            : `/admin/shortlet/get-all?sort=${sort}&limit=20&page=${page}`
         );
-        const responseData = response?.data?.data;
+        const { shortlet } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
-          responseData;
+          shortlet;
         const paginationDataset = {
           current_page,
           last_page,
