@@ -1,3 +1,7 @@
+##### 15.10.2024
+
+> Apartment calendar view api integration
+
 ##### 14.10.2024
 
 > Apartment CRUDE operation api integration (TODO: Display backend validation error messages)

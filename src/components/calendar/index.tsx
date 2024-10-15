@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import NavigatePrevIcon from "../../assets/icons/navigate-prev";
-import NavigateNextIcon from "../../assets/icons/navigate-next";
+// import NavigatePrevIcon from "../../assets/icons/navigate-prev";
+// import NavigateNextIcon from "../../assets/icons/navigate-next";
 
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const months = [
@@ -93,30 +93,34 @@ export default function CalendarView({
     generateDays();
   }, [currentDay]);
 
-  const prevMonthHandler = useCallback(() => {
-    setCurrentDay(
-      (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1)
-    );
-  }, []);
+  useEffect(() => {
+    setCurrentDay(date ? date : dateValue);
+  }, [date]);
 
-  const nextMonthHandler = useCallback(() => {
-    setCurrentDay(
-      (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1)
-    );
-  }, []);
+  // const prevMonthHandler = useCallback(() => {
+  //   setCurrentDay(
+  //     (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1)
+  //   );
+  // }, []);
+
+  // const nextMonthHandler = useCallback(() => {
+  //   setCurrentDay(
+  //     (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1)
+  //   );
+  // }, []);
 
   return (
     <div>
-      <div className=" flex justify-between items-center gap-3">
-        <button type="button" title="prev" onClick={() => prevMonthHandler()}>
+      <div className=" flex justify-center items-center gap-3">
+        {/* <button type="button" title="prev" onClick={() => prevMonthHandler()}>
           <NavigatePrevIcon />
-        </button>
+        </button> */}
         <h1 className=" font-bold">
           {months[currentDay.getMonth()]} {currentDay.getFullYear()}
         </h1>
-        <button type="button" title="prev" onClick={() => nextMonthHandler()}>
+        {/* <button type="button" title="prev" onClick={() => nextMonthHandler()}>
           <NavigateNextIcon />
-        </button>
+        </button> */}
       </div>
       <div className=" grid grid-cols-7 gap-2  text-gray-500">
         {weekdays.map((day) => (

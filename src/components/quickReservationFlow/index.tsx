@@ -13,8 +13,10 @@ import Search from "../inputs/search";
 
 export default function QuickReservationFlow({
   variant = 1,
+  apartment_name,
 }: {
   variant?: number;
+  apartment_name?: string;
 }) {
   const dispatch = useAppDispatch();
 
@@ -68,7 +70,7 @@ export default function QuickReservationFlow({
           >
             <option value="">1 Bedroom apartment</option>
           </Select> */}
-          {variant === 2 ? (
+          {variant === 2 && !apartment_name ? (
             <Search
               id="apartment-search"
               placeholder="Search apartment by name"
@@ -77,7 +79,7 @@ export default function QuickReservationFlow({
             />
           ) : (
             <span className="w-full p-3 rounded-lg border  bg-gray-200/15 ">
-              1 Bedroom Apartment
+              {apartment_name}
             </span>
           )}
           <Select
