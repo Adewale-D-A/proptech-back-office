@@ -1,12 +1,40 @@
-import { SyntheticEvent, useCallback } from "react";
+import { SyntheticEvent, useCallback, useState } from "react";
 import PaperClip from "../../assets/icons/paper-clip";
 import PaperplaneIcon from "../../assets/icons/paperplane";
 import LoadingButton from "../button";
+import useAxios from "../../useHooks/useAxios";
 
-export default function SendBar() {
-  const sendMessage = useCallback((e: SyntheticEvent) => {
-    e.preventDefault();
-  }, []);
+export default function SendBar({
+  user_id,
+  setSentHistory,
+}: {
+  user_id: string;
+  setSentHistory: Function;
+}) {
+  const axios = useAxios();
+  const [message, setMessage] = useState("");
+  const [isSending, setIsSending] = useState(false);
+
+  const sendMessage = useCallback(
+    async (e: SyntheticEvent) => {
+      e.preventDefault();
+      try {
+        setIsSending(false);
+        const response = await axios.post(`/admin/chat/send`, {
+          message,
+          user_id,
+        });
+        setSentHistory((prev: { message: string }[]) => [
+          ...prev,
+          { message: message },
+        ]);
+      } catch (error) {
+      } finally {
+        setIsSending(false);
+      }
+    },
+    [message, user_id]
+  );
 
   return (
     <div className=" p-4 border-t">
@@ -24,7 +52,7 @@ export default function SendBar() {
         <div className=" w-fit">
           <LoadingButton
             type="submit"
-            isLoading={false}
+            isLoading={isSending}
             label="Send"
             endIcon={<PaperplaneIcon />}
           />

@@ -1,31 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { taxRates } from "../../types/apiData/taxRates";
+import { pagination } from "../../types/pagination";
+import { chatList } from "../../types/apiData/chat";
 
-export const taxRateListsData = createSlice({
-  name: "all tax rates",
+export const chatListData = createSlice({
+  name: "chat list",
   initialState: {
     value: {
       status: false,
       pagination: [] as {
-        pagination_data: {
-          current_page: number;
-          last_page: number;
-          per_page: number;
-          total: number;
-          from: number;
-          to: number;
-        };
-        data: taxRates[];
+        pagination_data: pagination;
+        data: chatList[];
       }[],
-      data: [] as taxRates[],
+      data: [] as chatList[],
     },
   },
   reducers: {
-    updateTaxRateList: (state, action) => {
+    updateChatList: (state, action) => {
       state.value.status = true;
       state.value.data = action?.payload?.data;
     },
-    addTaxRateToList: (state, action) => {
+    addChatToList: (state, action) => {
       state.value.data = [...state.value.data, action?.payload];
       //include in pagination data
       const pagination_data = [...state.value.pagination];
@@ -58,7 +52,7 @@ export const taxRateListsData = createSlice({
         ];
       }
     },
-    removeTaxRateInList: (state, action) => {
+    removeChatInList: (state, action) => {
       const { id } = action?.payload;
       const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
@@ -81,7 +75,7 @@ export const taxRateListsData = createSlice({
       });
       state.value.pagination = removed;
     },
-    replaceTaxRateInList: (state, action) => {
+    replaceChatInList: (state, action) => {
       const { id } = action?.payload;
       const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
@@ -108,7 +102,7 @@ export const taxRateListsData = createSlice({
       });
       state.value.pagination = replacedItem;
     },
-    clearTaxRateList: (state) => {
+    clearChatList: (state) => {
       state.value.status = false;
       state.value.data = [];
     },
@@ -116,12 +110,12 @@ export const taxRateListsData = createSlice({
 });
 
 export const {
-  updateTaxRateList,
-  addTaxRateToList,
+  updateChatList,
+  addChatToList,
   addToPaginationHistory,
-  removeTaxRateInList,
-  replaceTaxRateInList,
-  clearTaxRateList,
-} = taxRateListsData.actions;
+  removeChatInList,
+  replaceChatInList,
+  clearChatList,
+} = chatListData.actions;
 
-export default taxRateListsData.reducer;
+export default chatListData.reducer;

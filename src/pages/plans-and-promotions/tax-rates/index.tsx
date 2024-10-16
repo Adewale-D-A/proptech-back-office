@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import { useAppDispatch } from "../../../stores/hooks";
 import { useLayoutEffect } from "react";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
@@ -18,7 +17,6 @@ const breadCrumb = [
   },
 ];
 export default function TaxRates() {
-  const { id } = useParams();
   const dispatch = useAppDispatch();
   // update page props on component mount
   useLayoutEffect(() => {

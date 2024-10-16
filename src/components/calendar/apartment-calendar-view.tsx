@@ -15,11 +15,11 @@ import dateRangeIterator from "../../utils/dateRangeIterator";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import useGetApartmentById from "../../services-hooks/useGetApartmentById";
 
-const sampleBookedDates = [
-  new Date(2024, 8, 27),
-  new Date(2024, 8, 29),
-  new Date(2024, 8, 30),
-];
+// const sampleBookedDates = [
+//   new Date(2024, 8, 27),
+//   new Date(2024, 8, 29),
+//   new Date(2024, 8, 30),
+// ];
 
 export default function ApartmentCalendarView() {
   const { id } = useParams();
@@ -48,7 +48,7 @@ export default function ApartmentCalendarView() {
     isFailed: apartment_isFailed,
     setIsFailed: apartment_setIsFailed,
     retryFunction: apartment_retryFunction,
-  } = useGetApartmentById(id ? id : "1");
+  } = useGetApartmentById(id ? id : undefined);
 
   // click handlers
   const handleSalesFiltering = useCallback(

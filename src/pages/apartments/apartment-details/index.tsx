@@ -33,7 +33,7 @@ export default function ApartmentDetail() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const { data, isLoading, isFailed, setIsFailed, retryFunction } =
-    useGetApartmentById(id ? id : "1");
+    useGetApartmentById(id ? id : undefined);
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
@@ -53,7 +53,6 @@ export default function ApartmentDetail() {
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
 
   const deleteApartment = useCallback(() => {
-    console.log({ id });
     setOpenDeleteConfirmation(false);
   }, [id]);
 

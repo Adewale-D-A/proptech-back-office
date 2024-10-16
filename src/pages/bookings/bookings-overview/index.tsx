@@ -78,7 +78,7 @@ export default function BookingsOverview() {
             </h4>
             <div className=" w-fit">
               <LinkButton
-                url="#"
+                url="/new-booking"
                 label="New Booking"
                 startIcon={<PlusIcon />}
               />

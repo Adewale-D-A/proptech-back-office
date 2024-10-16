@@ -1,7 +1,7 @@
 export type taxRates = {
-  id: string;
+  id: number;
   name: string;
-  rate: string;
-  createdOn: string;
-  breakdown: string;
+  rate: number;
+  created_at: string;
+  updated_at: string;
 };

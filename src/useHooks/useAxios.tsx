@@ -33,7 +33,8 @@ const useAxios = (disableErrorPrompt?: boolean) => {
       async (error) => {
         const prevRequest = error?.config;
         // ----log error message using snackbar---
-        const errorMessage = error?.response?.data?.message;
+        const errorMessage =
+          error?.response?.data?.message || error?.response?.data?.status;
         // ----log error message using snackbar---
         // if (
         //   error?.response?.status === 422 ||

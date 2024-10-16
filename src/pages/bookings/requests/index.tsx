@@ -43,7 +43,7 @@ export default function Requests() {
   const [openNewRequest, setOpenNewRequest] = useState(false);
   return (
     <>
-      <section className="w-full flex flex-col items-center">
+      <section className="w-full flex flex-col items-center my-10">
         <div className="w-full max-w-screen-xl flex flex-col gap-10">
           <div className=" w-full flex justify-between">
             <h2 className="text-xl font-semibold">All Requests List</h2>

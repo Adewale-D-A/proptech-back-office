@@ -1,11 +1,12 @@
+import { useState } from "react";
 import UserPlusIcon from "../../assets/icons/user-plus";
 import Search from "../inputs/search";
 import NotifierNumber from "../status/notifierNumber";
 import InboxCard from "./inbox-card";
-import SendBar from "./send-bar";
-import SenderCard from "./sender-card";
 import groupMessageList from "../../assets/temp-api-mockup-data/chatGroup.json";
 import individualMessageList from "../../assets/temp-api-mockup-data/chatIndividuals.json";
+import useGetChatList from "../../services-hooks/chat/useGetchatList";
+import ChatHistory from "./chat-history";
 
 export default function ChatModule({
   variant = "dm",
@@ -13,6 +14,10 @@ export default function ChatModule({
   variant?: "dm" | "group-chat";
 }) {
   // const [userInfo, setUserInfo] = useState({}as any)
+  const [selectedChatId, setSelectedChatId] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
+    useGetChatList({ page: currentPage });
   return (
     <div className=" w-full flex flex-col md:flex-row items-stretch gap-5">
       <div className="rounded-md border flex-1 md:flex-[0.3] flex flex-col gap-2 ">
@@ -33,54 +38,26 @@ export default function ChatModule({
           {variant === "dm"
             ? individualMessageList.map((item, index) => (
                 <InboxCard
+                  isActive={String(selectedChatId) === String(item?.id)}
                   key={item?.id}
-                  username={item?.username}
-                  image={item?.image}
-                  message={item?.message}
-                  time={item?.time}
-                  isActive={index === 0 ? true : false}
-                  read={item?.read}
-                  unread={item?.unread}
                   variant="dm"
+                  conversation={item}
+                  setChatId={setSelectedChatId}
                 />
               ))
             : groupMessageList.map((item, index) => (
                 <InboxCard
+                  isActive={selectedChatId === String(item?.id)}
                   key={item?.id}
-                  username={item?.username}
-                  image={item?.image}
-                  message={item?.message}
-                  time={item?.time}
-                  isActive={index === 0 ? true : false}
-                  read={item?.read}
-                  groupName={item?.groupName}
-                  unread={item?.unread}
                   variant="group-chat"
+                  conversation={item}
+                  setChatId={setSelectedChatId}
+                  groupName="Customer Success"
                 />
               ))}
         </div>
       </div>
-      <div className="rounded-md border flex-1 md:flex-[0.7]">
-        <div className=" shadow-sm w-full p-3 sticky top-0 left-0">
-          <SenderCard
-            image={"/temp/temp_apartment_1.jpg"}
-            isOnline={true}
-            name={variant === "dm" ? "John" : "Group Chat"}
-            variant={variant}
-          />
-        </div>
-        <div className="w-full min-h-96 p-3 flex flex-col gap-4">
-          <div className=" w-full flex justify-start">
-            <div className=" p-2 bg-primary/5 rounded-md">
-              <p className=" max-w-60">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              </p>
-              <span></span>
-            </div>
-          </div>
-        </div>
-        <SendBar />
-      </div>
+      <ChatHistory variant={variant} id={selectedChatId} />
     </div>
   );
 }

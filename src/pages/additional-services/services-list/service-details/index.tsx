@@ -7,6 +7,7 @@ import CustomerInfoCard from "../../../../components/booking-detail/customer-inf
 import ImageCarousel from "../../../../components/cards/image-carousel";
 import RequestInformation from "../../../../components/booking-detail/request-info";
 import ConfirmationCard from "../../../../components/booking-detail/cofirmation-card";
+import useGetRequest from "../../../../services-hooks/useGetRequest";
 
 const breadCrumb = [
   {
@@ -38,6 +39,7 @@ export default function AdditionalServiceDetailsById() {
     );
   }, []);
 
+  const { data } = useGetRequest({ id });
   return (
     <section className="w-full flex flex-col items-center my-5">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
@@ -49,7 +51,7 @@ export default function AdditionalServiceDetailsById() {
             </h4>
             <div className=" p-3 flex flex-col gap-6">
               <ConfirmationCard />
-              <RequestInformation addCost />
+              <RequestInformation addCost request_details={data} />
             </div>
           </div>
           <div className=" w-full rounded-md border flex flex-col gap-3">

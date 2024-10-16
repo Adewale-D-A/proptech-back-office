@@ -1,7 +1,15 @@
 import UserPlusIcon from "../../assets/icons/user-plus";
+import { requests } from "../../types/apiData/requests";
+import formatDate from "../../utils/isoDateConverter";
 import Status from "../status";
 
-export default function RequestInformation({ addCost }: { addCost?: boolean }) {
+export default function RequestInformation({
+  addCost,
+  request_details,
+}: {
+  addCost?: boolean;
+  request_details: requests;
+}) {
   return (
     <div className=" w-full bg-gray-100 rounded-md">
       <h4 className=" font-semibold p-3 text-md flex items-center gap-2">
@@ -12,22 +20,22 @@ export default function RequestInformation({ addCost }: { addCost?: boolean }) {
           {
             id: 1,
             header: addCost ? "Service Type" : "Request Type",
-            value: "Internet",
+            value: request_details?.subject || "",
           },
           {
             id: 2,
             header: "Description",
-            value: "Internet not working",
+            value: request_details?.description || "",
           },
           {
             id: 3,
             header: "Date of Request",
-            value: "24-06-2024",
+            value: formatDate(request_details?.created_at || "") || "",
           },
           {
             id: 4,
             header: "Escalated Status",
-            value: "Yes",
+            value: request_details?.is_escalated > 0 ? "Yes" : "No",
           },
         ].map((item) => (
           <div
@@ -41,13 +49,13 @@ export default function RequestInformation({ addCost }: { addCost?: boolean }) {
         <div className=" w-full flex items-center justify-between gap-5">
           <span className=" text-gray-500">Status</span>
           <span className=" font-semibold">
-            <Status status="Resolved" />
+            <Status status={request_details?.status} />
           </span>
         </div>
         {addCost && (
           <div className=" w-full flex items-center justify-between gap-5">
             <span className=" text-gray-500">Cost of Service</span>
-            <span className=" font-semibold">N15,000.00</span>
+            <span className=" font-semibold">***</span>
           </div>
         )}
       </div>

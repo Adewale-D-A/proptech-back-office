@@ -1,14 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 import useAxios from "../useHooks/useAxios";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
-import tempAptData from "../assets/temp-api-mockup-data/taxRates.json";
 import {
   updateTaxRateList,
   addToPaginationHistory,
 } from "../stores/apiData/tax-rate-lists";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetAllTaxRateLists({ page = 1 }: { page?: number }) {
+export default function useGetAllTaxRateLists({
+  page = 1,
+  limit = 20,
+}: {
+  page?: number;
+  limit?: number;
+}) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
   const {
@@ -40,44 +45,40 @@ export default function useGetAllTaxRateLists({ page = 1 }: { page?: number }) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateTaxRateList({ data: foundPage?.data }));
       } else {
-        // const response = await axios.post(`/institution-list?page=${page}`);
-        // const responseData = response?.data?.data;
-        // const institutions = response?.data?.institution;
-        dispatch(updateTaxRateList({ data: tempAptData.data }));
+        const response = await axios.get(
+          `/admin/tax?limit=${limit}&page=${page}`
+        );
+        const result = response?.data?.data;
+        // console.log({ result });
+        const { data, current_page, last_page, per_page, total, from, to } =
+          result;
+        const paginationDataset = {
+          current_page: 1,
+          last_page: 1,
+          per_page: 20,
+          total: 4,
+          from: 1,
+          to: 1,
+        };
+        dispatch(updateTaxRateList({ data: result }));
 
-        // TODO: UPDATE based on backend pagination response
-        //CURRENTLY: Pagination is not being returned for this dataset,
-        //TEMPORARY SOLUTION: Hardcoding pagination
-        // const { data, current_page, last_page, per_page, total, from, to } =
-        //   responseData;
-        // const paginationDataset = {
-        //   current_page: 1,
-        //   last_page: 1,
-        //   per_page: 20,
-        //   total: 4,
-        //   from: 1,
-        //   to: 1,
-        // };
-        // dispatch(update_institution({data}));
         dispatch(
           addToPaginationHistory({
-            pagination_data: tempAptData.pagination,
-            data: tempAptData.data,
+            pagination_data: paginationDataset,
+            data: result,
           })
         );
-        setPagination(tempAptData.pagination);
+        setPagination(paginationDataset);
       }
       setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
-    } finally {
-      setIsLoading(false);
     }
-  }, [page]);
+  }, [page, limit]);
 
   useEffect(() => {
     getAllTaxRates();
-  }, [page]);
+  }, [page, limit]);
 
   return {
     data,

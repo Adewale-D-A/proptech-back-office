@@ -1,23 +1,41 @@
-import { ChangeEvent, SyntheticEvent, useCallback, useState } from "react";
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useCallback,
+  // useEffect,
+  useState,
+} from "react";
 import TextInput from "../inputs/textInput";
 import LoadingButton from "../button";
 import CheckboxInput from "../inputs/checkbox/checkbox";
+// import useGetTaxRate from "../../services-hooks/useGetTaxRate";
 
 export default function AddTax({
+  id,
   setOpen,
   submitHandler,
   isSubmitting,
   componentId,
 }: {
+  id?: string;
   setOpen: Function;
   submitHandler: Function;
   isSubmitting: boolean;
   componentId: "tax-rate" | "service-tax";
 }) {
+  // const { data } = useGetTaxRate({ id: id || undefined });
   const [name, setName] = useState("");
   const [amount, setAmount] = useState("");
   const [cap, setCap] = useState("");
   const [isCompound, setIsCompound] = useState(false);
+
+  // useEffect(() => {
+  //   if (data && id && componentId === "tax-rate") {
+  //     const { name, rate } = data;
+  //     setName(name || "");
+  //     setAmount(String(rate) || "");
+  //   }
+  // }, [data, id, componentId]);
 
   const addNewTax = useCallback(
     async (e: SyntheticEvent) => {
@@ -25,7 +43,7 @@ export default function AddTax({
       await submitHandler({
         id: Math?.random()?.toString(36)?.substr(2, 9),
         name: name,
-        amount: `${amount}%`,
+        amount: amount,
         isCompound: isCompound,
         cap: cap,
       });
@@ -60,7 +78,7 @@ export default function AddTax({
               setAmount(e.target.value)
             }
             type={"text"}
-            className=" w-full"
+            className=" w-full outline-none"
           />
           <div className="p-2 px-6 bg-gray-200 rounded-md flex items-center text-gray-400">
             <span>%</span>
@@ -76,7 +94,7 @@ export default function AddTax({
                 setCap(e.target.value)
               }
               type={"text"}
-              className=" w-full"
+              className=" w-full outline-none"
             />
             <div className="p-2 px-6 bg-gray-200 rounded-md flex items-center text-gray-400">
               <span>#</span>

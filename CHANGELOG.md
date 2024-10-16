@@ -1,3 +1,9 @@
+##### 16.10.2024
+
+> Chat api setup (api not yet working)
+> Tax api integration
+> Customer requests CRUDE api integration
+
 ##### 15.10.2024
 
 > Apartment calendar view api integration

@@ -1,19 +1,15 @@
 export default function Status({ status }: { status: string | undefined }) {
   return (
     <div className=" text-xs whitespace-nowrap">
-      {status?.toLocaleLowerCase().includes("not") ? (
+      {status?.toLocaleLowerCase().includes("not") ||
+      status?.toLocaleLowerCase().includes("cancel") ? (
         <span className=" p-1 px-3 bg-red-500/15 text-red-500 rounded-full">
           {status}
         </span>
-      ) : status?.toLocaleLowerCase().includes("ailable") ? (
-        <span className=" p-1 px-3 bg-green-500/15 text-green-500 rounded-full">
-          {status}
-        </span>
-      ) : status?.toLocaleLowerCase().includes("confirmed") ? (
-        <span className=" p-1 px-3 bg-green-500/15 text-green-500 rounded-full">
-          {status}
-        </span>
-      ) : status?.toLocaleLowerCase().includes("resolved") ? (
+      ) : status?.toLocaleLowerCase().includes("confirmed") ||
+        status?.toLocaleLowerCase().includes("ailable") ||
+        status?.toLocaleLowerCase().includes("resolved") ||
+        status?.toLocaleLowerCase().includes("complete") ? (
         <span className=" p-1 px-3 bg-green-500/15 text-green-500 rounded-full">
           {status}
         </span>

@@ -1,16 +1,24 @@
 import { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
 import Pagination from "../pagination";
 import NoResult from "../noResult";
 import Search from "../inputs/search";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import { useAppDispatch } from "../../stores/hooks";
 import useGetAllTaxRateLists from "../../services-hooks/useGetTaxRatesLists";
-import { removeTaxRateInList } from "../../stores/apiData/tax-rate-lists";
+import {
+  removeTaxRateInList,
+  replaceTaxRateInList,
+} from "../../stores/apiData/tax-rate-lists";
 import Filter from "../filterAndSort/filter";
 import Sort from "../filterAndSort/sort";
+import formatDate, { formatTime } from "../../utils/isoDateConverter";
+import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import useAxios from "../../useHooks/useAxios";
+import ModalTemplate from "../modal";
+import AddTax from "../tax/addTax";
 
 export default function TaxRateLists({ header }: { header: string[] }) {
+  const axios = useAxios();
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
@@ -19,11 +27,54 @@ export default function TaxRateLists({ header }: { header: string[] }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedId, setSelectedId] = useState("1");
 
+  // tax rates
+  const [openTaxUpdate, setOpenTaxUpdate] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // tax rates submission
+  const updateTaxService = useCallback(
+    async (item: {
+      id: string;
+      name: string;
+      amount: string;
+      isCompound: boolean;
+      cap: string;
+    }) => {
+      setIsSubmitting(true);
+      try {
+        const response = await axios.post(`/admin/tax/${selectedId}`, {
+          name: item?.name,
+          rate: Number(item?.amount),
+        });
+        const result = response?.data?.data;
+        console.log({ result });
+        dispatch(
+          openSnackbar({
+            message: "Tax successfully updated",
+            isError: false,
+          })
+        );
+        dispatch(
+          replaceTaxRateInList({
+            id: result?.id,
+            name: result?.name,
+            rate: result?.rate,
+            created_at: result?.created_at,
+            breakdown: item?.cap,
+          })
+        );
+      } catch (error) {
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [selectedId]
+  );
+
   const deleteApartment = useCallback(() => {
     setIsDeleting(true);
     try {
       dispatch(removeTaxRateInList({ id: selectedId }));
-
       setOpenDeleteConfirmation(false);
     } catch (error) {
     } finally {
@@ -59,21 +110,28 @@ export default function TaxRateLists({ header }: { header: string[] }) {
                     <td>{index + 1}</td>
                     <td>{request?.name}</td>
                     <td>{request?.rate}</td>
-                    <td>{request?.createdOn}</td>
-                    <td>{request?.breakdown}</td>
+                    <td>
+                      {formatDate(request?.created_at)}{" "}
+                      {formatTime(request?.created_at)}
+                    </td>
+                    <td>***</td>
                     <td className=" group relative">
                       <span className=" p-2 text-lg">...</span>
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                        <Link
-                          to={`#/${request?.id}`}
-                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Edit Tax
-                        </Link>
                         <button
                           type="button"
                           onClick={() => {
-                            setSelectedId(request?.id);
+                            setSelectedId(String(request?.id));
+                            setOpenTaxUpdate(true);
+                          }}
+                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit Tax
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedId(String(request?.id));
                             setOpenDeleteConfirmation(true);
                           }}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
@@ -91,14 +149,7 @@ export default function TaxRateLists({ header }: { header: string[] }) {
           <NoResult />
         )}
         <Pagination
-          pagination={{
-            current_page: 1,
-            last_page: 2,
-            per_page: 20,
-            total: 24,
-            from: 1,
-            to: 1,
-          }}
+          pagination={pagination}
           setCurrentPage={setCurrentPage}
           isLoading={false}
           label="Tax"
@@ -113,6 +164,22 @@ export default function TaxRateLists({ header }: { header: string[] }) {
         open={openDeleteConfirmation}
         setOpen={setOpenDeleteConfirmation}
       />
+      {/* tax rate */}
+      <ModalTemplate
+        open={openTaxUpdate}
+        setOpen={setOpenTaxUpdate}
+        showXicon={true}
+        title="Update Tax Rate"
+        className=" max-w-md"
+      >
+        <AddTax
+          id={selectedId}
+          setOpen={setOpenTaxUpdate}
+          submitHandler={updateTaxService}
+          isSubmitting={isSubmitting}
+          componentId="tax-rate"
+        />
+      </ModalTemplate>
     </>
   );
 }

@@ -5,9 +5,9 @@ import { updatePageProperties } from "../../../../stores/appFunctionality/pagePr
 import CalendarIcon from "../../../../assets/icons/calendar";
 import ImageCarousel from "../../../../components/cards/image-carousel";
 import ConfirmationCard from "../../../../components/booking-detail/cofirmation-card";
-import UserPlusIcon from "../../../../assets/icons/user-plus";
-import Status from "../../../../components/status";
 import RequestInformation from "../../../../components/booking-detail/request-info";
+import useGetRequest from "../../../../services-hooks/useGetRequest";
+import useGetApartmentById from "../../../../services-hooks/useGetApartmentById";
 
 const breadCrumb = [
   {
@@ -39,6 +39,11 @@ export default function RequestDetailsById() {
     );
   }, []);
 
+  const { data } = useGetRequest({ id });
+  const { data: apartment_data } = useGetApartmentById(
+    data?.shortlet_id ? String(data?.shortlet_id) : undefined
+  );
+
   return (
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
@@ -49,7 +54,7 @@ export default function RequestDetailsById() {
               Customer Details
             </h4>
             <div className=" p-3 flex flex-col gap-6">
-              <ConfirmationCard /> <RequestInformation />
+              <ConfirmationCard /> <RequestInformation request_details={data} />
             </div>
           </div>
           <div className=" w-full rounded-md border flex flex-col gap-3">
@@ -58,27 +63,29 @@ export default function RequestDetailsById() {
             </h4>
             <div className="p-2 ">
               <ImageCarousel
-                images={[
-                  { url: "/temp/temp_apartment_1.jpg" },
-                  { url: "/temp/temp_apartment_2.jpg" },
-                  { url: "/temp/temp_apartment_2.jpg" },
-                ]}
+                images={apartment_data?.images?.map((item) => ({
+                  url: item?.path,
+                }))}
               />
               <div className=" flex flex-col gap-4 py-3">
-                <h4 className="text-xl font-semibold">Garden Breeze</h4>
+                <h4 className="text-xl font-semibold">
+                  {apartment_data?.name}
+                </h4>
 
                 <div className=" flex items-start justify-between gap-4 pb-2 border-b">
                   <span className=" text-gray-500">Check-in Date</span>
-                  <span className="">18/6/2024 10:00</span>
+                  <span className="">***</span>
                 </div>
 
                 <div className=" flex items-start justify-between gap-4 pb-2 border-b">
                   <span className="text-gray-500">Check-out Date</span>
-                  <span className="">20/6/2024 10:00</span>
+                  <span className="">***</span>
                 </div>
                 <div className=" flex items-start justify-between gap-4 pb-2">
                   <span className="">Total Amount</span>
-                  <span className=" text-primary font-semibold">N150,000</span>
+                  <span className=" text-primary font-semibold">
+                    {apartment_data?.currency} {apartment_data?.price}
+                  </span>
                 </div>
               </div>
             </div>

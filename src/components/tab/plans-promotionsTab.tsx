@@ -9,6 +9,8 @@ import { addTaxRateToList } from "../../stores/apiData/tax-rate-lists";
 import AddNewPrices from "../inputs/plansAndPromotions/prices";
 import AddNewCoupon from "../inputs/plansAndPromotions/coupons";
 import LinkButton from "../button/linkButton";
+import useAxios from "../../useHooks/useAxios";
+import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 
 export default function PlansAndPromotionsTab({
   header,
@@ -17,6 +19,7 @@ export default function PlansAndPromotionsTab({
   header: { id: string | number; label: string; icon: ReactNode }[];
   content: { id: string | number; data: ReactNode }[];
 }) {
+  const axios = useAxios();
   const dispatch = useAppDispatch();
   const [trackTab, setTrackTab] = useState(1);
 
@@ -27,9 +30,9 @@ export default function PlansAndPromotionsTab({
   const [openNewPrice, setOpenNewPrice] = useState(false);
   //
   const [openNewCoupon, setOpenNewCoupon] = useState(false);
-  // tax rates submittion
+  // tax rates submission
   const addNewServiceTax = useCallback(
-    (item: {
+    async (item: {
       id: string;
       name: string;
       amount: string;
@@ -38,12 +41,24 @@ export default function PlansAndPromotionsTab({
     }) => {
       setIsSubmitting(true);
       try {
+        const response = await axios.post(`/admin/tax`, {
+          name: item?.name,
+          rate: Number(item?.amount),
+        });
+        const result = response?.data?.data;
+        console.log({ result });
+        dispatch(
+          openSnackbar({
+            message: "New Tax successfully added",
+            isError: false,
+          })
+        );
         dispatch(
           addTaxRateToList({
-            id: item?.id,
-            name: item?.name,
-            rate: `${item?.amount}%`,
-            createdOn: "today",
+            id: result?.id,
+            name: result?.name,
+            rate: result?.rate,
+            created_at: result?.created_at,
             breakdown: item?.cap,
           })
         );
