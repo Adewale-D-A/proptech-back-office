@@ -5,11 +5,11 @@ import ReceiptIcon from "../../assets/icons/receipt";
 import PricingTab from "../../components/tab/bookingTab";
 import MenuIcon from "../../assets/icons/menu";
 import ChartIcon from "../../assets/icons/chart";
-// import TagsIcon from "../../assets/icons/tags";
+import TagsIcon from "../../assets/icons/tags";
 import KeyIcon from "../../assets/icons/restrictions";
 import PricingOverview from "./pricing-overview";
 import RateTable from "./rates-table";
-// import SpecialPrices from "./special-prices";
+import SpecialPrices from "./special-prices";
 import NewPricingRestrictions from "./pricing-restriction";
 
 const breadCrumb = [
@@ -44,7 +44,7 @@ export default function Pricing() {
           header={[
             { id: 1, icon: <MenuIcon />, label: "Rate Overview" },
             { id: 2, icon: <ChartIcon />, label: "Rates Table" },
-            // { id: 3, icon: <TagsIcon />, label: "Special Prices" },
+            { id: 3, icon: <TagsIcon />, label: "Special Prices" },
             { id: 4, icon: <KeyIcon />, label: "Restriction" },
           ]}
           content={[
@@ -56,10 +56,10 @@ export default function Pricing() {
               id: 2,
               data: <RateTable />,
             },
-            // {
-            //   id: 3,
-            //   data: <SpecialPrices />,
-            // },
+            {
+              id: 3,
+              data: <SpecialPrices />,
+            },
             {
               id: 4,
               data: <NewPricingRestrictions />,
