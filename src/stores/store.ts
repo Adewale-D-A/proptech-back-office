@@ -37,6 +37,10 @@ import extraOptionData from "./apiData/extra-options";
 import roomOptionsData from "./apiData/room-options";
 import houseRulesData from "./apiData/house-rules";
 import chatListData from "./apiData/chat-list";
+// admins
+import adminsListData from "./apiData/admins-list";
+import rolesListData from "./apiData/roles-lists";
+import resourcesData from "./apiData/resources";
 // api data - plans and promotions
 import taxRateListsData from "./apiData/tax-rate-lists";
 import priceTypeListsData from "./apiData/price-type-lists";
@@ -84,6 +88,11 @@ export const adminStore = () => {
       allAdditionalServices: additionalServiceListData,
       allVendorServices: vendorServiceListData,
       chatList: chatListData,
+
+      // admins
+      allAdminsLists: adminsListData,
+      allRolesLists: rolesListData,
+      resources: resourcesData,
       // api data - plans and promotions
       allTaxRates: taxRateListsData,
       allPriceTypes: priceTypeListsData,

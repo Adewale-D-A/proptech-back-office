@@ -122,6 +122,25 @@ export default function NavigationMenuItems() {
           ],
         },
         {
+          id: 12,
+          url: "/admin-users-management",
+          label: "Admin Users",
+          value: "admin-users",
+          show: true,
+          icon: <UsersIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
           id: 6,
           url: "/pricing",
           label: "Pricing",

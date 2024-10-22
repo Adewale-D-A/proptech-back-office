@@ -1,3 +1,7 @@
+##### 22.10.2024
+
+> Create admin, append roles and permissions UI Development
+
 ##### 16.10.2024
 
 > Chat api setup (api not yet working)

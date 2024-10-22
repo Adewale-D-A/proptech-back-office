@@ -45,6 +45,12 @@ import AddNewPackageAndOffer from "./pages/plans-and-promotions/package-and-offe
 import AdditionalServiceDetailsById from "./pages/additional-services/services-list/service-details";
 import VendorServiceDetailsById from "./pages/additional-services/vendor-services/vendor-details";
 import NewBookings from "./pages/bookings/new-booking";
+import AdminManagement from "./pages/manage-admins";
+import RolesAndPermissions from "./pages/manage-admins/roels-and-permissions";
+import EditAdminUser from "./pages/manage-admins/users/edit-user";
+import AddAdminUser from "./pages/manage-admins/users/add-user";
+import EditRoles from "./pages/manage-admins/roels-and-permissions/add-roles";
+import AddRoles from "./pages/manage-admins/roels-and-permissions/add-roles";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -161,6 +167,16 @@ function App() {
               path="/edit-customer/customer-sales-channel/:id"
               element={<EditCustomerSalesChannelPage />}
             />
+
+            {/* Admin management */}
+            <Route
+              path="/admin-users-management"
+              element={<AdminManagement />}
+            />
+            <Route path="/admin/add" element={<AddAdminUser />} />
+            <Route path="/admin/edit/:id" element={<EditAdminUser />} />
+            <Route path="/admin-roles/add" element={<AddRoles />} />
+            <Route path="/admin-roles/edit/:id" element={<EditRoles />} />
 
             <Route path="/pricing" element={<Pricing />} />
             <Route
