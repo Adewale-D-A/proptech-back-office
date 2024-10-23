@@ -1,3 +1,9 @@
+##### 23.10.2024
+
+> Add admin, roles and permissions complete API integration
+> Admin profile UI development
+> Admin password update API integration
+
 ##### 22.10.2024
 
 > Create admin, append roles and permissions UI Development

@@ -84,6 +84,7 @@ export default function AddEditUser({
               value: firstname,
               setValue: setFirstname,
               isShow: true,
+              readOnly: isEdit,
             },
             {
               id: "lastname",
@@ -94,6 +95,7 @@ export default function AddEditUser({
               value: lastname,
               setValue: setLastname,
               isShow: true,
+              readOnly: isEdit,
             },
             {
               id: "email-address",
@@ -104,6 +106,7 @@ export default function AddEditUser({
               value: email,
               setValue: setEmail,
               isShow: true,
+              readOnly: isEdit,
             },
           ].map((field) => (
             <TextInput
@@ -113,13 +116,18 @@ export default function AddEditUser({
               setValue={field?.setValue}
               id={field?.id}
               placeholder={field?.placeholder}
+              readonly={field?.readOnly}
             />
           ))}
           <Select isRequired={true} value={role} setValue={setRole} id="type">
             <option value="" disabled>
               Select role
             </option>
-            <option value="regular">Regular</option>
+            {data?.map((item) => (
+              <option key={item?.id} value={`${item?.id}`}>
+                {item?.name}
+              </option>
+            ))}
           </Select>
         </div>
       </div>

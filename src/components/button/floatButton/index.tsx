@@ -16,15 +16,15 @@ export default function FloatButton({
   clickHandler,
 }: Props) {
   return (
-    <div className=" fixed bottom-6 right-6">
+    <div className=" fixed bottom-6 right-6 ">
       <button
         type={type}
         disabled={disabled}
-        className={
+        className={`w-full flex justify-center p-3 px-12 rounded-full transition-all ${
           disabled
             ? "w-full flex justify-center bg-gray-400 p-3 px-6 rounded-full text-white"
-            : "w-full flex justify-center  bg-primary_green-500 text-white p-3 px-6 rounded-full hover:bg-transparent hover:border hover:border-primary_green-500 transition-all hover:text-primary_green-500"
-        }
+            : "bg-primary hover:bg-transparent hover:border hover:border-primary  hover:text-primary text-white"
+        }`}
         onClick={clickHandler}
       >
         {isLoading ? <LoaderIcon className="w-6 h-6 animate-spin" /> : label}

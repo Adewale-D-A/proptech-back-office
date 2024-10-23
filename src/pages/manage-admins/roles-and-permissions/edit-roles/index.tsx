@@ -1,18 +1,18 @@
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useLayoutEffect } from "react";
 
 import AddEditRoles from "../add-edit-roles";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../../../stores/hooks";
 import { openSnackbar } from "../../../../stores/appFunctionality/snackbar";
 import { updatePageProperties } from "../../../../stores/appFunctionality/pageProperties";
 import MenuIcon from "../../../../assets/icons/menu";
 import useGetRole from "../../../../services-hooks/useGetRole";
 import useAxios from "../../../../useHooks/useAxios";
-import { updateRolesList } from "../../../../stores/apiData/roles-lists";
+import { replaceRolesInList } from "../../../../stores/apiData/roles-lists";
 
 const breadCrumb = [
   {
-    url: "#",
+    url: "/admin-users-management",
     label: "Admin",
     icon: <MenuIcon />,
   },
@@ -20,6 +20,7 @@ const breadCrumb = [
 
 export default function EditRoles() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const axios = useAxios();
   const dispatch = useAppDispatch();
 
@@ -45,30 +46,20 @@ export default function EditRoles() {
   const updateRole = useCallback(
     async ({ name, permissions }: { name: string; permissions: string[] }) => {
       try {
-        const response = await axios.put(`/admin/roles${id}`, {
+        const response = await axios.put(`/admin/roles/${id}`, {
           name,
           permissions,
         });
-        console.log({ response });
-        dispatch(
-          updateRolesList({
-            id: 3,
-            name,
-            slug: "",
-            guard_name: "",
-            created_at: "",
-            updated_at: "",
-          })
-        );
+        const { role } = response?.data?.data;
+        dispatch(replaceRolesInList(role));
         dispatch(
           openSnackbar({
-            message: "Role name successfully updated",
+            message: "Role successfully updated",
             isError: false,
           })
         );
-      } catch (error: any) {
-      } finally {
-      }
+        navigate("/admin-users-management?redirect=roles");
+      } catch (error: any) {}
     },
     []
   );
@@ -84,6 +75,7 @@ export default function EditRoles() {
           <div className="w-full mt-16 flex flex-col gap-5">
             <AddEditRoles
               isEdit={true}
+              existingPermissions={data?.permissions}
               name={data?.name}
               roleSubmitHandler={updateRole}
             />

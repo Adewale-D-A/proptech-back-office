@@ -2,29 +2,38 @@ import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import FloatButton from "../../../components/button/floatButton";
 import TextInput from "../../../components/inputs/textInput";
 import useGetAllResources from "../../../services-hooks/useGetResources";
+import updatePermissions from "../../../utils/updatePermissions";
+import reformResourcePermissions from "../../../utils/reformPermissions";
+import { resource } from "../../../types/apiData/resources";
+import { useAppDispatch } from "../../../stores/hooks";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 
 export default function AddEditRoles({
   isEdit,
   name,
+  existingPermissions,
   roleSubmitHandler,
 }: {
   isEdit: boolean;
   name: string;
+  existingPermissions: resource[];
   roleSubmitHandler: Function;
 }) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction } =
     useGetAllResources({
       page: currentPage,
     });
+
   const [roleName, setRoleName] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [resourceStates, setResourceStates] = useState<
     {
-      sn: number;
       id: number;
       resource_name: string;
+      slug: string;
       permissions: {
         all: boolean;
         read: boolean;
@@ -40,73 +49,30 @@ export default function AddEditRoles({
     setRoleName(name || "");
   }, [name]);
 
+  // update resource states
+  useEffect(() => {
+    const reformed = reformResourcePermissions({
+      existingResource: existingPermissions || [],
+      allResources: data || [],
+    });
+    setResourceStates(reformed);
+  }, [data, existingPermissions]);
+
   const handleResourceChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>, index: number) => {
       const selectedValue = event.target.value;
-      setResourceStates((prev: any) => {
+      setResourceStates((prev) => {
         const cloned = [...prev];
         const item = cloned[index];
-        const permissions =
-          selectedValue === "all"
-            ? item?.permissions?.all
-              ? {
-                  all: false,
-                  read: false,
-                  create: false,
-                  update: false,
-                  delete: false,
-                }
-              : {
-                  all: true,
-                  read: true,
-                  create: true,
-                  update: true,
-                  delete: true,
-                }
-            : selectedValue === "read"
-            ? {
-                all: false,
-                read: !item?.permissions?.read,
-                create: item?.permissions?.create,
-                update: item?.permissions?.update,
-                delete: item?.permissions?.delete,
-              }
-            : selectedValue === "create"
-            ? {
-                all: false,
-                read: item?.permissions?.read,
-                create: !item?.permissions?.create,
-                update: item?.permissions?.update,
-                delete: item?.permissions?.delete,
-              }
-            : selectedValue === "update"
-            ? {
-                all: false,
-                read: item?.permissions?.read,
-                create: item?.permissions?.create,
-                update: !item?.permissions?.update,
-                delete: item?.permissions?.delete,
-              }
-            : selectedValue === "delete"
-            ? {
-                all: false,
-                read: item?.permissions?.read,
-                create: item?.permissions?.create,
-                update: item?.permissions?.update,
-                delete: !item?.permissions?.delete,
-              }
-            : {
-                all: false,
-                read: false,
-                create: false,
-                update: false,
-                delete: false,
-              };
+        const updatedPermission = updatePermissions({
+          value: selectedValue,
+          permission: item?.permissions,
+        });
         cloned.splice(index, 1, {
-          sn: item?.sn,
           id: item?.id,
           resource_name: item?.resource_name,
-          permissions: permissions,
+          slug: item?.slug,
+          permissions: updatedPermission,
         });
         return cloned;
       });
@@ -114,8 +80,24 @@ export default function AddEditRoles({
     []
   );
 
-  const handleRoleSubmit = useCallback(() => {
-    roleSubmitHandler({ name: roleName, permissions: resourceStates });
+  const handleRoleSubmit = useCallback(async () => {
+    setIsSubmitting(true);
+    if (roleName) {
+      await roleSubmitHandler({
+        name: roleName,
+        permissions: resourceStates
+          ?.filter((item) => item?.permissions?.all)
+          ?.map((item) => item?.slug),
+      });
+      setIsSubmitting(false);
+    } else {
+      dispatch(
+        openSnackbar({
+          message: "Role name is required",
+          isError: true,
+        })
+      );
+    }
   }, [roleName, resourceStates]);
 
   return (
@@ -221,13 +203,13 @@ export default function AddEditRoles({
             </tbody>
           </table>
         </div>
+        <FloatButton
+          isLoading={isSubmitting}
+          label={isEdit ? "Update" : "Save"}
+          type="button"
+          clickHandler={() => handleRoleSubmit()}
+        />
       </div>
-      <FloatButton
-        isLoading={isSubmitting}
-        label={isEdit ? "Update" : "Save"}
-        type="button"
-        clickHandler={() => handleRoleSubmit()}
-      />
     </>
   );
 }

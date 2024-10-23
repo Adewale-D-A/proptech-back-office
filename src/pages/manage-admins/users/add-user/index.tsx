@@ -5,16 +5,19 @@ import MenuIcon from "../../../../assets/icons/menu";
 import useAxios from "../../../../useHooks/useAxios";
 import AddEditAdminUser from "../add-edit-users";
 import { addAdminsToList } from "../../../../stores/apiData/admins-list";
+import { openSnackbar } from "../../../../stores/appFunctionality/snackbar";
+import { useNavigate } from "react-router-dom";
 
 const breadCrumb = [
   {
-    url: "#",
+    url: "/admin-users-management",
     label: "Admin",
     icon: <MenuIcon />,
   },
 ];
 export default function AddAdminUser() {
   const axios = useAxios();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   // update page props on component mount
@@ -40,13 +43,12 @@ export default function AddAdminUser() {
       email: string;
       role_id: string;
     }) => {
-      const response = await axios.post("/admin/create", {
+      await axios.post("/admin/create", {
         first_name: data?.first_name,
         last_name: data?.last_name,
         email: data?.email,
         role_id: data?.role_id,
       });
-      console.log({ response });
       dispatch(
         addAdminsToList({
           id: 2,
@@ -56,6 +58,13 @@ export default function AddAdminUser() {
           role_id: data?.role_id,
         })
       );
+      dispatch(
+        openSnackbar({
+          message: "Admin user successfully added",
+          isError: false,
+        })
+      );
+      navigate("/admin-users-management?redirect=admins");
     },
     []
   );

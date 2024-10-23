@@ -5,18 +5,20 @@ import MenuIcon from "../../../../assets/icons/menu";
 import useAxios from "../../../../useHooks/useAxios";
 import AddEditAdminUser from "../add-edit-users";
 import { replaceAdminsInList } from "../../../../stores/apiData/admins-list";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useGetAdmin from "../../../../services-hooks/useGetAdmin";
+import { openSnackbar } from "../../../../stores/appFunctionality/snackbar";
 
 const breadCrumb = [
   {
-    url: "#",
+    url: "/admin-users-management",
     label: "Admin",
     icon: <MenuIcon />,
   },
 ];
 export default function EditAdminUser() {
   const axios = useAxios();
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const dispatch = useAppDispatch();
@@ -48,21 +50,20 @@ export default function EditAdminUser() {
       role_id: string;
     }) => {
       const response = await axios.put(`/admin/admins/${id}`, {
-        first_name: data?.first_name,
-        last_name: data?.last_name,
-        email: data?.email,
+        // first_name: data?.first_name,
+        // last_name: data?.last_name,
+        // email: data?.email,
         role_id: data?.role_id,
       });
-      console.log({ response });
+      const { admin } = response?.data?.data;
+      dispatch(replaceAdminsInList(admin));
       dispatch(
-        replaceAdminsInList({
-          id: 2,
-          first_name: data?.first_name,
-          last_name: data?.last_name,
-          email: data?.email,
-          role_id: data?.role_id,
+        openSnackbar({
+          message: "Admin user successfully updated",
+          isError: false,
         })
       );
+      navigate("/admin-users-management?redirect=admins");
     },
     [id]
   );
@@ -73,7 +74,7 @@ export default function EditAdminUser() {
         <h2 className=" text-2xl mt-10 text-gray-700">Edit user</h2>
         <div>
           <AddEditAdminUser
-            isEdit={false}
+            isEdit={true}
             userInfo={{
               first_name: data?.first_name,
               last_name: data?.last_name,

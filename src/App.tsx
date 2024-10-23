@@ -46,11 +46,11 @@ import AdditionalServiceDetailsById from "./pages/additional-services/services-l
 import VendorServiceDetailsById from "./pages/additional-services/vendor-services/vendor-details";
 import NewBookings from "./pages/bookings/new-booking";
 import AdminManagement from "./pages/manage-admins";
-import RolesAndPermissions from "./pages/manage-admins/roels-and-permissions";
 import EditAdminUser from "./pages/manage-admins/users/edit-user";
 import AddAdminUser from "./pages/manage-admins/users/add-user";
-import EditRoles from "./pages/manage-admins/roels-and-permissions/add-roles";
-import AddRoles from "./pages/manage-admins/roels-and-permissions/add-roles";
+import EditRoles from "./pages/manage-admins/roles-and-permissions/edit-roles";
+import AddRoles from "./pages/manage-admins/roles-and-permissions/add-roles";
+import Profile from "./pages/profile";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -197,6 +197,7 @@ function App() {
 
             <Route path="/reports" element={<Reports />} />
             <Route path="/notification" element={<Notification />} />
+            <Route path="/user-profile" element={<Profile />} />
           </Route>
         </Routes>
       </BrowserRouter>

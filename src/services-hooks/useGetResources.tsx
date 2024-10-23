@@ -24,7 +24,7 @@ export default function useGetAllResources({
     status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.allAdminsLists.value);
+  } = useAppSelector((state) => state.resources.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 

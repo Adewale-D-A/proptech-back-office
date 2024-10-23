@@ -76,7 +76,7 @@ function MainLayout({ children }: layoutProps) {
                     </div> */}
                   </div>
                   <Link
-                    to="#"
+                    to="/user-profile"
                     className="flex items-center justify-center w-8 h-8 aspect-square rounded-full overflow-hidden"
                   >
                     <img

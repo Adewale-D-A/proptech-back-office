@@ -5,7 +5,7 @@ import { updatePageProperties } from "../../../stores/appFunctionality/pagePrope
 
 const breadCrumb = [
   {
-    url: "#",
+    url: "/admin-users-management",
     label: "Admin",
     icon: <MenuIcon />,
   },

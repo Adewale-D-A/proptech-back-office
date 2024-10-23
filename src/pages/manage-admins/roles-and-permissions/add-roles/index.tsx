@@ -1,72 +1,58 @@
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useLayoutEffect } from "react";
 
 import AddEditRoles from "../add-edit-roles";
-import { useParams } from "react-router-dom";
 import { useAppDispatch } from "../../../../stores/hooks";
 import { openSnackbar } from "../../../../stores/appFunctionality/snackbar";
 import { updatePageProperties } from "../../../../stores/appFunctionality/pageProperties";
 import MenuIcon from "../../../../assets/icons/menu";
-import useGetRole from "../../../../services-hooks/useGetRole";
 import useAxios from "../../../../useHooks/useAxios";
 import { addRolesToList } from "../../../../stores/apiData/roles-lists";
+import { useNavigate } from "react-router-dom";
 
 const breadCrumb = [
   {
-    url: "#",
+    url: "/admin-users-management",
     label: "Admin",
     icon: <MenuIcon />,
   },
 ];
 
 export default function AddRoles() {
-  const { id } = useParams();
   const axios = useAxios();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
-  const { data, isLoading, isFailed, setIsFailed, retryFunction } = useGetRole({
-    id,
-  });
 
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "Edit Roles",
-        pageDescription: "Edit user roles",
-        isLoading: isLoading,
-        failedToLoad: isFailed,
-        setFailedToLoad: setIsFailed,
-        retryRequest: retryFunction,
+        pageTitle: "Add Roles",
+        pageDescription: "Add user roles",
+        isLoading: false,
+        failedToLoad: false,
+        setFailedToLoad: false,
+        retryRequest: false,
       })
     );
-  }, [isLoading, isFailed]);
+  }, []);
 
-  const updateRole = useCallback(
+  const addRole = useCallback(
     async ({ name, permissions }: { name: string; permissions: string[] }) => {
       try {
-        const response = await axios.post(`/admin/roles${id}`, {
+        const response = await axios.post(`/admin/roles`, {
           name,
           permissions,
         });
-        console.log({ response });
-        dispatch(
-          addRolesToList({
-            id: 3,
-            name,
-            slug: "",
-            guard_name: "",
-            created_at: "",
-            updated_at: "",
-          })
-        );
-
+        const { role } = response?.data?.data;
+        dispatch(addRolesToList(role));
         dispatch(
           openSnackbar({
-            message: "Role name successfully updated",
+            message: "Role name successfully added",
             isError: false,
           })
         );
+        navigate("/admin-users-management?redirect=roles");
       } catch (error: any) {
       } finally {
       }
@@ -84,9 +70,10 @@ export default function AddRoles() {
 
           <div className="w-full mt-16 flex flex-col gap-5">
             <AddEditRoles
-              isEdit={true}
-              name={data?.name}
-              roleSubmitHandler={updateRole}
+              isEdit={false}
+              existingPermissions={[]}
+              name={""}
+              roleSubmitHandler={addRole}
             />
           </div>
         </div>
