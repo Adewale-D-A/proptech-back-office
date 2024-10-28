@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect } from "react";
 import { useAppDispatch } from "../../stores/hooks";
 import { updatePageProperties } from "../../stores/appFunctionality/pageProperties";
 import BookingTab from "../../components/tab/bookingTab";
@@ -10,6 +10,7 @@ import BookingsCalendar from "./bookings-calendar";
 import AllBookings from "./all-bookings";
 import Requests from "./requests";
 import { useSearchParams } from "react-router-dom";
+import AvailabilityOverview from "./availability-overview";
 
 const breadCrumb = [
   {
@@ -59,7 +60,7 @@ export default function Bookings() {
             },
             {
               id: 3,
-              data: <div></div>,
+              data: <AvailabilityOverview/>,
             },
             {
               id: 4,

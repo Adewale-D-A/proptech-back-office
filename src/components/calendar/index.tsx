@@ -1,22 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
+import daysMonths from "../../assets/days-months.json";
+import generateCalendarData from "../../utils/generateCalendarData";
+import ChevronLeftIcon from "../../assets/icons/chevron-left";
+import ChevronRightIcon from "../../assets/icons/chevron-right";
 // import NavigatePrevIcon from "../../assets/icons/navigate-prev";
 // import NavigateNextIcon from "../../assets/icons/navigate-next";
 
-const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+// const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const sampleBookedDates = [new Date(2024, 8, 23), new Date(2024, 8, 22)];
 
 export default function CalendarView({
@@ -50,42 +40,10 @@ export default function CalendarView({
   );
 
   const generateDays = useCallback(() => {
-    const daysArray = [];
-    const firstDayOfMonth = new Date(
-      currentDay?.getFullYear(),
-      currentDay?.getMonth(),
-      1
-    );
-    const weekdayOfFirstDay = firstDayOfMonth.getDay();
-
-    for (let day = 0; day < 42; day++) {
-      if (day === 0 && weekdayOfFirstDay === 0) {
-        firstDayOfMonth.setDate(firstDayOfMonth.getDate() - 7);
-      } else if (day === 0) {
-        firstDayOfMonth.setDate(
-          firstDayOfMonth.getDate() + (day - weekdayOfFirstDay)
-        );
-      } else {
-        firstDayOfMonth.setDate(firstDayOfMonth.getDate() + 1);
-      }
-
-      let calendarDay = {
-        currentMonth: firstDayOfMonth.getMonth() === currentDay.getMonth(),
-        date: new Date(firstDayOfMonth),
-        month: firstDayOfMonth.getMonth(),
-        day: firstDayOfMonth.getDate(),
-        selected: firstDayOfMonth.toDateString() === currentDay.toDateString(),
-        year: firstDayOfMonth.getFullYear(),
-        highlight: highlights.find(
-          (item) =>
-            `${item.getFullYear()}-${item?.getMonth()}-${item?.getDate()}` ===
-            `${firstDayOfMonth.getFullYear()}-${firstDayOfMonth?.getMonth()}-${firstDayOfMonth?.getDate()}`
-        )
-          ? true
-          : false,
-      };
-      daysArray.push(calendarDay);
-    }
+    const daysArray = generateCalendarData({
+      selectedDate: currentDay,
+      highlights,
+    });
     setCurrentDays(daysArray);
   }, [currentDay, highlights]);
 
@@ -97,33 +55,33 @@ export default function CalendarView({
     setCurrentDay(date ? date : dateValue);
   }, [date]);
 
-  // const prevMonthHandler = useCallback(() => {
-  //   setCurrentDay(
-  //     (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1)
-  //   );
-  // }, []);
+  const prevMonthHandler = useCallback(() => {
+    setCurrentDay(
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1)
+    );
+  }, []);
 
-  // const nextMonthHandler = useCallback(() => {
-  //   setCurrentDay(
-  //     (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1)
-  //   );
-  // }, []);
+  const nextMonthHandler = useCallback(() => {
+    setCurrentDay(
+      (prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1)
+    );
+  }, []);
 
   return (
     <div>
       <div className=" flex justify-center items-center gap-3">
-        {/* <button type="button" title="prev" onClick={() => prevMonthHandler()}>
-          <NavigatePrevIcon />
-        </button> */}
+        <button type="button" title="prev" onClick={() => prevMonthHandler()}>
+          <ChevronLeftIcon />
+        </button>
         <h1 className=" font-bold">
-          {months[currentDay.getMonth()]} {currentDay.getFullYear()}
+          {daysMonths?.months[currentDay.getMonth()]} {currentDay.getFullYear()}
         </h1>
-        {/* <button type="button" title="prev" onClick={() => nextMonthHandler()}>
-          <NavigateNextIcon />
-        </button> */}
+        <button type="button" title="prev" onClick={() => nextMonthHandler()}>
+          <ChevronRightIcon />
+        </button>
       </div>
       <div className=" grid grid-cols-7 gap-2  text-gray-500">
-        {weekdays.map((day) => (
+        {daysMonths?.days.map((day) => (
           <div key={day} className=" aspect-square p-1">
             <span>{day}</span>
           </div>

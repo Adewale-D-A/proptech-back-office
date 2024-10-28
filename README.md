@@ -46,7 +46,7 @@
 step 1:
 run **npm install** (to install all the dependencies)
 step 2:
-run **npm start** (start application on port :3000)
+run **npm start** (start application on port:3000)
 
 > mime types documentation : <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types">MIME TYPES</a> > <a href="https://www.figma.com/design/foJk9S0rCJImkVXY0EgxId/proptech?node-id=4400-64&node-type=&t=ZI2UUvFyHO0J3pWZ-0">FIGMA File</a>
 > <a href="https://www.figma.com/design/sJXTHB9vabVu6hd3TXH9uk/99-APPs?node-id=100-24433&node-type=canvas&t=jbtAxyNdljLvbX97-0" targt="_blank">MISSING SCREEN UI</a>

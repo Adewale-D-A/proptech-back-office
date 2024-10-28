@@ -1,3 +1,7 @@
+##### 28.10.2024
+
+> Booking overview table logic development
+
 ##### 23.10.2024
 
 > Add admin, roles and permissions complete API integration
