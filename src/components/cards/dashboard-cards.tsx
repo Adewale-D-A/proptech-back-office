@@ -18,7 +18,7 @@ export default function DashboardCard({
   urlLabel?: string;
 }) {
   return (
-    <div className="flex flex-col gap-8 items-stretch justify-between shadow-md border p-4 rounded-xl">
+    <div className="flex flex-col gap-3 md:gap-8 items-stretch justify-between shadow-md border p-4 rounded-xl">
       <div className={`${theme} p-3 w-fit rounded-full`}>{icon}</div>
       <div className=" flex flex-col gap-3">
         <p className=" text-gray-500">{label}</p>

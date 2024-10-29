@@ -82,7 +82,7 @@ export default function DashboardOverview() {
       <div className="w-full max-w-screen-xl flex flex-col gap-16">
         <h2 className=" text-2xl font-semibold">Services Breakdown</h2>
         {/* sales breakdown cards */}
-        <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {[
             {
               id: 1,
@@ -131,9 +131,9 @@ export default function DashboardOverview() {
         {/* sales analytics */}
 
         <div className="w-full rounded-lg border">
-          <div className=" w-full border-b p-4 flex items-center justify-between">
+          <div className=" w-full border-b p-4 flex items-start gap-3 md:items-center justify-between flex-col md:flex-row ">
             <h2 className="text-lg font-semibold">Sales Analytics</h2>
-            <div className=" flex items-center gap-3 text-sm text-gray-500">
+            <div className=" flex items-center flex-col md:flex-row gap-3 text-sm text-gray-500">
               <Filter actionHandler={handleSalesFiltering} />
               <Sort id={"sales-analytics"} label={"Sort by:"} />
             </div>
@@ -202,7 +202,7 @@ export default function DashboardOverview() {
           </div>
 
           <div className=" w-full rounded-lg border">
-            <div className=" w-full border-b p-4 flex items-center justify-between">
+            <div className=" w-full border-b p-4 flex flex-start flex-col md:flex-row gap-3 md:items-center justify-between">
               <h2 className="text-lg font-semibold">Sales Channel</h2>
               <div className=" flex items-center gap-3 text-sm text-gray-500">
                 <Filter actionHandler={handleSalesChannelFiltering} />

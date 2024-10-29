@@ -2,13 +2,25 @@ export default function Switch({
   id,
   value,
   setValue,
+  size = "md",
 }: {
   id: string;
   value: boolean;
   setValue: Function;
+  size?: "md" | "sm";
 }) {
   return (
-    <label className="relative inline-block w-[60px] h-[34px]">
+    <label
+      className={`relative inline-block ${
+        size === "md" ? "w-[60px] h-[34px]" : "w-[30px] h-[17px]"
+      }`}
+      style={
+        {
+          "--size": size === "md" ? "26px" : "13px",
+          "--position": size === "md" ? "4px" : "2px",
+        } as any
+      }
+    >
       <input
         type="checkbox"
         onChange={() => setValue(!value)}

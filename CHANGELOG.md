@@ -1,3 +1,8 @@
+##### 29.10.2024
+
+> Notification dropdown UI development
+> Table data mobile reponsiveness updates (Top apartment and Addditional service done so far)
+
 ##### 28.10.2024
 
 > Booking overview table logic development

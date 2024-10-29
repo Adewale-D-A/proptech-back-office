@@ -42,7 +42,7 @@ export default function AdditionalServicesList() {
         <div className="w-full max-w-screen-xl flex flex-col gap-10">
           <div className=" w-full flex justify-between">
             <h2 className="text-xl font-semibold"> All Service List</h2>
-            <div className=" flex items-center gap-4">
+            <div className=" flex items-center flex-col md:flex-row gap-4">
               <ExportSelect id="customers" />
               <LoadingButton
                 clickHandler={() => setOpenNewRequest(true)}

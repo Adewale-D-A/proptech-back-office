@@ -7,7 +7,7 @@ import Loader from "../pages/loader";
 import MetaTags from "../components/metaTags";
 import NavigationMenu from "./navigationMenu";
 import MenuIcon from "../assets/icons/menu";
-import NotificationIcon from "../assets/icons/notification";
+import NotificationPopover from "../components/notifications/popover";
 
 interface layoutProps {
   children: React.ReactNode;
@@ -37,13 +37,17 @@ function MainLayout({ children }: layoutProps) {
   return (
     <>
       <MetaTags title={pageTitle} description={pageDescription} />
-      <main className=" flex w-full h-screen overflow-hidden">
-        <nav className="z-10 ">
+      <main className=" flex w-full dark:bg-dark bg-white items-stretch">
+        <nav className=" z-20 fixed top-0">
           <NavigationMenu />
         </nav>
-        <div className=" w-full h-screen overflow-y-auto ">
-          <div className="w-full webkit-sticky top-0 z-[8] py-5 bg-white h-16 px-5 md:px-10">
-            <div className="flex items-center gap-2 text-primary">
+        <div
+          className={`${
+            fullView ? " md:ml-[260px]" : " md:ml-20"
+          } w-full transition-all`}
+        >
+          <div className="w-full webkit-sticky top-0  bg-white dark:bg-dark-500 z-10 py-5 px-5 md:px-10 flex items-center gap-2 text-primary">
+            <div className="w-full flex items-center gap-2 text-primary">
               <button
                 type="button"
                 title="toggle-bar"
@@ -70,7 +74,7 @@ function MainLayout({ children }: layoutProps) {
                 {/* <h6 className=" text-lg text-gray-700 w-full"> {pageTitle}</h6> */}
                 <div className="flex items-center gap-5 w-full justify-end">
                   <div className=" relative group w-full flex justify-end cursor-pointer">
-                    <NotificationIcon />
+                    <NotificationPopover />
                     {/* <div className=" group-hover:flex absolute top-0 right-0 w-full hidden pt-10 justify-end">
                       <NotificationsMenu />
                     </div> */}
@@ -89,7 +93,7 @@ function MainLayout({ children }: layoutProps) {
               </div>
             </div>
           </div>
-          <div className=" w-full overflow-y-auto overflow-x-hidden pb-36 h-[calc(100vh-4rem)] px-5 md:px-10">
+          <div className=" w-full min-h-screen">
             <div className={`w-full ${isLoading ? "block" : "hidden"}`}>
               <Loader
                 failed={failedToLoad}
@@ -102,10 +106,18 @@ function MainLayout({ children }: layoutProps) {
                 isLoading ? "hidden" : "flex"
               }`}
             >
-              <div className="max-w-screen-2xl w-full h-full">{children}</div>
+              <div className="max-w-screen-2xl w-full h-full px-5 md-px-10">
+                {children}
+              </div>
             </div>
           </div>
         </div>
+        {fullView && (
+          <div
+            className=" fixed top-0 left-0 w-full h-screen z-[18] block md:hidden backgrop-bg-filter"
+            onClick={() => toggleMenu()}
+          ></div>
+        )}
       </main>
     </>
   );
