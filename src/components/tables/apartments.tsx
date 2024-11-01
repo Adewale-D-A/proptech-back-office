@@ -38,6 +38,7 @@ export default function ApartmentTable({
   const [currentPage, setCurrentPage] = useState(1);
   const [openReservation, setOpenReservation] = useState(false);
   const [openAvailability, setOpenAvailability] = useState(false);
+  const [availabilityResponset, setAvailabilityResponse] = useState();
 
   const { data, pagination, isLoading } = useGetTopApartmentLists({
     page: currentPage,
@@ -190,7 +191,9 @@ export default function ApartmentTable({
         className=" max-w-md"
       >
         <div className="w-full">
-          <CheckAvailability />
+          <CheckAvailability
+            setAvailabilityResponse={setAvailabilityResponse}
+          />
         </div>
       </ModalTemplate>
     </>

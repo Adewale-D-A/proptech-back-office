@@ -1,3 +1,7 @@
+##### 01.11.2024
+
+> Split stay and availbility option ui development
+
 ##### 29.10.2024
 
 > Notification dropdown UI development

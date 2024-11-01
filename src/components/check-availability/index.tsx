@@ -3,13 +3,15 @@ import LoadingButton from "../button";
 import DateInput from "../inputs/dateInput";
 import Select from "../inputs/select";
 import AddressAutocompleteInput from "../inputs/addressAutocompleteInout";
-
+import availabilityOptionDummyData from "../../assets/temp-api-mockup-data/availabilityOptionMockup.json";
 export default function CheckAvailability({
   variant = 1,
   className,
+  setAvailabilityResponse,
 }: {
   variant?: number;
   className?: string;
+  setAvailabilityResponse: Function;
 }) {
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
@@ -24,6 +26,7 @@ export default function CheckAvailability({
     e.preventDefault();
     setCalculating(true);
     try {
+      setAvailabilityResponse(availabilityOptionDummyData);
     } catch (error) {
     } finally {
       setCalculating(false);
@@ -31,7 +34,7 @@ export default function CheckAvailability({
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col gap-10">
       <form className=" flex flex-col gap-5" onSubmit={checkAvailability}>
         <div className={className || " w-full grid grid-cols-1 gap-5"}>
           {variant === 3 && (

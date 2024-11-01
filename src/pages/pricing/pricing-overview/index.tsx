@@ -6,6 +6,7 @@ import CheckAvailability from "../../../components/check-availability";
 
 export default function PricingOverview() {
   const [selectedOption, setSelectedOption] = useState("");
+  const [availabilityResponset, setAvailabilityResponse] = useState();
 
   return (
     <div className="w-full my-10 flex flex-col gap-8">
@@ -32,6 +33,7 @@ export default function PricingOverview() {
           <CheckAvailability
             variant={3}
             className=" w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3"
+            setAvailabilityResponse={setAvailabilityResponse}
           />
         </div>
       </div>

@@ -13,11 +13,16 @@ import BookingsListTable from "../../../components/tables/bookingsLists";
 import BarChart from "../../../components/charts/bar-chart";
 import RoomOccupancyListTable from "../../../components/tables/roomOccupancy";
 import ForecastDash from "../../../components/forecasting-dash";
+import CalculatedAvailabilityOptions from "../../../components/check-availability/calculated-option";
+import { useState } from "react";
+import { availabilityOptions } from "../../../types/apiData/availabilityOptions";
 
 export default function BookingsOverview() {
+  const [availabilityResponse, setAvailabilityResponse] =
+    useState<availabilityOptions>();
   return (
     <div className=" w-full flex flex-col gap-5 my-5">
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
         <div className=" flex flex-col gap-5">
           <div className=" rounded-md border">
             <h4 className="text-lg font-semibold border-b p-3 flex items-center gap-2">
@@ -66,9 +71,13 @@ export default function BookingsOverview() {
               <CalendarIcon /> <span>Check Availability</span>{" "}
             </h4>
             <div className=" p-3">
-              <CheckAvailability variant={2} />
+              <CheckAvailability
+                variant={2}
+                setAvailabilityResponse={setAvailabilityResponse}
+              />
             </div>
           </div>
+          {availabilityResponse?.options && <CalculatedAvailabilityOptions />}
         </div>
         <div className=" w-full flex flex-col gap-4 border rounded-md">
           {/* Bookings Calendar */}

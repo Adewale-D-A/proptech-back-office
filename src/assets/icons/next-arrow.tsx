@@ -4,7 +4,7 @@ export default function NextArrowIcon({ className }: { className?: string }) {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      strokeWidth={1.5}
+      strokeWidth={3}
       stroke="currentColor"
       className={className ? className : "w-6 h-6"}
     >
