@@ -1,3 +1,8 @@
+##### 10.11.2024
+
+> Coupon assign customer search logic and search multi-select
+> Coupon CRUD operations
+
 ##### 01.11.2024
 
 > Split stay and availbility option ui development

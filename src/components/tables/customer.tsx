@@ -6,6 +6,7 @@ import Filter from "../filterAndSort/filter";
 import Sort from "../filterAndSort/sort";
 import useGetAllCustomersLists from "../../services-hooks/useGetAllCustomersList";
 import TableSearch from "../inputs/search/table-search";
+import MobileCustomersTable from "./mobile/customers";
 
 export default function CustomersListTable({ header }: { header: string[] }) {
   const [filterDates, setFilterDates] = useState<{
@@ -39,74 +40,79 @@ export default function CustomersListTable({ header }: { header: string[] }) {
             placeholder="First name, last name, email, phone number..."
           />
         </div>
-        <div className=" flex items-center gap-2">
+        <div className=" flex items-center gap-2 flex-col md:flex-row">
           <Filter actionHandler={handleCustomersFiltering} />
           <Sort setSort={setSort} id="sort-by" label="Sort by" />
         </div>
       </div>
-      {data && data.length > 0 ? (
-        <table className=" w-full text-xs  overflow-x-auto">
-          <thead className="">
-            <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-              {header.map((head) => (
-                <th key={head}>{head}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="">
-            {data.map((request) => {
-              return (
-                <tr key={request?.id} className=" border-b">
-                  <td>
-                    <span className=" rounded-full p-2 border border-primary">
-                      {request?.id}
-                    </span>
-                  </td>
-                  <td>{request?.first_name}</td>
-                  <td>{request?.last_name}</td>
-                  <td>{request?.phone}</td>
-                  <td>***</td>
-                  <td>***</td>
-                  <td className=" group relative">
-                    <span className=" p-2 text-lg">...</span>
-                    <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                      <button
-                        //   onClick={() => {
-                        //     setSelectedId(request?.id);
-                        //     setOpenBookingDetailSummary(true);
-                        //   }}
-                        className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                      >
-                        View Details
-                      </button>
-                      <Link
-                        to={`#`}
-                        className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                      >
-                        Send Message
-                      </Link>
-                      <Link
-                        to={`#`}
-                        className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                      >
-                        Generate Invoice
-                      </Link>
-                      <Link
-                        to={`/edit-customer/customer-details/${request?.id}`}
-                        className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                      >
-                        Edit Customer
-                      </Link>
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      ) : (
-        <NoResult />
-      )}
+      <div className="hidden md:block px-5">
+        {data && data.length > 0 ? (
+          <table className=" w-full text-xs  overflow-x-auto">
+            <thead className="">
+              <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+                {header.map((head) => (
+                  <th key={head}>{head}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="">
+              {data.map((request) => {
+                return (
+                  <tr key={request?.id} className=" border-b">
+                    <td>
+                      <span className=" rounded-full p-2 border border-primary">
+                        {request?.id}
+                      </span>
+                    </td>
+                    <td>{request?.first_name}</td>
+                    <td>{request?.last_name}</td>
+                    <td>{request?.phone}</td>
+                    <td>***</td>
+                    <td>***</td>
+                    <td className=" group relative">
+                      <span className=" p-2 text-lg">...</span>
+                      <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
+                        <button
+                          //   onClick={() => {
+                          //     setSelectedId(request?.id);
+                          //     setOpenBookingDetailSummary(true);
+                          //   }}
+                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          View Details
+                        </button>
+                        <Link
+                          to={`#`}
+                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Send Message
+                        </Link>
+                        <Link
+                          to={`#`}
+                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Generate Invoice
+                        </Link>
+                        <Link
+                          to={`/edit-customer/customer-details/${request?.id}`}
+                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit Customer
+                        </Link>
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <NoResult />
+        )}
+      </div>
+      <div className="w-full block md:hidden">
+        <MobileCustomersTable data={data} />
+      </div>
       <Pagination
         pagination={pagination}
         setCurrentPage={setCurrentPage}

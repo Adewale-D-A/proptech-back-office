@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useAppDispatch } from "../../../stores/hooks";
 import { useLayoutEffect } from "react";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import AllBookingsListTable from "../../../components/tables/allBookingsLists";
 import PercentageBadgeIcon from "../../../assets/icons/percentage-badge";
 import CouponList from "../../../components/tables/couponsLists";
 
@@ -41,12 +40,12 @@ export default function Coupons() {
         <div>
           <CouponList
             header={[
-              "Coupon Name",
+              "Coupon Code",
               "Coupon Type",
               "Validity Dates",
-              "Rooms",
-              "Min Booking Total",
+              "Number of Apartments",
               "Number of Users",
+              "Validity",
               "Action",
             ]}
           />

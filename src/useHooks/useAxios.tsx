@@ -17,13 +17,15 @@ const useAxios = (disableErrorPrompt?: boolean) => {
   const { access_token } = useAppSelector(
     (state) => state.userAuthentication.value
   );
+  let token = access_token;
 
   useEffect(() => {
     const requestIntercept = axiosInstance.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${access_token}`;
+          config.headers["Authorization"] = `Bearer ${token}`;
         }
+        console.log({ token });
         return config;
       },
       (error) => Promise.reject(error)
@@ -54,13 +56,14 @@ const useAxios = (disableErrorPrompt?: boolean) => {
           const { new_access_token } = await refreshToken({
             old_token: access_token,
           });
+          token = new_access_token;
           dispatch(
             updateAuthentication({
               access_token: new_access_token,
               refresh_token: "",
             })
           );
-          prevRequest.headers["Authorization"] = `Bearer ${new_access_token}`;
+          prevRequest.headers["Authorization"] = `Bearer ${token}`;
           return axiosInstance(prevRequest);
         } else if (hadUnauthenticated) {
           sessionStorage.removeItem(`${process.env.REACT_APP_SESSION_KEY}`);
@@ -83,7 +86,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
       axiosInstance.interceptors.request.eject(requestIntercept);
       axiosInstance.interceptors.response.eject(responseIntercept);
     };
-  }, [access_token]);
+  }, []);
   return axiosInstance;
 };
 

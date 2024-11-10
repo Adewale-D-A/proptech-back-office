@@ -39,6 +39,7 @@ export default function NotificationPopover() {
           <div className=" flex flex-col max-h-60 overflow-y-scroll">
             {notificationDataset.map((item) => (
               <NotificationItem
+                key={item?.id}
                 url={"#"}
                 image={item?.image}
                 name={item?.name}
