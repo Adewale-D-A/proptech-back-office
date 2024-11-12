@@ -13,7 +13,6 @@ export default function TableSearch({
   const submitHandler = useCallback(
     (e: SyntheticEvent) => {
       e.preventDefault();
-      console.log(keywords);
       setValue(keywords);
     },
     [keywords]

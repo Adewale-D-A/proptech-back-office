@@ -8,6 +8,7 @@ import {
 } from "../stores/authUser/auth";
 import { openSnackbar } from "../stores/appFunctionality/snackbar";
 import refreshToken from "../services-hooks/base/refreshToken";
+import extractErrMssg from "../utils/extractErrMssg";
 
 //axios instace interceptor for access token integration and refresh tokens
 const useAxios = (disableErrorPrompt?: boolean) => {
@@ -35,8 +36,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
       async (error) => {
         const prevRequest = error?.config;
         // ----log error message using snackbar---
-        const errorMessage =
-          error?.response?.data?.message || error?.response?.data?.status;
+        const errMssg = extractErrMssg(error?.response?.data);
         // ----log error message using snackbar---
         // if (
         //   error?.response?.status === 422 ||
@@ -59,21 +59,21 @@ const useAxios = (disableErrorPrompt?: boolean) => {
           token = new_access_token;
           dispatch(
             updateAuthentication({
-              access_token: new_access_token,
+              access_token: new_access_token || access_token,
               refresh_token: "",
             })
           );
           prevRequest.headers["Authorization"] = `Bearer ${token}`;
           return axiosInstance(prevRequest);
         } else if (hadUnauthenticated) {
-          sessionStorage.removeItem(`${process.env.REACT_APP_SESSION_KEY}`);
-          dispatch(clearAuthentication());
-          navigate(`/?redirect=${location?.pathname}`);
+          // sessionStorage.removeItem(`${process.env.REACT_APP_SESSION_KEY}`);
+          // dispatch(clearAuthentication());
+          // navigate(`/?redirect=${location?.pathname}`);
           return Promise.reject(error);
         } else if (!disableErrorPrompt) {
           dispatch(
             openSnackbar({
-              message: errorMessage || "Please try again later",
+              message: errMssg || "Please try again later",
               isError: true,
             })
           );
@@ -86,7 +86,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
       axiosInstance.interceptors.request.eject(requestIntercept);
       axiosInstance.interceptors.response.eject(responseIntercept);
     };
-  }, []);
+  }, [access_token]);
   return axiosInstance;
 };
 

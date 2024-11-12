@@ -162,7 +162,7 @@ export default function PlansAndPromotionsTab({
         title="Add New Coupon"
         className=" max-w-md"
       >
-        <AddNewCoupon setOpen={setOpenNewPrice} />
+        <AddNewCoupon setOpen={setOpenNewCoupon} />
       </ModalTemplate>
     </>
   );

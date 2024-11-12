@@ -13,11 +13,13 @@ export default function useGetAllApartmentLists({
   start_date,
   end_date,
   sort = "desc",
+  search = "",
 }: {
   page?: number;
   start_date?: string;
   end_date?: string;
   sort?: "desc" | "asc" | string;
+  search?: string;
 }) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
@@ -38,14 +40,23 @@ export default function useGetAllApartmentLists({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage && !(start_date && end_date) && !(sort === "asc")) {
+      if (
+        foundPage &&
+        !(start_date && end_date) &&
+        !(sort === "asc") &&
+        !search
+      ) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateApartmentList({ data: foundPage?.data }));
       } else {
         const response = await axios.post(
           start_date && end_date
-            ? `/admin/shortlet/get-all?sort=${sort}&limit=20&page=${page}&start_date=${start_date}&end_date=${end_date}`
-            : `/admin/shortlet/get-all?sort=${sort}&limit=20&page=${page}`
+            ? `/admin/shortlet/get-all?sort=${sort}&limit=20&page=${page}&start_date=${start_date}&end_date=${end_date}&search=${
+                search || ""
+              }`
+            : `/admin/shortlet/get-all?sort=${sort}&limit=20&page=${page}&search=${
+                search || ""
+              }`
         );
         const { shortlet } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
@@ -72,11 +83,11 @@ export default function useGetAllApartmentLists({
     } catch (error) {
       setIsFailed(true);
     }
-  }, [page, start_date, end_date, sort]);
+  }, [page, start_date, end_date, sort, search]);
 
   useEffect(() => {
     getAllApartmentList();
-  }, [page, start_date, end_date, sort]);
+  }, [page, start_date, end_date, sort, search]);
 
   return {
     data,

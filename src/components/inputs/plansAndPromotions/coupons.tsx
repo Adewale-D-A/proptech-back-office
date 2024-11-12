@@ -11,10 +11,7 @@ import Search from "../search";
 import DateInput from "../dateInput";
 import useAxios from "../../../useHooks/useAxios";
 import useGetCoupon from "../../../services-hooks/useGetCoupon";
-import {
-  openSnackbar,
-  snackBar,
-} from "../../../stores/appFunctionality/snackbar";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 
 export default function AddNewCoupon({
   setOpen,
@@ -33,9 +30,13 @@ export default function AddNewCoupon({
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [apartmentApplicability, setApartmentApplicability] = useState("");
-  const [assignedApartments, setAssignedApartments] = useState([]);
+  const [assignedApartments, setAssignedApartments] = useState<
+    { id: string; name: string }[]
+  >([]);
   const [userApplicability, setUserApplicability] = useState("");
-  const [assignCustomers, setAssignedCustomers] = useState("");
+  const [assignCustomers, setAssignedCustomers] = useState<
+    { id: string; name: string }[]
+  >([]);
   const [type, setType] = useState("");
   const [validity, setValidity] = useState("");
   const [isReusable, setIsReusable] = useState("");
@@ -89,7 +90,8 @@ export default function AddNewCoupon({
   const createCoupon = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
-      const payload = {
+      setIsSubmitting(true);
+      let payload = {
         code: code,
         start_date: startDate,
         end_date: endDate,
@@ -98,26 +100,38 @@ export default function AddNewCoupon({
         type: type, //percentage or price
         validity: validity, //temporary or permanent
         is_reusable: isReusable, // yes or no
-        applicable_shortlets: assignedApartments, // required if applicable_to_shortlet is specific
-        applicable_users: assignCustomers, //required if applicable_to_user is specific
+        applicable_shortlets: assignedApartments?.map((item) => item?.id), // required if applicable_to_shortlet is specific
+        applicable_users: assignCustomers?.map((item) => item?.id), //required if applicable_to_user is specific
         price: price, //required if type is price
         percentage: percentage, //required if type is percentage
         minimum_amount: minAmount,
         maximum_amount: maxAmount,
       };
 
+      // conditionally filter payload based on the coupon parameters
+      const newPayload = Object.fromEntries(
+        Object.entries(payload).filter(([key]) =>
+          (key === "applicable_shortlets" &&
+            apartmentApplicability === "all") ||
+          (key === "applicable_users" && userApplicability === "all") ||
+          (key === "price" && type === "percentage") ||
+          (key === "percentage" && type === "price")
+            ? false
+            : true
+        )
+      );
+
       try {
         let response;
         if (id) {
-          response = await axios.put(`admin/coupon/${id}`, payload);
+          response = await axios.put(`/admin/coupon/${id}`, newPayload);
           const dataset = response?.data?.data;
           dispatch(replaceCouponsInList(dataset));
         } else {
-          response = await axios.post("/admin/coupon", payload);
+          response = await axios.post("/admin/coupon", newPayload);
           const dataset = response?.data?.data;
           dispatch(addCouponsToList(dataset));
         }
-        console.log({ response });
         setOpen(false);
         dispatch(
           openSnackbar({
@@ -214,6 +228,7 @@ export default function AddNewCoupon({
             placeholder="Assign to apartments"
             id="search-apartments"
             multipleSelect={true}
+            updatelist={setAssignedApartments}
           />
         )}
         {/* user selection */}
@@ -235,6 +250,7 @@ export default function AddNewCoupon({
             componentId="customer"
             placeholder="Assign to customer"
             id="search-customer"
+            updatelist={setAssignedCustomers}
           />
         )}
         <div className=" grid grid-cols-1  md:grid-cols-2 gap-3">

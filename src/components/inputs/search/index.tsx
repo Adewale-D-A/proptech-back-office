@@ -6,10 +6,10 @@ import {
   ComboboxOptions,
 } from "@headlessui/react";
 import SearchIcon from "../../../assets/icons/search";
-import apartments from "../../../assets/temp-api-mockup-data/apartments.json";
 import CancelIcon from "../../../assets/icons/cancel";
 import useGetAllCustomersLists from "../../../services-hooks/useGetAllCustomersList";
 import LoaderIcon from "../../../assets/icons/loader";
+import useGetAllApartmentLists from "../../../services-hooks/useGetAllApartmentLists";
 
 export default function Search({
   id,
@@ -17,15 +17,24 @@ export default function Search({
   componentId,
   setValue,
   multipleSelect,
+  updatelist,
 }: {
   id: string;
   placeholder: string;
   componentId?: "customer" | "apartment";
   setValue?: Function;
   multipleSelect?: boolean;
+  updatelist?: (item: { id: string; name: string }[]) => void;
 }) {
+  // states
   const [keywords, setKeywords] = useState("");
   const [filteredResult, setFilteredResult] = useState<any>([]);
+
+  const [selectedList, setSelectedList] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const [selected, setSelected] = useState(null);
+
   // customers list
   const {
     data: customers,
@@ -38,40 +47,29 @@ export default function Search({
     page: 1,
     search: componentId === "customer" ? keywords : "",
   });
+  // apartment lists
+  const {
+    data: apartments,
+    isLoading: apt_loading,
+    isFailed: apt_failed,
+    setIsFailed: apt_setFailed,
+    retryFunction: apt_retry,
+    pagination: apt_pagination,
+  } = useGetAllApartmentLists({
+    page: 1,
+    search: componentId === "apartment" ? keywords : "",
+  });
 
   // populate fultered list on data search
   useEffect(() => {
-    setFilteredResult(
-      componentId === "customer" ? customers : apartments?.data
-    );
+    setFilteredResult(componentId === "customer" ? customers : apartments);
   }, [componentId, customers]);
 
-  const [selectedList, setSelectedList] = useState<
-    { id: string; name: string }[]
-  >([]);
-  const [selected, setSelected] = useState(null);
-
-  const handleSearch = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      setKeywords(value);
-      if (componentId === "apartment") {
-        const result = apartments.data.filter(
-          (apartment) =>
-            apartment?.name?.toLowerCase()?.includes(value.toLowerCase()) ||
-            apartment?.location?.toLowerCase()?.includes(value.toLowerCase())
-        );
-        setFilteredResult(value === "" ? apartments?.data : result);
-      }
-    },
-    [customers, apartments, componentId]
-  );
-
-  const addToList = useCallback((item: { id: string; name: string }) => {
-    if (item?.id) {
-      setSelectedList((prev) => [...prev, item]);
+  useEffect(() => {
+    if (updatelist) {
+      updatelist(selectedList);
     }
-  }, []);
+  }, [selectedList]);
 
   const onSelected = useCallback((item: any) => {
     setSelected(item);
@@ -90,6 +88,11 @@ export default function Search({
     }
   }, []);
 
+  const addToList = useCallback((item: { id: string; name: string }) => {
+    if (item?.id) {
+      setSelectedList((prev) => [...prev, item]);
+    }
+  }, []);
   const removeFromList = useCallback((id: string) => {
     setSelectedList((prev) => {
       return prev.filter((item) => item?.id !== id);
@@ -121,7 +124,7 @@ export default function Search({
         htmlFor={id}
         className=" p-1 flex items-center gap-2 border rounded-lg text-sm"
       >
-        {isLoading ? (
+        {isLoading || apt_loading ? (
           <LoaderIcon className=" animate-spin size-6" />
         ) : (
           <SearchIcon />
@@ -130,7 +133,7 @@ export default function Search({
           id={id}
           aria-label="Assignee"
           displayValue={() => keywords}
-          onChange={(event) => handleSearch(event)}
+          onChange={(event) => setKeywords(event.target.value)}
           placeholder={placeholder}
           className=" focus:outline-none p-2 w-full"
         />

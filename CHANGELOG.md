@@ -1,3 +1,7 @@
+##### 11.11.2024
+
+> Coupon creation based on user options logic definition
+
 ##### 10.11.2024
 
 > Coupon assign customer search logic and search multi-select
