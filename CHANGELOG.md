@@ -1,5 +1,6 @@
 ##### 12.11.2024
 
+> Package and offer CRUD enpoint integration
 > Edit coupon UI update
 
 ##### 11.11.2024

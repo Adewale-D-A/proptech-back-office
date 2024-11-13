@@ -1,5 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import { SyntheticEvent, useCallback, useLayoutEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import PercentageBadgeIcon from "../../../../assets/icons/percentage-badge";
 import { useAppDispatch } from "../../../../stores/hooks";
 import { updatePageProperties } from "../../../../stores/appFunctionality/pageProperties";
@@ -11,9 +17,14 @@ import TextInput from "../../../../components/inputs/textInput";
 import FileInput from "../../../../components/inputs/fileInput";
 import CheckboxInput from "../../../../components/inputs/checkbox/checkbox";
 import Search from "../../../../components/inputs/search";
-import Switch from "../../../../components/switch";
-import { addPackageAndOfferToList } from "../../../../stores/apiData/packages-and-offers";
+// import Switch from "../../../../components/switch";
+import {
+  addPackageAndOfferToList,
+  replacePackageAndOfferInList,
+} from "../../../../stores/apiData/packages-and-offers";
 import { openSnackbar } from "../../../../stores/appFunctionality/snackbar";
+import useAxiosMultipart from "../../../../useHooks/useAxiosMultipart";
+import useGetOffer from "../../../../services-hooks/userGetOffer";
 
 const breadCrumb = [
   {
@@ -28,8 +39,17 @@ const breadCrumb = [
   },
 ];
 export default function AddNewPackageAndOffer() {
+  const { id } = useParams();
+  const axios = useAxiosMultipart();
   const naviagte = useNavigate();
   const dispatch = useAppDispatch();
+
+  const { data, isLoading, isFailed, setIsFailed, retryFunction } = useGetOffer(
+    {
+      id,
+    }
+  );
+
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
@@ -46,6 +66,8 @@ export default function AddNewPackageAndOffer() {
   }, []);
 
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [shortDescription, setShortDescription] = useState("");
   const [file, setFile] = useState<{
     name: string;
     size: number;
@@ -53,45 +75,117 @@ export default function AddNewPackageAndOffer() {
   }>({} as any);
   const [validityStartDate, setValidityStartDate] = useState("");
   const [validityEndDate, setValidityEndDate] = useState("");
-  const [excludeDates, setExcludeDate] = useState(false);
+  // const [excludeDates, setExcludeDate] = useState(false);
   const [isAllRoomss, setIsAllRooms] = useState(false);
+  const [selectApartments, setSelectedApartments] = useState<
+    { id: string; name: string }[]
+  >([]);
   const [minNights, setMinNights] = useState("");
   const [maxNights, setMaxNights] = useState("");
-  const [cost, setCost] = useState("");
-  const [taxRate, setTaxRate] = useState("");
+  // const [taxRate, setTaxRate] = useState("");
   const [type, setType] = useState("");
-  const [isPerPerson, setIsPerPerson] = useState(false);
-  const [roomOptions, setRoomOptions] = useState("");
-
-  const [shortDescription, setShortDescription] = useState("");
-  const [description, setDescription] = useState("");
+  const [cost, setCost] = useState("");
+  const [percentage, setPercentage] = useState("");
   const [conditions, setConditions] = useState("");
   const [benefits, setBenefits] = useState("");
+  // const [isPerPerson, setIsPerPerson] = useState(false);
+  // const [roomOptions, setRoomOptions] = useState("");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // auto populate
+  useEffect(() => {
+    if (data?.name) {
+      const {
+        name,
+        image,
+        start_date,
+        end_date,
+        applicable_to,
+        type,
+        applicable_shortlets,
+        minimum_number_of_nights,
+        maximum_number_of_nights,
+        price,
+        percentage,
+        short_description,
+        description,
+        conditions,
+        benefits,
+      } = data;
+      const startDateValue = new Date(start_date)?.toISOString()?.slice(0, 10);
+      const endDateValue = new Date(end_date)?.toISOString()?.slice(0, 10);
+
+      setName(name);
+      setDescription(description);
+      setShortDescription(short_description);
+      setFile({ preview: image, size: 0, name: "image 1" });
+      setValidityStartDate(startDateValue);
+      setValidityEndDate(endDateValue);
+      setIsAllRooms(applicable_to === "all" ? true : false);
+
+      setMinNights(String(minimum_number_of_nights));
+      setMaxNights(String(maximum_number_of_nights));
+      setType(type);
+      setCost(String(price) || "");
+      setPercentage(String(percentage) || "");
+      setConditions(conditions);
+      setBenefits(benefits);
+    }
+  }, [data]);
   const saveAndClose = useCallback(() => {
     naviagte("/plans-and-promotions");
   }, []);
 
   const handleSubmit = useCallback(
-    (e: SyntheticEvent) => {
+    async (e: SyntheticEvent) => {
       e.preventDefault();
       setIsSubmitting(true);
+      const payload = {
+        name,
+        description: description,
+        image: file,
+        start_date: validityStartDate,
+        end_date: validityEndDate,
+        applicable_to: isAllRoomss ? "all" : "specific",
+        type: type,
+        applicable_shortlets: selectApartments?.map((item) => item?.id),
+        minimum_number_of_nights: minNights,
+        maximum_number_of_nights: maxNights,
+        price: cost,
+        percentage,
+        short_description: shortDescription,
+        conditions: conditions,
+        benefits: benefits,
+      };
+      // conditionally filter payload based on the offer parameters
+      const newPayload = Object.fromEntries(
+        Object.entries(payload).filter(([key]) =>
+          (key === "price" && type === "percentage") ||
+          (key === "percentage" && type === "price") ||
+          (key === "image" && file?.size < 10)
+            ? false
+            : true
+        )
+      );
       try {
-        dispatch(
-          addPackageAndOfferToList({
-            id: "random",
-            name,
-            fromDate: validityStartDate,
-            toDate: validityEndDate,
-            price: cost,
-            noOfRoomsAffected: roomOptions,
-          })
-        );
+        if (id) {
+          const response = await axios.post(
+            `/admin/offer/update/${id}`,
+            newPayload
+          );
+          const dataset = response?.data?.data;
+          dispatch(replacePackageAndOfferInList(dataset));
+        } else {
+          const response = await axios.post("/admin/offer", newPayload);
+          const dataset = response?.data?.data;
+          dispatch(addPackageAndOfferToList(dataset));
+        }
         dispatch(
           openSnackbar({
-            message: "Package successfully added",
+            message: id
+              ? "Offer succesffully updated"
+              : "Package successfully added",
             isError: false,
           })
         );
@@ -100,7 +194,24 @@ export default function AddNewPackageAndOffer() {
         setIsSubmitting(false);
       }
     },
-    [name, validityStartDate, validityEndDate, cost, roomOptions]
+    [
+      id,
+      name,
+      description,
+      file,
+      validityEndDate,
+      validityStartDate,
+      isAllRoomss,
+      type,
+      selectApartments,
+      minNights,
+      maxNights,
+      cost,
+      percentage,
+      shortDescription,
+      conditions,
+      benefits,
+    ]
   );
   return (
     <section className="w-full flex flex-col items-center my-5">
@@ -121,7 +232,7 @@ export default function AddNewPackageAndOffer() {
             <LoadingButton
               type="submit"
               isLoading={isSubmitting}
-              label="Save Package"
+              label={id ? "Update Package" : "Save Package"}
             />
           </div>
         </div>{" "}
@@ -164,13 +275,19 @@ export default function AddNewPackageAndOffer() {
                 placeholder="Validity End Date"
                 label="Check-in Date"
               />
-              <CheckboxInput
+              {/* <CheckboxInput
                 value={excludeDates}
                 setValue={setExcludeDate}
                 label="Exclude Dates"
                 id="exclude-date"
+              /> */}
+              <Search
+                componentId="apartment"
+                placeholder="Assign to apartments"
+                id="search-apartments"
+                multipleSelect={true}
+                updatelist={setSelectedApartments}
               />
-              <Search placeholder="Search available rooms" id="search-room" />
               <CheckboxInput
                 value={isAllRoomss}
                 setValue={setIsAllRooms}
@@ -194,15 +311,7 @@ export default function AddNewPackageAndOffer() {
                 value={maxNights}
                 setValue={setMaxNights}
               />
-              <TextInput
-                isRequired={true}
-                inputType="number"
-                placeholder="Enter Package Cost Number"
-                id="max-nights"
-                value={cost}
-                setValue={setCost}
-              />
-              <Select
+              {/* <Select
                 isRequired={true}
                 value={taxRate}
                 setValue={setTaxRate}
@@ -211,18 +320,40 @@ export default function AddNewPackageAndOffer() {
                 <option value="">Select Tax Rate</option>
                 <option value="10%">10%</option>
                 <option value="20%">20%</option>
-              </Select>
+              </Select> */}
               <Select
                 isRequired={true}
                 value={type}
                 setValue={setType}
                 id="select-cost-type"
               >
-                <option value="">Select Cost Type</option>
-                <option value="average">Average</option>
-                <option value="new">New</option>
+                <option value="" disabled>
+                  Select Cost Type
+                </option>
+                <option value="price">Price</option>
+                <option value="percentage">Percentage</option>
               </Select>
-              <label
+              {type === "price" && (
+                <TextInput
+                  isRequired={true}
+                  inputType="number"
+                  placeholder="Enter Package Cost"
+                  id="price"
+                  value={cost}
+                  setValue={setCost}
+                />
+              )}
+              {type === "percentage" && (
+                <TextInput
+                  isRequired={true}
+                  inputType="number"
+                  placeholder="Enter Package Perncetage"
+                  id="percentage"
+                  value={percentage}
+                  setValue={setPercentage}
+                />
+              )}
+              {/* <label
                 htmlFor="is-per-person-cost"
                 className=" w-full flex items-center justify-between"
               >
@@ -232,8 +363,8 @@ export default function AddNewPackageAndOffer() {
                   value={isPerPerson}
                   setValue={setIsPerPerson}
                 />
-              </label>
-              <Select
+              </label> */}
+              {/* <Select
                 isRequired={true}
                 value={roomOptions}
                 setValue={setRoomOptions}
@@ -242,7 +373,7 @@ export default function AddNewPackageAndOffer() {
                 <option value="">Select Display Rooms Options</option>
                 <option value="all">All Rooms</option>
                 <option value="one-room">1 room</option>
-              </Select>
+              </Select> */}
             </div>
           </div>
           <div className=" w-full rounded-md border flex-1 md:flex-[0.4] flex flex-col gap-3">

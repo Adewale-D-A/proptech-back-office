@@ -1,8 +1,26 @@
 export type packagesAndOffers = {
-  id: string;
-  name: string;
-  fromDate: string;
-  toDate: string;
-  price: string;
-  noOfRoomsAffected: string;
-};
+  "id": number,
+  "name": string,
+  "slug": string,
+  "offer_id": string,
+  "image": string,
+  "start_date": string,
+  "end_date": string,
+  "applicable_to": string,
+  "type": string,
+  "applicable_shortlets": string,
+  "minimum_number_of_nights": number,
+  "maximum_number_of_nights": number,
+  "price": number,
+  "currency": string,
+  "percentage": number,
+  "short_description": string,
+  "description": string,
+  "conditions": string,
+  "benefits": string,
+  "is_active": number,
+  "is_deleted": number,
+  "created_at": string,
+  "updated_at": string,
+  "applicable_shortlet_count": number
+}

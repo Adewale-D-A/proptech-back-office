@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import useAxios from "../useHooks/useAxios";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
-import tempAptData from "../assets/temp-api-mockup-data/packagesAndOffers.json";
 import {
   updatePackageAndOfferList,
   addToPaginationHistory,
@@ -10,8 +9,10 @@ import {
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetAllPackagesAndOffers({
   page = 1,
+  search = "",
 }: {
   page?: number;
+  search?: string;
 }) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
@@ -40,36 +41,34 @@ export default function useGetAllPackagesAndOffers({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage) {
+      if (foundPage && !search) {
         setPagination(foundPage?.pagination_data);
         dispatch(updatePackageAndOfferList({ data: foundPage?.data }));
       } else {
-        // const response = await axios.post(`/institution-list?page=${page}`);
-        // const responseData = response?.data?.data;
-        // const institutions = response?.data?.institution;
-        dispatch(updatePackageAndOfferList({ data: tempAptData.data }));
+        const response = await axios.get(
+          `/admin/offer?limit=20&search=${search || ""}&page=${page}`
+        );
+        const { offer } = response?.data?.data;
+        const { data, current_page, last_page, per_page, total, from, to } =
+          offer;
+        const paginationDataset = {
+          current_page,
+          last_page,
+          per_page,
+          total,
+          from,
+          to,
+          length: data?.length,
+        };
+        dispatch(updatePackageAndOfferList({ data }));
 
-        // TODO: UPDATE based on backend pagination response
-        //CURRENTLY: Pagination is not being returned for this dataset,
-        //TEMPORARY SOLUTION: Hardcoding pagination
-        // const { data, current_page, last_page, per_page, total, from, to } =
-        //   responseData;
-        // const paginationDataset = {
-        //   current_page: 1,
-        //   last_page: 1,
-        //   per_page: 20,
-        //   total: 4,
-        //   from: 1,
-        //   to: 1,
-        // };
-        // dispatch(update_institution({data}));
         dispatch(
           addToPaginationHistory({
-            pagination_data: tempAptData.pagination,
-            data: tempAptData.data,
+            pagination_data: paginationDataset,
+            data,
           })
         );
-        setPagination(tempAptData.pagination);
+        setPagination(paginationDataset);
       }
       setIsLoading(false);
     } catch (error) {
@@ -77,11 +76,11 @@ export default function useGetAllPackagesAndOffers({
     } finally {
       setIsLoading(false);
     }
-  }, [page]);
+  }, [page, search]);
 
   useEffect(() => {
     getPackageAndOffersLists();
-  }, [page]);
+  }, [page, search]);
 
   return {
     data,

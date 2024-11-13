@@ -8,6 +8,7 @@ import {
 } from "../stores/authUser/auth";
 import { openSnackbar } from "../stores/appFunctionality/snackbar";
 import refreshToken from "../services-hooks/base/refreshToken";
+import extractErrMssg from "../utils/extractErrMssg";
 
 //axios instace interceptor for access token integration and refresh tokens
 const useAxiosMultipart = (disableErrorPrompt?: boolean) => {
@@ -24,6 +25,7 @@ const useAxiosMultipart = (disableErrorPrompt?: boolean) => {
         if (!config.headers["Authorization"]) {
           config.headers["Authorization"] = `Bearer ${access_token}`;
         }
+        // console.log({ token });
         return config;
       },
       (error) => Promise.reject(error)
@@ -31,9 +33,9 @@ const useAxiosMultipart = (disableErrorPrompt?: boolean) => {
     const responseIntercept = axiosMultipartInstance.interceptors.response.use(
       (response) => response,
       async (error) => {
-        const prevRequest = error?.config;
+        const originalRequest = error?.config;
         // ----log error message using snackbar---
-        const errorMessage = error?.response?.data?.message;
+        const errMssg = extractErrMssg(error?.response?.data);
         // ----log error message using snackbar---
         // if (
         //   error?.response?.status === 422 ||
@@ -47,29 +49,31 @@ const useAxiosMultipart = (disableErrorPrompt?: boolean) => {
             .includes("unauthenticated") ||
           statusMessage?.toLowerCase().includes("token") ||
           error?.response?.data?.debug?.toLowerCase().includes("token");
-        if (hadUnauthenticated && !prevRequest?.sent) {
+        if (hadUnauthenticated && !!originalRequest._retry) {
           // If the request was already sent, we don't want to refresh the token
-          prevRequest.sent = true;
+          originalRequest._retry = true;
           const { new_access_token } = await refreshToken({
             old_token: access_token,
           });
           dispatch(
             updateAuthentication({
-              access_token: new_access_token,
+              access_token: new_access_token || access_token,
               refresh_token: "",
             })
           );
-          prevRequest.headers["Authorization"] = `Bearer ${new_access_token}`;
-          return axiosMultipartInstance(prevRequest);
+          axiosMultipartInstance.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${new_access_token}`;
+          return axiosMultipartInstance(originalRequest);
         } else if (hadUnauthenticated) {
-          sessionStorage.removeItem(`${process.env.REACT_APP_SESSION_KEY}`);
-          dispatch(clearAuthentication());
-          navigate(`/?redirect=${location?.pathname}`);
+          // sessionStorage.removeItem(`${process.env.REACT_APP_SESSION_KEY}`);
+          // dispatch(clearAuthentication());
+          // navigate(`/?redirect=${location?.pathname}`);
           return Promise.reject(error);
         } else if (!disableErrorPrompt) {
           dispatch(
             openSnackbar({
-              message: errorMessage || "Please try again later",
+              message: errMssg || "Please try again later",
               isError: true,
             })
           );

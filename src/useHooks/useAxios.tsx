@@ -18,13 +18,12 @@ const useAxios = (disableErrorPrompt?: boolean) => {
   const { access_token } = useAppSelector(
     (state) => state.userAuthentication.value
   );
-  let token = access_token;
 
   useEffect(() => {
     const requestIntercept = axiosInstance.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${token}`;
+          config.headers["Authorization"] = `Bearer ${access_token}`;
         }
         // console.log({ token });
         return config;
@@ -34,7 +33,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
     const responseIntercept = axiosInstance.interceptors.response.use(
       (response) => response,
       async (error) => {
-        const prevRequest = error?.config;
+        const originalRequest = error?.config;
         // ----log error message using snackbar---
         const errMssg = extractErrMssg(error?.response?.data);
         // ----log error message using snackbar---
@@ -50,21 +49,22 @@ const useAxios = (disableErrorPrompt?: boolean) => {
             .includes("unauthenticated") ||
           statusMessage?.toLowerCase().includes("token") ||
           error?.response?.data?.debug?.toLowerCase().includes("token");
-        if (hadUnauthenticated && !prevRequest?.sent) {
+        if (hadUnauthenticated && !!originalRequest._retry) {
           // If the request was already sent, we don't want to refresh the token
-          prevRequest.sent = true;
+          originalRequest._retry = true;
           const { new_access_token } = await refreshToken({
             old_token: access_token,
           });
-          token = new_access_token;
           dispatch(
             updateAuthentication({
               access_token: new_access_token || access_token,
               refresh_token: "",
             })
           );
-          prevRequest.headers["Authorization"] = `Bearer ${token}`;
-          return axiosInstance(prevRequest);
+          axiosInstance.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${new_access_token}`;
+          return axiosInstance(originalRequest);
         } else if (hadUnauthenticated) {
           // sessionStorage.removeItem(`${process.env.REACT_APP_SESSION_KEY}`);
           // dispatch(clearAuthentication());

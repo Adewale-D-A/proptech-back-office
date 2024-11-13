@@ -187,6 +187,10 @@ function App() {
               path="/plans-and-promotions/package-and-offer/add-new-package-and-offer"
               element={<AddNewPackageAndOffer />}
             />
+            <Route
+              path="/plans-and-promotions/package-and-offer/edit-new-package-and-offer/:id"
+              element={<AddNewPackageAndOffer />}
+            />
             <Route path="/chat" element={<Chat />} />
             {/* invoice flow */}
             <Route path="/invoices" element={<Invoices />} />
