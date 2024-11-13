@@ -1,3 +1,7 @@
+##### 12.11.2024
+
+> Edit coupon UI update
+
 ##### 11.11.2024
 
 > Coupon creation based on user options logic definition

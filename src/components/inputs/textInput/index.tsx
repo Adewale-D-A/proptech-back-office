@@ -34,12 +34,13 @@ function TextInput({
       <input
         id={id}
         readOnly={readonly}
+        disabled={readonly}
         placeholder={placeholder}
         required={isRequired}
         value={value}
         onChange={(e: ChangeEvent<HTMLInputElement>) => handleInput(e)}
         type={inputType}
-        className="w-full p-3 focus:outline-none rounded-lg border  bg-gray-100/15 focus:ring-[#17594F] focus:border-[#17594F]"
+        className="w-full p-3 disabled:border-gray-300 disabled:text-gray-300 focus:outline-none rounded-lg border  bg-gray-100/15 focus:ring-[#17594F] focus:border-[#17594F]"
       />
     </div>
   );

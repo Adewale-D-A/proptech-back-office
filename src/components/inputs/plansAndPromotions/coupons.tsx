@@ -49,7 +49,7 @@ export default function AddNewCoupon({
 
   // populate data authomatically
   useEffect(() => {
-    if (id && data) {
+    if (id && data?.start_date) {
       const {
         code,
         start_date,
@@ -64,9 +64,12 @@ export default function AddNewCoupon({
         minimum_amount,
         maximum_amount,
       } = data;
+      const startDateValue = new Date(start_date)?.toISOString()?.slice(0, 10);
+      const endDateValue = new Date(end_date)?.toISOString()?.slice(0, 10);
+      // console.log(startDateValue);
       setCode(code);
-      setStartDate(start_date);
-      setEndDate(end_date);
+      setStartDate(startDateValue);
+      setEndDate(endDateValue);
       setApartmentApplicability(applicable_to_shortlet);
       setUserApplicability(applicable_to_user);
       setType(type);
@@ -91,6 +94,8 @@ export default function AddNewCoupon({
     async (e: SyntheticEvent) => {
       e.preventDefault();
       setIsSubmitting(true);
+
+      // post request payload reform
       let payload = {
         code: code,
         start_date: startDate,
@@ -121,10 +126,23 @@ export default function AddNewCoupon({
         )
       );
 
+      // put request payload reform
+      const putPayload = {
+        applicable_to_user: userApplicability, // all or specific
+        applicable_users: assignCustomers?.map((item) => item?.id),
+      };
+      const putNewPayload = Object.fromEntries(
+        Object.entries(putPayload).filter(([key]) =>
+          key === "applicable_users" && userApplicability === "all"
+            ? false
+            : true
+        )
+      );
+
       try {
         let response;
         if (id) {
-          response = await axios.put(`/admin/coupon/${id}`, newPayload);
+          response = await axios.put(`/admin/coupon/${id}`, putNewPayload);
           const dataset = response?.data?.data;
           dispatch(replaceCouponsInList(dataset));
         } else {
@@ -178,15 +196,18 @@ export default function AddNewCoupon({
             setValue={setCode}
             id="coupon-code"
             placeholder={"Enter Coupon Code"}
+            readonly={Boolean(id)}
           />
-          <div className=" w-fit ">
-            <LoadingButton
-              type="button"
-              isLoading={false}
-              label="Generate Code"
-              clickHandler={generateCouponCode}
-            />
-          </div>
+          {!id && (
+            <div className=" w-fit ">
+              <LoadingButton
+                type="button"
+                isLoading={false}
+                label="Generate Code"
+                clickHandler={generateCouponCode}
+              />
+            </div>
+          )}
         </div>
         {/*  date */}
         <div className=" grid grid-cols-1  md:grid-cols-2 gap-3">
@@ -198,6 +219,7 @@ export default function AddNewCoupon({
             id="start-date"
             placeholder="Start date"
             label="Start date"
+            readonly={Boolean(id)}
           />
           <DateInput
             inputType="date"
@@ -207,6 +229,7 @@ export default function AddNewCoupon({
             id="end-date"
             placeholder="End date"
             label="End date"
+            readonly={Boolean(id)}
           />
         </div>
         {/* apartment select */}
@@ -215,6 +238,7 @@ export default function AddNewCoupon({
           value={apartmentApplicability}
           setValue={setApartmentApplicability}
           id="apartment-applicability"
+          readOnly={Boolean(id)}
         >
           <option value="" disabled>
             Apartment
@@ -222,7 +246,7 @@ export default function AddNewCoupon({
           <option value="all">All</option>
           <option value="specific">Specific</option>
         </Select>
-        {apartmentApplicability === "specific" && (
+        {apartmentApplicability === "specific" && !Boolean(id) && (
           <Search
             componentId="apartment"
             placeholder="Assign to apartments"
@@ -260,6 +284,7 @@ export default function AddNewCoupon({
             value={type}
             setValue={setType}
             id="coupon-type"
+            readOnly={Boolean(id)}
           >
             <option value="" disabled>
               Select Coupon Type
@@ -275,6 +300,7 @@ export default function AddNewCoupon({
               setValue={setPrice}
               id="coupon-price"
               placeholder={"Enter price"}
+              readonly={Boolean(id)}
             />
           )}
           {type === "percentage" && (
@@ -285,6 +311,7 @@ export default function AddNewCoupon({
               setValue={setPercentage}
               id="coupon-percentage"
               placeholder={"Enter percentage"}
+              readonly={Boolean(id)}
             />
           )}
         </div>
@@ -296,6 +323,7 @@ export default function AddNewCoupon({
             value={validity}
             setValue={setValidity}
             id="validity"
+            readOnly={Boolean(id)}
           >
             <option value="" disabled>
               Validity
@@ -308,6 +336,7 @@ export default function AddNewCoupon({
             value={isReusable}
             setValue={setIsReusable}
             id="is-reusable"
+            readOnly={Boolean(id)}
           >
             <option value="" disabled>
               Reusable
@@ -326,6 +355,7 @@ export default function AddNewCoupon({
             setValue={setMinAmount}
             id="minimum-amount"
             placeholder={"Minimum amount"}
+            readonly={Boolean(id)}
           />
 
           <TextInput
@@ -335,6 +365,7 @@ export default function AddNewCoupon({
             setValue={setMaxAmount}
             id="maximum-amount"
             placeholder={"Maximum amount"}
+            readonly={Boolean(id)}
           />
         </div>
       </div>
@@ -349,7 +380,7 @@ export default function AddNewCoupon({
         />
         <LoadingButton
           type="submit"
-          label={"Save Coupon"}
+          label={id ? "Update Coupon" : "Save Coupon"}
           disabled={false}
           isLoading={isSubmitting}
         />

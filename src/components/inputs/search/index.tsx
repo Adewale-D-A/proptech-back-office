@@ -122,7 +122,7 @@ export default function Search({
       )}
       <label
         htmlFor={id}
-        className=" p-1 flex items-center gap-2 border rounded-lg text-sm"
+        className=" p-1 flex items-center gap-2 border-gray-700 border rounded-lg text-sm"
       >
         {isLoading || apt_loading ? (
           <LoaderIcon className=" animate-spin size-6" />
@@ -135,7 +135,7 @@ export default function Search({
           displayValue={() => keywords}
           onChange={(event) => setKeywords(event.target.value)}
           placeholder={placeholder}
-          className=" focus:outline-none p-2 w-full"
+          className=" focus:outline-none p-2 w-full "
         />
       </label>
       <ComboboxOptions

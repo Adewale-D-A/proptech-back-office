@@ -26,7 +26,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
         if (!config.headers["Authorization"]) {
           config.headers["Authorization"] = `Bearer ${token}`;
         }
-        console.log({ token });
+        // console.log({ token });
         return config;
       },
       (error) => Promise.reject(error)

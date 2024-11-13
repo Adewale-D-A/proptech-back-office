@@ -12,7 +12,7 @@ export default function useGetCoupon({ id }: { id?: string }) {
   const getCoupon = useCallback(async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`/admin/coupon//${id}`);
+      const response = await axios.get(`/admin/coupon/${id}`);
       const { coupon } = response?.data?.data;
       setData(coupon);
       setIsLoading(false);

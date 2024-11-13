@@ -31,12 +31,13 @@ export default function TimeInput({
       <input
         id={id}
         readOnly={readonly}
+        disabled={readonly}
         placeholder={placeholder}
         required={isRequired}
         value={value}
         onChange={(e: ChangeEvent<HTMLInputElement>) => handleInput(e)}
         type={inputType}
-        className={`w-full date-input group-hover:block focus:block ${
+        className={`w-full disabled:border-gray-300 disabled:text-gray-300 date-input group-hover:block focus:block ${
           value ? "block" : "hidden"
         }  p-3 focus:ring-[#17594F] focus:border-[#17594F]`}
       />
