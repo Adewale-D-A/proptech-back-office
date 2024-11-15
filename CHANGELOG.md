@@ -1,3 +1,7 @@
+##### 15.11.2024
+
+> Add customer to list
+
 ##### 12.11.2024
 
 > Package and offer CRUD enpoint integration

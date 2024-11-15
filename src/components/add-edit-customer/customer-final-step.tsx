@@ -37,23 +37,23 @@ export default function AddEditCustomerFinalStep({ id }: { id?: string }) {
   // populate apartment details interface
   useEffect(() => {
     const {
-      companyName,
-      VATid,
-      companyEmail,
-      companyId,
-      companyCountry,
-      companyState,
-      companyCity,
-      companyAddress,
+      company_name,
+      vat_id,
+      company_email,
+      company_id,
+      company_country,
+      company_state,
+      company_city,
+      company_address,
     } = storeCustomerCompany;
-    setCompanyName(companyName);
-    setVATid(VATid);
-    setCompanyEmail(companyEmail);
-    setCompanyId(companyId);
-    setCompanyCountry(companyCountry);
-    setCountryState(companyState);
-    setCompanyCity(companyCity);
-    setCompanyAddress(companyAddress);
+    setCompanyName(company_name);
+    setVATid(vat_id);
+    setCompanyEmail(company_email);
+    setCompanyId(company_id);
+    setCompanyCountry(company_country);
+    setCountryState(company_state);
+    setCompanyCity(company_city);
+    setCompanyAddress(company_address);
   }, [storeCustomerCompany]);
 
   //update redux store and naviagte to next timeline
@@ -61,17 +61,17 @@ export default function AddEditCustomerFinalStep({ id }: { id?: string }) {
     (e: SyntheticEvent) => {
       e.preventDefault();
       setIsSubmitting(true);
-      const { customerDetails, customerVerification, customerCompany } =
-        storeCustomerDatast;
+      const {
+        customerDetails,
+        customerVerification,
+        customerCompany,
+        customerSalesChannel,
+      } = storeCustomerDatast;
       const payload = {
         ...customerDetails,
         ...customerVerification,
         ...customerCompany,
-        isSalesChannel: false,
-        salesChannelName: "",
-        salesChannelCommision: "",
-        calculateCommissionOn: "",
-        applyCommissionOn: "",
+        ...customerSalesChannel,
       };
       try {
         if (id) {

@@ -1,18 +1,18 @@
 import { useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import { toggleMenuView } from "../stores/appFunctionality/navMenuFunctions";
-import { clearAuthentication } from "../stores/authUser/auth";
-import { clearProfile } from "../stores/authUser/profile";
 import NavigationMenuItems from "../assets/menuItem";
 import LogoutIcon from "../assets/icons/logout";
 import MenuIcon from "../assets/icons/menu";
 import useAxios from "../useHooks/useAxios";
+import NextArrowIcon from "../assets/icons/next-arrow";
+import NavigatePrevIcon from "../assets/icons/navigate-prev";
+import signOut from "../utils/signOut";
 
 //full view
 function FullMenuView() {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const axios = useAxios();
 
@@ -29,10 +29,7 @@ function FullMenuView() {
   const logOut = useCallback(async () => {
     try {
       // await axios.post("/admin/logout");
-      dispatch(clearAuthentication());
-      dispatch(clearProfile());
-      window.location.href = "/";
-      navigate("/");
+      signOut();
     } catch (error) {
       // dispatch(openSnackbar({ message: "logout failed", isError: true }));
     }
@@ -73,17 +70,32 @@ function FullMenuView() {
         <NavigationMenuItems />
       </div>
       {/* signout nav section */}
-      <button
-        type="button"
-        onClick={() => logOut()}
-        title="logout"
-        className={`w-full flex items-center ${
-          fullView ? "" : " justify-center"
-        } gap-4 p-2 md:p-3 transition-all hover:bg-white/15 hover:border-l-4 my-5`}
-      >
-        <LogoutIcon />
-        {fullView && <span className=" ">Log Out</span>}
-      </button>
+      <div>
+        <button
+          type="button"
+          onClick={() => logOut()}
+          title="logout"
+          className={`w-full flex items-center ${
+            fullView ? "" : " justify-center"
+          } gap-4 p-2 md:p-3 transition-all hover:bg-white/15 hover:border-l-4 my-5`}
+        >
+          <LogoutIcon />
+          {fullView && <span className=" ">Log Out</span>}
+        </button>
+
+        <div className="w-full flex justify-end">
+          <button
+            onClick={() => toggleMenu()}
+            className=" p-3 transition-all hover:bg-white/15 hover:border-r-4"
+          >
+            {fullView ? (
+              <NavigatePrevIcon className="w-6 h-6" />
+            ) : (
+              <NextArrowIcon />
+            )}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

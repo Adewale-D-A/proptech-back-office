@@ -1,29 +1,31 @@
 import { useEffect } from "react";
 import { axiosInstance } from "../services-hooks/base";
-import { useAppDispatch, useAppSelector } from "../stores/hooks";
+import { useAppDispatch } from "../stores/hooks";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  clearAuthentication,
-  updateAuthentication,
-} from "../stores/authUser/auth";
+
 import { openSnackbar } from "../stores/appFunctionality/snackbar";
 import refreshToken from "../services-hooks/base/refreshToken";
 import extractErrMssg from "../utils/extractErrMssg";
+import { updateToken } from "../stores/authUser/auth";
+import Criptic from "../utils/criptic";
+import signOut from "../utils/signOut";
 
-//axios instace interceptor for access token integration and refresh tokens
+const decrypt = new Criptic();
+const authKey = process.env.REACT_APP_AUTH_KEY || "";
 const useAxios = (disableErrorPrompt?: boolean) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const { access_token } = useAppSelector(
-    (state) => state.userAuthentication.value
-  );
+  // decipher adn extract token
+  const credentials = localStorage.getItem(authKey) || "";
+  const decryptCredentials = decrypt.decrypt(authKey, credentials);
+  const { token } = JSON.parse(decryptCredentials);
 
   useEffect(() => {
     const requestIntercept = axiosInstance.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${access_token}`;
+          config.headers["Authorization"] = `Bearer ${token}`;
         }
         // console.log({ token });
         return config;
@@ -53,14 +55,9 @@ const useAxios = (disableErrorPrompt?: boolean) => {
           // If the request was already sent, we don't want to refresh the token
           originalRequest._retry = true;
           const { new_access_token } = await refreshToken({
-            old_token: access_token,
+            old_token: token,
           });
-          dispatch(
-            updateAuthentication({
-              access_token: new_access_token || access_token,
-              refresh_token: "",
-            })
-          );
+          dispatch(updateToken(new_access_token || token));
           axiosInstance.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${new_access_token}`;
@@ -69,6 +66,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
           // sessionStorage.removeItem(`${process.env.REACT_APP_SESSION_KEY}`);
           // dispatch(clearAuthentication());
           // navigate(`/?redirect=${location?.pathname}`);
+          signOut(location?.pathname);
           return Promise.reject(error);
         } else if (!disableErrorPrompt) {
           dispatch(
@@ -86,7 +84,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
       axiosInstance.interceptors.request.eject(requestIntercept);
       axiosInstance.interceptors.response.eject(responseIntercept);
     };
-  }, [access_token]);
+  }, [token]);
   return axiosInstance;
 };
 

@@ -13,8 +13,6 @@ import ClipBoardIcon from "./icons/clipboard";
 import NotificationIcon from "./icons/notification";
 
 export default function NavigationMenuItems() {
-  const { data } = useAppSelector((state) => state.userProfile.value);
-
   const fullView = useAppSelector(
     (state) => state?.menuFunctions?.value?.fullMenuView
   );

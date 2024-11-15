@@ -10,7 +10,7 @@ export default function Sort({
   label: string;
   setSort?: Function;
 }) {
-  const [selectSort, setSelectSort] = useState("");
+  const [selectSort, setSelectSort] = useState("desc");
   useEffect(() => {
     if (setSort) {
       setSort(selectSort);

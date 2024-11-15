@@ -2,10 +2,7 @@ import { useEffect } from "react";
 import { axiosMultipartInstance } from "../services-hooks/base";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import { useLocation, useNavigate } from "react-router-dom";
-import {
-  clearAuthentication,
-  updateAuthentication,
-} from "../stores/authUser/auth";
+import { updateCurrrentAuthUser, updateToken } from "../stores/authUser/auth";
 import { openSnackbar } from "../stores/appFunctionality/snackbar";
 import refreshToken from "../services-hooks/base/refreshToken";
 import extractErrMssg from "../utils/extractErrMssg";
@@ -15,15 +12,13 @@ const useAxiosMultipart = (disableErrorPrompt?: boolean) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const { access_token } = useAppSelector(
-    (state) => state.userAuthentication.value
-  );
+  const { token } = useAppSelector((state) => state.userAuthentication.value);
 
   useEffect(() => {
     const requestIntercept = axiosMultipartInstance.interceptors.request.use(
       (config) => {
         if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${access_token}`;
+          config.headers["Authorization"] = `Bearer ${token}`;
         }
         // console.log({ token });
         return config;
@@ -53,14 +48,9 @@ const useAxiosMultipart = (disableErrorPrompt?: boolean) => {
           // If the request was already sent, we don't want to refresh the token
           originalRequest._retry = true;
           const { new_access_token } = await refreshToken({
-            old_token: access_token,
+            old_token: token,
           });
-          dispatch(
-            updateAuthentication({
-              access_token: new_access_token || access_token,
-              refresh_token: "",
-            })
-          );
+          dispatch(updateToken(new_access_token || token));
           axiosMultipartInstance.defaults.headers.common[
             "Authorization"
           ] = `Bearer ${new_access_token}`;
@@ -86,7 +76,7 @@ const useAxiosMultipart = (disableErrorPrompt?: boolean) => {
       axiosMultipartInstance.interceptors.request.eject(requestIntercept);
       axiosMultipartInstance.interceptors.response.eject(responseIntercept);
     };
-  }, [access_token]);
+  }, [token]);
   return axiosMultipartInstance;
 };
 

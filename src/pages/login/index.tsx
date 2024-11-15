@@ -4,10 +4,13 @@ import TextInput from "../../components/inputs/textInput";
 import Password from "../../components/inputs/password";
 import LoadingButton from "../../components/button";
 import { useAppDispatch } from "../../stores/hooks";
-import { updateAuthentication } from "../../stores/authUser/auth";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import useAxios from "../../useHooks/useAxios";
+import Criptic from "../../utils/criptic";
+import { updateToken } from "../../stores/authUser/auth";
 
+const encrypt = new Criptic();
+const authKey = process.env.REACT_APP_AUTH_KEY || "";
 function Login() {
   const axios = useAxios();
   const navigate = useNavigate();
@@ -29,18 +32,15 @@ function Login() {
           password: password,
         });
         const { access_token } = response?.data?.data;
-        // console.log({ access_token });
-        // const token = "random-tokenizer";
-        dispatch(
-          updateAuthentication({
-            access_token: access_token,
-            refresh_token: "",
-          })
-        );
-        sessionStorage.setItem(
-          `${process.env.REACT_APP_SESSION_KEY}`,
-          access_token
-        );
+        const strigifiedToken = JSON.stringify({
+          token: access_token,
+        });
+
+        dispatch(updateToken(access_token));
+        // encrypt token
+        const encryptedToken = encrypt.encrypt(authKey, strigifiedToken);
+        localStorage.setItem(authKey, encryptedToken);
+
         navigate(
           searchParams?.get("redirect")
             ? `${searchParams?.get("redirect")}`

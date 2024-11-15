@@ -58,16 +58,20 @@ export default function ResetPassword() {
 
   const verifyOtp = useCallback(
     async (e: SyntheticEvent) => {
+      e.preventDefault();
+      setIsVerifyingCode(true);
       try {
-        const response = await axios.post(
-          "/auth/admin/forgot-password/verify",
-          {
-            email: email,
-            otp: otp,
-          }
-        );
-        setIsVerifyingCode(true);
+        await axios.post("/auth/admin/forgot-password/verify", {
+          email: email,
+          otp: otp,
+        });
         navigate(`/change-password/${email}/${otp}`);
+        dispatch(
+          openSnackbar({
+            message: "please continue to update your password",
+            isError: false,
+          })
+        );
       } catch (error) {
       } finally {
         setIsVerifyingCode(false);

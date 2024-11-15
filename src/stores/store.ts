@@ -15,7 +15,6 @@ import addEditCustomerInfo from "./inAppDataInterations/addEditCustomerInfo";
 // inApp Data interactions
 
 //user profile
-import profile from "./authUser/profile";
 import userAuthentication from "./authUser/auth";
 
 // api data
@@ -65,7 +64,6 @@ export const adminStore = () => {
       // inApp Data interactions
 
       //user
-      userProfile: profile,
       userAuthentication: userAuthentication,
 
       // api data

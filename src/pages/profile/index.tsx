@@ -19,9 +19,9 @@ const breadCrumb = [
 function Profile() {
   const axios = useAxios();
   const dispatch = useAppDispatch();
-  const { data } = useAppSelector((state) => state.userProfile.value);
+  const { user } = useAppSelector((state) => state.userAuthentication.value);
 
-  const [firstname, setFirstname] = useState(data?.name);
+  const [firstname, setFirstname] = useState(user?.first_name);
   const [lastname, setLastname] = useState("");
 
   const [currentPassword, setCurrentPassword] = useState("");

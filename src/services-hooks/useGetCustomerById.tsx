@@ -39,6 +39,8 @@ export default function useGetCustomerById(id?: string) {
         has_set_password,
         identity_verified,
         email_verified_at,
+        is_deleted,
+        deleted_at,
         created_at,
         updated_at,
         stripe_id,
@@ -48,6 +50,28 @@ export default function useGetCustomerById(id?: string) {
         delete_reason,
         referral_code,
         referred_by,
+        country,
+        state,
+        city,
+        address,
+        place_of_birth,
+        id_type,
+        id_number,
+        notes,
+        company_name,
+        vat_id,
+        company_email,
+        company_id,
+        company_country,
+        company_state,
+        company_city,
+        company_address,
+        is_sales_channel,
+        sales_channel_name,
+        commission_per_booking,
+        calculate_commission_on,
+        apply_commission_on,
+        total_bookings,
       } = user;
       setData(user);
       dispatch(updateCustomerInfoId({ id: id }));
@@ -60,41 +84,41 @@ export default function useGetCustomerById(id?: string) {
           profileImg: { name: "", size: 1000, preview: profile_photo },
           gender: gender || "Male",
           dob,
-          country: "Nigeria",
-          state: "***",
-          city: "****",
-          address: "***",
+          country: country,
+          state: state,
+          city: city,
+          address: address,
         })
       );
       dispatch(
         updateCustomerVerification({
-          placeOfBirth: "***",
-          idType: "***",
-          idNumber: "****",
-          idImage: "****",
-          pinGenerated: "****",
-          notes: "***",
+          place_of_birth: place_of_birth,
+          id_type: id_type,
+          id_number: id_number,
+          identity_document: { name: "", size: 0, preview: "" },
+          password: "",
+          notes: notes,
         })
       );
       dispatch(
         updateCustomerCompany({
-          companyName: "***",
-          VATid: "***",
-          companyEmail: "***",
-          companyId: "***",
-          companyCountry: "***",
-          companyState: "***",
-          companyCity: "***",
-          companyAddress: "***",
+          company_name: company_name,
+          vat_id: vat_id,
+          company_email: company_email,
+          company_id: company_id,
+          company_country: company_country,
+          company_state: company_state,
+          company_city: company_city,
+          company_address: company_address,
         })
       );
       dispatch(
         updateCustomerSalesChannel({
-          isSalesChannel: false,
-          salesChannelName: "***",
-          salesChannelCommision: "***",
-          calculateCommissionOn: "***",
-          applyCommissionOn: "***",
+          sales_channel: is_sales_channel || false,
+          sales_channel_name: sales_channel_name,
+          commission_per_booking: commission_per_booking,
+          calculate_commission_on: calculate_commission_on,
+          apply_commission_on: apply_commission_on,
         })
       );
 

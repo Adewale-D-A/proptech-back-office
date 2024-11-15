@@ -30,13 +30,19 @@ export default function AddEditCustomerVerification({ id }: { id?: string }) {
 
   // populate apartment details interface
   useEffect(() => {
-    const { placeOfBirth, idType, idNumber, idImage, pinGenerated, notes } =
-      storeAptDetails;
-    setPlaceOfBirth(placeOfBirth);
-    setIdType(idType);
-    setIdNumber(idNumber);
-    setIdImage(idImage);
-    setPinGenerated(pinGenerated);
+    const {
+      place_of_birth,
+      id_type,
+      id_number,
+      identity_document,
+      password,
+      notes,
+    } = storeAptDetails;
+    setPlaceOfBirth(place_of_birth);
+    setIdType(id_type);
+    setIdNumber(id_number);
+    setIdImage(identity_document);
+    setPinGenerated(password);
     setNotes(notes);
   }, [storeAptDetails]);
 
@@ -51,11 +57,11 @@ export default function AddEditCustomerVerification({ id }: { id?: string }) {
       e.preventDefault();
       if (idImage) {
         const payload = {
-          placeOfBirth,
-          idType,
-          idNumber,
-          idImage,
-          pinGenerated,
+          place_of_birth: placeOfBirth,
+          id_type: idType,
+          id_number: idNumber,
+          identity_document: idImage,
+          password: pinGenerated,
           notes,
         };
         dispatch(updateCustomerVerification(payload));

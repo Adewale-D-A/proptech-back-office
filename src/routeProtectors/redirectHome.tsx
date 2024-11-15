@@ -1,17 +1,17 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAppSelector } from "../stores/hooks";
 import OnboardingLayout from "../layouts/onboardingLayout";
+import useGetAuthUser from "../services-hooks/auth/useGetAuthUser";
+import Loader from "../pages/loader";
 
 export default function RedirectHome() {
-  const { status } = useAppSelector((state) => state.userProfile.value);
-  const { status: authenticated } = useAppSelector(
-    (state) => state.userAuthentication.value
-  );
-
+  const { data, isLoading, isFailed, setIsFailed, retryFunction } =
+    useGetAuthUser();
   return (
     <>
-      {status && authenticated ? (
-        <Navigate to={`/dashboard`} replace />
+      {isLoading ? (
+        <Loader />
+      ) : data?.id ? (
+        <Navigate to={`/dashboard-overview`} replace />
       ) : (
         <OnboardingLayout>
           <Outlet />

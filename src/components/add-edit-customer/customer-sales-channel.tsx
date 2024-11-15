@@ -15,8 +15,10 @@ import {
   addCustomersToList,
   replaceCustomersInList,
 } from "../../stores/apiData/customers-lists";
+import useAxios from "../../useHooks/useAxios";
 
 export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
+  const axios = useAxios();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const storeCustomerDatast = useAppSelector(
@@ -33,22 +35,22 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
   // populate apartment details interface
   useEffect(() => {
     const {
-      isSalesChannel,
-      salesChannelName,
-      salesChannelCommision,
-      calculateCommissionOn,
-      applyCommissionOn,
+      sales_channel,
+      sales_channel_name,
+      commission_per_booking,
+      calculate_commission_on,
+      apply_commission_on,
     } = storeCustomerDatast?.customerSalesChannel;
-    setIsSalesChannel(isSalesChannel);
-    setChannelName(salesChannelName);
-    setCommission(salesChannelCommision);
-    setCalculateCommission(calculateCommissionOn);
-    setApplyCommission(applyCommissionOn);
+    setIsSalesChannel(sales_channel);
+    setChannelName(sales_channel_name);
+    setCommission(commission_per_booking);
+    setCalculateCommission(calculate_commission_on);
+    setApplyCommission(apply_commission_on);
   }, [storeCustomerDatast]);
 
   //update redux store and naviagte to next timeline
   const uploadCustomerInformation = useCallback(
-    (e: SyntheticEvent) => {
+    async (e: SyntheticEvent) => {
       console.log("triggered");
       e.preventDefault();
       setIsSubmitting(true);
@@ -58,57 +60,42 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
         ...customerDetails,
         ...customerVerification,
         ...customerCompany,
-        isSalesChannel,
-        salesChannelName: channelName,
-        salesChannelCommision: commision,
-        calculateCommissionOn: calculateCommission,
-        applyCommissionOn: applyCommission,
+        sales_channel: isSalesChannel ? "yes" : "no",
+        sales_channel_name: channelName,
+        commission_per_booking: commision,
+        calculate_commission_on: calculateCommission,
+        apply_commission_on: applyCommission,
       };
       dispatch(
         updateCustomerSalesChannel({
-          isSalesChannel,
-          salesChannelName: channelName,
-          salesChannelCommision: commision,
-          calculateCommissionOn: calculateCommission,
-          applyCommissionOn: applyCommission,
+          sales_channel: isSalesChannel,
+          sales_channel_name: channelName,
+          commission_per_booking: commision,
+          calculate_commission_on: calculateCommission,
+          apply_commission_on: applyCommission,
         })
       );
       try {
         if (id) {
-          console.log({ payload });
+          const response = await axios.post(`/admin/user/${id}`, payload);
+          const data = response?.data?.data;
           dispatch(
             openSnackbar({
-              message: "Customer's informaton successfully updated",
+              message: "Customer's information successfully updated",
               isError: false,
             })
           );
-          dispatch(
-            replaceCustomersInList({
-              id: id,
-              firstname: customerDetails?.first_name,
-              lastname: customerDetails?.last_name,
-              phoneNumber: customerDetails?.phone,
-              country: customerDetails?.country,
-              bookings: "nil",
-            })
-          );
+          dispatch(replaceCustomersInList(data));
         } else {
+          const response = await axios.post(`/admin/user`, payload);
+          const data = response?.data?.data;
           dispatch(
             openSnackbar({
-              message: "Customer informaton successfully created",
+              message: "Customer information successfully created",
               isError: false,
             })
           );
-          dispatch(
-            addCustomersToList({
-              id: "randomized",
-              firstname: customerDetails?.first_name,
-              lastname: customerDetails?.last_name,
-              phoneNumber: customerDetails?.phone,
-              country: customerDetails?.country,
-              bookings: "nil",
-            })
-          );
+          dispatch(addCustomersToList(data));
         }
         dispatch(clearAllCustomerInfo());
         navigate(`/customers`);

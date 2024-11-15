@@ -31,6 +31,7 @@ export default function useGetTopApartmentLists({
 
   const [pagination, setPagination] = useState<pagination>({} as any);
   const getTopApartmentList = useCallback(async () => {
+    setIsFailed(false);
     try {
       setIsLoading(true);
       //check store if this requested data has been saved previously and retirve it
@@ -68,9 +69,10 @@ export default function useGetTopApartmentLists({
         );
         setPagination(paginationDataset);
       }
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [page, start_date, end_date, sort]);
 

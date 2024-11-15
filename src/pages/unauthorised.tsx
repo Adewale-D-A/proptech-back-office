@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useAppSelector } from "../stores/hooks";
 
 export default function Unauthorised() {
-  const { status } = useAppSelector((state) => state?.userProfile?.value);
+  const { user } = useAppSelector((state) => state.userAuthentication.value);
 
   return (
     <div className="flex w-full h-screen flex-col gap-4 items-center justify-center">
@@ -10,7 +10,7 @@ export default function Unauthorised() {
         You are not authorised to view this page
       </h1>
       <Link
-        to={status ? "/dashboard" : "/"}
+        to={user?.id ? "/dashboard" : "/"}
         className="w-fit flex justify-center bg-primary_green-500 text-white  gap-3 p-3 px-6 rounded-lg hover:bg-transparent hover:border hover:border-primary_green-500 transition-all hover:text-primary_green-500"
       >
         <svg

@@ -1,29 +1,39 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { auth_user } from "../../types/auth_user/user_profile";
 
 export const userAuthentication = createSlice({
-  name: "user authentication",
+  name: "current-user",
   initialState: {
     value: {
       status: false,
-      access_token: "",
-      refresh_token: "",
+      isLoggedIn: false,
+      user: {
+      } as auth_user,
+      token: ""
     },
   },
   reducers: {
-    updateAuthentication: (state, action) => {
-      state.value.status = true;
-      state.value.access_token = action?.payload?.access_token;
-      state.value.refresh_token = action?.payload?.refresh_token;
+    updateCurrrentAuthUser: (state, action) => {
+      state.value.status = true
+      state.value.isLoggedIn = true
+      state.value.user = action.payload?.user;
+      state.value.token = action.payload?.token;
     },
-    clearAuthentication: (state) => {
-      state.value.status = false;
-      state.value.access_token = "";
-      state.value.refresh_token = "";
+    clearCurrentAuthUser: (state) => {
+        state.value.status = false
+        state.value.isLoggedIn = false 
+        state.value.token = "" 
+    },
+    updateToken: (state, action) => {
+      state.value.token = action.payload;
     },
   },
 });
 
-export const { updateAuthentication, clearAuthentication } =
-  userAuthentication.actions;
+export const {
+    updateCurrrentAuthUser,
+    clearCurrentAuthUser,
+    updateToken
+} = userAuthentication.actions;
 
 export default userAuthentication.reducer;

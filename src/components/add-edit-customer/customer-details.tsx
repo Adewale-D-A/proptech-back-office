@@ -47,7 +47,7 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
       last_name,
       email,
       phone,
-      profileImg,
+      profile_photo,
       gender,
       dob,
       country,
@@ -59,7 +59,7 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
     setLastname(last_name || "");
     setEmail(email || "");
     setPhoneNumber(phone || "");
-    setProfileImg(profileImg);
+    setProfileImg(profile_photo);
     setGender(gender || "");
     setDob(dob || "");
     setCountry(country);
@@ -78,7 +78,7 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
           last_name: lastname,
           email,
           phone: phoneNumber,
-          profileImg,
+          profile_photo: profileImg,
           gender,
           dob,
           country,

@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 import { useAppSelector } from "../stores/hooks";
 
 function PageNotFound() {
-  const { status } = useAppSelector((state) => state?.userProfile?.value);
-
+  const { user } = useAppSelector((state) => state.userAuthentication.value);
   return (
     <div className="w-full h-screen flex justify-center flex-col gap-5 items-center">
       <div className=" flex items-center flex-col gap-5">
@@ -25,7 +24,7 @@ function PageNotFound() {
           </svg>
         </div>
         <Link
-          to={status ? "/dashboard" : "/"}
+          to={user?.id ? "/dashboard" : "/"}
           className="w-fit flex justify-center button-gradient text-white  gap-3 p-3 px-6 rounded-lg hover:bg-transparent hover:border hover:border-primary-500 transition-all hover:text-primary-500"
         >
           <svg

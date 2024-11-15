@@ -1,5 +1,5 @@
-import { useLayoutEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../stores/hooks";
+import { useLayoutEffect } from "react";
+import { useAppDispatch } from "../../stores/hooks";
 import { updatePageProperties } from "../../stores/appFunctionality/pageProperties";
 
 const breadCrumb = [
@@ -21,11 +21,6 @@ const breadCrumb = [
 ];
 export default function Notification() {
   const dispatch = useAppDispatch();
-
-  const { data: userProfile } = useAppSelector(
-    (state) => state.userProfile.value
-  );
-  const [openNewRequestModal, setOpenNewRequestModal] = useState(false);
 
   // update page props on component mount
   useLayoutEffect(() => {

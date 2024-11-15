@@ -6,12 +6,14 @@ export default function OTPInput({ setOtpCode }: { setOtpCode: Function }) {
   const threeRef = useRef() as any;
   const fourRef = useRef() as any;
   const fiveRef = useRef() as any;
+  const sixRef = useRef() as any;
 
   const [one, setOne] = useState("");
   const [two, setTwo] = useState("");
   const [three, setThree] = useState("");
   const [four, setFour] = useState("");
   const [five, setFive] = useState("");
+  const [six, setSix] = useState("");
 
   const handleOtpInput = useCallback((e: any) => {
     const currentId = e.target.id;
@@ -25,7 +27,7 @@ export default function OTPInput({ setOtpCode }: { setOtpCode: Function }) {
       } else if (currentId === "four") {
         fiveRef.current.focus();
       } else if (currentId === "five") {
-        fiveRef.current.focus();
+        sixRef.current.focus();
       } else {
         oneRef.current.focus();
       }
@@ -38,6 +40,8 @@ export default function OTPInput({ setOtpCode }: { setOtpCode: Function }) {
         threeRef.current.focus();
       } else if (currentId === "five") {
         fourRef.current.focus();
+      } else if (currentId === "six") {
+        fiveRef.current.focus();
       } else {
         oneRef.current.focus();
       }
@@ -49,9 +53,9 @@ export default function OTPInput({ setOtpCode }: { setOtpCode: Function }) {
   }, []);
 
   useEffect(() => {
-    const finalCode = `${one}${two}${three}${four}${five}`;
+    const finalCode = `${one}${two}${three}${four}${five}${six}`;
     setOtpCode(finalCode);
-  }, [one, two, three, four, five]);
+  }, [one, two, three, four, five, six]);
 
   return (
     <div className=" w-full flex items-center gap-3">
@@ -61,6 +65,7 @@ export default function OTPInput({ setOtpCode }: { setOtpCode: Function }) {
         { state: three, setState: setThree, id: "three", ref: threeRef },
         { state: four, setState: setFour, id: "four", ref: fourRef },
         { state: five, setState: setFive, id: "five", ref: fiveRef },
+        { state: six, setState: setSix, id: "six", ref: sixRef },
       ].map((val) => {
         return (
           <input

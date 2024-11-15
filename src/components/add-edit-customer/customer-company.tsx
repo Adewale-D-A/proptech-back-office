@@ -28,23 +28,23 @@ export default function AddEditCustomerCompany({ id }: { id?: string }) {
   // populate apartment details interface
   useEffect(() => {
     const {
-      companyName,
-      VATid,
-      companyEmail,
-      companyId,
-      companyCountry,
-      companyState,
-      companyCity,
-      companyAddress,
+      company_name,
+      vat_id,
+      company_email,
+      company_id,
+      company_country,
+      company_state,
+      company_city,
+      company_address,
     } = storeCustomerCompany;
-    setCompanyName(companyName);
-    setVATid(VATid);
-    setCompanyEmail(companyEmail);
-    setCompanyId(companyId);
-    setCompanyCountry(companyCountry);
-    setCountryState(companyState);
-    setCompanyCity(companyCity);
-    setCompanyAddress(companyAddress);
+    setCompanyName(company_name);
+    setVATid(vat_id);
+    setCompanyEmail(company_email);
+    setCompanyId(company_id);
+    setCompanyCountry(company_country);
+    setCountryState(company_state);
+    setCompanyCity(company_city);
+    setCompanyAddress(company_address);
   }, [storeCustomerCompany]);
 
   //update redux store and naviagte to next timeline
@@ -52,14 +52,14 @@ export default function AddEditCustomerCompany({ id }: { id?: string }) {
     (e: SyntheticEvent) => {
       e.preventDefault();
       const payload = {
-        companyName,
-        VATid,
-        companyEmail,
-        companyId,
-        companyCountry,
-        companyState,
-        companyCity,
-        companyAddress,
+        company_name: companyName,
+        vat_id: VATid,
+        company_email: companyEmail,
+        company_id: companyId,
+        company_country: companyCountry,
+        company_state: companyState,
+        company_city: companyCity,
+        company_address: companyAddress,
       };
       dispatch(updateCustomerCompany(payload));
       if (id) {
