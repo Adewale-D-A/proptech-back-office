@@ -9,7 +9,7 @@ import MenuIcon from "../assets/icons/menu";
 import useAxios from "../useHooks/useAxios";
 import NextArrowIcon from "../assets/icons/next-arrow";
 import NavigatePrevIcon from "../assets/icons/navigate-prev";
-import signOut from "../utils/signOut";
+import signOut from "../utils/auth/signOut";
 
 //full view
 function FullMenuView() {
@@ -28,7 +28,7 @@ function FullMenuView() {
 
   const logOut = useCallback(async () => {
     try {
-      // await axios.post("/admin/logout");
+      await axios.post("/auth/admin/logout");
       signOut();
     } catch (error) {
       // dispatch(openSnackbar({ message: "logout failed", isError: true }));

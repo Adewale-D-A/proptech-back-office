@@ -3,6 +3,8 @@ import NextArrowIcon from "../../assets/icons/next-arrow";
 import LoaderIcon from "../../assets/icons/loader";
 import PreviousArrowIcon from "../../assets/icons/previous-arrow";
 import { pagination } from "../../types/pagination";
+import NavigateNextIcon from "../../assets/icons/navigate-next";
+import NavigatePrevIcon from "../../assets/icons/navigate-prev";
 
 export default function Pagination({
   pagination,
@@ -48,7 +50,7 @@ export default function Pagination({
           {isLoading ? (
             <LoaderIcon className=" h-4 w-4 animate-spin" />
           ) : (
-            <PreviousArrowIcon className=" h-4 w-4 min-h-4 min-w-4" />
+            <NavigatePrevIcon className=" h-4 w-4 min-h-4 min-w-4" />
           )}
         </button>
         <div className="flex gap-2 flex-wrap justify-between md:justify-center">
@@ -83,7 +85,7 @@ export default function Pagination({
           {isLoading ? (
             <LoaderIcon className=" h-4 w-4 animate-spin" />
           ) : (
-            <NextArrowIcon className=" h-4 w-4" />
+            <NavigateNextIcon className=" h-4 w-4" />
           )}
         </button>
       </div>

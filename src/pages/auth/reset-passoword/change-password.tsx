@@ -1,12 +1,12 @@
 import { SyntheticEvent, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
-import LoadingButton from "../../components/button";
+import LoadingButton from "../../../components/button";
 import SuccessPasswordChange from "./successPasswordChange";
-import { useAppDispatch } from "../../stores/hooks";
-import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import { useAppDispatch } from "../../../stores/hooks";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 // import useAxios from "../../hooks/useAxios";
-import Password from "../../components/inputs/password";
-import useAxios from "../../useHooks/useAxios";
+import Password from "../../../components/inputs/password";
+import useAxios from "../../../useHooks/useAxios";
 
 export default function ChangePassword() {
   const axios = useAxios();

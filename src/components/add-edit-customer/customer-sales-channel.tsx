@@ -51,7 +51,7 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
   //update redux store and naviagte to next timeline
   const uploadCustomerInformation = useCallback(
     async (e: SyntheticEvent) => {
-      console.log("triggered");
+      // console.log("triggered");
       e.preventDefault();
       setIsSubmitting(true);
       const { customerDetails, customerVerification, customerCompany } =

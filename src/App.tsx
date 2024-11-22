@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import PageNotFound from "./pages/404";
-import Login from "./pages/login";
-import ResetPassword from "./pages/reset-passoword";
-import ChangePassword from "./pages/reset-passoword/change-password";
+import Login from "./pages/auth/login";
+import ResetPassword from "./pages/auth/reset-passoword";
+import ChangePassword from "./pages/auth/reset-passoword/change-password";
 // import SnackBar from "./components/snackbar";
 import { useAppSelector } from "./stores/hooks";
 import Unauthorised from "./pages/unauthorised";
@@ -63,9 +63,9 @@ function App() {
           <Route path="/unauthorised" element={<Unauthorised />} />
           <Route element={<RedirectHome />}>
             <Route path="/" element={<Login />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/auth/reset-password" element={<ResetPassword />} />
             <Route
-              path="/change-password/:email/:otp"
+              path="/auth/change-password/:email/:otp"
               element={<ChangePassword />}
             />
           </Route>

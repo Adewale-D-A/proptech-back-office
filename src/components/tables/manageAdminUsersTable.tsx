@@ -11,6 +11,7 @@ import TableSearch from "../inputs/search/table-search";
 import Filter from "../filterAndSort/filter";
 import Sort from "../filterAndSort/sort";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
+import MobileAdminTable from "./mobile/admins";
 
 export default function ManageAdminUsersTable() {
   const axios = useAxios();
@@ -72,7 +73,7 @@ export default function ManageAdminUsersTable() {
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Admins Lists</h2>
-          <div className=" max-w-md">
+          {/* <div className=" max-w-md">
             <TableSearch
               setValue={setSearch}
               placeholder="First name, last name, email, phone number..."
@@ -81,55 +82,60 @@ export default function ManageAdminUsersTable() {
           <div className=" flex items-center gap-2">
             <Filter actionHandler={handleCustomersFiltering} />
             <Sort setSort={setSort} id="sort-by" label="Sort by" />
-          </div>
+          </div> */}
         </div>
-        {data?.length > 0 ? (
-          <table className=" w-full py-10 border rounded-md">
-            <thead>
-              <tr className=" text-left bg-gray-200/15 text-gray-500">
-                <th>S/N</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody className="">
-              {data.map((request, index) => {
-                return (
-                  <tr key={request?.id} className=" border-b">
-                    <td className=" text-gray-500  max-w-xs">{index + 1}</td>
-                    <td className=" max-w-xs">
-                      {request?.first_name} {request?.last_name}
-                    </td>
-                    <td className=" max-w-xs">{request?.email}</td>
-                    <td className=" max-w-xs">{request?.role}</td>
-                    <td className=" group relative">
-                      <span className=" p-2 text-lg">...</span>
-                      <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                        <Link
-                          to={`/admin/edit/${request?.id}`}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Edit admin
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => onDeleteClick(request?.id)}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Delete admin
-                        </button>
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        ) : (
-          <NoResult title="No Result" message="No data found for this page" />
-        )}
+        <div className="hidden md:block px-5">
+          {data?.length > 0 ? (
+            <table className=" w-full py-10 border rounded-md">
+              <thead>
+                <tr className=" text-left bg-gray-200/15 text-gray-500">
+                  <th>S/N</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody className="">
+                {data.map((request, index) => {
+                  return (
+                    <tr key={request?.id} className=" border-b">
+                      <td className=" text-gray-500  max-w-xs">{index + 1}</td>
+                      <td className=" max-w-xs">
+                        {request?.first_name} {request?.last_name}
+                      </td>
+                      <td className=" max-w-xs">{request?.email}</td>
+                      <td className=" max-w-xs">{request?.role}</td>
+                      <td className=" group relative">
+                        <span className=" p-2 text-lg">...</span>
+                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
+                          <Link
+                            to={`/admin/edit/${request?.id}`}
+                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                          >
+                            Edit admin
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => onDeleteClick(request?.id)}
+                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                          >
+                            Delete admin
+                          </button>
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          ) : (
+            <NoResult title="No Result" message="No data found for this page" />
+          )}
+        </div>
+        <div className="w-full block md:hidden">
+          <MobileAdminTable data={data} onDeleteClick={onDeleteClick} />
+        </div>
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}

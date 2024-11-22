@@ -3,10 +3,11 @@ import FloatButton from "../../../components/button/floatButton";
 import TextInput from "../../../components/inputs/textInput";
 import useGetAllResources from "../../../services-hooks/useGetResources";
 import updatePermissions from "../../../utils/updatePermissions";
-import reformResourcePermissions from "../../../utils/reformPermissions";
+import reformResourcePermissions from "../../../utils/admin/reformPermissions";
 import { resource } from "../../../types/apiData/resources";
 import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import backendPermissionFormatter from "../../../utils/admin/backendFormatConverter";
 
 export default function AddEditRoles({
   isEdit,
@@ -20,11 +21,8 @@ export default function AddEditRoles({
   roleSubmitHandler: Function;
 }) {
   const dispatch = useAppDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction } =
-    useGetAllResources({
-      page: currentPage,
-    });
+    useGetAllResources();
 
   const [roleName, setRoleName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,7 +34,7 @@ export default function AddEditRoles({
       slug: string;
       permissions: {
         all: boolean;
-        read: boolean;
+        view: boolean;
         create: boolean;
         update: boolean;
         delete: boolean;
@@ -83,11 +81,10 @@ export default function AddEditRoles({
   const handleRoleSubmit = useCallback(async () => {
     setIsSubmitting(true);
     if (roleName) {
+      const result = backendPermissionFormatter({ permission: resourceStates });
       await roleSubmitHandler({
         name: roleName,
-        permissions: resourceStates
-          ?.filter((item) => item?.permissions?.all)
-          ?.map((item) => item?.slug),
+        permissions: result,
       });
       setIsSubmitting(false);
     } else {
@@ -120,7 +117,7 @@ export default function AddEditRoles({
                 <th>S/N</th>
                 <th>Resource</th>
                 <th>All</th>
-                <th>Read</th>
+                <th>View</th>
                 <th>Create</th>
                 <th>Update</th>
                 <th>Delete</th>
@@ -152,12 +149,12 @@ export default function AddEditRoles({
                     <td className="max-w-xs">
                       <div className="w-full">
                         <input
-                          title="read"
+                          title="view"
                           type="checkbox"
                           className=" w-6 h-6"
-                          value={"read"}
+                          value={"view"}
                           onChange={(e) => handleResourceChange(e, index)}
-                          checked={resource?.permissions.read}
+                          checked={resource?.permissions.view}
                         />
                       </div>
                     </td>

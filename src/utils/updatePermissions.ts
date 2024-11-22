@@ -2,10 +2,10 @@ export default function updatePermissions({
   value,
   permission,
 }: {
-  value: "all" | "read" | "create" | "update" | "delete" | string;
+  value: "all" | "view" | "create" | "update" | "delete" | string;
   permission: {
     all: boolean;
-    read: boolean;
+    view: boolean;
     create: boolean;
     update: boolean;
     delete: boolean;
@@ -13,12 +13,12 @@ export default function updatePermissions({
 }) {
   const updatedPermission = {
     all: value === "all" ? Boolean(!permission?.all) : permission?.all,
-    read:
+    view:
       value === "all"
         ? Boolean(!permission?.all)
-        : value === "read"
-        ? Boolean(!permission?.read)
-        : permission?.read,
+        : value === "view"
+        ? Boolean(!permission?.view)
+        : permission?.view,
     create:
       value === "all"
         ? Boolean(!permission?.all)
@@ -35,7 +35,7 @@ export default function updatePermissions({
       value === "all"
         ? Boolean(!permission?.all)
         : value === "delete"
-        ? Boolean(!permission?.read)
+        ? Boolean(!permission?.view)
         : permission?.delete,
   };
   return updatedPermission || permission;

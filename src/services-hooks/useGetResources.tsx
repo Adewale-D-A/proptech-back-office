@@ -1,96 +1,44 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
-import {
-  addToPaginationHistory,
-  updateResources,
-} from "../stores/apiData/resources";
+import { updateResources } from "../stores/apiData/resources";
 import useAxios from "../useHooks/useAxios";
+import reformResources from "../utils/admin/reformResource";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetAllResources({
-  page = 1,
-  sort = "desc",
-  search = "",
-}: {
-  page?: number;
-  start_date?: string;
-  end_date?: string;
-  sort?: "desc" | "asc" | string;
-  search?: string;
-}) {
+export default function useGetAllResources() {
   const axios = useAxios();
   const dispatch = useAppDispatch();
-  const {
-    status,
-    data,
-    pagination: store_pagination,
-  } = useAppSelector((state) => state.resources.value);
+  const { status, rawdata, reformedData } = useAppSelector(
+    (state) => state.resources.value
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
-
-  const [pagination, setPagination] = useState<{
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    from: number;
-    to: number;
-  }>({} as any);
 
   const getAllAdmins = useCallback(async () => {
     try {
       setIsLoading(true);
-      //check store if this requested data has been saved previously and retirve it
-      //if not, make a new request and save into store
-      const foundPage = store_pagination.find(
-        (item) => item?.pagination_data?.current_page === page
-      );
-      if (foundPage && !(sort === "asc") && !search) {
-        setPagination(foundPage?.pagination_data);
-        dispatch(updateResources({ data: foundPage?.data }));
-      } else {
-        const response = await axios.get(
-          `/admin/permissions?sort=${sort}&limit=20&search=${
-            search || ""
-          }&page=${page}`
-        );
-        const { permissions } = response?.data?.data;
-        const { data, current_page, last_page, per_page, total, from, to } =
-          permissions;
-        const paginationDataset = {
-          current_page,
-          last_page,
-          per_page,
-          total,
-          from,
-          to,
-          length: data?.length,
-        };
-        dispatch(updateResources({ data }));
-        dispatch(
-          addToPaginationHistory({
-            pagination_data: paginationDataset,
-            data: data,
-          })
-        );
-        setPagination(paginationDataset);
-      }
-      setIsLoading(false);
+      const response = await axios.get(`/admin/permissions`);
+      const { permissions } = response?.data?.data;
+      const result = reformResources({ resource: permissions });
+      dispatch(updateResources({ rawdata: permissions, reformedData: result }));
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
-  }, [page, sort, search]);
+  }, []);
 
   useEffect(() => {
-    getAllAdmins();
-  }, [page, sort, search]);
+    if (!status) {
+      getAllAdmins();
+    }
+  }, [status]);
 
   return {
-    data,
+    data: reformedData,
     isLoading,
     isFailed,
     setIsFailed,
     retryFunction: getAllAdmins,
-    pagination,
   };
 }

@@ -1,11 +1,11 @@
 import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import TextInput from "../../components/inputs/textInput";
-import LoadingButton from "../../components/button";
-import OTPInput from "../../components/inputs/otpInput";
-import useAxios from "../../useHooks/useAxios";
-import { useAppDispatch } from "../../stores/hooks";
-import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import TextInput from "../../../components/inputs/textInput";
+import LoadingButton from "../../../components/button";
+import OTPInput from "../../../components/inputs/otpInput";
+import useAxios from "../../../useHooks/useAxios";
+import { useAppDispatch } from "../../../stores/hooks";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 
 export default function ResetPassword() {
   const axios = useAxios();

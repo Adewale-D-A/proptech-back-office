@@ -1,18 +1,19 @@
 import { useEffect } from "react";
 import { axiosMultipartInstance } from "../services-hooks/base";
-import { useAppDispatch, useAppSelector } from "../stores/hooks";
+import { useAppDispatch } from "../stores/hooks";
 import { useLocation, useNavigate } from "react-router-dom";
-import { updateCurrrentAuthUser, updateToken } from "../stores/authUser/auth";
+import { updateToken } from "../stores/authUser/auth";
 import { openSnackbar } from "../stores/appFunctionality/snackbar";
 import refreshToken from "../services-hooks/base/refreshToken";
 import extractErrMssg from "../utils/extractErrMssg";
+import extractToken from "../utils/auth/extractToken";
+import signOut from "../utils/auth/signOut";
 
 //axios instace interceptor for access token integration and refresh tokens
 const useAxiosMultipart = (disableErrorPrompt?: boolean) => {
-  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const { token } = useAppSelector((state) => state.userAuthentication.value);
+  const { token } = extractToken();
 
   useEffect(() => {
     const requestIntercept = axiosMultipartInstance.interceptors.request.use(
@@ -59,6 +60,7 @@ const useAxiosMultipart = (disableErrorPrompt?: boolean) => {
           // sessionStorage.removeItem(`${process.env.REACT_APP_SESSION_KEY}`);
           // dispatch(clearAuthentication());
           // navigate(`/?redirect=${location?.pathname}`);
+          signOut(location?.pathname);
           return Promise.reject(error);
         } else if (!disableErrorPrompt) {
           dispatch(

@@ -172,8 +172,8 @@ export default function DashboardOverview() {
         </div>
 
         {/* top countries and sales channel */}
-        <div className=" w-full gap-5 grid grid-cols-1 lg:grid-cols-2">
-          <div className="w-full rounded-lg border">
+        <div className=" w-full gap-5 grid grid-cols-1">
+          {/* <div className="w-full rounded-lg border">
             <div className=" w-full border-b p-4">
               <h2 className="text-lg font-semibold">Top Countries</h2>
             </div>
@@ -199,7 +199,7 @@ export default function DashboardOverview() {
                 }}
               />
             </div>
-          </div>
+          </div> */}
 
           <div className=" w-full rounded-lg border">
             <div className=" w-full border-b p-4 flex flex-start flex-col md:flex-row gap-3 md:items-center justify-between">

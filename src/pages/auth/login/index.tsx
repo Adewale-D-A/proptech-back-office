@@ -1,13 +1,14 @@
 import { SyntheticEvent, useCallback, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import TextInput from "../../components/inputs/textInput";
-import Password from "../../components/inputs/password";
-import LoadingButton from "../../components/button";
-import { useAppDispatch } from "../../stores/hooks";
-import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-import useAxios from "../../useHooks/useAxios";
-import Criptic from "../../utils/criptic";
-import { updateToken } from "../../stores/authUser/auth";
+import TextInput from "../../../components/inputs/textInput";
+import Password from "../../../components/inputs/password";
+import LoadingButton from "../../../components/button";
+import { useAppDispatch } from "../../../stores/hooks";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import useAxios from "../../../useHooks/useAxios";
+import Criptic from "../../../utils/criptic";
+import { updateToken } from "../../../stores/authUser/auth";
+import storeToken from "../../../utils/auth/storeToken";
 
 const encrypt = new Criptic();
 const authKey = process.env.REACT_APP_AUTH_KEY || "";
@@ -32,15 +33,7 @@ function Login() {
           password: password,
         });
         const { access_token } = response?.data?.data;
-        const strigifiedToken = JSON.stringify({
-          token: access_token,
-        });
-
-        dispatch(updateToken(access_token));
-        // encrypt token
-        const encryptedToken = encrypt.encrypt(authKey, strigifiedToken);
-        localStorage.setItem(authKey, encryptedToken);
-
+        storeToken({ token: access_token });
         navigate(
           searchParams?.get("redirect")
             ? `${searchParams?.get("redirect")}`

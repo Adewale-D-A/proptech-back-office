@@ -1,25 +1,19 @@
 import { useEffect } from "react";
 import { axiosInstance } from "../services-hooks/base";
 import { useAppDispatch } from "../stores/hooks";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { openSnackbar } from "../stores/appFunctionality/snackbar";
 import refreshToken from "../services-hooks/base/refreshToken";
 import extractErrMssg from "../utils/extractErrMssg";
 import { updateToken } from "../stores/authUser/auth";
-import Criptic from "../utils/criptic";
-import signOut from "../utils/signOut";
+import signOut from "../utils/auth/signOut";
+import extractToken from "../utils/auth/extractToken";
 
-const decrypt = new Criptic();
-const authKey = process.env.REACT_APP_AUTH_KEY || "";
 const useAxios = (disableErrorPrompt?: boolean) => {
-  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  // decipher adn extract token
-  const credentials = localStorage.getItem(authKey) || "";
-  const decryptCredentials = decrypt.decrypt(authKey, credentials);
-  const { token } = JSON.parse(decryptCredentials);
+  const { token } = extractToken();
 
   useEffect(() => {
     const requestIntercept = axiosInstance.interceptors.request.use(

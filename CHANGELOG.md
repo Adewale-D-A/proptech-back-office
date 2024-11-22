@@ -1,3 +1,7 @@
+##### 22.11.2024
+
+> Permissions logic redefinition and cleanup
+
 ##### 15.11.2024
 
 > Add customer to list
