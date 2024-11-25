@@ -10,20 +10,24 @@ import CalendarView from ".";
 import ModalTemplate from "../modal";
 import AssignCustomer from "../quickReservationFlow/assignToCustomer";
 import useGetApartmentCalendar from "../../services-hooks/apartmentCalendar";
-import { useParams } from "react-router-dom";
 import dateRangeIterator from "../../utils/dateRangeIterator";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-import useGetApartmentById from "../../services-hooks/useGetApartmentById";
+import { apartmentById } from "../../types/apiData/apartment";
 
 // const sampleBookedDates = [
 //   new Date(2024, 8, 27),
 //   new Date(2024, 8, 29),
 //   new Date(2024, 8, 30),
 // ];
-
+const today = new Date();
+const todayString = new Date()?.toISOString()?.slice(0, 10);
+const nextMonthString = new Date(today?.getFullYear(), today?.getMonth() + 2, 0)
+  ?.toISOString()
+  ?.slice(0, 10);
 export default function ApartmentCalendarView() {
-  const { id } = useParams();
   const dispatch = useAppDispatch();
+  const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
+
   // store assigned customer state
   const { open: openAssignToCustomerView } = useAppSelector(
     (state) => state.assignCustomer.value
@@ -33,22 +37,18 @@ export default function ApartmentCalendarView() {
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
-  }>();
+  }>({
+    start_date: todayString,
+    end_date: nextMonthString,
+  });
   const [calendarVewData, setCalendarViewData] = useState<Date[]>([]);
 
   // calendar data fetching based on filtered dates
   const { data } = useGetApartmentCalendar({
-    id,
+    id: String(selectedAprt?.id || ""),
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,
   });
-  const {
-    data: apartment_details,
-    isLoading: apartment_isLoading,
-    isFailed: apartment_isFailed,
-    setIsFailed: apartment_setIsFailed,
-    retryFunction: apartment_retryFunction,
-  } = useGetApartmentById(id ? id : undefined);
 
   // click handlers
   const handleSalesFiltering = useCallback(
@@ -84,7 +84,9 @@ export default function ApartmentCalendarView() {
   }, [filterDates]);
 
   useEffect(() => {
-    extractCalendarViewData();
+    if (data?.blocked_dates) {
+      extractCalendarViewData();
+    }
   }, [data]);
   //spread date range into objects for the calendar view to render
 
@@ -100,7 +102,7 @@ export default function ApartmentCalendarView() {
               <div className="w-full p-2">
                 <QuickReservationFlow
                   variant={2}
-                  apartment_name={apartment_details?.name}
+                  setSelectedApt={setSelectedApt}
                 />
               </div>
             </div>
@@ -112,30 +114,34 @@ export default function ApartmentCalendarView() {
                 <Filter actionHandler={handleSalesFiltering} />
               </div>
               <div className="w-full p-2 flex flex-col gap-5">
-                <ImageCarousel
-                  images={apartment_details?.images?.map((item) => ({
-                    url: item?.path,
-                  }))}
-                />
-                <div className="w-full flex justify-center flex-col gap-5">
-                  <CalendarAvailabilitySymbol />
-                  <div className="w-full flex flex-wrap gap-8 gap-y-16 justify-center items-start">
-                    {calendarVewData?.map((item, index) => (
-                      <div key={index} className=" border-r px-3">
-                        <CalendarView
-                          date={new Date(item)}
-                          highlights={data?.booked_dates}
-                        />
-                      </div>
-                    ))}
+                {selectedAprt?.images?.length > 0 && (
+                  <ImageCarousel
+                    images={selectedAprt?.images?.map((item) => ({
+                      url: item?.path,
+                    }))}
+                  />
+                )}
+                {calendarVewData?.length > 0 && (
+                  <div className="w-full flex justify-center flex-col gap-5">
+                    <CalendarAvailabilitySymbol />
+                    <div className="w-full flex flex-wrap gap-8 gap-y-16 justify-center items-start">
+                      {calendarVewData?.map((item, index) => (
+                        <div key={index} className=" border-r px-3">
+                          <CalendarView
+                            date={new Date(item)}
+                            highlights={data?.booked_dates}
+                          />
+                        </div>
+                      ))}
 
-                    {/* {
+                      {/* {
                         id: 1,
                         date: new Date(2024, 8, 1),
                         highlights: sampleBookedDates,
                       }, */}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>

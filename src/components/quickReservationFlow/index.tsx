@@ -1,4 +1,4 @@
-import { SyntheticEvent, useCallback, useState } from "react";
+import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import Select from "../inputs/select";
 import TextInput from "../inputs/textInput";
 import UserPlusIcon from "../../assets/icons/user-plus";
@@ -10,18 +10,21 @@ import TimeInput from "../inputs/timeInput";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { openAssignToCustomerView } from "../../stores/inAppDataInterations/assignCustomer";
 import Search from "../inputs/search";
+import { apartmentById } from "../../types/apiData/apartment";
 
 export default function QuickReservationFlow({
   variant = 1,
   apartment_name,
+  setSelectedApt,
 }: {
   variant?: number;
   apartment_name?: string;
+  setSelectedApt?: (data: apartmentById) => void;
 }) {
   const dispatch = useAppDispatch();
 
   const { data } = useAppSelector((state) => state.assignCustomer.value);
-  const [apartment, setApartment] = useState({} as any);
+  const [apartment, setApartment] = useState<apartmentById>({} as any);
   const [payment, setPayment] = useState("");
   const [checkInDate, setCheckInDate] = useState("");
   const [rate, setRate] = useState("");
@@ -35,6 +38,13 @@ export default function QuickReservationFlow({
   const [customerInfo, setCustomerInfo] = useState("");
 
   const [isMakingReservation, setIsMakingReservation] = useState(false);
+
+  // update selected apartment
+  useEffect(() => {
+    if (setSelectedApt) {
+      setSelectedApt(apartment);
+    }
+  }, [apartment]);
 
   const assignCustomer = useCallback(() => {
     dispatch(openAssignToCustomerView());

@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Combobox,
   ComboboxInput,
@@ -63,7 +63,7 @@ export default function Search({
   // populate fultered list on data search
   useEffect(() => {
     setFilteredResult(componentId === "customer" ? customers : apartments);
-  }, [componentId, customers]);
+  }, [componentId, customers, apartments]);
 
   useEffect(() => {
     if (updatelist) {

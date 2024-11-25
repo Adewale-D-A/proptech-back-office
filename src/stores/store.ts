@@ -12,6 +12,7 @@ import pageProperties from "./appFunctionality/pageProperties";
 import assignCustomer from "./inAppDataInterations/assignCustomer";
 import addEditApartmentInfo from "./inAppDataInterations/addEditApartmentInfo";
 import addEditCustomerInfo from "./inAppDataInterations/addEditCustomerInfo";
+
 // inApp Data interactions
 
 //user profile
@@ -23,6 +24,14 @@ import userAuthentication from "./authUser/auth";
 import serviceBreakdownData from "./apiData/dahsboards/services-breakdown";
 import salesAnalyticsData from "./apiData/dahsboards/sales-analytics";
 import salesChannelData from "./apiData/dahsboards/sales-channels";
+
+// bookings
+import arrivingReservation from "./apiData/bookings/arriving-reservation";
+import departingReservation from "./apiData/bookings/departing-reservation";
+import latestReservation from "./apiData/bookings/lastest-reservation";
+import upcomingReservation from "./apiData/bookings/upcoming-reservation";
+import visitorsCount from "./apiData/bookings/visitor-count";
+import dailyOccupancy from "./apiData/bookings/daily-occupancy";
 
 import apartmentListsData from "./apiData/apartment-lists";
 import topApartmentListsData from "./apiData/top-apartment-list";
@@ -71,6 +80,14 @@ export const adminStore = () => {
       serviceBreakdown: serviceBreakdownData,
       salesAnalytics: salesAnalyticsData,
       salesChannels: salesChannelData,
+
+      // bookings
+      arrivingReservation: arrivingReservation,
+      departingReservation: departingReservation,
+      latestRestervation: latestReservation,
+      upcomingReservation: upcomingReservation,
+      visitorCount: visitorsCount,
+      dailyOccupany: dailyOccupancy,
 
       allAparmentLists: apartmentListsData,
       topAparmentLists: topApartmentListsData,

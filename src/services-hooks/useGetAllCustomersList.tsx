@@ -77,12 +77,14 @@ export default function useGetAllCustomersLists({
           length: data?.length,
         };
         dispatch(updateCustomersList({ data }));
-        dispatch(
-          addToPaginationHistory({
-            pagination_data: paginationDataset,
-            data: data,
-          })
-        );
+        if (!search) {
+          dispatch(
+            addToPaginationHistory({
+              pagination_data: paginationDataset,
+              data: data,
+            })
+          );
+        }
         setPagination(paginationDataset);
       }
       setIsLoading(false);

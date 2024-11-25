@@ -1,3 +1,7 @@
+##### 25.11.2024
+
+> Bookings UI population
+
 ##### 22.11.2024
 
 > Permissions logic redefinition and cleanup

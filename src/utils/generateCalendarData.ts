@@ -1,11 +1,18 @@
-import weekdayMonth from "../assets/days-months.json"
-export default function generateCalendarData ({selectedDate, highlights}:{selectedDate: Date, highlights?: Date[]}){
-    
-  const generateDays =() => {
+import weekdayMonth from "../assets/days-months.json";
+export default function generateCalendarData({
+  selectedDate,
+  highlights,
+  notAvailable,
+}: {
+  selectedDate: Date;
+  highlights?: Date[];
+  notAvailable?: Date[];
+}) {
+  const generateDays = () => {
     const daysArray = [];
     const firstDayOfMonth = new Date(
-        selectedDate?.getFullYear(),
-        selectedDate?.getMonth(),
+      selectedDate?.getFullYear(),
+      selectedDate?.getMonth(),
       1
     );
     const weekdayOfFirstDay = firstDayOfMonth.getDay();
@@ -26,10 +33,18 @@ export default function generateCalendarData ({selectedDate, highlights}:{select
         date: new Date(firstDayOfMonth),
         month: firstDayOfMonth.getMonth(),
         day: firstDayOfMonth.getDate(),
-        weekday:  weekdayMonth?.days[firstDayOfMonth.getDay()],
-        selected: firstDayOfMonth.toDateString() === selectedDate.toDateString(),
+        weekday: weekdayMonth?.days[firstDayOfMonth.getDay()],
+        selected:
+          firstDayOfMonth.toDateString() === selectedDate.toDateString(),
         year: firstDayOfMonth.getFullYear(),
         highlight: highlights?.find(
+          (item) =>
+            `${item.getFullYear()}-${item?.getMonth()}-${item?.getDate()}` ===
+            `${firstDayOfMonth.getFullYear()}-${firstDayOfMonth?.getMonth()}-${firstDayOfMonth?.getDate()}`
+        )
+          ? true
+          : false,
+        notAvailable: notAvailable?.find(
           (item) =>
             `${item.getFullYear()}-${item?.getMonth()}-${item?.getDate()}` ===
             `${firstDayOfMonth.getFullYear()}-${firstDayOfMonth?.getMonth()}-${firstDayOfMonth?.getDate()}`
@@ -41,6 +56,5 @@ export default function generateCalendarData ({selectedDate, highlights}:{select
     }
     return daysArray;
   };
-  return generateDays()
-
+  return generateDays();
 }

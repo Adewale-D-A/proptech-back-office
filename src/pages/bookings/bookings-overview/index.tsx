@@ -1,3 +1,4 @@
+import { useCallback, useState } from "react";
 import CalendarIcon from "../../../assets/icons/calendar";
 import PlaneIcon from "../../../assets/icons/plane";
 import PlusIcon from "../../../assets/icons/plus";
@@ -7,19 +8,46 @@ import CalendarView from "../../../components/calendar";
 import CalendarAvailabilitySymbol from "../../../components/calender-availability-symbol";
 import CheckAvailability from "../../../components/check-availability";
 import Filter from "../../../components/filterAndSort/filter";
-import Sort from "../../../components/filterAndSort/sort";
 import Search from "../../../components/inputs/search";
 import BookingsListTable from "../../../components/tables/bookingsLists";
 import BarChart from "../../../components/charts/bar-chart";
 import RoomOccupancyListTable from "../../../components/tables/roomOccupancy";
 import ForecastDash from "../../../components/forecasting-dash";
 import CalculatedAvailabilityOptions from "../../../components/check-availability/calculated-option";
-import { useState } from "react";
 import { availabilityOptions } from "../../../types/apiData/availabilityOptions";
+import { apartmentById } from "../../../types/apiData/apartment";
+import useGetApartmentCalendar from "../../../services-hooks/apartmentCalendar";
+import useGetVisitorCount from "../../../services-hooks/bookings/useGetVisitorCOunter";
+import useGetWeeklyBookingCount from "../../../services-hooks/bookings/useGetWeeklyBookingCount";
+import formatDate from "../../../utils/isoDateConverter";
 
 export default function BookingsOverview() {
+  const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
   const [availabilityResponse, setAvailabilityResponse] =
     useState<availabilityOptions>();
+
+  const [filterDates, setFilterDates] = useState<{
+    start_date: string;
+    end_date: string;
+  }>();
+
+  const { data: weekly_booking } = useGetWeeklyBookingCount({
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+  });
+
+  const handleWeklybookingFiltering = useCallback(
+    (start_date: string, end_date: string) => {
+      setFilterDates({ start_date, end_date });
+    },
+    []
+  );
+  // calendar data fetching based on filtered dates
+  const { data } = useGetApartmentCalendar({
+    id: String(selectedAprt?.id || ""),
+  });
+  const { data: visitorCount } = useGetVisitorCount();
+
   return (
     <div className=" w-full flex flex-col gap-5 my-5">
       <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
@@ -32,22 +60,22 @@ export default function BookingsOverview() {
               {[
                 {
                   id: 1,
-                  value: "12",
+                  value: visitorCount?.visitors_today,
                   label: "Visitors today",
                 },
                 {
                   id: 2,
-                  value: "579",
+                  value: visitorCount?.visitors_this_month,
                   label: "Visitors this month",
                 },
                 {
                   id: 3,
-                  value: "450",
+                  value: visitorCount?.visitors_last_month,
                   label: "Visitors last month",
                 },
                 {
                   id: 4,
-                  value: "+35.6%",
+                  value: `${visitorCount?.turnout}%`,
                   label: "Turnout",
                 },
               ].map((item) => (
@@ -83,7 +111,7 @@ export default function BookingsOverview() {
           {/* Bookings Calendar */}
           <div className="flex items-center justify-between gap-2 border-b p-3">
             <h4 className="text-lg font-semibold  flex items-center gap-2">
-              <CalendarIcon /> <span>Bookings Calendar</span>{" "}
+              <CalendarIcon /> <span>Bookings Calendar</span>
             </h4>
             <div className=" w-fit">
               <LinkButton
@@ -94,173 +122,51 @@ export default function BookingsOverview() {
             </div>
           </div>
           <div className=" px-3 flex flex-col gap-3 justify-center items-center">
-            <div className="w-full">
-              <Search id="apartment-search" placeholder="Apartment name..." />
+            <div className="w-full flex flex-col gap-3">
+              <Search
+                id="apartment-search"
+                componentId="apartment"
+                placeholder="Apartment name..."
+                setValue={setSelectedApt}
+              />
             </div>
-            <CalendarView />
             <CalendarAvailabilitySymbol />
+            {data.blocked_dates && (
+              <CalendarView
+                // date={new Date(item)}
+                highlights={data?.booked_dates}
+              />
+            )}
           </div>
         </div>
         {/* upcoming reservations */}
-        <div className=" w-full flex flex-col gap-4 border rounded-md">
-          <div className="flex  flex-col md:flex-row items-center justify-between gap-2 border-b p-3">
-            <h4 className="text-lg font-semibold  flex items-center gap-2">
-              <CalendarIcon /> <span>Upcoming Reservations</span>{" "}
-            </h4>
-            <div className=" w-fit">
-              <Filter />
-            </div>
-          </div>
-          <div className=" px-3 flex flex-col gap-3 justify-center items-center">
-            <BookingsListTable
-              header={["ID", "Customer Name", "Rooms", "Check-in", "Status"]}
-              data={[
-                {
-                  id: "axss12",
-                  customerName: "John Doe",
-                  rooms: "Tranquil Tavaern",
-                  checkIn: "2023-03-01",
-                  status: "Confirmed",
-                },
-                {
-                  id: "sasfsa",
-                  customerName: "John Doe",
-                  rooms: "Tranquil Tavaern",
-                  checkIn: "2023-03-01",
-                  status: "Confirmed",
-                },
-                {
-                  id: "sasaa",
-                  customerName: "John Doe",
-                  rooms: "Tranquil Tavaern",
-                  checkIn: "2023-03-01",
-                  status: "Stand-by",
-                },
-              ]}
-              variant="status"
-            />
-          </div>
-        </div>
+        <BookingsListTable
+          label="Upcoming Reservation"
+          variant="status"
+          type="upcoming"
+          icon={<CalendarIcon />}
+        />
         {/* latest reservations  */}
-        <div className=" w-full flex flex-col gap-4 border rounded-md">
-          <div className="flex items-center justify-between gap-2 border-b p-3">
-            <h4 className="text-lg font-semibold  flex items-center gap-2">
-              <CalendarIcon /> <span>Latest Reservations</span>{" "}
-            </h4>
-            <div className=" w-fit">
-              <Sort id="sort-by" label="sort-by" />
-            </div>
-          </div>
-          <div className=" px-3 flex flex-col gap-3 justify-center items-center">
-            <BookingsListTable
-              header={["ID", "Customer Name", "Rooms", "Check-in", "Status"]}
-              data={[
-                {
-                  id: "axss12",
-                  customerName: "John Doe",
-                  rooms: "Tranquil Tavaern",
-                  checkIn: "2023-03-01",
-                  status: "Confirmed",
-                },
-                {
-                  id: "sasfsa",
-                  customerName: "John Doe",
-                  rooms: "Tranquil Tavaern",
-                  checkIn: "2023-03-01",
-                  status: "Confirmed",
-                },
-                {
-                  id: "sasaa",
-                  customerName: "John Doe",
-                  rooms: "Tranquil Tavaern",
-                  checkIn: "2023-03-01",
-                  status: "Confirmed",
-                },
-              ]}
-              variant="status"
-            />
-          </div>
-        </div>
+        <BookingsListTable
+          label="Latest Reservations"
+          variant="status"
+          type="latest"
+          icon={<CalendarIcon />}
+        />
         {/* arriving */}
-        <div className=" w-full flex flex-col gap-4 border rounded-md">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-2 border-b p-3">
-            <h4 className="text-lg font-semibold  flex items-center gap-2">
-              <PlaneIcon className=" h-6 w-6 rotate-45" /> <span>Arriving</span>{" "}
-            </h4>
-            <div className=" w-fit">
-              <Filter />
-            </div>
-          </div>
-          <div className=" px-3 flex flex-col gap-3 justify-center items-center">
-            <BookingsListTable
-              header={["ID", "Customer Name", "Rooms", "Check-Out", "Action"]}
-              data={[
-                {
-                  id: "axss12",
-                  customerName: "John Doe",
-                  rooms: "Tranquil Tavaern",
-                  checkIn: "2023-03-01",
-                  status: "N/A",
-                },
-                {
-                  id: "sasfsa",
-                  customerName: "John Doe",
-                  rooms: "Tranquil Tavaern",
-                  checkIn: "2023-03-01",
-                  status: "N/A",
-                },
-                {
-                  id: "sasaa",
-                  customerName: "John Doe",
-                  rooms: "Tranquil Tavaern",
-                  checkIn: "2023-03-01",
-                  status: "N/A",
-                },
-              ]}
-              variant="action"
-            />
-          </div>
-        </div>
+        <BookingsListTable
+          label="Arriving"
+          variant="action"
+          type="arriving"
+          icon={<PlaneIcon className=" h-6 w-6 rotate-45" />}
+        />
         {/* latest reservations  */}
-        <div className=" w-full flex flex-col gap-4 border rounded-md">
-          <div className="flex  flex-col md:flex-row items-center justify-between gap-2 border-b p-3">
-            <h4 className="text-lg font-semibold  flex items-center gap-2">
-              <PlaneIcon /> <span>Departing</span>{" "}
-            </h4>
-            <div className=" w-fit">
-              <Filter />
-            </div>
-          </div>
-          <div className=" px-3 flex flex-col gap-3 justify-center items-center">
-            <BookingsListTable
-              header={["ID", "Customer Name", "Rooms", "Check-Out", "Action"]}
-              data={[
-                {
-                  id: "axss12",
-                  customerName: "John Doe",
-                  rooms: "Tranquil Tavaern",
-                  checkIn: "2023-03-01",
-                  status: "N/A",
-                },
-                {
-                  id: "sasfsa",
-                  customerName: "John Doe",
-                  rooms: "Tranquil Tavaern",
-                  checkIn: "2023-03-01",
-                  status: "N/A",
-                },
-                {
-                  id: "sasaa",
-                  customerName: "John Doe",
-                  rooms: "Tranquil Tavaern",
-                  checkIn: "2023-03-01",
-                  status: "N/A",
-                },
-              ]}
-              variant="action"
-            />
-          </div>
-        </div>
+        <BookingsListTable
+          label="Departing"
+          variant="action"
+          type="departing"
+          icon={<PlaneIcon />}
+        />
       </div>
 
       {/* forecast */}
@@ -272,26 +178,18 @@ export default function BookingsOverview() {
             <CalendarIcon /> <span>This Week's Bookings</span>{" "}
           </h4>
           <div className=" w-fit">
-            <Filter />
+            <Filter actionHandler={handleWeklybookingFiltering} />
           </div>
         </div>
         <div className=" p-5 md:p-10">
           <div className=" border p-5 rounded-md h-full w-full flex justify-center">
             <BarChart
               data={{
-                labels: [
-                  "MONDAY, 17 SEPT",
-                  "TUESDAY, 18 SEPT",
-                  "WEDNESDAY, 19 SEPT",
-                  "THURSDAY, 20 SEPT",
-                  "FRIDAY, 21 SEPT",
-                  "SATURDAY, 22 SEPT",
-                  "SUNDAY, 23 SEPT",
-                ],
+                labels: weekly_booking?.map((item) => formatDate(item?.date)),
                 datasets: [
                   {
                     label: "Weekly Bookings",
-                    data: [3, 3, 2, 5, 6, 8, 12],
+                    data: weekly_booking?.map((item) => item?.count),
                     backgroundColor: "#2E4393",
                     indexAxis: "x",
                     borderRadius: 50,
@@ -306,47 +204,12 @@ export default function BookingsOverview() {
       <div className=" w-full flex flex-col gap-4 border rounded-md">
         <div className="flex  flex-col md:flex-row items-center justify-between gap-2 border-b p-3">
           <h4 className="text-lg font-semibold">Today's Room Occupancy</h4>
-          <div className=" max-w-sm">
+          {/* <div className=" max-w-sm">
             <Search id="apartment-search" placeholder="Apartment name..." />
-          </div>
+          </div> */}
         </div>
         <div className=" p-3">
-          <RoomOccupancyListTable
-            header={[
-              "S/N",
-              "Apartment Name",
-              "Customer Name",
-              "Amount Paid",
-              "Check-in Date",
-              "Check-out Date",
-            ]}
-            data={[
-              {
-                id: "1",
-                apartmentName: "Sunshine - 2 Bedroom",
-                customerName: "Ibrahim Johnson",
-                amount: "N116,000",
-                checkIn: "2023-09-17",
-                checkOut: "2023-09-18",
-              },
-              {
-                id: "2",
-                apartmentName: "Sunshine - 2 Bedroom",
-                customerName: "Ibrahim Johnson",
-                amount: "N116,000",
-                checkIn: "2023-09-17",
-                checkOut: "2023-09-18",
-              },
-              {
-                id: "3",
-                apartmentName: "Sunshine - 2 Bedroom",
-                customerName: "Ibrahim Johnson",
-                amount: "N116,000",
-                checkIn: "2023-09-17",
-                checkOut: "2023-09-18",
-              },
-            ]}
-          />
+          <RoomOccupancyListTable />
         </div>
       </div>
     </div>

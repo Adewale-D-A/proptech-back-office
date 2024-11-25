@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import CalendarIcon from "../../../assets/icons/calendar";
@@ -7,8 +13,12 @@ import daysMonths from "../../../assets/days-months.json";
 import ChevronLeftIcon from "../../../assets/icons/chevron-left";
 import ChevronRightIcon from "../../../assets/icons/chevron-right";
 import BuildingIcon from "../../../assets/icons/building";
-import Search from "../../../components/inputs/search";
 import generateCalendarData from "../../../utils/generateCalendarData";
+import useGetAllApartmentLists from "../../../services-hooks/useGetAllApartmentLists";
+import LoaderIcon from "../../../assets/icons/loader";
+import SearchIcon from "../../../assets/icons/search";
+import { apartmentById } from "../../../types/apiData/apartment";
+import useGetApartmentCalendar from "../../../services-hooks/apartmentCalendar";
 
 const breadCrumb = [
   {
@@ -40,9 +50,10 @@ export default function AvailabilityOverview() {
       })
     );
   }, []);
-
-  const [month, setMonth] = useState("");
-  const [year, setYear] = useState("");
+  const [search, setSeach] = useState("");
+  const [selectedApt, setSelectedApt] = useState<apartmentById>({} as any);
+  const [month, setMonth] = useState(daysMonths?.months[today?.getMonth()]);
+  const [year, setYear] = useState(String(today?.getFullYear()));
 
   const [currentDay, setCurrentDay] = useState(
     new Date(today?.getFullYear(), today?.getMonth(), today?.getDate())
@@ -60,6 +71,18 @@ export default function AvailabilityOverview() {
     }[]
   >([]);
 
+  // apartment lists
+  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
+    useGetAllApartmentLists({
+      page: 1,
+      search: search,
+    });
+
+  // calendar data fetching based on filtered dates
+  const { data: calendarDates } = useGetApartmentCalendar({
+    id: String(selectedApt?.id || ""),
+  });
+
   const changeHandler = useCallback(
     (event: { year: number; month: number; day: number }) => {
       const selectedDate = new Date(event.year, event.month, event.day);
@@ -70,13 +93,16 @@ export default function AvailabilityOverview() {
   const generateDays = useCallback(() => {
     const daysArray = generateCalendarData({
       selectedDate: currentDay,
+      highlights: calendarDates?.booked_dates,
     });
     setCurrentDays(daysArray);
-  }, [currentDay]);
+  }, [currentDay, calendarDates]);
 
   useEffect(() => {
+    setMonth(daysMonths?.months[currentDay?.getMonth()]);
+    setYear(String(currentDay?.getFullYear()));
     generateDays();
-  }, [currentDay]);
+  }, [currentDay, calendarDates]);
 
   const prevMonthHandler = useCallback(() => {
     setCurrentDay(
@@ -108,7 +134,7 @@ export default function AvailabilityOverview() {
           </Select>
           <Select isRequired={true} value={year} setValue={setYear} id="year">
             {Array.from({ length: 8 }, (_, index) => (
-              <option key={index} value={`${index + 1}`}>
+              <option key={index} value={`${index + 2020}`}>
                 {index + 2020}
               </option>
             ))}
@@ -125,24 +151,49 @@ export default function AvailabilityOverview() {
           </div>
         </div>
       </div>
-      <div className="w-full flex items-start flex-col md:flex-row gap-4 md:gap-0 items-stretch">
+      <div className="w-full flex flex-col md:flex-row gap-4 md:gap-0 items-stretch">
         <div className="w-full flex-1 md:flex-[0.2] bg-gray-100 px-2 flex flex-col gap-1">
           <div className=" flex flex-col gap-2 border-b pb-3">
             <div className=" flex items-center gap-2 text-primary p-4">
               <BuildingIcon />
               <h2 className=" font-semibold text-lg">Apartments</h2>
             </div>
-            <Search placeholder="Search" id="apartment-search" />
+            <label
+              htmlFor={"search-apt"}
+              className=" p-1 flex items-center gap-2 border-gray-700 border rounded-lg text-sm"
+            >
+              {isLoading ? (
+                <LoaderIcon className=" animate-spin size-6" />
+              ) : (
+                <SearchIcon />
+              )}
+              <input
+                id="search-apt"
+                placeholder="Search"
+                value={search}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setSeach(e.target.value)
+                }
+                type={"text"}
+                className="w-full p-3 focus:outline-none rounded-lg  bg-gray-100/15 focus:ring-[#17594F] focus:border-[#17594F]"
+              />
+            </label>
           </div>
           <ul className=" pl-4 py-2">
-            {[
-              {
-                id: 1,
-                name: "Victoria heights",
-              },
-            ].map((item) => (
-              <li key={item?.id} className="border-b py-2">
-                {item?.name}
+            {data.map((item) => (
+              <li
+                key={item?.id}
+                className={`${
+                  selectedApt?.id === item?.id ? " bg-primary text-white" : ""
+                } border-b py-2 hover:bg-primary hover:text-white transition-all`}
+              >
+                <button
+                  type="button"
+                  onClick={() => setSelectedApt(item)}
+                  className="w-full text-left px-2"
+                >
+                  {item?.name}
+                </button>
               </li>
             ))}
           </ul>
@@ -180,12 +231,14 @@ export default function AvailabilityOverview() {
                       </span>
                     </div>
                     {Array.from({ length: 24 }, (_, index) => (
-                      <div className="w-full h-10 border bg-white"></div>
+                      <div
+                        className={`w-full h-10 border ${
+                          item?.highlight ? " bg-red-400" : "bg-white"
+                        } `}
+                      ></div>
                     ))}
                   </div>
                 );
-              } else {
-                return;
               }
             })}
           </div>

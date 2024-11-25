@@ -14,12 +14,7 @@ export default function dateRangeIterator({
       end_year: new Date(end_date || "")?.getFullYear(),
       end_month: new Date(end_date || "")?.getMonth(),
     };
-    if (
-      start_date &&
-      end_date &&
-      endDate?.end_year >= startDate?.start_year &&
-      endDate?.end_month >= startDate?.start_month
-    ) {
+    if (start_date && end_date && endDate?.end_year >= startDate?.start_year) {
       const yearRange = endDate?.end_year - startDate?.start_year;
       if (yearRange === 0) {
         const monthRange = endDate?.end_month + 1 - startDate?.start_month;

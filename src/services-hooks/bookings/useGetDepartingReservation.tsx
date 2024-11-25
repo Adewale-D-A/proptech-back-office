@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import {
   addToPaginationHistory,
-  updateApartmentList,
-} from "../stores/apiData/apartment-lists";
-import useAxios from "../useHooks/useAxios";
-import { pagination } from "../types/pagination";
+  updateDepartingReservationList,
+} from "../../stores/apiData/bookings/departing-reservation";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
+import useAxios from "../../useHooks/useAxios";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetAllApartmentLists({
+export default function useGetDepartingReservation({
   page = 1,
   start_date,
   end_date,
@@ -27,12 +26,20 @@ export default function useGetAllApartmentLists({
     status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.allAparmentLists.value);
+  } = useAppSelector((state) => state.departingReservation.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const [pagination, setPagination] = useState<pagination>({} as any);
-  const getAllApartmentList = useCallback(async () => {
+  const [pagination, setPagination] = useState<{
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+    from: number;
+    to: number;
+  }>({} as any);
+
+  const getDepartingReservation = useCallback(async () => {
     setIsLoading(true);
     setIsFailed(false);
     try {
@@ -48,20 +55,20 @@ export default function useGetAllApartmentLists({
         !search
       ) {
         setPagination(foundPage?.pagination_data);
-        dispatch(updateApartmentList({ data: foundPage?.data }));
+        dispatch(updateDepartingReservationList({ data: foundPage?.data }));
       } else {
-        const response = await axios.post(
+        const response = await axios.get(
           start_date && end_date
-            ? `/admin/shortlet/get-all?sort=${sort}&limit=20&page=${page}&start_date=${start_date}&end_date=${end_date}&search=${
+            ? `/admin/booking/departing-reservation?sort=${sort}&limit=20&search=${
                 search || ""
-              }`
-            : `/admin/shortlet/get-all?sort=${sort}&limit=20&page=${page}&search=${
+              }&page=${page}&start_date=${start_date}&end_date=${end_date}`
+            : `/admin/booking/departing-reservation?sort=${sort}&limit=20&search=${
                 search || ""
-              }`
+              }&page=${page}`
         );
-        const { shortlet } = response?.data?.data;
+        const { bookings } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
-          shortlet;
+          bookings;
         const paginationDataset = {
           current_page,
           last_page,
@@ -71,7 +78,7 @@ export default function useGetAllApartmentLists({
           to,
           length: data?.length,
         };
-        dispatch(updateApartmentList({ data }));
+        dispatch(updateDepartingReservationList({ data }));
         if (!search) {
           dispatch(
             addToPaginationHistory({
@@ -90,7 +97,7 @@ export default function useGetAllApartmentLists({
   }, [page, start_date, end_date, sort, search]);
 
   useEffect(() => {
-    getAllApartmentList();
+    getDepartingReservation();
   }, [page, start_date, end_date, sort, search]);
 
   return {
@@ -98,7 +105,7 @@ export default function useGetAllApartmentLists({
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getAllApartmentList,
+    retryFunction: getDepartingReservation,
     pagination,
   };
 }

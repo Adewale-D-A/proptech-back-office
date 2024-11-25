@@ -23,7 +23,9 @@ export default function useGetApartmentCalendar({
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `/admin/calendar/${id}?start_date=${start_date}&end_date=${end_date}`
+        start_date && end_date
+          ? `/admin/calendar/${id}?start_date=${start_date}&end_date=${end_date}`
+          : `/admin/calendar/${id}`
       );
       const result = response?.data?.data;
       const dateRsult = {
@@ -42,7 +44,7 @@ export default function useGetApartmentCalendar({
   }, [id, start_date, end_date]);
 
   useEffect(() => {
-    if (id && start_date && end_date) {
+    if (id) {
       getApartmentCalendar();
     }
   }, [id, start_date, end_date]);

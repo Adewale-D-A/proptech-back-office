@@ -45,7 +45,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
             .includes("unauthenticated") ||
           statusMessage?.toLowerCase().includes("token") ||
           error?.response?.data?.debug?.toLowerCase().includes("token");
-        if (hadUnauthenticated && !!originalRequest._retry) {
+        if (hadUnauthenticated && !originalRequest._retry) {
           // If the request was already sent, we don't want to refresh the token
           originalRequest._retry = true;
           const { new_access_token } = await refreshToken({
