@@ -5,6 +5,7 @@ import {
 } from "../../stores/apiData/bookings/arriving-reservation";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import useAxios from "../../useHooks/useAxios";
+import { pagination } from "../../types/pagination";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetArrivingReservation({
@@ -30,14 +31,7 @@ export default function useGetArrivingReservation({
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const [pagination, setPagination] = useState<{
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    from: number;
-    to: number;
-  }>({} as any);
+  const [pagination, setPagination] = useState<pagination>({} as any);
 
   const getArrivingReservation = useCallback(async () => {
     setIsLoading(true);

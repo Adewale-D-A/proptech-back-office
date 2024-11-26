@@ -82,3 +82,18 @@ export type bookingsById = {
     location_group_id: string;
   };
 };
+
+export type bookingHistory = {
+  id: number;
+  user_id: number;
+  admin_id: number;
+  booking_id: number;
+  name: string;
+  user_type: string;
+  action_type: string;
+  message: string;
+  is_deleted: number;
+  deleted_at: string;
+  created_at: string;
+  updated_at: string;
+}[];

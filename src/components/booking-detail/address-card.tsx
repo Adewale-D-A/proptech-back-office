@@ -1,7 +1,8 @@
 import BuildingIcon from "../../assets/icons/building";
 import LocationPinIcon from "../../assets/icons/location";
+import { customersById } from "../../types/apiData/customers";
 
-export default function AddressCard() {
+export default function AddressCard({ data }: { data: customersById }) {
   return (
     <div className=" w-full text-xs grid grid-cols-4">
       {[
@@ -9,25 +10,25 @@ export default function AddressCard() {
           id: 1,
           label: "Home Address",
           icon: <LocationPinIcon className=" h-4 w-4" />,
-          value: "16 Remo Olowude way",
+          value: data?.address,
         },
         {
           id: 2,
           label: "Zip Code",
           icon: <LocationPinIcon className=" h-4 w-4" />,
-          value: "10001",
+          value: "",
         },
         {
           id: 3,
           label: "City",
           icon: <BuildingIcon className=" h-4 w-4" />,
-          value: "Lagos",
+          value: data?.city,
         },
         {
           id: 4,
           label: "Company Name",
           icon: <BuildingIcon className=" h-4 w-4" />,
-          value: "99Apartments",
+          value: data?.company_name,
         },
       ].map((head) => (
         <div key={head?.id} className=" flex flex-col gap-1 text-[10px]">

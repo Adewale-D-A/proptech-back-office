@@ -15,6 +15,8 @@ import GuestMessaging from "./guest-messaging/page";
 import InvoiceNotes from "./invoice-notes/page";
 import BookingHistory from "./booking-history/page";
 import BookingByIdList from "../../../../components/tables/bookingList";
+import useGetBookingById from "../../../../services-hooks/bookings/useGetBookingById";
+import useGetCustomerById from "../../../../services-hooks/useGetCustomerById";
 
 const breadCrumb = [
   {
@@ -47,15 +49,17 @@ export default function BookingAdministrationById() {
   }, []);
 
   const [payment, setPayment] = useState("");
+  const { data, isFailed, setIsFailed, isLoading } = useGetBookingById(id);
+  const { data: user } = useGetCustomerById(String(data?.user_id || ""));
 
   return (
     <section className="w-full flex flex-col items-center my-5">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
         <div className=" p-3 rounded-lg border">
-          <BookingByIdList />
+          <BookingByIdList data={data} />
         </div>
         <div className="w-full flex flex-col md:flex-row gap-5 items-start">
-          <div className=" w-full flex-1 md:flex-[0.4]">
+          <div className=" w-full flex-1 md:flex-[0.4] flex flex-col gap-3">
             <div className=" w-full flex flex-col gap-4 border rounded-md">
               {/* Assign Customer */}
               <h4 className="text-lg font-semibold border-b p-3">
@@ -69,13 +73,13 @@ export default function BookingAdministrationById() {
                 />
                 <div className=" flex justify-end">
                   <div className=" w-fit">
-                    <LoadingButton
-                      isLoading={false}
-                      label="Create new Customer"
-                      startIcon={<PlusIcon />}
-                      type="button"
-                      variant={2}
-                    />
+                    <Link
+                      to={"/add-customer/customer-details"}
+                      className="w-full flex justify-center p-3 px-6 rounded-full transition-all border hover:border-primary/60 border-primary text-primary"
+                    >
+                      {" "}
+                      <PlusIcon /> <span>Create new Customer</span>
+                    </Link>
                   </div>
                 </div>
               </div>

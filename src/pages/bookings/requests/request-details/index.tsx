@@ -8,6 +8,7 @@ import ConfirmationCard from "../../../../components/booking-detail/cofirmation-
 import RequestInformation from "../../../../components/booking-detail/request-info";
 import useGetRequest from "../../../../services-hooks/useGetRequest";
 import useGetApartmentById from "../../../../services-hooks/useGetApartmentById";
+import useGetCustomerById from "../../../../services-hooks/useGetCustomerById";
 
 const breadCrumb = [
   {
@@ -43,6 +44,7 @@ export default function RequestDetailsById() {
   const { data: apartment_data } = useGetApartmentById(
     data?.shortlet_id ? String(data?.shortlet_id) : undefined
   );
+  const { data: customer } = useGetCustomerById(String(data?.user_id || ""));
 
   return (
     <section className="w-full flex flex-col items-center">
@@ -54,7 +56,8 @@ export default function RequestDetailsById() {
               Customer Details
             </h4>
             <div className=" p-3 flex flex-col gap-6">
-              <ConfirmationCard /> <RequestInformation request_details={data} />
+              <ConfirmationCard data={customer} />{" "}
+              <RequestInformation request_details={data} />
             </div>
           </div>
           <div className=" w-full rounded-md border flex flex-col gap-3">

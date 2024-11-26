@@ -28,7 +28,7 @@ const Select: React.FC<Props> = ({
       )}
       <label
         htmlFor={id}
-        className="w-full relative p-3 px-6 bg-primary/20 rounded-full flex items-center gap-3"
+        className="w-full relative p-3 px-6 rounded-md border flex items-center gap-3"
       >
         <select
           id={id}

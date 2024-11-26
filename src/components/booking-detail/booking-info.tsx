@@ -1,4 +1,7 @@
-export default function BookingInfo() {
+import { bookingsById } from "../../types/apiData/bookings";
+import formatDate, { formatTime } from "../../utils/isoDateConverter";
+
+export default function BookingInfo({ data }: { data: bookingsById }) {
   return (
     <div className=" w-full bg-gray-100 rounded-md">
       <h4 className=" font-semibold p-3 text-md">Booking Details</h4>
@@ -7,32 +10,34 @@ export default function BookingInfo() {
           {
             id: 1,
             header: "Room Name",
-            value: "Island Court",
+            value: data?.shortlet?.name,
           },
           {
             id: 2,
             header: "VAT-ID",
-            value: "N-13812312",
+            value: "****",
           },
           {
             id: 3,
             header: "No of Guests",
-            value: "4 Guests",
+            value: `${data?.number_of_guests} Guests`,
           },
           {
             id: 4,
             header: "Check-in Date",
-            value: "26/06/24",
+            value: formatDate(data?.check_in_date),
           },
           {
             id: 5,
-            header: "Check-in Date",
-            value: "27/06/24(1 Night)",
+            header: "Check-out Date",
+            value: formatDate(data?.check_out_date),
           },
           {
             id: 6,
             header: "Created On",
-            value: "25/06/24, 17:56",
+            value: `${formatDate(data?.created_at)} ${formatTime(
+              data?.created_at
+            )}`,
           },
         ].map((item) => (
           <div
@@ -45,7 +50,9 @@ export default function BookingInfo() {
         ))}
         <div className=" w-full flex items-center justify-between gap-5 border-t py-4">
           <span className="">Total</span>
-          <span className=" font-semibold text-primary text-lg">N70,000</span>
+          <span className=" font-semibold text-primary text-lg">
+            {data?.currency} {data?.total_price}
+          </span>
         </div>
       </div>
     </div>

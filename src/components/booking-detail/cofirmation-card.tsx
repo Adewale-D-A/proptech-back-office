@@ -1,6 +1,7 @@
+import { customersById } from "../../types/apiData/customers";
 import Status from "../status";
 
-export default function ConfirmationCard() {
+export default function ConfirmationCard({ data }: { data: customersById }) {
   return (
     <div className=" flex items-center justify-between">
       <div className=" flex items-center gap-3">
@@ -10,12 +11,14 @@ export default function ConfirmationCard() {
           className=" rounded-full h-8 w-8 object-cover aspect-square"
         />
         <div>
-          <h6 className=" font-semibold">Funsho Michaels</h6>
-          <span className=" text-xs">funsho.m@yahoo.com</span>
+          <h6 className=" font-semibold">
+            {data?.first_name} {data?.last_name}
+          </h6>
+          <span className=" text-xs">{data?.email}m</span>
         </div>
       </div>
       <div className=" flex flex-col gap-1 items-end">
-        <h6 className=" font-semibold">ID Number: 4811</h6>
+        <h6 className=" font-semibold">ID Number: ***</h6>
         <Status status="Confirmed" />
       </div>
     </div>

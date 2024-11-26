@@ -1,4 +1,11 @@
+import { useParams } from "react-router-dom";
+import useGetBookingHistoryById from "../../../../../services-hooks/bookings/useGetBookingHistoryById";
+
 export default function BookingHistory() {
+  const { id } = useParams();
+  const { data, isFailed, setIsFailed, isLoading } =
+    useGetBookingHistoryById(id);
+
   return (
     <div className=" p-3 border-t">
       <table className=" w-full text-xs overflow-x-auto">
@@ -16,23 +23,14 @@ export default function BookingHistory() {
           </tr>
         </thead>
         <tbody className="">
-          {[
-            {
-              id: "asasas",
-              title: "New Stand-by booking",
-              date: "18/6/24 10:30am",
-              description: "IP - 18:299:00:32",
-              paid: "N70,000",
-              total: "N150,000",
-            },
-          ].map((request) => {
+          {data.map((item) => {
             return (
-              <tr key={request?.id} className=" border-b">
-                <td>{request?.title}</td>
-                <td>{request?.date}</td>
-                <td>{request?.description}</td>
-                <td className=" font-semibold">{request?.paid}</td>
-                <td className="font-semibold">{request?.total}</td>
+              <tr key={item?.id} className=" border-b">
+                <td>{item?.name}</td>
+                <td></td>
+                <td>{item?.message}</td>
+                <td className=" font-semibold"></td>
+                <td className="font-semibold"></td>
               </tr>
             );
           })}

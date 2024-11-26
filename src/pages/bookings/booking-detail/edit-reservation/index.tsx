@@ -22,6 +22,8 @@ import SwitchArrowIcon from "../../../../assets/icons/switch";
 import ModalTemplate from "../../../../components/modal";
 import SplitStay from "../../../../components/booking-detail/split-stay";
 import AddRoom from "../../../../components/booking-detail/add-room";
+import useGetBookingById from "../../../../services-hooks/bookings/useGetBookingById";
+import useGetCustomerById from "../../../../services-hooks/useGetCustomerById";
 
 export default function EditBookingReservation() {
   const { id } = useParams();
@@ -61,6 +63,9 @@ export default function EditBookingReservation() {
       })
     );
   }, [breadCrumb]);
+
+  const { data, isFailed, setIsFailed, isLoading } = useGetBookingById(id);
+  const { data: customer } = useGetCustomerById(String(data?.user_id || ""));
 
   const [isDeleting, setIsDeleting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -110,7 +115,7 @@ export default function EditBookingReservation() {
     <>
       <section className="w-full flex flex-col items-center">
         <div className="w-full max-w-screen-xl flex flex-col gap-10">
-          <BookingByIdList />
+          <BookingByIdList data={data} />
           <div className="w-full flex gap-5 flex-col md:flex-row justify-center items-center md:justify-between md:items-end  border-b">
             <h2 className="text-xl font-semibold flex items-center gap-3 border-b-2 border-primary pb-3 text-primary">
               <WriteIcon /> <span>Edit Reservation</span>
@@ -150,7 +155,7 @@ export default function EditBookingReservation() {
                     Customer Details
                   </h4>
                   <div className=" p-3 flex flex-col gap-6">
-                    <CustomerInfoCard />
+                    <CustomerInfoCard data={customer} />
                   </div>
                 </div>
                 <div className=" w-full flex flex-col gap-4 border rounded-md">

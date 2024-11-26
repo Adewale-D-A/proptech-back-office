@@ -8,6 +8,7 @@ import ImageCarousel from "../../../../components/cards/image-carousel";
 import RequestInformation from "../../../../components/booking-detail/request-info";
 import ConfirmationCard from "../../../../components/booking-detail/cofirmation-card";
 import useGetRequest from "../../../../services-hooks/useGetRequest";
+import useGetCustomerById from "../../../../services-hooks/useGetCustomerById";
 
 const breadCrumb = [
   {
@@ -23,6 +24,7 @@ const breadCrumb = [
 ];
 export default function AdditionalServiceDetailsById() {
   const { id } = useParams();
+  const { data: customer } = useGetCustomerById(String(id || ""));
   const dispatch = useAppDispatch();
   // update page props on component mount
   useLayoutEffect(() => {
@@ -50,7 +52,7 @@ export default function AdditionalServiceDetailsById() {
               Customer Details
             </h4>
             <div className=" p-3 flex flex-col gap-6">
-              <ConfirmationCard />
+              <ConfirmationCard data={customer} />
               <RequestInformation addCost request_details={data} />
             </div>
           </div>

@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import Status from "../status";
+import { apartmentById } from "../../types/apiData/apartment";
+import { bookingsById } from "../../types/apiData/bookings";
+import formatDate from "../../utils/isoDateConverter";
 
 type props = {
   //   header,
@@ -18,7 +21,7 @@ type props = {
   //     status: string,
   //   }[];
 };
-export default function BookingByIdList() {
+export default function BookingByIdList({ data }: { data: bookingsById }) {
   return (
     <table className=" w-full text-xs overflow-x-auto">
       <thead className="">
@@ -42,14 +45,14 @@ export default function BookingByIdList() {
         {[
           {
             id: "asasas",
-            customerName: "Jola Samson",
-            apartnmentName: "Sunshine - 2 Bedroom",
-            bookingDate: "15-02-2024",
-            noOfRooms: "4 Rooms",
-            amount: "N150,000",
-            checkIn: "15-02-2024",
-            checkOut: "15-02-2024",
-            status: "Confirmed",
+            customerName: `${data?.account_name}`,
+            apartnmentName: data?.shortlet?.name,
+            bookingDate: formatDate(data?.created_at),
+            noOfRooms: data?.shortlet?.no_of_bedrooms,
+            amount: `${data?.currency} ${data?.total_price}`,
+            checkIn: formatDate(data?.check_in_date),
+            checkOut: formatDate(data?.check_out_date),
+            status: data?.payment_status,
           },
         ].map((request, index) => {
           return (

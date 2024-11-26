@@ -9,6 +9,7 @@ export default function Status({ status }: { status: string | undefined }) {
       ) : status?.toLocaleLowerCase().includes("confirmed") ||
         status?.toLocaleLowerCase().includes("ailable") ||
         status?.toLocaleLowerCase().includes("resolved") ||
+        status?.toLocaleLowerCase().includes("success") ||
         status?.toLocaleLowerCase().includes("complete") ? (
         <span className=" p-1 px-3 bg-green-500/15 text-green-500 rounded-full">
           {status}
