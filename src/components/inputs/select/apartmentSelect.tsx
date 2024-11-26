@@ -25,35 +25,40 @@ const ApartmentSingleSelect: React.FC<Props> = ({
         <label htmlFor={id} className=" font-medium">
           {label}
         </label>
-      )}
-      <select
-        id={id}
-        title={label}
-        aria-readonly={readOnly}
-        value={value}
-        required={isRequired}
-        onChange={(e) => setValue(e.target.value)}
-        className="w-full p-3 rounded-lg border  bg-gray-200/15 sm:text-md focus:ring-[#17594F] focus:border-[#17594F]"
+      )}{" "}
+      <label
+        htmlFor={id}
+        className="w-full relative p-3 px-6 border rounded-md flex items-center gap-3"
       >
-        {placeholder && <option value={""}>{placeholder}</option>}
-        <option value={"all"}>All</option>
-        {[
-          {
-            id: 1,
-            label: "Sunshine - 2 Bedroom",
-            value: "sunshine-2-bed",
-          },
-          {
-            id: 2,
-            label: "Moonlight - 2 Bedroom",
-            value: "moonlight-2-bed",
-          },
-        ].map((item) => (
-          <option key={item.id} value={item.value}>
-            {item.label}
-          </option>
-        ))}
-      </select>
+        <select
+          id={id}
+          title={label}
+          aria-readonly={readOnly}
+          value={value}
+          required={isRequired}
+          onChange={(e) => setValue(e.target.value)}
+          className="w-full sm:text-md bg-transparent"
+        >
+          {placeholder && <option value={""}>{placeholder}</option>}
+          <option value={"all"}>All</option>
+          {[
+            {
+              id: 1,
+              label: "Sunshine - 2 Bedroom",
+              value: "sunshine-2-bed",
+            },
+            {
+              id: 2,
+              label: "Moonlight - 2 Bedroom",
+              value: "moonlight-2-bed",
+            },
+          ].map((item) => (
+            <option key={item.id} value={item.value}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+      </label>
     </div>
   );
 };

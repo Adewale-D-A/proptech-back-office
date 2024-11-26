@@ -15,7 +15,6 @@ th {
 }
 
 /* toggle button */
-
 .slider:before {
   position: absolute;
   content: "";

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { bookingsists } from "../../types/apiData/bookings";
+import { bookingsById, bookingsists } from "../../types/apiData/bookings";
 
 export const bookingsListsData = createSlice({
   name: "all bookings",
@@ -15,9 +15,9 @@ export const bookingsListsData = createSlice({
           from: number;
           to: number;
         };
-        data: bookingsists;
+        data: bookingsById[];
       }[],
-      data: [] as bookingsists,
+      data: [] as bookingsById[],
     },
   },
   reducers: {
@@ -62,7 +62,7 @@ export const bookingsListsData = createSlice({
       const { id } = action?.payload;
       const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
-        (v: { id: string }) => v.id === id
+        (v: { id: number }) => v.id === id
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1);
@@ -85,7 +85,7 @@ export const bookingsListsData = createSlice({
       const { id } = action?.payload;
       const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
-        (v: { id: string }) => v.id === id
+        (v: { id: number }) => v.id === id
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1, action?.payload);

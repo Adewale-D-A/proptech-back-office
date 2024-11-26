@@ -5,6 +5,7 @@ import Status from "../status";
 import Filter from "../filterAndSort/filter";
 import formatDate from "../../utils/isoDateConverter";
 import useGetReservation from "../../services-hooks/bookings/userGetReservation";
+import MobileReservationsTable from "./mobile/reservations";
 
 export default function BookingsListTable({
   variant,
@@ -50,7 +51,7 @@ export default function BookingsListTable({
           <Filter actionHandler={handleSalesFiltering} />
         </div>
       </div>
-      <div className=" px-3 flex flex-col gap-3 justify-center items-center">
+      <div className=" hidden px-3 md:flex flex-col gap-3 justify-center items-center">
         <table className=" w-full text-xs overflow-x-auto">
           <thead className="">
             <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
@@ -91,6 +92,9 @@ export default function BookingsListTable({
             })}
           </tbody>
         </table>
+      </div>
+      <div className="w-full block md:hidden">
+        <MobileReservationsTable data={data} variant={variant} />
       </div>
       <Pagination
         pagination={pagination}

@@ -52,14 +52,12 @@ const useAxios = (disableErrorPrompt?: boolean) => {
             old_token: token,
           });
           dispatch(updateToken(new_access_token || token));
-          axiosInstance.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${new_access_token}`;
-          return axiosInstance(originalRequest);
+          console.log({ new_access_token, token, originalRequest });
+          // axiosInstance.defaults.headers.common[
+          //   "Authorization"
+          // ] = `Bearer ${new_access_token}`;
+          // return axiosInstance(originalRequest);
         } else if (hadUnauthenticated) {
-          // sessionStorage.removeItem(`${process.env.REACT_APP_SESSION_KEY}`);
-          // dispatch(clearAuthentication());
-          // navigate(`/?redirect=${location?.pathname}`);
           signOut(location?.pathname);
           return Promise.reject(error);
         } else if (!disableErrorPrompt) {

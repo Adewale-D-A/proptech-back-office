@@ -26,18 +26,23 @@ const Select: React.FC<Props> = ({
           {label}
         </label>
       )}
-      <select
-        id={id}
-        title={label}
-        aria-readonly={readOnly}
-        disabled={readOnly}
-        value={value}
-        required={isRequired}
-        onChange={(e) => setValue(e.target.value)}
-        className="w-full p-3 disabled:border-gray-300 disabled:text-gray-300 rounded-lg border  bg-gray-100/15 sm:text-md focus:ring-[#17594F] focus:border-[#17594F]"
+      <label
+        htmlFor={id}
+        className="w-full relative p-3 px-6 bg-primary/20 rounded-full flex items-center gap-3"
       >
-        {children}
-      </select>
+        <select
+          id={id}
+          title={label}
+          aria-readonly={readOnly}
+          disabled={readOnly}
+          value={value}
+          required={isRequired}
+          onChange={(e) => setValue(e.target.value)}
+          className="w-full sm:text-md bg-transparent"
+        >
+          {children}
+        </select>
+      </label>
     </div>
   );
 };

@@ -26,14 +26,15 @@ export default function useGetTopApartmentLists({
     data,
     pagination: store_pagination,
   } = useAppSelector((state) => state.topAparmentLists.value);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
-
   const [pagination, setPagination] = useState<pagination>({} as any);
+
   const getTopApartmentList = useCallback(async () => {
     setIsFailed(false);
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       //check store if this requested data has been saved previously and retirve it
       //if not, make a new request and save into store
       const foundPage = store_pagination.find(

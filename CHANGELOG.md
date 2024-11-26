@@ -1,3 +1,7 @@
+##### 26.11.2024
+
+> Select field UI uplift
+
 ##### 25.11.2024
 
 > Bookings UI population
