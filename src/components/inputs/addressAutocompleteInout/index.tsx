@@ -7,10 +7,12 @@ export default function AddressAutocompleteInput({
   setValue,
   label,
   placeholder,
+  readOnly,
 }: // setAddress,
 {
   value: string;
   setValue: any;
+  readOnly?: boolean;
   label?: string;
   placeholder?: string;
   // setAddress: Function;
@@ -49,13 +51,15 @@ export default function AddressAutocompleteInput({
             {label && <label htmlFor="address-searcher">{label}</label>}
             <input
               required={true}
+              readOnly={readOnly}
+              disabled={readOnly}
               id="location-search"
               type="text"
               {...getInputProps({
                 id: "location-search",
                 placeholder: placeholder ? placeholder : "apartment location",
               })}
-              className="w-full p-3 rounded-lg border outline-none  bg-gray-200/15 focus:ring-[#17594F] focus:border-[#17594F]"
+              className="w-full p-3 disabled:border-gray-300 disabled:text-gray-300 focus:outline-none rounded-lg border  bg-gray-100/15 focus:ring-[#17594F] focus:border-[#17594F]"
             />
             <div>
               {loading && (

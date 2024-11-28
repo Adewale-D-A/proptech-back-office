@@ -1,5 +1,11 @@
 import { useParams } from "react-router-dom";
-import { useCallback, useLayoutEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import CalendarIcon from "../../../../assets/icons/calendar";
 import { useAppDispatch } from "../../../../stores/hooks";
 import { updatePageProperties } from "../../../../stores/appFunctionality/pageProperties";
@@ -73,10 +79,10 @@ export default function EditBookingReservation() {
   const [openSplitStay, setOpenSplitStay] = useState(false);
   const [openAddRoom, setOpenAddRoom] = useState(false);
 
-  const [checkInDate, setCheckInDate] = useState("2024-09-26");
-  const [checkInTime, setCheckInTime] = useState("12:04");
-  const [checkOutDate, setCheckOutDate] = useState("2024-09-26");
-  const [checkOutTime, setCheckOutTime] = useState("12:04");
+  const [checkInDate, setCheckInDate] = useState("");
+  const [checkInTime, setCheckInTime] = useState("");
+  const [checkOutDate, setCheckOutDate] = useState("");
+  const [checkOutTime, setCheckOutTime] = useState("");
 
   const [rooms, setRooms] = useState("");
   const [guests, setGuests] = useState("");
@@ -101,6 +107,32 @@ export default function EditBookingReservation() {
   const [amountOne, setAmountOne] = useState("");
   const [countryTwo, setCountryTwo] = useState("");
   const [amountTwo, setAmountTwo] = useState("");
+
+  // populate existing fields
+  useEffect(() => {
+    if (data?.id) {
+      const {
+        number_of_guests,
+        check_in_date,
+        check_in_time,
+        check_out_date,
+        check_out_time,
+      } = data || {};
+      setGuests(String(number_of_guests));
+      setCheckInDate(check_in_date);
+      setCheckInTime(check_in_time);
+      setCheckOutDate(check_out_date);
+      setCheckOutTime(check_out_time);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (customer?.first_name) {
+      const { first_name, last_name } = customer || {};
+      setFirstname(customer?.first_name);
+      setLastname(customer?.first_name);
+    }
+  }, [customer]);
 
   const deleteReservation = useCallback(() => {
     console.log({ id });

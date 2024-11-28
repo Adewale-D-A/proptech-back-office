@@ -1,3 +1,7 @@
+##### 28.11.2024
+
+> Bookings Reservation endpoint integration
+
 ##### 26.11.2024
 
 > Bookings by ID API integrations

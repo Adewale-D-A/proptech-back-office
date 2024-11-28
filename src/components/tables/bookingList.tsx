@@ -44,7 +44,7 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
       <tbody className="">
         {[
           {
-            id: "asasas",
+            id: data?.id,
             customerName: `${data?.account_name}`,
             apartnmentName: data?.shortlet?.name,
             bookingDate: formatDate(data?.created_at),

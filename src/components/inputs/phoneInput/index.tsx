@@ -34,7 +34,7 @@ const PhoneInput: React.FC<Props> = ({
           value={coutryCode}
           disabled={readOnly}
           onChange={(e) => setCountryCode(e.target.value)}
-          className=" max-w-28 bg-transparent"
+          className=" max-w-28 bg-transparent disabled:border-gray-300 disabled:text-gray-300 "
         >
           {countries.map((country) => (
             <option
@@ -46,14 +46,15 @@ const PhoneInput: React.FC<Props> = ({
           ))}
         </select>
         <input
-          type="number"
+          type="text"
           id={id}
           value={number}
           readOnly={readOnly}
+          disabled={readOnly}
           required={isRequired}
           onChange={(e) => setNumber(e.target.value)}
           placeholder="000-000-0000"
-          className="w-full p-3 bg-transparent rounded-r-lg focus:ring-blue-500 focus:border-blue-500"
+          className="w-full p-3 disabled:border-gray-300 disabled:text-gray-300 focus:outline-none rounded-lg  bg-gray-100/15 focus:ring-[#17594F] focus:border-[#17594F]"
         />
       </div>
     </div>

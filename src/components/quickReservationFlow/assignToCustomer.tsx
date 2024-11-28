@@ -4,13 +4,18 @@ import LoadingButton from "../button";
 import Search from "../inputs/search";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import {
+  clearAssignToCustomerData,
   closeAssignToCustomerView,
   updateAssignToCustomerData,
 } from "../../stores/inAppDataInterations/assignCustomer";
 import PhoneInput from "../inputs/phoneInput";
+import { customersById } from "../../types/apiData/customers";
+import AddressAutocompleteInput from "../inputs/addressAutocompleteInout";
+import BinIcon from "../../assets/icons/bin-icon";
 
 export default function AssignCustomer() {
   const dispatch = useAppDispatch();
+
   const { data } = useAppSelector((state) => state.assignCustomer.value);
 
   const [firstname, setFirstName] = useState("");
@@ -21,68 +26,65 @@ export default function AssignCustomer() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
 
-  const [searchedUser, setSearcchedUser] = useState({} as any);
-  const [isAssigning, setIsAssigning] = useState(false);
+  const [searchedUser, setSearcchedUser] = useState<customersById>({} as any);
+  const [isSelected, setIsSelected] = useState(false);
 
   useEffect(() => {
-    const {
-      userId,
-      firstname,
-      lastname,
-      email,
-      countryCode,
-      phoneNumber,
-      address,
-    } = data;
-    if (firstname) {
-      setFirstName(firstname);
-      setLastname(lastname);
-      setEmail(email);
-      setAddress(address);
-      setSelectedCountryCode(countryCode);
-      setPhoneNumber(phoneNumber);
+    const { id, first_name, last_name, email, phone, address } = data || {};
+    if (first_name) {
+      setFirstName(first_name);
+      setLastname(last_name || "");
+      setEmail(email || "");
+      setAddress(address || "");
+      // setSelectedCountryCode(countryCode);
+      setPhoneNumber(phone || "");
+      setIsSelected(id ? true : false);
+    } else {
+      setIsSelected(false);
     }
   }, [data]);
 
   useEffect(() => {
-    const { firstname, lastname, email, phoneNumber, address } = searchedUser;
-    if (firstname) {
-      setFirstName(firstname);
-      setLastname(lastname);
-      setEmail(email);
-      setAddress(address);
-      setSelectedCountryCode("+234+Nigeria");
-      setPhoneNumber(phoneNumber);
+    const { id, first_name, last_name, email, phone, address } =
+      searchedUser || {};
+    if (first_name) {
+      setFirstName(first_name);
+      setLastname(last_name || "");
+      setEmail(email || "");
+      setAddress(address || "");
+      // setSelectedCountryCode(countryCode);
+      setPhoneNumber(phone || "");
+      setIsSelected(id ? true : false);
     }
   }, [searchedUser]);
 
   const close = useCallback(() => {
     dispatch(closeAssignToCustomerView());
+    dispatch(clearAssignToCustomerData());
   }, []);
 
   const assignToCustomer = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
-      setIsAssigning(true);
-      try {
-        dispatch(
-          updateAssignToCustomerData({
-            userId: "",
-            firstname,
-            lastname,
-            email,
-            phoneNumber,
-            countryCode: selectedCountryCode,
-            address,
-          })
-        );
-        dispatch(closeAssignToCustomerView());
-      } catch (error) {
-      } finally {
-        setIsAssigning(false);
+      const splitDigits = phoneNumber.split("");
+      if (splitDigits[0] === "0") {
+        splitDigits.shift();
       }
+      const phoneAndCountryCode =
+        `+${selectedCountryCode?.split("+")[1]}` + splitDigits.join("");
+      const payload = {
+        first_name: firstname,
+        last_name: lastname,
+        email,
+        phone: phoneAndCountryCode,
+        address,
+      };
+      dispatch(
+        updateAssignToCustomerData(searchedUser?.id ? searchedUser : payload)
+      );
+      dispatch(closeAssignToCustomerView());
     },
-    [firstname, lastname, email, phoneNumber, selectedCountryCode, address]
+    [searchedUser, lastname, email, phoneNumber, selectedCountryCode, address]
   );
 
   return (
@@ -100,8 +102,18 @@ export default function AssignCustomer() {
           />
         </div>
         <div className=" w-full grid grid-cols-1 gap-5">
-          <label htmlFor="" className=" font-semibold">
-            Fill these details
+          <label htmlFor="" className=" font-semibold flex items-center gap-3">
+            <span>Fill these details</span>
+            {isSelected && (
+              <button
+                type="button"
+                className=" border px-3 p-1 rounded-md font-normal flex items-center gap-2 hover:text-red-500 hover:border-red-500 transition-all"
+                onClick={() => dispatch(clearAssignToCustomerData())}
+              >
+                <span>clear data </span>
+                <BinIcon />
+              </button>
+            )}
           </label>
           <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-5">
             <TextInput
@@ -111,6 +123,7 @@ export default function AssignCustomer() {
               setValue={setFirstName}
               id="firstname"
               placeholder="First name"
+              readonly={isSelected}
             />
             <TextInput
               inputType="text"
@@ -119,6 +132,7 @@ export default function AssignCustomer() {
               setValue={setLastname}
               id="lastname"
               placeholder="Last name"
+              readonly={isSelected}
             />
           </div>
           <TextInput
@@ -128,6 +142,7 @@ export default function AssignCustomer() {
             setValue={setEmail}
             id="customer-email"
             placeholder="Customer Email"
+            readonly={isSelected}
           />
 
           <PhoneInput
@@ -138,14 +153,13 @@ export default function AssignCustomer() {
             label={""}
             isRequired={true}
             id="phone-number"
+            readOnly={isSelected}
           />
-          <TextInput
-            inputType="text"
-            isRequired={true}
+          <AddressAutocompleteInput
             value={address}
             setValue={setAddress}
-            id="customer-address"
             placeholder="Enter address"
+            readOnly={isSelected}
           />
         </div>
         <div className=" flex items-center gap-5">
@@ -162,7 +176,7 @@ export default function AssignCustomer() {
             type="submit"
             label="Apply"
             disabled={false}
-            isLoading={isAssigning}
+            isLoading={false}
           />
         </div>
       </form>

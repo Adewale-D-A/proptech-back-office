@@ -113,7 +113,7 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
                             View Booking
                           </button>
                           <Link
-                            to={`/edit-apartment/apartment-details/${item?.id}`}
+                            to={`/booking-details/edit-reservation/${item?.id}`}
                             className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Edit Booking
