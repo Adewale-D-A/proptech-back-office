@@ -147,7 +147,7 @@ export default function CouponList({ header }: { header: string[] }) {
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}
-          isLoading={false}
+          isLoading={isLoading}
           label="Coupon Lists"
         />
       </div>

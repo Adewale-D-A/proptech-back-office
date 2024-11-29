@@ -89,7 +89,7 @@ export default function RulesLists({
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}
-          isLoading={false}
+          isLoading={isLoading}
           label="Rules"
         />
       </div>

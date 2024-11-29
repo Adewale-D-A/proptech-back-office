@@ -1,0 +1,21 @@
+export type restriction = {
+  id: number;
+  name: string;
+  from_date: string;
+  to_date: string;
+  min_no_of_nights: number;
+  max_no_of_nights: number;
+  multiply_min_no_of_nights: number;
+  set_days_closed_to_arrival: number;
+  set_days_closed_to_departure: number;
+  set_days_closed_to_stay: number;
+  force_arrival_week_day: string;
+  applicable_to_shortlet: string;
+  applicable_shortlets: string;
+  is_deleted: number;
+  deleted_at: string;
+  deleted_by: string;
+  created_at: string;
+  updated_at: string;
+  applicable_shortlet_count: number;
+};

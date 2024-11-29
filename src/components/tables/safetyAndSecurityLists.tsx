@@ -89,7 +89,7 @@ export default function SafetyAndSecurityList({
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}
-          isLoading={false}
+          isLoading={isLoading}
           label="Safety & Security"
         />
       </div>

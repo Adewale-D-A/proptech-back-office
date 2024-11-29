@@ -146,7 +146,7 @@ export default function ApartmentListsTable({
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}
-          isLoading={false}
+          isLoading={isLoading}
           label="Apartment"
         />
         <DeleteConfirmation

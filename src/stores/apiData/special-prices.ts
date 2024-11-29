@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { additionalService } from "../../types/apiData/additionalServices";
+import { specialPrices } from "../../types/apiData/specialPrices";
 
-export const additionalServiceListData = createSlice({
-  name: "all additional services",
+export const specialPricesList = createSlice({
+  name: "special prices",
   initialState: {
     value: {
       status: false,
@@ -15,17 +15,17 @@ export const additionalServiceListData = createSlice({
           from: number;
           to: number;
         };
-        data: additionalService[];
+        data: specialPrices[];
       }[],
-      data: [] as additionalService[],
+      data: [] as specialPrices[],
     },
   },
   reducers: {
-    updateAdditionalServicesList: (state, action) => {
+    updateSpecialPricesList: (state, action) => {
       state.value.status = true;
       state.value.data = action?.payload?.data;
     },
-    addAdditionalServicesToList: (state, action) => {
+    addSpecialPricesToList: (state, action) => {
       state.value.data = [...state.value.data, action?.payload];
       //include in pagination data
       const pagination_data = [...state.value.pagination];
@@ -58,7 +58,7 @@ export const additionalServiceListData = createSlice({
         ];
       }
     },
-    removeAdditionalServicesInList: (state, action) => {
+    removeSpecialPricesInList: (state, action) => {
       const { id } = action?.payload;
       const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
@@ -81,7 +81,7 @@ export const additionalServiceListData = createSlice({
       });
       state.value.pagination = removed;
     },
-    replaceAdditionalServicesInList: (state, action) => {
+    replaceSpecialPricesInList: (state, action) => {
       const { id } = action?.payload;
       const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
@@ -108,7 +108,7 @@ export const additionalServiceListData = createSlice({
       });
       state.value.pagination = replacedItem;
     },
-    clearAdditionalServicesList: (state) => {
+    clearSpecialPricesList: (state) => {
       state.value.status = false;
       state.value.data = [];
     },
@@ -116,12 +116,12 @@ export const additionalServiceListData = createSlice({
 });
 
 export const {
-  updateAdditionalServicesList,
-  addAdditionalServicesToList,
+  updateSpecialPricesList,
+  addSpecialPricesToList,
   addToPaginationHistory,
-  removeAdditionalServicesInList,
-  replaceAdditionalServicesInList,
-  clearAdditionalServicesList,
-} = additionalServiceListData.actions;
+  removeSpecialPricesInList,
+  replaceSpecialPricesInList,
+  clearSpecialPricesList,
+} = specialPricesList.actions;
 
-export default additionalServiceListData.reducer;
+export default specialPricesList.reducer;

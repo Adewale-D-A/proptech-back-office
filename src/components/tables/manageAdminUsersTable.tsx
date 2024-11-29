@@ -139,7 +139,7 @@ export default function ManageAdminUsersTable() {
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}
-          isLoading={false}
+          isLoading={isLoading}
           label="admins"
         />
       </div>

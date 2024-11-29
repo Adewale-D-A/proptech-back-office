@@ -83,7 +83,7 @@ export default function RoomOptionTable({
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}
-          isLoading={false}
+          isLoading={isLoading}
           label="Room Options"
         />
       </div>

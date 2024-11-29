@@ -152,7 +152,7 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}
-          isLoading={false}
+          isLoading={isLoading}
           label="bookings"
         />
       </div>

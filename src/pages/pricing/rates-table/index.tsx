@@ -5,11 +5,12 @@ import ReceiptIcon from "../../../assets/icons/receipt";
 import ImageCarousel from "../../../components/cards/image-carousel";
 import LocationPinIcon from "../../../assets/icons/location";
 import BathIcon from "../../../assets/icons/bath";
-import Select from "../../../components/inputs/select";
 import LoadingButton from "../../../components/button";
 import DateInput from "../../../components/inputs/dateInput";
 import TextInput from "../../../components/inputs/textInput";
 import PriceRateList from "../../../components/tables/pricingRateLists";
+import { apartmentById } from "../../../types/apiData/apartment";
+import Search from "../../../components/inputs/search";
 
 const breadCrumb = [
   {
@@ -41,11 +42,11 @@ export default function RateTable() {
     );
   }, []);
 
-  const [apartment, setApartment] = useState("");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [rate, setRate] = useState("");
   const [cautionFee, setCautionFee] = useState("");
+  const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
 
   const submitRate = useCallback((e: SyntheticEvent) => {
     e.preventDefault();
@@ -55,35 +56,38 @@ export default function RateTable() {
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
         <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5">
           <div className=" w-full rounded-md border p-2 flex flex-col gap-3">
-            <Select
-              isRequired={true}
-              value={apartment}
-              setValue={setApartment}
-              id="all-status"
-            >
-              <option value="">Select any apartment</option>
-              <option value="sunshine-apt">Sunshine - 2 Bedroom</option>
-            </Select>
-            <ImageCarousel
-              images={[
-                { url: "/temp/temp_apartment_1.jpg" },
-                { url: "/temp/temp_apartment_2.jpg" },
-                { url: "/temp/temp_apartment_2.jpg" },
-              ]}
+            <Search
+              id="apartment-search"
+              componentId="apartment"
+              placeholder="Apartment name..."
+              setValue={setSelectedApt}
             />
-            <div className=" flex flex-col gap-2 border-b py-3">
-              <div className=" flex items-center justify-between gap-4">
-                <h4 className="text-xl font-semibold">Sunshine - 2 Bedroom</h4>
+            {selectedAprt?.id && (
+              <div className=" flex flex-col gap-3">
+                <ImageCarousel
+                  images={selectedAprt?.images?.map((item) => ({
+                    url: item?.path,
+                  }))}
+                />
+                <div className=" flex flex-col gap-2 border-b py-3">
+                  <div className=" flex items-center justify-between gap-4">
+                    <h4 className="text-xl font-semibold">
+                      {selectedAprt?.name}
+                    </h4>
+                  </div>
+                  <div className=" text-sm text-gray-500 flex items-center gap-3">
+                    <span className="flex items-center gap-1">
+                      <LocationPinIcon className=" h-4 w-4" />{" "}
+                      {selectedAprt?.location}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <BathIcon className=" h-4 w-4" />{" "}
+                      {selectedAprt?.no_of_bathrooms} Bathrooms
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div className=" text-sm text-gray-500 flex items-center gap-3">
-                <span className="flex items-center gap-1">
-                  <LocationPinIcon className=" h-4 w-4" /> Lekki Phase II
-                </span>
-                <span className="flex items-center gap-1">
-                  <BathIcon className=" h-4 w-4" /> 2 Bathrooms
-                </span>
-              </div>
-            </div>
+            )}
             <div className="pb-3">
               <form onSubmit={submitRate} className="flex flex-col gap-3">
                 <h6 className="text-md font-semibold">Add Rates Per Night</h6>

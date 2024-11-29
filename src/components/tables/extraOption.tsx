@@ -83,7 +83,7 @@ export default function ExtraOptionTable({
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}
-          isLoading={false}
+          isLoading={isLoading}
           label="Exra Options"
         />
       </div>

@@ -56,6 +56,9 @@ import couponListsData from "./apiData/coupons-lists";
 import packagesAndOffersListsData from "./apiData/packages-and-offers";
 import additionalServiceListData from "./apiData/additional-services-lists";
 import vendorServiceListData from "./apiData/vendor-services-lists";
+// special prices and restriction
+import restrictionsList from "./apiData/restrictions";
+import specialPricesList from "./apiData/special-prices";
 
 export const adminStore = () => {
   return configureStore({
@@ -88,6 +91,9 @@ export const adminStore = () => {
       upcomingReservation: upcomingReservation,
       visitorCount: visitorsCount,
       dailyOccupany: dailyOccupancy,
+
+      restriction: restrictionsList,
+      specialPrices: specialPricesList,
 
       allAparmentLists: apartmentListsData,
       topAparmentLists: topApartmentListsData,

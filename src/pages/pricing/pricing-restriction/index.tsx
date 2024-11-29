@@ -8,6 +8,10 @@ import Switch from "../../../components/switch";
 import LoadingButton from "../../../components/button";
 import DateInput from "../../../components/inputs/dateInput";
 import WeekdaysSelect from "../../../components/inputs/select/weekdaysSelect";
+import useAxios from "../../../useHooks/useAxios";
+import Search from "../../../components/inputs/search";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import { addRestrictionssToList } from "../../../stores/apiData/restrictions";
 
 const breadCrumb = [
   {
@@ -23,6 +27,7 @@ const breadCrumb = [
 ];
 export default function NewPricingRestrictions() {
   const dispatch = useAppDispatch();
+  const axios = useAxios();
 
   // update page props on component mount
   useLayoutEffect(() => {
@@ -42,25 +47,83 @@ export default function NewPricingRestrictions() {
   const [restrictionName, setRestrictionName] = useState("");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [isAllRooms, setIsAllRooms] = useState(false);
   const [minNights, setMinNights] = useState("");
-  const [multipleMinNights, setMultipleMinNights] = useState(false);
   const [maxNights, setMaxNights] = useState("");
+  const [multipleMinNights, setMultipleMinNights] = useState(false);
   const [daysClosedArrival, setDaysClosedArrival] = useState(false);
   const [daysClosedDeparture, setDaysClosedDeparture] = useState(false);
+  const [isAllRooms, setIsAllRooms] = useState(false);
   const [forcedArrival, setForcedArrival] = useState("");
+  const [appliacleToApartment, setApplicableToApartment] = useState("all");
+  const [selectedApt, setSelectedApt] = useState<
+    { id: string; name: string }[]
+  >([]);
 
   const [isSaving, setIsSaving] = useState(false);
-  const submitSpecialPrices = useCallback((e: SyntheticEvent) => {
-    e.preventDefault();
-  }, []);
+
+  const submitRestriction = useCallback(
+    async (e: SyntheticEvent) => {
+      e.preventDefault();
+      try {
+        setIsSaving(true);
+        const payload = {
+          name: restrictionName,
+          from_date: from,
+          to_date: to,
+          min_no_of_nights: minNights,
+          max_no_of_nights: maxNights,
+          multiply_min_no_of_nights: multipleMinNights,
+          set_days_closed_to_arrival: daysClosedArrival,
+          set_days_closed_to_departure: daysClosedDeparture,
+          set_days_closed_to_stay: false, //TODO: Get what this means
+          force_arrival_week_day: forcedArrival,
+          applicable_to_shortlet: appliacleToApartment, // all or specific
+          applicable_shortlets: selectedApt?.map((item) => item?.id), // required if applicable_to_shortlet is specific
+        };
+        const newPayload = Object.fromEntries(
+          Object.entries(payload).filter(([key]) =>
+            key === "applicable_shortlets" &&
+            !(payload?.applicable_to_shortlet === "specific")
+              ? false
+              : true
+          )
+        );
+        const response = await axios.post("/admin/restriction", newPayload);
+        const { data, message } = response?.data || {};
+        const response_data = data?.restriction;
+        dispatch(addRestrictionssToList(response_data));
+        dispatch(
+          openSnackbar({
+            message: message || "Restriction created successfully",
+            isError: false,
+          })
+        );
+      } catch (error) {
+      } finally {
+        setIsSaving(false);
+      }
+    },
+    [
+      restrictionName,
+      from,
+      to,
+      minNights,
+      maxNights,
+      multipleMinNights,
+      daysClosedArrival,
+      daysClosedDeparture,
+      forcedArrival,
+      appliacleToApartment,
+      selectedApt,
+    ]
+  );
 
   return (
     <section className="w-full flex flex-col items-center my-10">
       <div className=" w-full flex flex-col gap-4">
         <div className=" rounded-md border">
           <h4 className="text-lg font-semibold border-b  p-3">Details</h4>
-          <form onSubmit={submitSpecialPrices}>
+          <form onSubmit={submitRestriction}>
             <div className="w-full p-5 flex flex-col gap-8">
               <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
                 <div className=" max-w-md">
@@ -177,7 +240,7 @@ export default function NewPricingRestrictions() {
                   <option value="" disabled>
                     Select
                   </option>
-                  {Array.from({ length: 8 }, (_, index) => (
+                  {Array.from({ length: 30 }, (_, index) => (
                     <option key={index} value={`${index + 1}`}>
                       {index + 1}
                     </option>
@@ -218,6 +281,40 @@ export default function NewPricingRestrictions() {
                   id="force-arrival-day"
                 />
               </div>
+              <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-center">
+                <div className=" max-w-md">
+                  <h6 className=" text-lg font-semibold">
+                    Applicable Shortlet
+                  </h6>
+                  <p className=" text-gray-500">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Quae labore.
+                  </p>
+                </div>
+                <div className=" flex flex-col gap-3">
+                  <Select
+                    isRequired={true}
+                    value={appliacleToApartment}
+                    setValue={setApplicableToApartment}
+                    id="apartment"
+                  >
+                    <option value="" disabled>
+                      Applicable to apartment
+                    </option>
+                    <option value="all">All</option>
+                    <option value="specific">Specific</option>
+                  </Select>
+                  {appliacleToApartment === "specific" && (
+                    <Search
+                      id="apartment-search"
+                      componentId="apartment"
+                      placeholder="Apartment name..."
+                      updatelist={setSelectedApt}
+                      multipleSelect={true}
+                    />
+                  )}
+                </div>
+              </div>
             </div>
             <div className=" flex items-center justify-end gap-4 my-10 p-4">
               <div className=" w-fit">
@@ -225,7 +322,7 @@ export default function NewPricingRestrictions() {
                   type="button"
                   label="Back"
                   variant={2}
-                  isLoading={isSaving}
+                  isLoading={false}
                 />
               </div>
               <div className=" w-fit">

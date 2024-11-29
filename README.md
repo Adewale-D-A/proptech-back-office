@@ -48,7 +48,12 @@ run **npm install** (to install all the dependencies)
 step 2:
 run **npm start** (start application on port:3000)
 
-> mime types documentation : <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types">MIME TYPES</a> > <a href="https://www.figma.com/design/foJk9S0rCJImkVXY0EgxId/proptech?node-id=4400-64&node-type=&t=ZI2UUvFyHO0J3pWZ-0">FIGMA File</a>
-> <a href="https://www.figma.com/design/sJXTHB9vabVu6hd3TXH9uk/99-APPs?node-id=100-24433&node-type=canvas&t=jbtAxyNdljLvbX97-0" targt="_blank">MISSING SCREEN UI</a>
+[MIME TYPES](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types)
 
-<a href="https://documenter.getpostman.com/view/36930652/2sAXjNXAMk" targt="_blank">backend main api doc</a>
+[FIGMA File](https://www.figma.com/design/foJk9S0rCJImkVXY0EgxId/proptech?node-id=4400-64&node-type=&t=ZI2UUvFyHO0J3pWZ-0)
+
+[MISSING SCREEN UI](https://www.figma.com/design/sJXTHB9vabVu6hd3TXH9uk/99-APPs?node-id=100-24433&node-type=canvas&t=jbtAxyNdljLvbX97-0)
+
+[OPERATIONS FIGMA](https://www.figma.com/proto/sJXTHB9vabVu6hd3TXH9uk/99-APPs?page-id=51%3A91251&node-id=51-91253&node-type=frame&viewport=7324%2C17129%2C0.22&t=44IpZvZVOOxQuZCO-1&scaling=min-zoom&content-scaling=fixed)
+
+[backend main api doc](https://documenter.getpostman.com/view/36930652/2sAXjNXAMk)

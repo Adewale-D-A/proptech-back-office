@@ -1,5 +1,4 @@
 import UserPlusIcon from "../../assets/icons/user-plus";
-import { requests } from "../../types/apiData/requests";
 import formatDate from "../../utils/isoDateConverter";
 import Status from "../status";
 
@@ -8,7 +7,13 @@ export default function RequestInformation({
   request_details,
 }: {
   addCost?: boolean;
-  request_details: requests;
+  request_details: {
+    subject: string;
+    description: string;
+    created_at: string;
+    is_escalated: number;
+    status: string;
+  };
 }) {
   return (
     <div className=" w-full bg-gray-100 rounded-md">

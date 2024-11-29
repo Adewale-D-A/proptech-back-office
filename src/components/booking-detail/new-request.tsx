@@ -9,15 +9,28 @@ import TimeInput from "../inputs/timeInput";
 import { useAppDispatch } from "../../stores/hooks";
 import { addAdditionalServicesToList } from "../../stores/apiData/additional-services-lists";
 import { addRequestsToList } from "../../stores/apiData/requests-lists";
+import { customersById } from "../../types/apiData/customers";
+import { apartmentById } from "../../types/apiData/apartment";
+import useAxios from "../../useHooks/useAxios";
+import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 
 export default function NewRequest({
   setValue,
   isDateRestricted,
+  componentId,
 }: {
   setValue: Function;
   isDateRestricted?: boolean;
+  componentId: "request" | "additional-services";
 }) {
   const dispatch = useAppDispatch();
+  const axios = useAxios();
+  const [seletedCustomer, setSelectedCustomer] = useState<customersById>(
+    {} as any
+  );
+  const [selectedApartment, setSelectedApartment] = useState<apartmentById>(
+    {} as any
+  );
   const [type, setType] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
@@ -25,43 +38,91 @@ export default function NewRequest({
   const [isAdding, setIsAdding] = useState(false);
 
   const addService = useCallback(
-    (e: SyntheticEvent) => {
+    async (e: SyntheticEvent) => {
       e.preventDefault();
-      setValue(false);
-      dispatch(
-        addAdditionalServicesToList({
-          id: "random-service",
-          customerName: "new user",
-          apartmentName: "new apartment",
-          requestDate: `${date} ${time}`,
-          serviceType: type,
-          description: description,
-          escalateStatus: "NO",
-          status: "pending",
-        })
-      );
-      dispatch(
-        addRequestsToList({
-          id: "random-request",
-          customerName: "new user",
-          apartnmentName: "new apartment",
-          date: date,
-          type: type,
-          description: description,
-          isEscalated: "Yes",
-          status: "pending",
-        })
-      );
+      if (selectedApartment?.id && seletedCustomer?.id) {
+        try {
+          setIsAdding(true);
+          if (componentId === "request") {
+            const payload = {
+              user_id: seletedCustomer?.id,
+              shortlet_id: selectedApartment?.id,
+              subject: type,
+              description: description,
+            };
+            const response = await axios.post("/admin/user-request", payload);
+            const { data, messsage } = response?.data || {};
+            dispatch(addRequestsToList(data));
+            dispatch(
+              openSnackbar({
+                message: messsage || "User request created succefully",
+                isError: false,
+              })
+            );
+          }
+          // if (componentId === "additional-services") {
+          //   const payload = {
+          //     user_id: seletedCustomer?.id,
+          //     shortlet_id: selectedApartment?.id,
+          //     subject: type,
+          //     description: description,
+          //   };
+          //   const response = await axios.post(
+          //     "/admin/additional-service",
+          //     payload
+          //   );
+          //   const { data, messsage } = response?.data || {};
+          //   dispatch(addRequestsToList(data));
+          //   dispatch(
+          //     openSnackbar({
+          //       message: messsage || "User request created succefully",
+          //       isError: false,
+          //     })
+          //   );
+          // }
+          setValue(false);
+        } catch (error) {
+        } finally {
+          setIsAdding(false);
+        }
+      } else {
+        dispatch(
+          openSnackbar({
+            message:
+              "Please select an apartment and a user by using the search and select feature",
+            isError: true,
+          })
+        );
+      }
+      // dispatch(
+      //   addAdditionalServicesToList({
+      //     id: "random-service",
+      //     customerName: "new user",
+      //     apartmentName: "new apartment",
+      //     requestDate: `${date} ${time}`,
+      //     serviceType: type,
+      //     description: description,
+      //     escalateStatus: "NO",
+      //     status: "pending",
+      //   })
+      // );
     },
-    [date, time, type, description]
+    [date, time, type, description, seletedCustomer, selectedApartment]
   );
   return (
     <form onSubmit={addService} className="w-full flex flex-col gap-3">
       <Search
         id="customers-search"
         placeholder="Search customer to assign to"
+        setValue={setSelectedCustomer}
+        componentId="customer"
       />
-      <Search id="customers-apartment" placeholder="Search apartment" />
+      <Search
+        id="customers-apartment"
+        placeholder="Search apartment"
+        setValue={setSelectedApartment}
+        componentId="apartment"
+      />
       <Select
         isRequired={true}
         value={type}
@@ -71,8 +132,8 @@ export default function NewRequest({
         <option value="" disabled>
           Select Request Type
         </option>
-        <option value="internet">Internet</option>
-        <option value="dstv">DSTV</option>
+        {/* <option value="internet">Internet</option> */}
+        <option value="Dstv">DSTV</option>
       </Select>
       {isDateRestricted ? (
         <div className=" flex flex-col gap-3">

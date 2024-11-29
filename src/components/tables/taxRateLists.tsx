@@ -151,7 +151,7 @@ export default function TaxRateLists({ header }: { header: string[] }) {
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}
-          isLoading={false}
+          isLoading={isLoading}
           label="Tax"
         />
       </div>

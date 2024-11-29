@@ -97,7 +97,7 @@ export default function AmenitiesListsTable({
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}
-          isLoading={false}
+          isLoading={isLoading}
           label="Amenities"
         />
       </div>

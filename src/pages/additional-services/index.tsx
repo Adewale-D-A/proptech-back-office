@@ -4,9 +4,7 @@ import { updatePageProperties } from "../../stores/appFunctionality/pageProperti
 import BookingTab from "../../components/tab/bookingTab";
 import AdditionIcon from "../../assets/icons/addtion";
 import AdditionalServicesList from "./services-list";
-import StallIcon from "../../assets/icons/stall";
 import DoorIcon from "../../assets/icons/door";
-import VendorServicesList from "./vendor-services";
 
 const breadCrumb = [
   {

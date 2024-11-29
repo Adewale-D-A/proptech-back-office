@@ -1,3 +1,7 @@
+##### 29.11.2024
+
+> Restriction and special prices
+
 ##### 28.11.2024
 
 > Bookings Reservation endpoint integration

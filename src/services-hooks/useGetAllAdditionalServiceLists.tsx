@@ -1,17 +1,25 @@
 import { useCallback, useEffect, useState } from "react";
-import useAxios from "../useHooks/useAxios";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
-import tempAptData from "../assets/temp-api-mockup-data/additionalServices.json";
 import {
   addToPaginationHistory,
   updateAdditionalServicesList,
 } from "../stores/apiData/additional-services-lists";
+import useAxios from "../useHooks/useAxios";
+import { pagination } from "../types/pagination";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetAllAdditionalServiceLists({
   page = 1,
+  start_date,
+  end_date,
+  sort = "desc",
+  search = "",
 }: {
   page?: number;
+  start_date?: string;
+  end_date?: string;
+  sort?: "desc" | "asc" | string;
+  search?: string;
 }) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
@@ -23,71 +31,75 @@ export default function useGetAllAdditionalServiceLists({
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const [pagination, setPagination] = useState<{
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    from: number;
-    to: number;
-  }>({} as any);
-  const getAllAdditionalServiceList = useCallback(async () => {
+  const [pagination, setPagination] = useState<pagination>({} as any);
+
+  const getAllAdditionalService = useCallback(async () => {
     setIsLoading(true);
+    setIsFailed(false);
     try {
       //check store if this requested data has been saved previously and retirve it
       //if not, make a new request and save into store
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage) {
+      if (
+        foundPage &&
+        !(start_date && end_date) &&
+        !(sort === "asc") &&
+        !search
+      ) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateAdditionalServicesList({ data: foundPage?.data }));
       } else {
-        // const response = await axios.post(`/institution-list?page=${page}`);
-        // const responseData = response?.data?.data;
-        // const institutions = response?.data?.institution;
-        dispatch(updateAdditionalServicesList({ data: tempAptData.data }));
-
-        // TODO: UPDATE based on backend pagination response
-        //CURRENTLY: Pagination is not being returned for this dataset,
-        //TEMPORARY SOLUTION: Hardcoding pagination
-        // const { data, current_page, last_page, per_page, total, from, to } =
-        //   responseData;
-        // const paginationDataset = {
-        //   current_page: 1,
-        //   last_page: 1,
-        //   per_page: 20,
-        //   total: 4,
-        //   from: 1,
-        //   to: 1,
-        // };
-        // dispatch(update_institution({data}));
-        dispatch(
-          addToPaginationHistory({
-            pagination_data: tempAptData.pagination,
-            data: tempAptData.data,
-          })
+        const response = await axios.get(
+          start_date && end_date
+            ? `/admin/additional-service?sort=${sort}&limit=20&page=${page}&start_date=${start_date}&end_date=${end_date}&search=${
+                search || ""
+              }`
+            : `/admin/additional-service?sort=${sort}&limit=20&page=${page}&search=${
+                search || ""
+              }`
         );
-        setPagination(tempAptData.pagination);
+        const { additional_service } = response?.data?.data;
+        const { data, current_page, last_page, per_page, total, from, to } =
+          additional_service;
+        const paginationDataset = {
+          current_page,
+          last_page,
+          per_page,
+          total,
+          from,
+          to,
+          length: data?.length,
+        };
+        dispatch(updateAdditionalServicesList({ data }));
+        if (!search) {
+          dispatch(
+            addToPaginationHistory({
+              pagination_data: paginationDataset,
+              data: data,
+            })
+          );
+        }
+        setPagination(paginationDataset);
       }
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
     } finally {
       setIsLoading(false);
     }
-  }, [page]);
+  }, [page, start_date, end_date, sort, search]);
 
   useEffect(() => {
-    getAllAdditionalServiceList();
-  }, [page]);
+    getAllAdditionalService();
+  }, [page, start_date, end_date, sort, search]);
 
   return {
     data,
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getAllAdditionalServiceList,
+    retryFunction: getAllAdditionalService,
     pagination,
   };
 }

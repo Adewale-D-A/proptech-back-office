@@ -1,0 +1,23 @@
+export type specialPrices = {
+  id: number;
+  name: string;
+  check_in_date: string;
+  check_out_date: string;
+  price: number;
+  percentage: number;
+  round_to_integer: number;
+  weekday: string;
+  tied_to_year: number;
+  at_season_beginning: number;
+  promotion: number;
+  type: string;
+  price_type: string;
+  applicable_to_shortlet: string;
+  applicable_shortlets: string;
+  is_deleted: number;
+  deleted_at: string;
+  deleted_by: string;
+  created_at: string;
+  updated_at: string;
+  applicable_shortlet_count: number;
+};

@@ -152,7 +152,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}
-          isLoading={false}
+          isLoading={isLoading}
           label="requests"
         />
       </div>

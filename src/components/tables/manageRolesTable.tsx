@@ -135,7 +135,7 @@ export default function ManageRoleTableData() {
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}
-          isLoading={false}
+          isLoading={isLoading}
           label="roles"
         />
       </div>

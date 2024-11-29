@@ -9,6 +9,9 @@ import Switch from "../../../components/switch";
 import ApartmentSingleSelect from "../../../components/inputs/select/apartmentSelect";
 import LoadingButton from "../../../components/button";
 import WeekdaysSelect from "../../../components/inputs/select/weekdaysSelect";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import { addSpecialPricesToList } from "../../../stores/apiData/special-prices";
+import useAxios from "../../../useHooks/useAxios";
 
 const breadCrumb = [
   {
@@ -23,6 +26,7 @@ const breadCrumb = [
   },
 ];
 export default function SpecialPrices() {
+  const axios = useAxios();
   const dispatch = useAppDispatch();
 
   // update page props on component mount
@@ -55,8 +59,50 @@ export default function SpecialPrices() {
   const [priceType, setPriceType] = useState("");
 
   const [isSaving, setIsSaving] = useState(false);
-  const submitSpecialPrices = useCallback((e: SyntheticEvent) => {
+  const submitSpecialPrices = useCallback(async (e: SyntheticEvent) => {
     e.preventDefault();
+    try {
+      setIsSaving(true);
+      const payload = {
+        name: "October Special Price",
+        check_in_date: "2025-10-24",
+        check_out_date: "2025-12-11",
+        weekday: "lorem ipsum",
+        tied_to_year: true,
+        at_season_beginning: true,
+        promotion: true,
+        round_to_integer: true,
+        applicable_to_shortlet: "specific", // all or specific
+        type: "lorem ipsum",
+        price_type: "percentage", //percentage or price
+        validity: "permanent", //temporary or permanent
+        is_reusable: "yes", // yes or no
+        applicable_shortlets: [1, 2], // required if applicable_to_shortlet is specific
+        price: 50000, //required if price_type is price
+        percentage: 20, //required if price_type is percentage
+      };
+      const newPayload = Object.fromEntries(
+        Object.entries(payload).filter(([key]) =>
+          key === "applicable_shortlets" &&
+          !(payload?.applicable_to_shortlet === "specific")
+            ? false
+            : true
+        )
+      );
+      const response = await axios.post("/admin/restriction", newPayload);
+      const { data, message } = response?.data || {};
+      const response_data = data?.special_price;
+      dispatch(addSpecialPricesToList(response_data));
+      dispatch(
+        openSnackbar({
+          message: message || "Restriction created successfully",
+          isError: false,
+        })
+      );
+    } catch (error) {
+    } finally {
+      setIsSaving(false);
+    }
   }, []);
 
   return (

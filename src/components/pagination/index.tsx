@@ -1,7 +1,5 @@
 import { useCallback } from "react";
-import NextArrowIcon from "../../assets/icons/next-arrow";
 import LoaderIcon from "../../assets/icons/loader";
-import PreviousArrowIcon from "../../assets/icons/previous-arrow";
 import { pagination } from "../../types/pagination";
 import NavigateNextIcon from "../../assets/icons/navigate-next";
 import NavigatePrevIcon from "../../assets/icons/navigate-prev";

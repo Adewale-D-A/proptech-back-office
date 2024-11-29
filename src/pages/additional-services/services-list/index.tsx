@@ -77,7 +77,11 @@ export default function AdditionalServicesList() {
         title="Add New Service"
         className=" max-w-md"
       >
-        <NewRequest setValue={setOpenNewRequest} isDateRestricted />
+        <NewRequest
+          componentId="additional-services"
+          setValue={setOpenNewRequest}
+          isDateRestricted
+        />
       </ModalTemplate>
     </>
   );
