@@ -17,7 +17,7 @@ const breadCrumb = [
     icon: <AdditionIcon />,
   },
 ];
-export default function AdditionalServicesList() {
+export default function AptAdditionalServicesList() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   // update page props on component mount
@@ -25,8 +25,8 @@ export default function AdditionalServicesList() {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "Service List",
-        pageDescription: "All service List",
+        pageTitle: "99 Apartment Services",
+        pageDescription: "99 apartment services",
         isLoading: false,
         failedToLoad: false,
         setFailedToLoad: false,

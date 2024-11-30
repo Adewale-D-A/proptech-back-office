@@ -5,7 +5,6 @@ import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import ExportSelect from "../../../components/inputs/select/exportSelect";
 import PlusIcon from "../../../assets/icons/plus";
-import AdditionalServiceListTable from "../../../components/tables/additionalServices";
 import LoadingButton from "../../../components/button";
 import ModalTemplate from "../../../components/modal";
 import NewAdventure from "../../../components/booking-detail/add-adventure";

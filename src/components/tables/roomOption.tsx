@@ -6,13 +6,7 @@ import ModalTemplate from "../modal";
 import AddEditRoomOption from "../room-extra-options/add-edit-options";
 import useGetRoomOptions from "../../services-hooks/useGetRoomOptions";
 
-export default function RoomOptionTable({
-  header,
-  title,
-}: {
-  header: string[];
-  title: string;
-}) {
+export default function RoomOptionTable() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
@@ -36,13 +30,13 @@ export default function RoomOptionTable({
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-x-auto">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
-          <h2 className="text-xl font-semibold">{title}</h2>
+          <h2 className="text-xl font-semibold">Room Options List</h2>
           <Sort id="room-options" label="Sort Category" />{" "}
         </div>
         <table className=" w-full overflow-x-auto">
           <thead className="">
             <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-              {header.map((head) => (
+              {["Category Name", "Description", "Action"].map((head) => (
                 <th key={head}>{head}</th>
               ))}
             </tr>

@@ -1,34 +1,31 @@
 import { useLayoutEffect } from "react";
+import BuildingIcon from "../../../assets/icons/building";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import ReceiptIcon from "../../../assets/icons/receipt";
-
-import useAxios from "../../../useHooks/useAxios";
-import PricingRestrictionsTable from "../../../components/tables/pricing-restrictions";
+import AmenitiesIcon from "../../../assets/icons/amenities";
+import AmenitiesListsTable from "../../../components/tables/amenitiesLists";
 
 const breadCrumb = [
   {
-    url: "#",
-    label: "Pricing",
-    icon: <ReceiptIcon />,
+    url: "/apartments/view-all",
+    label: "Apartments",
+    icon: <BuildingIcon />,
   },
   {
     url: "#",
-    label: "New Restriction",
-    icon: "",
+    label: "Amenities",
+    icon: <AmenitiesIcon />,
   },
 ];
-export default function NewPricingRestrictions() {
+export default function AmenitiesListView() {
   const dispatch = useAppDispatch();
-  const axios = useAxios();
-
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "New Pricing Restriction",
-        pageDescription: "New pricing restriction",
+        pageTitle: "Amenities",
+        pageDescription: "Apartments amenities configuration",
         isLoading: false,
         failedToLoad: false,
         setFailedToLoad: false,
@@ -36,9 +33,10 @@ export default function NewPricingRestrictions() {
       })
     );
   }, []);
+
   return (
-    <div>
-      <PricingRestrictionsTable />
+    <div className="w-full">
+      <AmenitiesListsTable />
     </div>
   );
 }

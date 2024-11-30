@@ -1,34 +1,31 @@
 import { useLayoutEffect } from "react";
+import BuildingIcon from "../../../assets/icons/building";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import ReceiptIcon from "../../../assets/icons/receipt";
-
-import useAxios from "../../../useHooks/useAxios";
-import PricingRestrictionsTable from "../../../components/tables/pricing-restrictions";
+import AdjustmentIcon from "../../../assets/icons/adjustment";
+import RoomOptionTable from "../../../components/tables/roomOption";
 
 const breadCrumb = [
   {
-    url: "#",
-    label: "Pricing",
-    icon: <ReceiptIcon />,
+    url: "/apartments/view-all",
+    label: "Apartments",
+    icon: <BuildingIcon />,
   },
   {
     url: "#",
-    label: "New Restriction",
-    icon: "",
+    label: "Room Options",
+    icon: <AdjustmentIcon />,
   },
 ];
-export default function NewPricingRestrictions() {
+export default function RoomOptionsListView() {
   const dispatch = useAppDispatch();
-  const axios = useAxios();
-
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "New Pricing Restriction",
-        pageDescription: "New pricing restriction",
+        pageTitle: "Room Options",
+        pageDescription: "Apartments room options configuration",
         isLoading: false,
         failedToLoad: false,
         setFailedToLoad: false,
@@ -36,9 +33,10 @@ export default function NewPricingRestrictions() {
       })
     );
   }, []);
+
   return (
-    <div>
-      <PricingRestrictionsTable />
+    <div className="w-full">
+      <RoomOptionTable />
     </div>
   );
 }

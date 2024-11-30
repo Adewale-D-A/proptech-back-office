@@ -45,7 +45,7 @@ export default function NavigationMenuItems() {
         },
         {
           id: 2,
-          url: "/apartments",
+          url: "/apartments/view-all",
           label: "Apartments",
           value: "apartments",
           show: true,
@@ -64,7 +64,7 @@ export default function NavigationMenuItems() {
         },
         {
           id: 3,
-          url: "/bookings",
+          url: "/bookings/overview",
           label: "Bookings",
           value: "bookings",
           show: true,
@@ -83,7 +83,7 @@ export default function NavigationMenuItems() {
         },
         {
           id: 4,
-          url: "/additional-services",
+          url: "/additional-services/99apartment-services",
           label: "Additional Services",
           value: "additional services",
           show: true,
@@ -121,7 +121,7 @@ export default function NavigationMenuItems() {
         },
         {
           id: 12,
-          url: "/admin-users-management",
+          url: "/admin/admin-users",
           label: "Admin Users",
           value: "admin-users",
           show: true,
@@ -140,7 +140,7 @@ export default function NavigationMenuItems() {
         },
         {
           id: 6,
-          url: "/pricing",
+          url: "/pricing/overview",
           label: "Pricing",
           value: "pricing",
           show: true,
@@ -159,7 +159,7 @@ export default function NavigationMenuItems() {
         },
         {
           id: 7,
-          url: "/plans-and-promotions",
+          url: "/plans-and-promotions/tax-rates",
           label: "Plans & Promotions",
           value: "plands-and-promotions",
           show: true,
@@ -178,7 +178,7 @@ export default function NavigationMenuItems() {
         },
         {
           id: 8,
-          url: "/chat",
+          url: "/chat/guest",
           label: "Chat",
           value: "chat",
           show: true,
@@ -197,7 +197,7 @@ export default function NavigationMenuItems() {
         },
         {
           id: 9,
-          url: "/invoices",
+          url: "/invoices/apartment",
           label: "Invoices",
           value: "invoices",
           show: true,

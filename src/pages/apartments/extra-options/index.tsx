@@ -1,34 +1,31 @@
 import { useLayoutEffect } from "react";
+import BuildingIcon from "../../../assets/icons/building";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import ReceiptIcon from "../../../assets/icons/receipt";
-
-import useAxios from "../../../useHooks/useAxios";
-import PricingRestrictionsTable from "../../../components/tables/pricing-restrictions";
+import ExtraOptionsIcon from "../../../assets/icons/extra-options";
+import ExtraOptionTable from "../../../components/tables/extraOption";
 
 const breadCrumb = [
   {
-    url: "#",
-    label: "Pricing",
-    icon: <ReceiptIcon />,
+    url: "/apartments/view-all",
+    label: "Apartments",
+    icon: <BuildingIcon />,
   },
   {
     url: "#",
-    label: "New Restriction",
-    icon: "",
+    label: "Extra Options",
+    icon: <ExtraOptionsIcon />,
   },
 ];
-export default function NewPricingRestrictions() {
+export default function ExtraOptionsListView() {
   const dispatch = useAppDispatch();
-  const axios = useAxios();
-
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "New Pricing Restriction",
-        pageDescription: "New pricing restriction",
+        pageTitle: "Extra Options",
+        pageDescription: "Apartments extra options configuration",
         isLoading: false,
         failedToLoad: false,
         setFailedToLoad: false,
@@ -36,9 +33,10 @@ export default function NewPricingRestrictions() {
       })
     );
   }, []);
+
   return (
-    <div>
-      <PricingRestrictionsTable />
+    <div className="w-full">
+      <ExtraOptionTable />
     </div>
   );
 }

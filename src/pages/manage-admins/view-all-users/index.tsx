@@ -1,22 +1,17 @@
 import { useLayoutEffect } from "react";
+import MenuIcon from "../../../assets/icons/menu";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import CalendarIcon from "../../../assets/icons/calendar";
-import ApartmentCalendarView from "../../../components/calendar/apartment-calendar-view";
+import ManageAdminUsersTable from "../../../components/tables/manageAdminUsersTable";
 
 const breadCrumb = [
   {
-    url: "/bookings/overview",
-    label: "Bookings",
-    icon: <CalendarIcon />,
-  },
-  {
-    url: "#",
-    label: "Calendar",
-    icon: "",
+    url: "/admin-users-management",
+    label: "Admin users",
+    icon: <MenuIcon />,
   },
 ];
-export default function BookingsCalendar() {
+export default function AdminManagementViewAll() {
   const dispatch = useAppDispatch();
 
   // update page props on component mount
@@ -24,8 +19,8 @@ export default function BookingsCalendar() {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "Bookings Calendar",
-        pageDescription: "Apartment's bookings calendar",
+        pageTitle: "Admin Management users",
+        pageDescription: "Admin management users",
         isLoading: false,
         failedToLoad: false,
         setFailedToLoad: false,
@@ -34,5 +29,5 @@ export default function BookingsCalendar() {
     );
   }, []);
 
-  return <ApartmentCalendarView />;
+  return <ManageAdminUsersTable />;
 }

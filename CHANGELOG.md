@@ -1,3 +1,7 @@
+##### 30.11.2024
+
+> Tab layout route wrapper updates
+
 ##### 29.11.2024
 
 > Restriction and special prices

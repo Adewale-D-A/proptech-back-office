@@ -7,13 +7,7 @@ import AddEdit from "../amenities/addEdit";
 import useGetHouseRules from "../../services-hooks/useGetAllRules";
 import NoResult from "../noResult";
 
-export default function RulesLists({
-  header,
-  title,
-}: {
-  header: string[];
-  title: string;
-}) {
+export default function RulesLists() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
@@ -38,14 +32,14 @@ export default function RulesLists({
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
-          <h2 className="text-xl font-semibold">{title}</h2>
+          <h2 className="text-xl font-semibold">Rules Lists</h2>
           <Sort id="extra-options" label="Sort List" />{" "}
         </div>
         {data && data.length > 0 ? (
           <table className=" w-full overflow-x-auto">
             <thead className="">
               <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                {header.map((head) => (
+                {["Title", "Description", "Action"].map((head) => (
                   <th key={head}>{head}</th>
                 ))}
               </tr>

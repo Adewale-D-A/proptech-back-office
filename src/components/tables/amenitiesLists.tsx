@@ -7,13 +7,7 @@ import AddEditAmenities from "../amenities/create-amenities";
 import NoResult from "../noResult";
 import useGetAmenities from "../../services-hooks/useGetAmenities";
 
-export default function AmenitiesListsTable({
-  header,
-  title,
-}: {
-  header: string[];
-  title: string;
-}) {
+export default function AmenitiesListsTable() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
@@ -38,14 +32,14 @@ export default function AmenitiesListsTable({
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 ">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
-          <h2 className="text-xl font-semibold">{title}</h2>
+          <h2 className="text-xl font-semibold">Amenities List</h2>
           <Sort id="room-options" label="Sort List" />{" "}
         </div>
         {data && data.length > 0 ? (
           <table className=" w-full overflow-x-auto">
             <thead className="">
               <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                {header.map((head) => (
+                {["Amenities Name", "Icon", "Text", "Action"].map((head) => (
                   <th key={head}>{head}</th>
                 ))}
               </tr>

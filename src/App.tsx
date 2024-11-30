@@ -13,13 +13,8 @@ import PersistLogin from "./routeProtectors/persistLogin";
 import Notification from "./pages/notification";
 import Reports from "./pages/reports";
 import Invoices from "./pages/invoices";
-import Chat from "./pages/chat";
-import PlansAndPromotions from "./pages/plans-and-promotions";
-import Pricing from "./pages/pricing";
 import Customers from "./pages/customers";
-import AdditionalServices from "./pages/additional-services";
 import Bookings from "./pages/bookings";
-import Apartments from "./pages/apartments";
 import DashboardOverview from "./pages/dashboard-overview";
 import ApartmentDetail from "./pages/apartments/apartment-details";
 import EditApartmentDetails from "./pages/apartments/edit-apartment/apartment-detail";
@@ -42,15 +37,74 @@ import EditCustomerCompanyPage from "./pages/customers/edit-customer/customer-co
 import EditCustomerSalesChannelPage from "./pages/customers/edit-customer/customer-sales-channels";
 import AddNewInvoice from "./pages/invoices/add-new-invoice";
 import AddNewPackageAndOffer from "./pages/plans-and-promotions/package-and-offers/add-new-package-and-offer";
-import AdditionalServiceDetailsById from "./pages/additional-services/services-list/service-details";
+import AdditionalServiceDetailsById from "./pages/additional-services/99apartment-services/service-details";
 import VendorServiceDetailsById from "./pages/additional-services/vendor-services/vendor-details";
 import NewBookings from "./pages/bookings/new-booking";
-import AdminManagement from "./pages/manage-admins";
 import EditAdminUser from "./pages/manage-admins/users/edit-user";
 import AddAdminUser from "./pages/manage-admins/users/add-user";
 import EditRoles from "./pages/manage-admins/roles-and-permissions/edit-roles";
 import AddRoles from "./pages/manage-admins/roles-and-permissions/add-roles";
 import Profile from "./pages/profile";
+// APARTMENTS
+import ApartmentTabWrapper from "./routeProtectors/wrapper/apartment";
+
+import ApartmentsListView from "./pages/apartments";
+import RoomOptionsListView from "./pages/apartments/room-options";
+import AmenitiesListView from "./pages/apartments/amenities";
+import ExtraOptionsListView from "./pages/apartments/extra-options";
+import SafetyAndSecurityListView from "./pages/apartments/safety-and-security";
+import RulesListView from "./pages/apartments/rules";
+
+// BOOKINGS
+import BookingTabWrapper from "./routeProtectors/wrapper/booking";
+
+import BookingsCalendar from "./pages/bookings/bookings-calendar";
+import AvailabilityOverview from "./pages/bookings/availability-overview";
+import AllBookings from "./pages/bookings/all-bookings";
+import Requests from "./pages/bookings/requests";
+
+// ADDITIONAL SERVICES
+import AdditionalServicesTabWrapper from "./routeProtectors/wrapper/additiona-services";
+
+import AptAdditionalServicesList from "./pages/additional-services/99apartment-services";
+import VendorServicesList from "./pages/additional-services/vendor-services";
+
+// ADMINS MANAGEMENT
+import AdminUsersTabWrapper from "./routeProtectors/wrapper/admin-users";
+
+import AdminManagementViewAll from "./pages/manage-admins/view-all-users";
+import AdminManagementViewAllRoles from "./pages/manage-admins/view-all-roles";
+
+// PRICING
+import PricingTabWrapper from "./routeProtectors/wrapper/pricing";
+
+import PricingOverview from "./pages/pricing/pricing-overview";
+import RateTable from "./pages/pricing/rates-table";
+import SpecialPrices from "./pages/pricing/special-prices";
+import NewPricingRestrictions from "./pages/pricing/pricing-restriction";
+
+// PACKAGES AND OFFERS
+import PlansAndPromotionsTabWrapper from "./routeProtectors/wrapper/plans-and-promotions";
+
+import TaxRates from "./pages/plans-and-promotions/tax-rates";
+import PricesTypes from "./pages/plans-and-promotions/price-types";
+import Coupons from "./pages/plans-and-promotions/coupons";
+import PackagesAndOffers from "./pages/plans-and-promotions/package-and-offers";
+
+// CHAT MODULE
+import ChatsTabWrapper from "./routeProtectors/wrapper/chat";
+
+import GuestChatModule from "./pages/chat/guest";
+import CustomerSuccessChatModule from "./pages/chat/customer-success.tsx";
+import OwnersChatModule from "./pages/chat/owners";
+import OtherStaffChatModule from "./pages/chat/other-staff";
+import VendorChatModule from "./pages/chat/vendor";
+
+// INVOICE
+import InvoicesTabWrapper from "./routeProtectors/wrapper/invoices";
+
+import ApartmentInvoice from "./pages/invoices/apartment-invoices";
+import AdditionalServicesInvoice from "./pages/invoices/addition-services-invoices";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -71,8 +125,31 @@ function App() {
           </Route>
           <Route element={<PersistLogin />}>
             <Route path="/dashboard-overview" element={<DashboardOverview />} />
-            {/* apartment flows */}
-            <Route path="/apartments" element={<Apartments />} />
+            {/* apartment flows wrapper */}
+            <Route element={<ApartmentTabWrapper />}>
+              <Route
+                path="/apartments/view-all"
+                element={<ApartmentsListView />}
+              />
+              <Route
+                path="/apartments/room-options"
+                element={<RoomOptionsListView />}
+              />
+              <Route
+                path="/apartments/amenities"
+                element={<AmenitiesListView />}
+              />
+              <Route
+                path="/apartments/extra-options"
+                element={<ExtraOptionsListView />}
+              />
+              <Route
+                path="/apartments/safety-and-securities"
+                element={<SafetyAndSecurityListView />}
+              />
+              <Route path="/apartments/rules" element={<RulesListView />} />
+            </Route>
+
             {/* view single apartment  */}
             <Route
               path="/apartments-details/:id"
@@ -107,8 +184,17 @@ function App() {
             />
             {/* apartment flows */}
 
-            {/* bookings flow */}
-            <Route path="/bookings" element={<Bookings />} />
+            {/* bookings flows wrapper */}
+            <Route element={<BookingTabWrapper />}>
+              <Route path="/bookings/overview" element={<Bookings />} />
+              <Route path="/bookings/calendar" element={<BookingsCalendar />} />
+              <Route
+                path="/bookings/availability-overview"
+                element={<AvailabilityOverview />}
+              />
+              <Route path="/bookings/view-all" element={<AllBookings />} />
+              <Route path="/bookings/requests" element={<Requests />} />
+            </Route>
             <Route path="/booking-details/:id" element={<BookingById />} />
             <Route path="/new-booking" element={<NewBookings />} />
             <Route
@@ -120,10 +206,18 @@ function App() {
               element={<RequestDetailsById />}
             />
             {/* <Route path="/bookings-calendar" element={<BookingsCalendar />} /> */}
-            <Route
-              path="/additional-services"
-              element={<AdditionalServices />}
-            />
+
+            {/* additional services flows wrapper */}
+            <Route element={<AdditionalServicesTabWrapper />}>
+              <Route
+                path="/additional-services/99apartment-services"
+                element={<AptAdditionalServicesList />}
+              />
+              <Route
+                path="/additional-services/vendor-services"
+                element={<VendorServicesList />}
+              />
+            </Route>
             <Route
               path="/additional-services/service-details/:id"
               element={<AdditionalServiceDetailsById />}
@@ -169,20 +263,73 @@ function App() {
             />
 
             {/* Admin management */}
-            <Route
-              path="/admin-users-management"
-              element={<AdminManagement />}
-            />
+            {/* admin users flows wrapper */}
+            <Route element={<AdminUsersTabWrapper />}>
+              <Route
+                path="/admin/admin-users"
+                element={<AdminManagementViewAll />}
+              />
+              <Route
+                path="/admin/users-roles"
+                element={<AdminManagementViewAllRoles />}
+              />
+            </Route>
             <Route path="/admin/add" element={<AddAdminUser />} />
             <Route path="/admin/edit/:id" element={<EditAdminUser />} />
             <Route path="/admin-roles/add" element={<AddRoles />} />
             <Route path="/admin-roles/edit/:id" element={<EditRoles />} />
 
-            <Route path="/pricing" element={<Pricing />} />
+            {/* pricing flows wrapper */}
+            <Route element={<PricingTabWrapper />}>
+              <Route path="/pricing/overview" element={<PricingOverview />} />
+              <Route path="/pricing/rate-table" element={<RateTable />} />
+              <Route
+                path="/pricing/special-prices"
+                element={<SpecialPrices />}
+              />
+              <Route
+                path="/pricing/restrictions"
+                element={<NewPricingRestrictions />}
+              />
+            </Route>
+
             <Route
-              path="/plans-and-promotions"
-              element={<PlansAndPromotions />}
+              path="/pricing/add-special-price"
+              element={<SpecialPrices />}
             />
+            <Route
+              path="/pricing/edit-special-price/:id"
+              element={<SpecialPrices />}
+            />
+            <Route
+              path="/pricing/add-restriction"
+              element={<NewPricingRestrictions />}
+            />
+            <Route
+              path="/pricing/edit-restriction/:id"
+              element={<NewPricingRestrictions />}
+            />
+
+            {/* plans and promotions flows wrapper */}
+            <Route element={<PlansAndPromotionsTabWrapper />}>
+              <Route
+                path="/plans-and-promotions/tax-rates"
+                element={<TaxRates />}
+              />
+              <Route
+                path="/plans-and-promotions/types-of-prices"
+                element={<PricesTypes />}
+              />
+              <Route
+                path="/plans-and-promotions/coupons"
+                element={<Coupons />}
+              />
+              <Route
+                path="/plans-and-promotions/packages-and-offers"
+                element={<PackagesAndOffers />}
+              />
+            </Route>
+
             <Route
               path="/plans-and-promotions/package-and-offer/add-new-package-and-offer"
               element={<AddNewPackageAndOffer />}
@@ -191,9 +338,34 @@ function App() {
               path="/plans-and-promotions/package-and-offer/edit-new-package-and-offer/:id"
               element={<AddNewPackageAndOffer />}
             />
-            <Route path="/chat" element={<Chat />} />
+
+            {/* chats flows wrapper */}
+            <Route element={<ChatsTabWrapper />}>
+              <Route path="/chat/guest" element={<GuestChatModule />} />
+              <Route
+                path="/chat/customer-success"
+                element={<CustomerSuccessChatModule />}
+              />
+              <Route path="/chat/owners" element={<OwnersChatModule />} />
+              <Route
+                path="/chat/other-staff-users"
+                element={<OtherStaffChatModule />}
+              />
+              <Route path="/chat/vendor" element={<VendorChatModule />} />
+            </Route>
             {/* invoice flow */}
-            <Route path="/invoices" element={<Invoices />} />
+
+            {/* invoices flows wrapper */}
+            <Route element={<InvoicesTabWrapper />}>
+              <Route
+                path="/invoices/apartment"
+                element={<ApartmentInvoice />}
+              />
+              <Route
+                path="/invoices/additional-sevices"
+                element={<AdditionalServicesInvoice />}
+              />
+            </Route>
             <Route
               path="/invoices/add-new-invoice"
               element={<AddNewInvoice />}
