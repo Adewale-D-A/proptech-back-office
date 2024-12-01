@@ -12,7 +12,6 @@ import RedirectHome from "./routeProtectors/redirectHome";
 import PersistLogin from "./routeProtectors/persistLogin";
 import Notification from "./pages/notification";
 import Reports from "./pages/reports";
-import Invoices from "./pages/invoices";
 import Customers from "./pages/customers";
 import Bookings from "./pages/bookings";
 import DashboardOverview from "./pages/dashboard-overview";
@@ -24,7 +23,6 @@ import AddNewApartmentDetails from "./pages/apartments/new-apartment/apartment-d
 import AddNewApartmentFeatures from "./pages/apartments/new-apartment/apartment-features";
 import AddNewApartmentPolicies from "./pages/apartments/new-apartment/apartment-policy";
 import CheckCalendar from "./pages/apartments/check-calendar";
-import BookingById from "./pages/bookings/booking-detail";
 import EditBookingReservation from "./pages/bookings/booking-detail/edit-reservation";
 import RequestDetailsById from "./pages/bookings/requests/request-details";
 import AddNewCustomerDetails from "./pages/customers/add-new-customer/customer-details";
@@ -62,6 +60,11 @@ import BookingsCalendar from "./pages/bookings/bookings-calendar";
 import AvailabilityOverview from "./pages/bookings/availability-overview";
 import AllBookings from "./pages/bookings/all-bookings";
 import Requests from "./pages/bookings/requests";
+
+// BOOKINGS DETAILS
+import BookingDetailTabWrapper from "./routeProtectors/wrapper/booking-detail";
+import BookingDetailsById from "./pages/bookings/booking-detail/booking-by-id";
+import BookingAdministrationById from "./pages/bookings/booking-detail/adminstration-by-id";
 
 // ADDITIONAL SERVICES
 import AdditionalServicesTabWrapper from "./routeProtectors/wrapper/additiona-services";
@@ -105,6 +108,10 @@ import InvoicesTabWrapper from "./routeProtectors/wrapper/invoices";
 
 import ApartmentInvoice from "./pages/invoices/apartment-invoices";
 import AdditionalServicesInvoice from "./pages/invoices/addition-services-invoices";
+import AddRestriction from "./pages/pricing/pricing-restriction/add";
+import EditRestriction from "./pages/pricing/pricing-restriction/edit";
+import AddSpecialPricing from "./pages/pricing/special-prices/add";
+import EditSpecialPricing from "./pages/pricing/special-prices/edit";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -195,7 +202,18 @@ function App() {
               <Route path="/bookings/view-all" element={<AllBookings />} />
               <Route path="/bookings/requests" element={<Requests />} />
             </Route>
-            <Route path="/booking-details/:id" element={<BookingById />} />
+
+            {/* bookings flows wrapper */}
+            <Route element={<BookingDetailTabWrapper />}>
+              <Route
+                path="/bookings/booking-details/:id"
+                element={<BookingDetailsById />}
+              />
+              <Route
+                path="/bookings/adminstration/booking-details/:id"
+                element={<BookingAdministrationById />}
+              />
+            </Route>
             <Route path="/new-booking" element={<NewBookings />} />
             <Route
               path="/booking-details/edit-reservation/:id"
@@ -295,19 +313,19 @@ function App() {
 
             <Route
               path="/pricing/add-special-price"
-              element={<SpecialPrices />}
+              element={<AddSpecialPricing />}
             />
             <Route
               path="/pricing/edit-special-price/:id"
-              element={<SpecialPrices />}
+              element={<EditSpecialPricing />}
             />
             <Route
               path="/pricing/add-restriction"
-              element={<NewPricingRestrictions />}
+              element={<AddRestriction />}
             />
             <Route
               path="/pricing/edit-restriction/:id"
-              element={<NewPricingRestrictions />}
+              element={<EditRestriction />}
             />
 
             {/* plans and promotions flows wrapper */}

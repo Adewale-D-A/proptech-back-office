@@ -1,3 +1,8 @@
+##### 1.12.2024
+
+> Tab adjustment
+> Special prices and restriction routing updates
+
 ##### 30.11.2024
 
 > Tab layout route wrapper updates

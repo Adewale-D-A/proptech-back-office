@@ -77,7 +77,7 @@ const WeekdaysSelect: React.FC<Props> = ({
               value: "saturday",
             },
           ].map((item) => (
-            <option key={item?.id} value={item?.value}>
+            <option key={item?.id} value={item?.value?.toLowerCase()}>
               {item?.label}
             </option>
           ))}

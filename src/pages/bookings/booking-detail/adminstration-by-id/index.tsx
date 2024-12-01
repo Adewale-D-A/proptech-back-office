@@ -3,12 +3,9 @@ import { useAppDispatch } from "../../../../stores/hooks";
 import { useLayoutEffect, useState } from "react";
 import { updatePageProperties } from "../../../../stores/appFunctionality/pageProperties";
 import CalendarIcon from "../../../../assets/icons/calendar";
-import Status from "../../../../components/status";
 import Search from "../../../../components/inputs/search";
-import LoadingButton from "../../../../components/button";
 import PlusIcon from "../../../../assets/icons/plus";
 import Select from "../../../../components/inputs/select";
-import BookingTab from "../../../../components/tab/bookingTab";
 import MenuIcon from "../../../../assets/icons/menu";
 import AdminNotes from "./notes/page";
 import GuestMessaging from "./guest-messaging/page";
@@ -17,6 +14,7 @@ import BookingHistory from "./booking-history/page";
 import BookingByIdList from "../../../../components/tables/bookingList";
 import useGetBookingById from "../../../../services-hooks/bookings/useGetBookingById";
 import useGetCustomerById from "../../../../services-hooks/useGetCustomerById";
+import CustomTab from "../../../../components/tab";
 
 const breadCrumb = [
   {
@@ -104,7 +102,7 @@ export default function BookingAdministrationById() {
             </div>
           </div>
           <div className=" w-full flex-1 md:flex-[0.6] rounded-md border flex flex-col gap-3">
-            <BookingTab
+            <CustomTab
               header={[
                 { id: 1, icon: <MenuIcon />, label: "Notes" },
                 { id: 2, icon: <MenuIcon />, label: "Guest Messaging" },

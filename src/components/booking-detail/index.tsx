@@ -19,7 +19,7 @@ export default function BookingDetailSummary({ id }: { id: string }) {
 
       <div className=" flex items-center gap-5">
         <LinkButton
-          url={`/booking-details/${id}`}
+          url={`/bookings/booking-details/${id}`}
           label="View Details"
           variant={2}
         />

@@ -1,4 +1,10 @@
-import { SyntheticEvent, useCallback, useLayoutEffect, useState } from "react";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import ReceiptIcon from "../../../assets/icons/receipt";
@@ -10,8 +16,12 @@ import ApartmentSingleSelect from "../../../components/inputs/select/apartmentSe
 import LoadingButton from "../../../components/button";
 import WeekdaysSelect from "../../../components/inputs/select/weekdaysSelect";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
-import { addSpecialPricesToList } from "../../../stores/apiData/special-prices";
+import {
+  addSpecialPricesToList,
+  replaceSpecialPricesInList,
+} from "../../../stores/apiData/special-prices";
 import useAxios from "../../../useHooks/useAxios";
+import useGetSpecialPrice from "../../../services-hooks/pricing/useSpecialPrice";
 
 const breadCrumb = [
   {
@@ -28,6 +38,7 @@ const breadCrumb = [
 export default function AddEditSpecialPrices({ id }: { id?: string }) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
+  const { data } = useGetSpecialPrice({ id });
 
   // update page props on component mount
   useLayoutEffect(() => {
@@ -59,6 +70,24 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
   const [priceType, setPriceType] = useState("");
 
   const [isSaving, setIsSaving] = useState(false);
+
+  // update and populate fields
+  useEffect(() => {
+    if (data?.name && id) {
+      const { name } = data;
+      // setRestrictionName(name || "");
+      // setFrom(new_from_date || "");
+      // setTo(new_to_date || "");
+      // setMinNights(String(min_no_of_nights || ""));
+      // setMaxNights(String(max_no_of_nights || ""));
+      // setMultipleMinNights(Boolean(multiply_min_no_of_nights || ""));
+      // setDaysClosedArrival(Boolean(set_days_closed_to_arrival));
+      // setDaysClosedDeparture(Boolean(set_days_closed_to_departure));
+      // setForcedArrival(force_arrival_week_day?.toLowerCase() || "");
+      // setApplicableToApartment(applicable_to_shortlet || "all");
+    }
+  }, [data]);
+
   const submitSpecialPrices = useCallback(async (e: SyntheticEvent) => {
     e.preventDefault();
     try {
@@ -89,16 +118,34 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
             : true
         )
       );
-      const response = await axios.post("/admin/restriction", newPayload);
-      const { data, message } = response?.data || {};
-      const response_data = data?.special_price;
-      dispatch(addSpecialPricesToList(response_data));
-      dispatch(
-        openSnackbar({
-          message: message || "Restriction created successfully",
-          isError: false,
-        })
-      );
+      if (id) {
+        const putPaload = {
+          name: "",
+          applicable_shortlets: [],
+          price: "",
+        };
+        const response = await axios.put("/admin/special-price", putPaload);
+        const { data, message } = response?.data || {};
+        const response_data = data?.restriction;
+        dispatch(replaceSpecialPricesInList(response_data));
+        dispatch(
+          openSnackbar({
+            message: message || "Special Prices successfully updated",
+            isError: false,
+          })
+        );
+      } else {
+        const response = await axios.post("/admin/special-price", newPayload);
+        const { data, message } = response?.data || {};
+        const response_data = data?.special_price;
+        dispatch(addSpecialPricesToList(response_data));
+        dispatch(
+          openSnackbar({
+            message: message || "Special Prices successfully created",
+            isError: false,
+          })
+        );
+      }
     } catch (error) {
     } finally {
       setIsSaving(false);

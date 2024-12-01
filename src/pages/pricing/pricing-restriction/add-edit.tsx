@@ -1,7 +1,5 @@
-import { SyntheticEvent, useCallback, useLayoutEffect, useState } from "react";
+import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { useAppDispatch } from "../../../stores/hooks";
-import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import ReceiptIcon from "../../../assets/icons/receipt";
 import Select from "../../../components/inputs/select";
 import TextInput from "../../../components/inputs/textInput";
 import Switch from "../../../components/switch";
@@ -11,38 +9,16 @@ import WeekdaysSelect from "../../../components/inputs/select/weekdaysSelect";
 import useAxios from "../../../useHooks/useAxios";
 import Search from "../../../components/inputs/search";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
-import { addRestrictionssToList } from "../../../stores/apiData/restrictions";
+import {
+  addRestrictionssToList,
+  replaceRestrictionssInList,
+} from "../../../stores/apiData/restrictions";
+import useGetRestriction from "../../../services-hooks/pricing/useGetRestrictionById";
 
-const breadCrumb = [
-  {
-    url: "#",
-    label: "Pricing",
-    icon: <ReceiptIcon />,
-  },
-  {
-    url: "#",
-    label: "New Restriction",
-    icon: "",
-  },
-];
 export default function AddEditRestriction({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
   const axios = useAxios();
-
-  // update page props on component mount
-  useLayoutEffect(() => {
-    dispatch(
-      updatePageProperties({
-        breadCrumb,
-        pageTitle: "New Pricing Restriction",
-        pageDescription: "New pricing restriction",
-        isLoading: false,
-        failedToLoad: false,
-        setFailedToLoad: false,
-        retryRequest: false,
-      })
-    );
-  }, []);
+  const { data } = useGetRestriction({ id });
 
   const [restrictionName, setRestrictionName] = useState("");
   const [from, setFrom] = useState("");
@@ -60,6 +36,38 @@ export default function AddEditRestriction({ id }: { id?: string }) {
   >([]);
 
   const [isSaving, setIsSaving] = useState(false);
+
+  // update and populate fields
+  useEffect(() => {
+    if (data?.name && id) {
+      const {
+        name,
+        from_date,
+        to_date,
+        min_no_of_nights,
+        max_no_of_nights,
+        multiply_min_no_of_nights,
+        force_arrival_week_day,
+        applicable_to_shortlet,
+        set_days_closed_to_arrival,
+        set_days_closed_to_departure,
+      } = data;
+
+      const new_from_date = new Date(from_date)?.toISOString()?.slice(0, 10);
+      const new_to_date = new Date(to_date)?.toISOString()?.slice(0, 10);
+      setRestrictionName(name || "");
+      setFrom(new_from_date || "");
+      setTo(new_to_date || "");
+      setMinNights(String(min_no_of_nights || ""));
+      setMaxNights(String(max_no_of_nights || ""));
+      setMultipleMinNights(Boolean(multiply_min_no_of_nights || ""));
+      setDaysClosedArrival(Boolean(set_days_closed_to_arrival));
+      setDaysClosedDeparture(Boolean(set_days_closed_to_departure));
+      // setIsAllRooms(false);
+      setForcedArrival(force_arrival_week_day?.toLowerCase() || "");
+      setApplicableToApartment(applicable_to_shortlet || "all");
+    }
+  }, [data]);
 
   const submitRestriction = useCallback(
     async (e: SyntheticEvent) => {
@@ -88,22 +96,41 @@ export default function AddEditRestriction({ id }: { id?: string }) {
               : true
           )
         );
-        const response = await axios.post("/admin/restriction", newPayload);
-        const { data, message } = response?.data || {};
-        const response_data = data?.restriction;
-        dispatch(addRestrictionssToList(response_data));
-        dispatch(
-          openSnackbar({
-            message: message || "Restriction created successfully",
-            isError: false,
-          })
-        );
+        if (id) {
+          const putPaload = {
+            name: restrictionName,
+            applicable_to_shortlet: appliacleToApartment,
+            remove_shortlets: [],
+          };
+          const response = await axios.put("/admin/restriction", putPaload);
+          const { data, message } = response?.data || {};
+          const response_data = data?.restriction;
+          dispatch(replaceRestrictionssInList(response_data));
+          dispatch(
+            openSnackbar({
+              message: message || "Restriction successfully updated",
+              isError: false,
+            })
+          );
+        } else {
+          const response = await axios.post("/admin/restriction", newPayload);
+          const { data, message } = response?.data || {};
+          const response_data = data?.restriction;
+          dispatch(addRestrictionssToList(response_data));
+          dispatch(
+            openSnackbar({
+              message: message || "Restriction created successfully",
+              isError: false,
+            })
+          );
+        }
       } catch (error) {
       } finally {
         setIsSaving(false);
       }
     },
     [
+      id,
       restrictionName,
       from,
       to,

@@ -15,6 +15,7 @@ import ModalTemplate from "../../components/modal";
 import AddTax from "../../components/tax/addTax";
 import AddNewPrices from "../../components/inputs/plansAndPromotions/prices";
 import AddNewCoupon from "../../components/inputs/plansAndPromotions/coupons";
+import NavTab from "../../components/tab/nav-tab";
 
 const tabList = [
   {
@@ -103,24 +104,7 @@ export default function PlansAndPromotionsTabWrapper() {
     <>
       <section className="w-full flex flex-col gap-5">
         <div className={"flex items-center gap-5 flex-col md:flex-row"}>
-          <nav className="w-full flex items-center gap-4 px-5 ">
-            {tabList?.map((items) => {
-              return (
-                <div key={items?.id} className="w-full group">
-                  <NavLink
-                    to={items?.url}
-                    className={({ isActive }) =>
-                      isActive
-                        ? `flex items-center justify-center md:justify-start gap-2 md:gap-3 py-3 border-primary focus:outline-none text-primary border-b-4  data-[hover]:text-primary outline-1 outline-white`
-                        : `flex items-center justify-center md:justify-start gap-2 md:gap-3 py-3 border-primary text-gray-400 focus:outline-none hover:border-b-4  hover:text-primary focus:outline-1 focus:outline-white`
-                    }
-                  >
-                    {items?.icon} {items?.label}
-                  </NavLink>
-                </div>
-              );
-            })}
-          </nav>
+          <NavTab tabList={tabList} />
           <div className="w-fit whitespace-nowrap">
             {trackTab === 1 ? (
               <LoadingButton

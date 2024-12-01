@@ -4,6 +4,8 @@ import { updatePageProperties } from "../../../stores/appFunctionality/pagePrope
 import ReceiptIcon from "../../../assets/icons/receipt";
 import useAxios from "../../../useHooks/useAxios";
 import SpecialPricesTable from "../../../components/tables/special-prices";
+import LinkButton from "../../../components/button/linkButton";
+import PlusIcon from "../../../assets/icons/plus";
 
 const breadCrumb = [
   {
@@ -37,7 +39,16 @@ export default function SpecialPricesViewAll() {
   }, []);
 
   return (
-    <div>
+    <div className=" w-full flex flex-col gap-4">
+      <div className=" w-full flex justify-end">
+        <div>
+          <LinkButton
+            url="/pricing/add-special-price"
+            label="Add Special Pricing"
+            startIcon={<PlusIcon />}
+          />
+        </div>
+      </div>
       <SpecialPricesTable />
     </div>
   );
