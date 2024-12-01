@@ -14,6 +14,7 @@ import {
   replaceRestrictionssInList,
 } from "../../../stores/apiData/restrictions";
 import useGetRestriction from "../../../services-hooks/pricing/useGetRestrictionById";
+import LinkButton from "../../../components/button/linkButton";
 
 export default function AddEditRestriction({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
@@ -345,11 +346,10 @@ export default function AddEditRestriction({ id }: { id?: string }) {
             </div>
             <div className=" flex items-center justify-end gap-4 my-10 p-4">
               <div className=" w-fit">
-                <LoadingButton
-                  type="button"
+                <LinkButton
+                  url="/pricing/restrictions"
                   label="Back"
                   variant={2}
-                  isLoading={false}
                 />
               </div>
               <div className=" w-fit">

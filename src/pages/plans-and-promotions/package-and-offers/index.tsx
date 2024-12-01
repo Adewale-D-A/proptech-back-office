@@ -1,6 +1,5 @@
-import { useParams } from "react-router-dom";
-import { useAppDispatch } from "../../../stores/hooks";
 import { useLayoutEffect } from "react";
+import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import PercentageBadgeIcon from "../../../assets/icons/percentage-badge";
 import PackagesAndOfferList from "../../../components/tables/packagesAndOfferLists";
@@ -18,7 +17,6 @@ const breadCrumb = [
   },
 ];
 export default function PackagesAndOffers() {
-  const { id } = useParams();
   const dispatch = useAppDispatch();
   // update page props on component mount
   useLayoutEffect(() => {

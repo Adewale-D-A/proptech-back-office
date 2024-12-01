@@ -58,13 +58,13 @@ export default function MobileAdditionalServicesTable({
                         >
                           Mark As Resolved
                         </Link>
-                        <button
+                        {/* <button
                           type="button"
                           onClick={() => deleteFunction(String(item?.id))}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Delete Service
-                        </button>
+                        </button> */}
                       </span>
                     </div>
                   </div>

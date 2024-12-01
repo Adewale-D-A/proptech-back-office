@@ -48,7 +48,7 @@ export default function SpecialPricesTable() {
   const deleteApartment = useCallback(async () => {
     setIsDeleting(true);
     try {
-      await axios.delete(`/admin/restriction/${selectedId}`);
+      await axios.delete(`/admin/special-price/${selectedId}`);
       dispatch(removeSpecialPricesInList({ id: selectedId }));
       setOpenDeleteConfirmation(false);
     } catch (error) {

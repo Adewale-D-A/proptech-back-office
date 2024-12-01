@@ -37,7 +37,7 @@ export default function AdditionalServiceListTable({
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteId, setDeleteId] = useState("1");
 
-  const deleteApartment = useCallback(() => {
+  const deleteAdditionalServices = useCallback(() => {
     setIsDeleting(true);
     try {
       dispatch(removeAdditionalServicesInList({ id: deleteId }));
@@ -101,7 +101,7 @@ export default function AdditionalServiceListTable({
                           >
                             Mark As Resolved
                           </Link>
-                          <button
+                          {/* <button
                             type="button"
                             onClick={() => {
                               deleteModal(item?.id);
@@ -109,7 +109,7 @@ export default function AdditionalServiceListTable({
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Delete Service
-                          </button>
+                          </button> */}
                         </span>
                       </td>
                     </tr>
@@ -136,7 +136,7 @@ export default function AdditionalServiceListTable({
       </div>
 
       <DeleteConfirmation
-        confirmationHandler={deleteApartment}
+        confirmationHandler={deleteAdditionalServices}
         isLoading={isDeleting}
         btnTitle="Yes, I want to"
         title="Delete Service"

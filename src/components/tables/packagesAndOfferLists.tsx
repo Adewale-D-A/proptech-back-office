@@ -105,17 +105,10 @@ export default function PackagesAndOfferList({ header }: { header: string[] }) {
           <MobileOfferTable data={data} deleteOffer={selectForDelete} />
         </div>
         <Pagination
-          pagination={{
-            current_page: 1,
-            last_page: 2,
-            per_page: 20,
-            total: 24,
-            from: 1,
-            to: 1,
-          }}
+          pagination={pagination}
           setCurrentPage={setCurrentPage}
           isLoading={false}
-          label="Offer Lists"
+          label="offer lists"
         />
       </div>
       <DeleteConfirmation

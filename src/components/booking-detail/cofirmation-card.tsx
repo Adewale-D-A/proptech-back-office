@@ -14,7 +14,7 @@ export default function ConfirmationCard({ data }: { data: customersById }) {
           <h6 className=" font-semibold">
             {data?.first_name} {data?.last_name}
           </h6>
-          <span className=" text-xs">{data?.email}m</span>
+          <span className=" text-xs">{data?.email}</span>
         </div>
       </div>
       <div className=" flex flex-col gap-1 items-end">

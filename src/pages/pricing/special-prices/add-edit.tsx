@@ -22,6 +22,7 @@ import {
 } from "../../../stores/apiData/special-prices";
 import useAxios from "../../../useHooks/useAxios";
 import useGetSpecialPrice from "../../../services-hooks/pricing/useSpecialPrice";
+import LinkButton from "../../../components/button/linkButton";
 
 const breadCrumb = [
   {
@@ -370,11 +371,10 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
             </div>
             <div className=" flex items-center justify-end gap-4 my-10 p-4">
               <div className=" w-fit">
-                <LoadingButton
-                  type="button"
+                <LinkButton
+                  url="/pricing/special-prices"
                   label="Back"
                   variant={2}
-                  isLoading={isSaving}
                 />
               </div>
               <div className=" w-fit">

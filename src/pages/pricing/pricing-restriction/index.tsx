@@ -18,6 +18,7 @@ const breadCrumb = [
     icon: "",
   },
 ];
+
 export default function NewPricingRestrictions() {
   const dispatch = useAppDispatch();
 
@@ -35,6 +36,7 @@ export default function NewPricingRestrictions() {
       })
     );
   }, []);
+
   return (
     <div className=" w-full flex flex-col gap-4">
       <div className=" w-full flex justify-end">
