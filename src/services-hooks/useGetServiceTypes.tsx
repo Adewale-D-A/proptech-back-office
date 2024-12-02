@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
-import {
-  addToPaginationHistory,
-  updateCustomersList,
-} from "../stores/apiData/customers-lists";
 import useAxios from "../useHooks/useAxios";
 import { pagination } from "../types/pagination";
+import {
+  updateServiceTypes,
+  addToPaginationHistory,
+} from "../stores/apiData/service-types";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetAllCustomersLists({
+export default function useGetServiceTypes({
   page = 1,
   start_date,
   end_date,
@@ -27,13 +27,13 @@ export default function useGetAllCustomersLists({
     status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.allCustomersLists.value);
+  } = useAppSelector((state) => state.serviceType.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const [pagination, setPagination] = useState<pagination>({} as any);
 
-  const getAllCustomerstList = useCallback(async () => {
+  const getServiceTypes = useCallback(async () => {
     setIsLoading(true);
     setIsFailed(false);
     try {
@@ -49,14 +49,14 @@ export default function useGetAllCustomersLists({
         !search
       ) {
         setPagination(foundPage?.pagination_data);
-        dispatch(updateCustomersList({ data: foundPage?.data }));
+        dispatch(updateServiceTypes({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
           start_date && end_date
-            ? `/admin/user/all?sort=${sort}&limit=20&search=${
+            ? `/admin/service-type?sort=${sort}&limit=20&search=${
                 search || ""
               }&page=${page}&start_date=${start_date}&end_date=${end_date}`
-            : `/admin/user/all?sort=${sort}&limit=20&search=${
+            : `/admin/service-type?sort=${sort}&limit=20&search=${
                 search || ""
               }&page=${page}`
         );
@@ -72,7 +72,7 @@ export default function useGetAllCustomersLists({
           to,
           length: data?.length,
         };
-        dispatch(updateCustomersList({ data }));
+        dispatch(updateServiceTypes({ data }));
         if (!search) {
           dispatch(
             addToPaginationHistory({
@@ -91,7 +91,7 @@ export default function useGetAllCustomersLists({
   }, [page, start_date, end_date, sort, search]);
 
   useEffect(() => {
-    getAllCustomerstList();
+    getServiceTypes();
   }, [page, start_date, end_date, sort, search]);
 
   return {
@@ -99,7 +99,7 @@ export default function useGetAllCustomersLists({
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getAllCustomerstList,
+    retryFunction: getServiceTypes,
     pagination,
   };
 }

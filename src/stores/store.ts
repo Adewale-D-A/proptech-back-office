@@ -59,6 +59,8 @@ import vendorServiceListData from "./apiData/vendor-services-lists";
 // special prices and restriction
 import restrictionsList from "./apiData/restrictions";
 import specialPricesList from "./apiData/special-prices";
+// service types
+import serviceTypeData from "./apiData/service-types";
 
 export const adminStore = () => {
   return configureStore({
@@ -94,6 +96,8 @@ export const adminStore = () => {
 
       restriction: restrictionsList,
       specialPrices: specialPricesList,
+
+      serviceType: serviceTypeData,
 
       allAparmentLists: apartmentListsData,
       topAparmentLists: topApartmentListsData,

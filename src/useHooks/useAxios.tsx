@@ -52,7 +52,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
             old_token: token,
           });
           dispatch(updateToken(new_access_token || token));
-          console.log({ new_access_token, token, originalRequest });
+          // console.log({ new_access_token, token, originalRequest });
           // axiosInstance.defaults.headers.common[
           //   "Authorization"
           // ] = `Bearer ${new_access_token}`;

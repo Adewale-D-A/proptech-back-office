@@ -1,5 +1,8 @@
 ##### 1.12.2024
 
+> Sepcial pricing endpoint completion
+> Pricing restriction endpoint completion
+> Service types CRUD operation endpoint integration
 > Tab adjustment
 > Special prices and restriction routing updates
 

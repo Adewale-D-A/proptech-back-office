@@ -112,6 +112,7 @@ import AddRestriction from "./pages/pricing/pricing-restriction/add";
 import EditRestriction from "./pages/pricing/pricing-restriction/edit";
 import AddSpecialPricing from "./pages/pricing/special-prices/add";
 import EditSpecialPricing from "./pages/pricing/special-prices/edit";
+import ServiceTypesViewAll from "./pages/additional-services/service-types";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -236,6 +237,7 @@ function App() {
                 element={<VendorServicesList />}
               />
             </Route>
+            <Route path="/service-types" element={<ServiceTypesViewAll />} />
             <Route
               path="/additional-services/service-details/:id"
               element={<AdditionalServiceDetailsById />}

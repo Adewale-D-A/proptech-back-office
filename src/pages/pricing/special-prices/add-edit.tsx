@@ -12,7 +12,6 @@ import Select from "../../../components/inputs/select";
 import TextInput from "../../../components/inputs/textInput";
 import TimeIcon from "../../../assets/icons/time";
 import Switch from "../../../components/switch";
-import ApartmentSingleSelect from "../../../components/inputs/select/apartmentSelect";
 import LoadingButton from "../../../components/button";
 import WeekdaysSelect from "../../../components/inputs/select/weekdaysSelect";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
@@ -23,6 +22,7 @@ import {
 import useAxios from "../../../useHooks/useAxios";
 import useGetSpecialPrice from "../../../services-hooks/pricing/useSpecialPrice";
 import LinkButton from "../../../components/button/linkButton";
+import Search from "../../../components/inputs/search";
 
 const breadCrumb = [
   {
@@ -56,102 +56,148 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
     );
   }, []);
 
+  const [name, setName] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [weekdays, setWeekdays] = useState("");
   const [isYearly, setIsYearly] = useState(false);
   const [seasonCheckin, setSeasonalCheckin] = useState(false);
   const [promotion, setPromotion] = useState(false);
-  const [priceName, setPriceName] = useState("");
   const [type, setType] = useState("");
   const [value, setValue] = useState("");
-  const [valueSelect, setValueSelect] = useState("");
-  const [rountInt, setRoundInt] = useState("");
-  const [apartment, setApartment] = useState("");
-  const [priceType, setPriceType] = useState("");
+  const [validity, setValidity] = useState("temporary");
+  const [rountInt, setRoundInt] = useState(false);
+  const [applicableApartment, setApplicableToApartment] = useState("all");
+  const [selectedApt, setSelectedApt] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const [priceType, setPriceType] = useState("percentage ");
+  const [resuseable, setReusable] = useState(false);
 
   const [isSaving, setIsSaving] = useState(false);
 
   // update and populate fields
   useEffect(() => {
     if (data?.name && id) {
-      const { name } = data;
-      // setRestrictionName(name || "");
-      // setFrom(new_from_date || "");
-      // setTo(new_to_date || "");
-      // setMinNights(String(min_no_of_nights || ""));
-      // setMaxNights(String(max_no_of_nights || ""));
-      // setMultipleMinNights(Boolean(multiply_min_no_of_nights || ""));
-      // setDaysClosedArrival(Boolean(set_days_closed_to_arrival));
-      // setDaysClosedDeparture(Boolean(set_days_closed_to_departure));
-      // setForcedArrival(force_arrival_week_day?.toLowerCase() || "");
-      // setApplicableToApartment(applicable_to_shortlet || "all");
+      const {
+        name,
+        check_in_date,
+        check_out_date,
+        weekday,
+        tied_to_year,
+        at_season_beginning,
+        promotion,
+        type,
+        price,
+        percentage,
+        round_to_integer,
+        applicable_to_shortlet,
+        price_type,
+      } = data;
+      const new_check_in_date = new Date(check_in_date)
+        ?.toISOString()
+        ?.slice(0, 10);
+      const new_check_out_date = new Date(check_out_date)
+        ?.toISOString()
+        ?.slice(0, 10);
+      setName(name || "");
+      setCheckIn(new_check_in_date || "");
+      setCheckOut(new_check_out_date || "");
+      setWeekdays(weekday || "");
+      setIsYearly(Boolean(tied_to_year || 0));
+      setSeasonalCheckin(Boolean(at_season_beginning || 0));
+      setPromotion(Boolean(promotion || 0));
+      setType(type);
+      setValue(String(price || percentage));
+      setRoundInt(Boolean(round_to_integer));
+      setApplicableToApartment(applicable_to_shortlet || "all");
+      setPriceType(price_type || "percentage");
     }
   }, [data]);
 
-  const submitSpecialPrices = useCallback(async (e: SyntheticEvent) => {
-    e.preventDefault();
-    try {
-      setIsSaving(true);
-      const payload = {
-        name: "October Special Price",
-        check_in_date: "2025-10-24",
-        check_out_date: "2025-12-11",
-        weekday: "lorem ipsum",
-        tied_to_year: true,
-        at_season_beginning: true,
-        promotion: true,
-        round_to_integer: true,
-        applicable_to_shortlet: "specific", // all or specific
-        type: "lorem ipsum",
-        price_type: "percentage", //percentage or price
-        validity: "permanent", //temporary or permanent
-        is_reusable: "yes", // yes or no
-        applicable_shortlets: [1, 2], // required if applicable_to_shortlet is specific
-        price: 50000, //required if price_type is price
-        percentage: 20, //required if price_type is percentage
-      };
-      const newPayload = Object.fromEntries(
-        Object.entries(payload).filter(([key]) =>
-          key === "applicable_shortlets" &&
-          !(payload?.applicable_to_shortlet === "specific")
-            ? false
-            : true
-        )
-      );
-      if (id) {
-        const putPaload = {
-          name: "",
-          applicable_shortlets: [],
-          price: "",
+  const submitSpecialPrices = useCallback(
+    async (e: SyntheticEvent) => {
+      e.preventDefault();
+      try {
+        setIsSaving(true);
+        const payload = {
+          name: name,
+          check_in_date: checkIn,
+          check_out_date: checkOut,
+          weekday: weekdays,
+          tied_to_year: isYearly,
+          at_season_beginning: seasonCheckin,
+          promotion: promotion,
+          round_to_integer: rountInt,
+          applicable_to_shortlet: applicableApartment, // all or specific
+          type: type,
+          price_type: priceType, //percentage or price
+          validity: validity, //temporary or permanent
+          is_reusable: resuseable ? "yes" : "no", // yes or no
+          applicable_shortlets: selectedApt?.map((item) => item?.id), // required if applicable_to_shortlet is specific
+          price: value, //required if price_type is price
+          percentage: value, //required if price_type is percentage
         };
-        const response = await axios.put("/admin/special-price", putPaload);
-        const { data, message } = response?.data || {};
-        const response_data = data?.restriction;
-        dispatch(replaceSpecialPricesInList(response_data));
-        dispatch(
-          openSnackbar({
-            message: message || "Special Prices successfully updated",
-            isError: false,
-          })
+
+        const newPayload = Object.fromEntries(
+          Object.entries(payload).filter(([key]) =>
+            key === "applicable_shortlets" &&
+            !(payload?.applicable_to_shortlet === "specific")
+              ? false
+              : true
+          )
         );
-      } else {
-        const response = await axios.post("/admin/special-price", newPayload);
-        const { data, message } = response?.data || {};
-        const response_data = data?.special_price;
-        dispatch(addSpecialPricesToList(response_data));
-        dispatch(
-          openSnackbar({
-            message: message || "Special Prices successfully created",
-            isError: false,
-          })
-        );
+        if (id) {
+          const putPaload = {
+            name: name,
+            applicable_shortlets: selectedApt?.map((item) => item?.id),
+            price: value,
+          };
+          const response = await axios.put("/admin/special-price", putPaload);
+          const { data, message } = response?.data || {};
+          const response_data = data?.restriction;
+          dispatch(replaceSpecialPricesInList(response_data));
+          dispatch(
+            openSnackbar({
+              message: message || "Special Prices successfully updated",
+              isError: false,
+            })
+          );
+        } else {
+          const response = await axios.post("/admin/special-price", newPayload);
+          const { data, message } = response?.data || {};
+          const response_data = data?.special_price;
+          dispatch(addSpecialPricesToList(response_data));
+          dispatch(
+            openSnackbar({
+              message: message || "Special Prices successfully created",
+              isError: false,
+            })
+          );
+        }
+      } catch (error) {
+      } finally {
+        setIsSaving(false);
       }
-    } catch (error) {
-    } finally {
-      setIsSaving(false);
-    }
-  }, []);
+    },
+    [
+      name,
+      checkIn,
+      checkOut,
+      weekdays,
+      isYearly,
+      seasonCheckin,
+      promotion,
+      rountInt,
+      applicableApartment,
+      type,
+      priceType,
+      validity,
+      selectedApt,
+      value,
+      resuseable,
+    ]
+  );
 
   return (
     <section className="w-full flex flex-col items-center my-10">
@@ -225,8 +271,8 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                 <TextInput
                   inputType="text"
                   isRequired={true}
-                  value={priceName}
-                  setValue={setPriceName}
+                  value={name}
+                  setValue={setName}
                   id="price-name"
                   placeholder="Enter Name"
                 />
@@ -279,9 +325,33 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                   <option value="regular">Regular</option>
                 </Select>
               </div>
+
               <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
                 <div className=" max-w-md">
-                  <h6 className=" text-lg font-semibold">Value</h6>
+                  <h6 className=" text-lg font-semibold">Type of Price</h6>
+                  <p className=" text-gray-500">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Quae labore.
+                  </p>
+                </div>
+                <Select
+                  isRequired={true}
+                  value={priceType}
+                  setValue={setPriceType}
+                  id="price-type"
+                >
+                  <option value="" disabled>
+                    Price Type
+                  </option>
+                  <option value="price">Price</option>
+                  <option value="percentage">Percentage</option>
+                </Select>
+              </div>
+              <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
+                <div className=" max-w-md">
+                  <h6 className=" text-lg font-semibold">
+                    {priceType === "price" ? "Price" : "Percentage"}
+                  </h6>
                   <p className=" text-gray-500">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Quae labore.
@@ -298,14 +368,15 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                   />
                   <Select
                     isRequired={true}
-                    value={valueSelect}
-                    setValue={setValueSelect}
+                    value={validity}
+                    setValue={setValidity}
                     id="value-select"
                   >
                     <option value="" disabled>
-                      Select
+                      Validity
                     </option>
-                    <option value="one">1</option>
+                    <option value="temporary">Temporary</option>
+                    <option value="permanent">Permanent</option>
                   </Select>
                 </div>
               </div>
@@ -318,55 +389,55 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                     Quae labore.
                   </p>
                 </div>
-                <Select
-                  isRequired={true}
+                <Switch
+                  id="round-int"
                   value={rountInt}
                   setValue={setRoundInt}
-                  id="round-integer"
-                >
-                  <option value="" disabled>
-                    Select
-                  </option>
-                  <option value="2">1</option>
-                </Select>
-              </div>
-              {/* select */}
-              <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
-                <div className=" max-w-md">
-                  <h6 className=" text-lg font-semibold">Apartments</h6>
-                  <p className=" text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quae labore.
-                  </p>
-                </div>
-                <ApartmentSingleSelect
-                  isRequired={true}
-                  value={apartment}
-                  setValue={setApartment}
-                  id="price-type"
-                  placeholder="Select Apartment(s)"
                 />
               </div>
               {/* select */}
-              <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
+              <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-center">
                 <div className=" max-w-md">
-                  <h6 className=" text-lg font-semibold">Type of Price</h6>
+                  <h6 className=" text-lg font-semibold">
+                    Applicable Shortlet
+                  </h6>
                   <p className=" text-gray-500">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Quae labore.
                   </p>
                 </div>
-                <Select
-                  isRequired={true}
-                  value={priceType}
-                  setValue={setPriceType}
-                  id="price-type"
-                >
-                  <option value="" disabled>
-                    Select
-                  </option>
-                  <option value="regular">Regular</option>
-                </Select>
+                <div className=" flex flex-col gap-3">
+                  <Select
+                    isRequired={true}
+                    value={applicableApartment}
+                    setValue={setApplicableToApartment}
+                    id="apartment"
+                  >
+                    <option value="" disabled>
+                      Applicable to apartment
+                    </option>
+                    <option value="all">All</option>
+                    <option value="specific">Specific</option>
+                  </Select>
+                  {applicableApartment === "specific" && (
+                    <Search
+                      id="apartment-search"
+                      componentId="apartment"
+                      placeholder="Apartment name..."
+                      updatelist={setSelectedApt}
+                      multipleSelect={true}
+                    />
+                  )}
+                </div>
+              </div>
+
+              <div className=" w-full flex justify-between items-center gap-3">
+                <h6 className=" text-lg">Is resuable</h6>
+                <Switch
+                  id="reusable"
+                  value={resuseable}
+                  setValue={setReusable}
+                />
               </div>
             </div>
             <div className=" flex items-center justify-end gap-4 my-10 p-4">
