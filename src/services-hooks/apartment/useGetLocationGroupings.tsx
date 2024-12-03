@@ -1,24 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
-import useAxios from "../useHooks/useAxios";
-import { useAppDispatch, useAppSelector } from "../stores/hooks";
+
+import { pagination } from "../../types/pagination";
+import useAxios from "../../useHooks/useAxios";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import {
-  updateCouponsList,
   addToPaginationHistory,
-} from "../stores/apiData/coupons-lists";
-import { pagination } from "../types/pagination";
+  updateLocationGroupingList,
+} from "../../stores/apiData/apartment/location-groupings";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetAllCoupons({
+export default function useGetLocationGroupings({
   page = 1,
-  start_date,
-  end_date,
-  sort = "desc",
   search = "",
 }: {
   page?: number;
-  start_date?: string;
-  end_date?: string;
-  sort?: "desc" | "asc" | string;
   search?: string;
 }) {
   const axios = useAxios();
@@ -27,13 +22,13 @@ export default function useGetAllCoupons({
     status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.allCoupons.value);
+  } = useAppSelector((state) => state.lcoationgGrouping.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const [pagination, setPagination] = useState<pagination>({} as any);
 
-  const getCouponList = useCallback(async () => {
+  const getLocationGroupings = useCallback(async () => {
     setIsLoading(true);
     setIsFailed(false);
     try {
@@ -42,27 +37,16 @@ export default function useGetAllCoupons({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (
-        foundPage &&
-        !(start_date && end_date) &&
-        !(sort === "asc") &&
-        !search
-      ) {
+      if (foundPage && !search) {
         setPagination(foundPage?.pagination_data);
-        dispatch(updateCouponsList({ data: foundPage?.data }));
+        dispatch(updateLocationGroupingList({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          start_date && end_date
-            ? `/admin/coupon?sort=${sort}&limit=20&search=${
-                search || ""
-              }&page=${page}&start_date=${start_date}&end_date=${end_date}`
-            : `/admin/coupon?sort=${sort}&limit=20&search=${
-                search || ""
-              }&page=${page}`
+          `/admin/location-group?limit=20&search=${search || ""}&page=${page}`
         );
-        const { coupon } = response?.data?.data;
+        const { location_groups } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
-          coupon;
+          location_groups;
         const paginationDataset = {
           current_page,
           last_page,
@@ -72,13 +56,15 @@ export default function useGetAllCoupons({
           to,
           length: data?.length,
         };
-        dispatch(updateCouponsList({ data }));
-        dispatch(
-          addToPaginationHistory({
-            pagination_data: paginationDataset,
-            data: data,
-          })
-        );
+        dispatch(updateLocationGroupingList({ data }));
+        if (!search) {
+          dispatch(
+            addToPaginationHistory({
+              pagination_data: paginationDataset,
+              data: data,
+            })
+          );
+        }
         setPagination(paginationDataset);
       }
     } catch (error) {
@@ -86,18 +72,18 @@ export default function useGetAllCoupons({
     } finally {
       setIsLoading(false);
     }
-  }, [page, start_date, end_date, sort, search]);
+  }, [page, search]);
 
   useEffect(() => {
-    getCouponList();
-  }, [page, start_date, end_date, sort, search]);
+    getLocationGroupings();
+  }, [page, search]);
 
   return {
     data,
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getCouponList,
+    retryFunction: getLocationGroupings,
     pagination,
   };
 }

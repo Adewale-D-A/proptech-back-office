@@ -10,6 +10,7 @@ import CancelIcon from "../../../assets/icons/cancel";
 import useGetAllCustomersLists from "../../../services-hooks/useGetAllCustomersList";
 import LoaderIcon from "../../../assets/icons/loader";
 import useGetAllApartmentLists from "../../../services-hooks/useGetAllApartmentLists";
+import useGetLocationGroupings from "../../../services-hooks/apartment/useGetLocationGroupings";
 
 export default function Search({
   id,
@@ -21,7 +22,7 @@ export default function Search({
 }: {
   id: string;
   placeholder: string;
-  componentId?: "customer" | "apartment";
+  componentId?: "customer" | "apartment" | "location-group";
   setValue?: Function;
   multipleSelect?: boolean;
   updatelist?: (item: { id: string; name: string }[]) => void;
@@ -47,6 +48,18 @@ export default function Search({
     page: 1,
     search: componentId === "customer" ? keywords : "",
   });
+  // location group
+  const {
+    data: location_data,
+    isLoading: location_loading,
+    isFailed: location_failed,
+    setIsFailed: location_set_failed,
+    retryFunction: location_retry,
+    pagination: location_pagination,
+  } = useGetLocationGroupings({
+    page: 1,
+    search: componentId === "location-group" ? keywords : "",
+  });
   // apartment lists
   const {
     data: apartments,
@@ -62,8 +75,14 @@ export default function Search({
 
   // populate fultered list on data search
   useEffect(() => {
-    setFilteredResult(componentId === "customer" ? customers : apartments);
-  }, [componentId, customers, apartments]);
+    setFilteredResult(
+      componentId === "customer"
+        ? customers
+        : componentId === "apartment"
+        ? apartments
+        : location_data
+    );
+  }, [componentId, customers, apartments, location_data]);
 
   useEffect(() => {
     if (updatelist) {
@@ -79,6 +98,12 @@ export default function Search({
     if (componentId === "apartment") {
       setKeywords(item ? `${item?.name}` : "");
       addToList(item);
+    } else if (componentId === "location-group") {
+      setKeywords(item ? `${item?.name}` : "");
+      addToList({
+        id: item?.id,
+        name: `${item?.name}`,
+      });
     } else if (componentId === "customer") {
       setKeywords(item ? `${item?.first_name} ${item?.last_name}` : "");
       addToList({
@@ -148,9 +173,9 @@ export default function Search({
             value={item}
             className=" border-b hover:bg-primary hover:text-white focus:bg-primary focus:text-white  p-1 px-3 hover:cursor-pointer"
           >
-            {componentId === "apartment"
+            {componentId === "apartment" || componentId === "location-group"
               ? item?.name
-              : `${item?.first_name} ${item?.last_name}`}{" "}
+              : `${item?.first_name} ${item?.last_name}`}
           </ComboboxOption>
         ))}
       </ComboboxOptions>

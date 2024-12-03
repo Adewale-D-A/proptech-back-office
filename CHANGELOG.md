@@ -1,3 +1,7 @@
+##### 3.12.2024
+
+> Location group bug fix
+
 ##### 1.12.2024
 
 > Sepcial pricing endpoint completion

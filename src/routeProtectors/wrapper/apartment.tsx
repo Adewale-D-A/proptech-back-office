@@ -14,6 +14,8 @@ import AddEditOptions from "../../components/room-extra-options/add-edit-options
 import AddEditAmenities from "../../components/amenities/create-amenities";
 import AddEdit from "../../components/amenities/addEdit";
 import NavTab from "../../components/tab/nav-tab";
+import LocationPinIcon from "../../assets/icons/location";
+import AddEditLocationGroup from "../../components/apartment/add-edit-location-group";
 
 const tabList = [
   {
@@ -52,6 +54,12 @@ const tabList = [
     label: "Rules",
     url: "/apartments/rules",
   },
+  {
+    id: 7,
+    icon: <LocationPinIcon />,
+    label: "Location Grouping",
+    url: "/apartments/location-grouping",
+  },
 ];
 export default function ApartmentTabWrapper() {
   const location = useLocation();
@@ -59,6 +67,7 @@ export default function ApartmentTabWrapper() {
   const [openAddOption, setOpenAddOption] = useState(false);
   const [openAddAmenity, setOpenAddAmenity] = useState(false);
   const [openAddEdit, setOpenAddEdit] = useState(false);
+  const [openAddLocationGroup, setOpenAddLocationGroup] = useState(false);
 
   //   update current tab value based on the current URL
   useEffect(() => {
@@ -111,7 +120,7 @@ export default function ApartmentTabWrapper() {
                 clickHandler={() => setOpenAddEdit(true)}
                 startIcon={<PlusIcon />}
               />
-            ) : (
+            ) : trackTab === 6 ? (
               <LoadingButton
                 label="Add Rule"
                 isLoading={false}
@@ -119,6 +128,16 @@ export default function ApartmentTabWrapper() {
                 clickHandler={() => setOpenAddEdit(true)}
                 startIcon={<PlusIcon />}
               />
+            ) : trackTab === 7 ? (
+              <LoadingButton
+                label="Add Location Group"
+                isLoading={false}
+                type="button"
+                clickHandler={() => setOpenAddLocationGroup(true)}
+                startIcon={<PlusIcon />}
+              />
+            ) : (
+              <></>
             )}
           </div>
         </div>
@@ -162,6 +181,16 @@ export default function ApartmentTabWrapper() {
           setOpen={setOpenAddEdit}
           componentId={trackTab === 5 ? "safety" : "rule"}
         />
+      </ModalTemplate>
+      {/* location group */}
+      <ModalTemplate
+        open={openAddLocationGroup}
+        setOpen={setOpenAddLocationGroup}
+        showXicon={true}
+        title="Location Group"
+        className=" max-w-md"
+      >
+        <AddEditLocationGroup setOpen={setOpenAddLocationGroup} />
       </ModalTemplate>
     </>
   );

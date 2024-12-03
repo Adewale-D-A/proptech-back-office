@@ -33,6 +33,7 @@ import upcomingReservation from "./apiData/bookings/upcoming-reservation";
 import visitorsCount from "./apiData/bookings/visitor-count";
 import dailyOccupancy from "./apiData/bookings/daily-occupancy";
 
+// apartments
 import apartmentListsData from "./apiData/apartment-lists";
 import topApartmentListsData from "./apiData/top-apartment-list";
 import bookingsListsData from "./apiData/bookings-lists";
@@ -44,6 +45,8 @@ import safetyAndSecurityData from "./apiData/safety-and-security";
 import extraOptionData from "./apiData/extra-options";
 import roomOptionsData from "./apiData/room-options";
 import houseRulesData from "./apiData/house-rules";
+import locationGroupings from "./apiData/apartment/location-groupings";
+
 import chatListData from "./apiData/chat-list";
 // admins
 import adminsListData from "./apiData/admins-list";
@@ -99,6 +102,7 @@ export const adminStore = () => {
 
       serviceType: serviceTypeData,
 
+      // appartments
       allAparmentLists: apartmentListsData,
       topAparmentLists: topApartmentListsData,
       allAmenities: amenitiesData,
@@ -106,6 +110,8 @@ export const adminStore = () => {
       allExtraOptions: extraOptionData,
       allRoomOptions: roomOptionsData,
       allHouseRules: houseRulesData,
+      lcoationgGrouping: locationGroupings,
+
       allBookingsLists: bookingsListsData,
       allRequestLists: requestListsData,
       allCustomersLists: customersListData,

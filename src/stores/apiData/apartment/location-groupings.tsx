@@ -1,25 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { customers } from "../../types/apiData/customers";
-import { pagination } from "../../types/pagination";
+import { pagination } from "../../../types/pagination";
+import { locationGrouping } from "../../../types/apiData/apartment/locationGroupings";
 
-export const customersListData = createSlice({
-  name: "all customers",
+export const locationGroupings = createSlice({
+  name: "location-groupings",
   initialState: {
     value: {
       status: false,
       pagination: [] as {
         pagination_data: pagination;
-        data: customers[];
+        data: locationGrouping[];
       }[],
-      data: [] as customers[],
+      data: [] as locationGrouping[],
     },
   },
   reducers: {
-    updateCustomersList: (state, action) => {
+    updateLocationGroupingList: (state, action) => {
       state.value.status = true;
       state.value.data = action?.payload?.data;
     },
-    addCustomersToList: (state, action) => {
+    addLocationGroupingToList: (state, action) => {
       state.value.data = [...state.value.data, action?.payload];
       //include in pagination data
       const pagination_data = [...state.value.pagination];
@@ -52,11 +52,11 @@ export const customersListData = createSlice({
         ];
       }
     },
-    removeCustomersInList: (state, action) => {
+    removeLocationGroupingInList: (state, action) => {
       const { id } = action?.payload;
       const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
-        (v: { id: number }) => v.id === id
+        (v: { id: number }) => String(v.id) === String(id)
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1);
@@ -75,7 +75,7 @@ export const customersListData = createSlice({
       });
       state.value.pagination = removed;
     },
-    replaceCustomersInList: (state, action) => {
+    replaceLocationGroupingInList: (state, action) => {
       const { id } = action?.payload;
       const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
@@ -102,7 +102,7 @@ export const customersListData = createSlice({
       });
       state.value.pagination = replacedItem;
     },
-    clearCustomersList: (state) => {
+    clearLocationGroupingList: (state) => {
       state.value.status = false;
       state.value.data = [];
     },
@@ -110,12 +110,12 @@ export const customersListData = createSlice({
 });
 
 export const {
-  updateCustomersList,
-  addCustomersToList,
+  updateLocationGroupingList,
+  addLocationGroupingToList,
   addToPaginationHistory,
-  removeCustomersInList,
-  replaceCustomersInList,
-  clearCustomersList,
-} = customersListData.actions;
+  removeLocationGroupingInList,
+  replaceLocationGroupingInList,
+  clearLocationGroupingList,
+} = locationGroupings.actions;
 
-export default customersListData.reducer;
+export default locationGroupings.reducer;

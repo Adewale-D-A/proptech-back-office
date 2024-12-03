@@ -2,7 +2,6 @@ import { useLayoutEffect, useState } from "react";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import ReceiptIcon from "../../../assets/icons/receipt";
-import useAxios from "../../../useHooks/useAxios";
 import PlusIcon from "../../../assets/icons/plus";
 import ServiceTypeTable from "../../../components/tables/serviceTypes";
 import ModalTemplate from "../../../components/modal";
@@ -17,7 +16,6 @@ const breadCrumb = [
   },
 ];
 export default function ServiceTypesViewAll() {
-  const axios = useAxios();
   const dispatch = useAppDispatch();
   const [openModal, setOpenModal] = useState(false);
   // update page props on component mount

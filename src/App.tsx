@@ -113,6 +113,7 @@ import EditRestriction from "./pages/pricing/pricing-restriction/edit";
 import AddSpecialPricing from "./pages/pricing/special-prices/add";
 import EditSpecialPricing from "./pages/pricing/special-prices/edit";
 import ServiceTypesViewAll from "./pages/additional-services/service-types";
+import LocationGroupView from "./pages/apartments/location-group";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -156,6 +157,10 @@ function App() {
                 element={<SafetyAndSecurityListView />}
               />
               <Route path="/apartments/rules" element={<RulesListView />} />
+              <Route
+                path="/apartments/location-grouping"
+                element={<LocationGroupView />}
+              />
             </Route>
 
             {/* view single apartment  */}
