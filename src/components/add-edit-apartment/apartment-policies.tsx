@@ -95,6 +95,12 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
         // amenities:[],
         extra_option_items: extraOptions,
         // safeties: []
+        // location_group, //ID
+        // city,
+        // state,
+        // country,
+        // longitude,
+        // latitude
       };
       dispatch(
         updateApartmentPolicies({

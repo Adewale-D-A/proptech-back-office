@@ -75,10 +75,12 @@ export default function ServiceTypeTable() {
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Service Types</h2>
-          <TableSearch
-            setValue={setSearch}
-            placeholder="First name, last name, email, phone number..."
-          />
+          <div>
+            <TableSearch
+              setValue={setSearch}
+              placeholder="First name, last name, email, phone number..."
+            />
+          </div>
           <div className=" flex items-center gap-3 text-sm text-gray-500 flex-col md:flex-row">
             <Filter actionHandler={handleSalesFiltering} />
             <Sort setSort={setSort} id={"service-types"} label={"Sort by:"} />

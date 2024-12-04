@@ -1,3 +1,7 @@
+##### 4.12.2024
+
+> Menu pathname matching highlight
+
 ##### 3.12.2024
 
 > Location group bug fix

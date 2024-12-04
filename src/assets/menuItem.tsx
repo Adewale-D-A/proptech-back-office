@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAppSelector } from "../stores/hooks";
 import MenuIcon from "./icons/menu";
 import BuildingIcon from "./icons/building";
@@ -11,11 +11,19 @@ import ChatIcon from "./icons/chat";
 import DocumentIcon from "./icons/document";
 import ClipBoardIcon from "./icons/clipboard";
 import NotificationIcon from "./icons/notification";
+import CaretDownIcon from "./icons/caret-down";
+import { useCallback, useState } from "react";
 
 export default function NavigationMenuItems() {
+  const location = useLocation();
   const fullView = useAppSelector(
     (state) => state?.menuFunctions?.value?.fullMenuView
   );
+  const [subMenuState, setSubMenuState] = useState({ open: false, id: 0 });
+
+  const handleSubMenu = useCallback((id: number) => {
+    setSubMenuState((prev) => ({ open: !prev.open, id: id }));
+  }, []);
 
   return (
     <div
@@ -85,17 +93,17 @@ export default function NavigationMenuItems() {
           id: 4,
           url: "/additional-services/99apartment-services",
           label: "Additional Services",
-          value: "additional services",
+          value: "additional-services",
           show: true,
           icon: <AdditionIcon />,
-          hasSubMenu: false,
+          hasSubMenu: true,
           subMenu: [
             {
-              url: "#",
-              label: "",
-              value: "",
+              url: "/additional-services/service-types",
+              label: "Service Types",
+              value: "service-types",
               show: true,
-              icon: "",
+              icon: <ReceiptIcon />,
               id: 1.1,
             },
           ],
@@ -258,8 +266,9 @@ export default function NavigationMenuItems() {
             <div key={items?.id} className="w-full group text-white">
               <NavLink
                 to={items?.url}
+                onClick={() => handleSubMenu(items?.id)}
                 className={({ isActive }) =>
-                  isActive
+                  isActive || location?.pathname?.includes(items?.value)
                     ? `flex justify-between w-full p-2 md:p-3 transition-all bg-white/15 border-l-4`
                     : `flex justify-between w-full p-2 md:p-3 transition-all hover:bg-white/15 hover:border-l-4`
                 }
@@ -272,22 +281,7 @@ export default function NavigationMenuItems() {
                   {items?.icon}{" "}
                   {fullView && <span className=" ">{items?.label}</span>}{" "}
                 </div>
-                {items?.hasSubMenu && fullView && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-6 h-6  "
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                    />
-                  </svg>
-                )}
+                {items?.hasSubMenu && fullView && <CaretDownIcon />}
               </NavLink>
               {items?.hasSubMenu && fullView && (
                 <div className=" w-full ml-5 group-hover:my-4 transition-all">
@@ -296,8 +290,17 @@ export default function NavigationMenuItems() {
                       return (
                         <Link
                           to={subItem?.url}
+                          onClick={() => handleSubMenu(items?.id)}
                           key={subItem?.id}
-                          className=" text-gray-500 group-hover:flex hidden hover:text-primary"
+                          className={`${
+                            location?.pathname?.includes(subItem?.url)
+                              ? "bg-white/15 border-r-4"
+                              : ""
+                          } ${
+                            subMenuState?.id === items?.id && subMenuState?.open
+                              ? "flex"
+                              : "hidden"
+                          } text-gray-200 group-hover:flex  hover:bg-white/15 hover:border-r-4 px-2 py-3`}
                         >
                           <div className="flex items-center">
                             {subItem?.icon}{" "}

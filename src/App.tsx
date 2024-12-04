@@ -242,7 +242,10 @@ function App() {
                 element={<VendorServicesList />}
               />
             </Route>
-            <Route path="/service-types" element={<ServiceTypesViewAll />} />
+            <Route
+              path="/additional-services/service-types"
+              element={<ServiceTypesViewAll />}
+            />
             <Route
               path="/additional-services/service-details/:id"
               element={<AdditionalServiceDetailsById />}
