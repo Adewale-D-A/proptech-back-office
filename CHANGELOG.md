@@ -1,5 +1,6 @@
 ##### 5.12.2024
 
+> Invoice API Intgeration (Get all, get by id and delete endpoint integration)
 > Reports UI separation
 
 ##### 4.12.2024

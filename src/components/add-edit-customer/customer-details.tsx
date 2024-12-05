@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import TextInput from "../inputs/textInput";
 import AddressAutocompleteInput from "../inputs/addressAutocompleteInout";
@@ -19,6 +19,7 @@ import countries from "../../assets/Countries.json";
 export default function AddEditCustomerDetails({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const storeAptDetails = useAppSelector(
     (state) => state.addEditCustomerInfo.value.data.customerDetails
   );
@@ -230,7 +231,15 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
       <div className=" w-full flex justify-end mt-10">
         <div className=" flex items-center gap-4">
           <div className=" w-fit">
-            <LinkButton url="/customers" label="Back" variant={2} />
+            <LinkButton
+              url={
+                searchParams?.get("redirect")
+                  ? `${searchParams?.get("redirect")}`
+                  : `/customers`
+              }
+              label="Back"
+              variant={2}
+            />
           </div>
           <div className=" w-fit">
             <LinkButton

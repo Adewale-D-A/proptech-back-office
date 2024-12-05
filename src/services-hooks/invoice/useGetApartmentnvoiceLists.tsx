@@ -3,11 +3,12 @@ import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import {
   addToPaginationHistory,
-  updateRestrictionssList,
-} from "../../stores/apiData/restrictions";
+  updateInvoiceList,
+} from "../../stores/apiData/invoice/invoice-lists";
+import { pagination } from "../../types/pagination";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetRestrictions({
+export default function useGetApartmentInvoiceLists({
   page = 1,
   start_date,
   end_date,
@@ -26,20 +27,13 @@ export default function useGetRestrictions({
     status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.restriction.value);
+  } = useAppSelector((state) => state.allInvoiceLists.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const [pagination, setPagination] = useState<{
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    from: number;
-    to: number;
-  }>({} as any);
+  const [pagination, setPagination] = useState<pagination>({} as any);
 
-  const getAllRestrictions = useCallback(async () => {
+  const getApartmentInvoice = useCallback(async () => {
     setIsLoading(true);
     setIsFailed(false);
     try {
@@ -55,20 +49,20 @@ export default function useGetRestrictions({
         !search
       ) {
         setPagination(foundPage?.pagination_data);
-        dispatch(updateRestrictionssList({ data: foundPage?.data }));
+        dispatch(updateInvoiceList({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
           start_date && end_date
-            ? `/admin/restriction?sort=${sort}&limit=20&search=${
+            ? `/admin/invoice?sort=${sort}&limit=20&search=${
                 search || ""
               }&page=${page}&start_date=${start_date}&end_date=${end_date}`
-            : `/admin/restriction?sort=${sort}&limit=20&search=${
+            : `/admin/invoice?sort=${sort}&limit=20&search=${
                 search || ""
               }&page=${page}`
         );
-        const { restriction } = response?.data?.data;
+        const { invoice } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
-          restriction;
+          invoice;
         const paginationDataset = {
           current_page,
           last_page,
@@ -78,7 +72,7 @@ export default function useGetRestrictions({
           to,
           length: data?.length,
         };
-        dispatch(updateRestrictionssList({ data }));
+        dispatch(updateInvoiceList({ data }));
         dispatch(
           addToPaginationHistory({
             pagination_data: paginationDataset,
@@ -95,7 +89,7 @@ export default function useGetRestrictions({
   }, [page, start_date, end_date, sort, search]);
 
   useEffect(() => {
-    getAllRestrictions();
+    getApartmentInvoice();
   }, [page, start_date, end_date, sort, search]);
 
   return {
@@ -103,7 +97,7 @@ export default function useGetRestrictions({
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getAllRestrictions,
+    retryFunction: getApartmentInvoice,
     pagination,
   };
 }

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { invoice } from "../../types/apiData/invoice";
+import { invoice } from "../../../types/apiData/invoice";
 
 export const invoiceListsData = createSlice({
   name: "all invoice",
@@ -62,7 +62,7 @@ export const invoiceListsData = createSlice({
       const { id } = action?.payload;
       const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
-        (v: { id: string }) => v.id === id
+        (v: { id: number }) => String(v.id) === String(id)
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1);
@@ -85,7 +85,7 @@ export const invoiceListsData = createSlice({
       const { id } = action?.payload;
       const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
-        (v: { id: string }) => v.id === id
+        (v: { id: number }) => String(v.id) === String(id)
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1, action?.payload);

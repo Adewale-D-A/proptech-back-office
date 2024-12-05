@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import { useAppDispatch } from "../../../stores/hooks";
 import {
   ChangeEvent,
@@ -17,11 +18,11 @@ import LoadingButton from "../../../components/button";
 import PlusIcon from "../../../assets/icons/plus";
 import ModalTemplate from "../../../components/modal";
 import AddTax from "../../../components/tax/addTax";
-import { addInvoiceToList } from "../../../stores/apiData/invoice-lists";
+import { addInvoiceToList } from "../../../stores/apiData/invoice/invoice-lists";
 
 const breadCrumb = [
   {
-    url: "/invoices",
+    url: "/invoices/apartment",
     label: "Invoices",
     icon: <ReceiptIcon />,
   },
@@ -32,6 +33,7 @@ const breadCrumb = [
   },
 ];
 export default function AddNewInvoice() {
+  const location = useLocation();
   const dispatch = useAppDispatch();
   // update page props on component mount
   useLayoutEffect(() => {
@@ -179,7 +181,7 @@ export default function AddNewInvoice() {
               <h4 className="text-lg font-semibold">Customer Details</h4>
               <div className=" w-fit">
                 <LinkButton
-                  url="/add-customer/customer-details"
+                  url={`/add-customer/customer-details?redirect=${location?.pathname}`}
                   label="Create New User"
                   variant={2}
                 />
@@ -219,7 +221,7 @@ export default function AddNewInvoice() {
                     type={"text"}
                     className=" w-full"
                   />
-                  <div className="p-2 bg-gray-200 flex items-center text-gray-400">
+                  <div className="p-2 bg-gray-200 flex items-center whitespace-nowrap text-gray-400">
                     <span>/WEB</span>
                   </div>
                 </div>

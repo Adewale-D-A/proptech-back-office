@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useLayoutEffect } from "react";
 import UsersIcon from "../../assets/icons/users";
 import { useAppDispatch } from "../../stores/hooks";
@@ -18,6 +18,7 @@ const breadCrumb = [
 ];
 export default function Customers() {
   const { id } = useParams();
+  const location = useLocation();
   const dispatch = useAppDispatch();
   // update page props on component mount
   useLayoutEffect(() => {
@@ -47,7 +48,7 @@ export default function Customers() {
           <div className=" flex items-center gap-4">
             <ExportSelect id="customers" />
             <LinkButton
-              url="/add-customer/customer-details"
+              url={`/add-customer/customer-details?redirect=${location?.pathname}`}
               label="Add New Customer"
               startIcon={<PlusIcon />}
             />

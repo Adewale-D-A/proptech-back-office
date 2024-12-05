@@ -2,28 +2,56 @@ import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../pagination";
 import NoResult from "../noResult";
-import Search from "../inputs/search";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import Status from "../status";
 import { useAppDispatch } from "../../stores/hooks";
-import useGetAllInvoiceLists from "../../services-hooks/useGetAllInvoiceLists";
-import { removeInvoiceInList } from "../../stores/apiData/invoice-lists";
+import useGetApartmentInvoiceLists from "../../services-hooks/invoice/useGetApartmentnvoiceLists";
+import { removeInvoiceInList } from "../../stores/apiData/invoice/invoice-lists";
 import Filter from "../filterAndSort/filter";
 import Sort from "../filterAndSort/sort";
+import formatDate from "../../utils/isoDateConverter";
+import TableSearch from "../inputs/search/table-search";
+import useAxios from "../../useHooks/useAxios";
 
 export default function InvoiceListsTable({ header }: { header: string[] }) {
+  const axios = useAxios();
   const dispatch = useAppDispatch();
+  const [sort, setSort] = useState("desc");
+  const [search, setSearch] = useState("");
+  const [filterDates, setFilterDates] = useState<{
+    start_date: string;
+    end_date: string;
+  }>();
+  // const [sort, setSort] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllInvoiceLists({ page: currentPage });
+    useGetApartmentInvoiceLists({
+      page: currentPage,
+      start_date: filterDates?.start_date,
+      end_date: filterDates?.end_date,
+      sort: sort,
+      search,
+    });
+  const handleCustomersFiltering = useCallback(
+    (start_date: string, end_date: string) => {
+      setFilterDates({ start_date, end_date });
+    },
+    []
+  );
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedId, setSelectedId] = useState("1");
 
-  const deleteApartment = useCallback(() => {
+  const selectForDelete = useCallback((id: number) => {
+    setSelectedId(String(id));
+    setOpenDeleteConfirmation(true);
+  }, []);
+
+  const deleteInvoice = useCallback(async () => {
     setIsDeleting(true);
     try {
+      await axios.delete(`/admin/invoice/${selectedId}`);
       dispatch(removeInvoiceInList({ id: selectedId }));
       setOpenDeleteConfirmation(false);
     } catch (error) {
@@ -31,17 +59,19 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
       setIsDeleting(false);
     }
   }, [selectedId]);
+
   return (
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 ">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Invoice List</h2>
-          <Search
-            placeholder="Invoice name, booking ID..."
-            id="apartment-search"
-          />
-          <Filter />
-          <Sort id="sort-by" label="Sort by" />
+          <div>
+            <TableSearch setValue={setSearch} placeholder="Search..." />
+          </div>
+          <div className=" flex items-center gap-2 flex-col md:flex-row">
+            <Filter actionHandler={handleCustomersFiltering} />
+            <Sort setSort={setSort} id="sort-by" label="Sort by" />
+          </div>
         </div>
         {data && data.length > 0 ? (
           <table className=" w-full text-xs overflow-x-auto">
@@ -53,32 +83,29 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
               </tr>
             </thead>
             <tbody className="">
-              {data.map((request, index) => {
+              {data.map((item, index) => {
                 return (
-                  <tr key={request?.id} className=" border-b">
-                    <td>{request?.number}</td>
-                    <td>{request?.bookingId}</td>
-                    <td>{request?.email}</td>
-                    <td>{request?.createdOn}</td>
-                    <td>{request?.createdBy}</td>
+                  <tr key={item?.id} className=" border-b">
+                    <td>{item?.invoice_number}</td>
+                    <td>{item?.booking_id}</td>
+                    <td>{item?.user?.email}</td>
+                    <td>{formatDate(item?.created_at)}</td>
+                    <td>{item?.created_by}</td>
                     <td>
-                      <Status status={request?.status} />
+                      <Status status={item?.status} />
                     </td>
                     <td className=" group relative">
                       <span className=" p-2 text-lg">...</span>
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                         <Link
-                          to={`/booking-details/${request?.id}`}
+                          to={`/booking-details/${item?.id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           View Booking
                         </Link>
                         <button
                           type="button"
-                          onClick={() => {
-                            setSelectedId(request?.id);
-                            setOpenDeleteConfirmation(true);
-                          }}
+                          onClick={() => selectForDelete(item?.id)}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Delete Invoice
@@ -112,21 +139,14 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
           <NoResult />
         )}
         <Pagination
-          pagination={{
-            current_page: 1,
-            last_page: 2,
-            per_page: 20,
-            total: 24,
-            from: 1,
-            to: 1,
-          }}
+          pagination={pagination}
           setCurrentPage={setCurrentPage}
-          isLoading={false}
-          label="Invoices"
+          isLoading={isLoading}
+          label="invoices"
         />
       </div>
       <DeleteConfirmation
-        confirmationHandler={deleteApartment}
+        confirmationHandler={deleteInvoice}
         isLoading={isDeleting}
         btnTitle="Yes, I want to"
         title="Delete Invoice"

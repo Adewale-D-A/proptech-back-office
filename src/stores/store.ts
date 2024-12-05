@@ -39,7 +39,7 @@ import topApartmentListsData from "./apiData/top-apartment-list";
 import bookingsListsData from "./apiData/bookings-lists";
 import requestListsData from "./apiData/requests-lists";
 import customersListData from "./apiData/customers-lists";
-import invoiceListsData from "./apiData/invoice-lists";
+import invoiceListsData from "./apiData/invoice/invoice-lists";
 import amenitiesData from "./apiData/amenities";
 import safetyAndSecurityData from "./apiData/safety-and-security";
 import extraOptionData from "./apiData/extra-options";
