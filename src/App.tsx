@@ -11,7 +11,6 @@ import AlertModal from "./components/infoModal";
 import RedirectHome from "./routeProtectors/redirectHome";
 import PersistLogin from "./routeProtectors/persistLogin";
 import Notification from "./pages/notification";
-import Reports from "./pages/reports";
 import Customers from "./pages/customers";
 import Bookings from "./pages/bookings";
 import DashboardOverview from "./pages/dashboard-overview";

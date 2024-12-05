@@ -2,7 +2,7 @@ import { useLayoutEffect } from "react";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import ClipBoardIcon from "../../../assets/icons/clipboard";
-import DailyRoomReportListTable from "../../../components/tables/dailyRoomReportList";
+import DailyRoomReportTable from "../../../components/tables/reports/daily-room";
 
 const breadCrumb = [
   {
@@ -37,7 +37,7 @@ export default function DailyRoomReport() {
 
   return (
     <section className="w-full">
-      <DailyRoomReportListTable />
+      <DailyRoomReportTable />
     </section>
   );
 }

@@ -2,7 +2,7 @@ import { useLayoutEffect } from "react";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import ClipBoardIcon from "../../../assets/icons/clipboard";
-import OccupanyTimeReportListTable from "../../../components/tables/occupancyTimeReportList";
+import OccupancyPerTimeReportTable from "../../../components/tables/reports/occupancy-per-time";
 
 const breadCrumb = [
   {
@@ -36,7 +36,7 @@ export default function OccupancyPerTimeReport() {
 
   return (
     <section className="w-full">
-      <OccupanyTimeReportListTable />
+      <OccupancyPerTimeReportTable />
     </section>
   );
 }

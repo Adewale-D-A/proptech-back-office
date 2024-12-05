@@ -2,7 +2,7 @@ import { useLayoutEffect } from "react";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import ClipBoardIcon from "../../../assets/icons/clipboard";
-import ReportListTable from "../../../components/tables/report";
+import OccupancyRankingReportTable from "../../../components/tables/reports/occupancy-ranking";
 
 const breadCrumb = [
   {
@@ -35,7 +35,7 @@ export default function OccupancyRankingReport() {
   }, []);
   return (
     <section className="w-full">
-      <ReportListTable type={"occupancy-ranking"} view={"sheet"} />
+      <OccupancyRankingReportTable />
     </section>
   );
 }

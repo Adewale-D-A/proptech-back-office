@@ -1,8 +1,8 @@
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect } from "react";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import ClipBoardIcon from "../../../assets/icons/clipboard";
-import ReportListTable from "../../../components/tables/report";
+import RevenueReportTable from "../../../components/tables/reports/revenue";
 
 const breadCrumb = [
   {
@@ -29,11 +29,9 @@ export default function RevenueReport() {
     );
   }, []);
 
-  const [reportType, setReportType] = useState("");
-  const [viewType, setViewType] = useState("");
   return (
     <section className="w-full">
-      <ReportListTable type={reportType} view={viewType} />
+      <RevenueReportTable />
     </section>
   );
 }
