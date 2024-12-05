@@ -114,6 +114,11 @@ import AddSpecialPricing from "./pages/pricing/special-prices/add";
 import EditSpecialPricing from "./pages/pricing/special-prices/edit";
 import ServiceTypesViewAll from "./pages/additional-services/service-types";
 import LocationGroupView from "./pages/apartments/location-group";
+import ReportsTabWrapper from "./routeProtectors/wrapper/reports";
+import RevenueReport from "./pages/reports/revenue";
+import OccupancyRankingReport from "./pages/reports/occupancy-ranking";
+import DailyRoomReport from "./pages/reports/daily-room";
+import OccupancyPerTimeReport from "./pages/reports/occupancy-per-time";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -398,8 +403,19 @@ function App() {
               path="/invoices/add-new-invoice"
               element={<AddNewInvoice />}
             />
-
-            <Route path="/reports" element={<Reports />} />
+            {/* reports */}
+            <Route element={<ReportsTabWrapper />}>
+              <Route path="/reports/revenue" element={<RevenueReport />} />
+              <Route
+                path="/reports/occupancy-ranking"
+                element={<OccupancyRankingReport />}
+              />
+              <Route path="/reports/daily-room" element={<DailyRoomReport />} />
+              <Route
+                path="/reports/occupancy-per-time"
+                element={<OccupancyPerTimeReport />}
+              />
+            </Route>
             <Route path="/notification" element={<Notification />} />
             <Route path="/user-profile" element={<Profile />} />
           </Route>

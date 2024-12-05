@@ -224,7 +224,7 @@ export default function NavigationMenuItems() {
         },
         {
           id: 10,
-          url: "/reports",
+          url: "/reports/revenue",
           label: "Reports",
           value: "reports",
           show: true,

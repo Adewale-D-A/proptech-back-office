@@ -1,3 +1,7 @@
+##### 5.12.2024
+
+> Reports UI separation
+
 ##### 4.12.2024
 
 > Menu pathname matching highlight
