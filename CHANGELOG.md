@@ -1,3 +1,8 @@
+##### 9.12.2024
+
+> Location extra details on apartment creation and updates
+> Invoice endpoint integrations
+
 ##### 5.12.2024
 
 > Invoice API Intgeration (Get all, get by id and delete endpoint integration)

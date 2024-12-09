@@ -46,6 +46,11 @@ export default function useGetApartmentById(id?: string) {
         images,
         rules,
         safeties,
+        city,
+        state,
+        country,
+        longitude,
+        latitude,
       } = shortlet;
       dispatch(clearAllApartmentInfo());
       dispatch(updateApartmentInfoId({ id: id }));
@@ -57,6 +62,11 @@ export default function useGetApartmentById(id?: string) {
           amount: price,
           location: location,
           aboutLocation: description,
+          city,
+          state,
+          country,
+          longitude,
+          latitude,
         })
       );
       dispatch(

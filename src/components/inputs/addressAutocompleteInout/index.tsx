@@ -1,4 +1,7 @@
-import PlacesAutocomplete from "react-places-autocomplete";
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from "react-places-autocomplete";
 import MapProvider from "../../../providers/map-provider";
 import LoaderIcon from "../../../assets/icons/loader";
 
@@ -8,6 +11,7 @@ export default function AddressAutocompleteInput({
   label,
   placeholder,
   readOnly,
+  setExtraDetails,
 }: // setAddress,
 {
   value: string;
@@ -15,18 +19,34 @@ export default function AddressAutocompleteInput({
   readOnly?: boolean;
   label?: string;
   placeholder?: string;
+  setExtraDetails?: (details: {
+    city: string;
+    state: string;
+    country: string;
+    longitude: number;
+    latitude: number;
+  }) => void;
   // setAddress: Function;
 }) {
   const extractCoordinates = async (address: string) => {
     setValue(address);
-    // setAddress(address);
-    // const country = address?.split(",")?.at(-1)?.replace(" ", "");
-    // try {
-    // const results = await geocodeByAddress(address);
-    // const { lat, lng } = await getLatLng(results[0]);
-    // } catch (error) {
-    //   console.log("errors");
-    // }
+    const country = address?.split(",")?.at(-1)?.replace(" ", "");
+    const state = address?.split(",")?.at(-2)?.replace(" ", "");
+    try {
+      const results = await geocodeByAddress(address);
+      const { lat, lng } = await getLatLng(results[0]);
+      if (setExtraDetails) {
+        setExtraDetails({
+          city: state || "",
+          state: state || "",
+          country: country || "",
+          longitude: lng,
+          latitude: lat,
+        });
+      }
+    } catch (error) {
+      console.log("errors");
+    }
   };
 
   return (

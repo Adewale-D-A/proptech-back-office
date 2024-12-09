@@ -60,8 +60,19 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
       e.preventDefault();
       setIsSubmitting(true);
       const { apartmentDetails, apartmentFeatures } = storeAptDataset;
-      const { name, roomOption, images, amount, location, aboutLocation } =
-        apartmentDetails;
+      const {
+        name,
+        roomOption,
+        images,
+        amount,
+        location,
+        aboutLocation,
+        city,
+        state,
+        country,
+        longitude,
+        latitude,
+      } = apartmentDetails;
       const {
         noBeds,
         noBaths,
@@ -96,11 +107,11 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
         extra_option_items: extraOptions,
         // safeties: []
         // location_group, //ID
-        // city,
-        // state,
-        // country,
-        // longitude,
-        // latitude
+        city,
+        state,
+        country,
+        longitude,
+        latitude,
       };
       dispatch(
         updateApartmentPolicies({

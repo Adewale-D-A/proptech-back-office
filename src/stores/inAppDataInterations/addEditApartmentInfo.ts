@@ -13,6 +13,11 @@ export const addEditApartmentInfo = createSlice({
           amount: "",
           location: "",
           aboutLocation: "",
+          city: "",
+          state: "",
+          country: "",
+          longitude: 0,
+          latitude: 0,
         },
         apartmentFeatures: {
           noBeds: "",
@@ -55,6 +60,11 @@ export const addEditApartmentInfo = createSlice({
           amount: "",
           location: "",
           aboutLocation: "",
+          city: "",
+          state: "",
+          country: "",
+          longitude: 0,
+          latitude: 0,
         },
         apartmentFeatures: {
           noBeds: "",

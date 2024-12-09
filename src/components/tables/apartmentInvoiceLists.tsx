@@ -12,6 +12,7 @@ import Sort from "../filterAndSort/sort";
 import formatDate from "../../utils/isoDateConverter";
 import TableSearch from "../inputs/search/table-search";
 import useAxios from "../../useHooks/useAxios";
+import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 
 export default function InvoiceListsTable({ header }: { header: string[] }) {
   const axios = useAxios();
@@ -54,6 +55,22 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
       await axios.delete(`/admin/invoice/${selectedId}`);
       dispatch(removeInvoiceInList({ id: selectedId }));
       setOpenDeleteConfirmation(false);
+    } catch (error) {
+    } finally {
+      setIsDeleting(false);
+    }
+  }, [selectedId]);
+
+  const resendInvoice = useCallback(async () => {
+    setIsDeleting(true);
+    try {
+      await axios.post(`/admin/resend/${selectedId}`);
+      dispatch(
+        openSnackbar({
+          message: "Invoice successfully sent via email",
+          isError: false,
+        })
+      );
     } catch (error) {
     } finally {
       setIsDeleting(false);
@@ -116,14 +133,14 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
                         >
                           Download Invoice
                         </Link>
-                        <Link
-                          to={`#}`}
+                        <button
+                          onClick={() => resendInvoice()}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Resend Via E-mail
-                        </Link>
+                        </button>
                         <Link
-                          to={`#}`}
+                          to={`/bookings/booking-details/${item?.booking_id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           View Booking Details

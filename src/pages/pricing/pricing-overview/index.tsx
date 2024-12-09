@@ -3,25 +3,24 @@ import Select from "../../../components/inputs/select";
 import ForecastDash from "../../../components/forecasting-dash";
 import CalendarIcon from "../../../assets/icons/calendar";
 import CheckAvailability from "../../../components/check-availability";
+import Search from "../../../components/inputs/search";
+import { apartmentById } from "../../../types/apiData/apartment";
 
 export default function PricingOverview() {
   const [selectedOption, setSelectedOption] = useState("");
   const [availabilityResponset, setAvailabilityResponse] = useState();
+  const [selectedApt, setSelectedApt] = useState<apartmentById>({} as any);
 
   return (
     <div className="w-full my-10 flex flex-col gap-8">
       <div className=" p-5 rounded-md border">
         <div className=" border rounded-md">
-          <Select
-            isRequired={true}
-            value={selectedOption}
-            setValue={setSelectedOption}
-            id="all-status"
-          >
-            <option value="">Select any apartment</option>
-            <option value="all">All</option>
-            <option value="sunshine-apt">Sunshine - 2 Bedroom</option>
-          </Select>
+          <Search
+            setValue={setSelectedApt}
+            id="apartment-search"
+            componentId="apartment"
+            placeholder="Search apartment..."
+          />
         </div>
       </div>
       <ForecastDash />

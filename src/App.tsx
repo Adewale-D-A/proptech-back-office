@@ -32,7 +32,7 @@ import EditCustomerDetailsPage from "./pages/customers/edit-customer/customer-de
 import EditCustomerVerifiationPage from "./pages/customers/edit-customer/customer-verification";
 import EditCustomerCompanyPage from "./pages/customers/edit-customer/customer-company";
 import EditCustomerSalesChannelPage from "./pages/customers/edit-customer/customer-sales-channels";
-import AddNewInvoice from "./pages/invoices/add-new-invoice";
+import AddNewInvoice from "./pages/invoices/add-invoice";
 import AddNewPackageAndOffer from "./pages/plans-and-promotions/package-and-offers/add-new-package-and-offer";
 import AdditionalServiceDetailsById from "./pages/additional-services/99apartment-services/service-details";
 import VendorServiceDetailsById from "./pages/additional-services/vendor-services/vendor-details";
@@ -118,6 +118,7 @@ import RevenueReport from "./pages/reports/revenue";
 import OccupancyRankingReport from "./pages/reports/occupancy-ranking";
 import DailyRoomReport from "./pages/reports/daily-room";
 import OccupancyPerTimeReport from "./pages/reports/occupancy-per-time";
+import EditInvoice from "./pages/invoices/edit-invoice";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -398,9 +399,10 @@ function App() {
                 element={<AdditionalServicesInvoice />}
               />
             </Route>
+            <Route path="/invoices/add-invoice" element={<AddNewInvoice />} />
             <Route
-              path="/invoices/add-new-invoice"
-              element={<AddNewInvoice />}
+              path="/invoices/edit-invoice/:id"
+              element={<EditInvoice />}
             />
             {/* reports */}
             <Route element={<ReportsTabWrapper />}>

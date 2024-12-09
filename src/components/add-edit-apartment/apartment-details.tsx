@@ -34,6 +34,13 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
   const [price, setPrice] = useState("");
   const [location, setLocation] = useState("");
   const [aboutLocation, setAboutLocation] = useState("");
+  const [extraLocationDetails, setExtraLocationDetails] = useState<{
+    city: string;
+    state: string;
+    country: string;
+    longitude: number;
+    latitude: number;
+  }>({ city: "", state: "", country: "", longitude: 0, latitude: 0 } as any);
 
   // populate apartment details interface
   useEffect(() => {
@@ -59,6 +66,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
           amount: price,
           location: location,
           aboutLocation: aboutLocation,
+          ...extraLocationDetails,
         };
         dispatch(updateApartmentDetails(payload));
         dispatch(updateApartmentInfoId({ id: "updated" }));
@@ -173,7 +181,11 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
             labore.
           </p>
         </div>
-        <AddressAutocompleteInput value={location} setValue={setLocation} />
+        <AddressAutocompleteInput
+          setExtraDetails={setExtraLocationDetails}
+          value={location}
+          setValue={setLocation}
+        />
       </div>
       {/* about location */}
       <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-start">

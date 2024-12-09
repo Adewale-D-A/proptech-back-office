@@ -1,67 +1,61 @@
 import { useLocation } from "react-router-dom";
-import { useAppDispatch } from "../../../stores/hooks";
-import {
-  ChangeEvent,
-  SyntheticEvent,
-  useCallback,
-  useLayoutEffect,
-  useState,
-} from "react";
-import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import ReceiptIcon from "../../../assets/icons/receipt";
-import LinkButton from "../../../components/button/linkButton";
-import Search from "../../../components/inputs/search";
-import TextInput from "../../../components/inputs/textInput";
-import TextAreaInput from "../../../components/inputs/textArea";
-import BinIcon from "../../../assets/icons/bin-icon";
-import LoadingButton from "../../../components/button";
-import PlusIcon from "../../../assets/icons/plus";
-import ModalTemplate from "../../../components/modal";
-import AddTax from "../../../components/tax/addTax";
-import { addInvoiceToList } from "../../../stores/apiData/invoice/invoice-lists";
+import { useAppDispatch } from "../../stores/hooks";
+import { ChangeEvent, SyntheticEvent, useCallback, useState } from "react";
+import LinkButton from "../../components/button/linkButton";
+import Search from "../../components/inputs/search";
+import TextInput from "../../components/inputs/textInput";
+import TextAreaInput from "../../components/inputs/textArea";
+import BinIcon from "../../assets/icons/bin-icon";
+import LoadingButton from "../../components/button";
+import PlusIcon from "../../assets/icons/plus";
+import ModalTemplate from "../../components/modal";
+import AddTax from "../../components/tax/addTax";
+import { addInvoiceToList } from "../../stores/apiData/invoice/invoice-lists";
+import useAxios from "../../useHooks/useAxios";
+import { customersById } from "../../types/apiData/customers";
+// import useGetInvoice from "../../services-hooks/invoice/useGetInvoice";
 
-const breadCrumb = [
-  {
-    url: "/invoices/apartment",
-    label: "Invoices",
-    icon: <ReceiptIcon />,
-  },
-  {
-    url: "#",
-    label: "New Invoice",
-    icon: "",
-  },
-];
-export default function AddNewInvoice() {
+export default function AddEditInvoice({ id }: { id?: string }) {
+  const axios = useAxios();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  // update page props on component mount
-  useLayoutEffect(() => {
-    dispatch(
-      updatePageProperties({
-        breadCrumb,
-        pageTitle: "New Invoice",
-        pageDescription: "Add new invoice",
-        isLoading: false,
-        failedToLoad: false,
-        setFailedToLoad: false,
-        retryRequest: false,
-      })
-    );
-  }, []);
+
+  const [openAddTax, setOpenAddTax] = useState(false);
 
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [invoiceSuffix, setInvoiceSuffix] = useState("");
   const [companyInfo, setCompanyInfo] = useState("");
+  const [user, setUser] = useState<customersById>({} as any);
+  const [total, setTotal] = useState("");
+  const [customerNote, setCustomerNote] = useState("");
 
   //   service details
-  const [serviceDetails, setServiceDetails] = useState([
-    {
-      id: "1",
-      name: "",
-      amount: "",
-    },
-  ]);
+  const [serviceDetails, setServiceDetails] = useState<
+    { id: string; name: string; amount: string }[]
+  >([]);
+  //   service taxes
+  const [serviceTaxes, setServiceTaxes] = useState<
+    { id: string; name: string; amount: string; isCompound: boolean }[]
+  >([]);
+
+  //   const { data } = useGetInvoice({ id });
+  // populate fields
+  //   useEffect(() => {
+  //     if (data?.id) {
+  //       const {
+  //         invoice_starting_number,
+  //         invoice_number_suffix,
+  //         company_information,
+  //         total_amount,
+  //         note,
+  //       } = data;
+  //       setInvoiceNumber(invoice_starting_number || "");
+  //       setInvoiceSuffix(invoice_number_suffix || "");
+  //       setCompanyInfo(company_information || "");
+  //       setTotal(String(total_amount) || "");
+  //       setCustomerNote(note || "");
+  //     }
+  //   }, [data]);
 
   const addNewService = useCallback(() => {
     setServiceDetails((prev) => [
@@ -104,12 +98,6 @@ export default function AddNewInvoice() {
     });
   }, []);
 
-  //   service taxes
-  const [serviceTaxes, setServiceTaxes] = useState<
-    { id: string; name: string; amount: string; isCompound: boolean }[]
-  >([]);
-  const [openAddTax, setOpenAddTax] = useState(false);
-
   const removeTax = useCallback((index: number) => {
     setServiceTaxes((prev) => {
       const deepCopy = [...prev];
@@ -138,34 +126,51 @@ export default function AddNewInvoice() {
     []
   );
 
-  // summary
-  const [invoiceStartingNumber, setInvoiceStartingNumber] = useState("");
-  const [customerNote, setCustomerNote] = useState("");
-
   // final submit handler
   const [isSaving, setIsSaving] = useState(false);
+  // submit
   const handleSubmit = useCallback(
-    (e: SyntheticEvent) => {
+    async (e: SyntheticEvent) => {
       e.preventDefault();
       setIsSaving(true);
+      const payload = {
+        booking_id: user?.id,
+        user_id: user?.id,
+        invoice_starting_number: invoiceNumber,
+        invoice_number_suffix: invoiceSuffix,
+        company_information: companyInfo,
+        service_details: serviceDetails.map((item) => ({
+          service_name: item?.name,
+          amount: item?.amount,
+        })),
+        tax_details: serviceTaxes.map((item) => ({
+          tax_name: item?.name,
+          amount: item?.amount,
+          is_compound_tax: item?.isCompound,
+        })),
+        note: customerNote,
+        total_amount: total,
+      };
       try {
-        dispatch(
-          addInvoiceToList({
-            id: "total-random",
-            number: invoiceNumber,
-            bookingId: "new-random",
-            email: "new-email",
-            createdOn: "today",
-            createdBy: "admin",
-            status: "confirmed",
-          })
-        );
+        const response = await axios.post("admin/invoice", payload);
+        const data = response.data;
+
+        dispatch(addInvoiceToList(data));
       } catch (error) {
       } finally {
         setIsSaving(false);
       }
     },
-    [invoiceNumber]
+    [
+      user,
+      invoiceNumber,
+      invoiceSuffix,
+      companyInfo,
+      serviceDetails,
+      serviceTaxes,
+      customerNote,
+      total,
+    ]
   );
 
   return (
@@ -189,7 +194,9 @@ export default function AddNewInvoice() {
             </div>
             <div className="w-full p-3 flex flex-col gap-6 max-w-screen-md">
               <Search
+                setValue={setUser}
                 id="customer-search"
+                componentId="customer"
                 placeholder="Existing Customer name, ID, etc..."
               />
             </div>
@@ -239,7 +246,7 @@ export default function AddNewInvoice() {
           <div className=" w-full flex flex-col items-center gap-4 border rounded-md">
             <div className=" w-full flex items-center justify-between gap-4 border-b p-3">
               <h4 className="text-lg font-semibold">Service Details</h4>
-              <div className=" w-fit">
+              {/* <div className=" w-fit">
                 <LoadingButton
                   type="button"
                   className=" text-primary"
@@ -248,7 +255,7 @@ export default function AddNewInvoice() {
                   variant={2}
                   clickHandler={() => setOpenAddTax(true)}
                 />
-              </div>
+              </div> */}
             </div>
             <div className="w-full p-3 flex flex-col gap-6">
               {serviceDetails.map((item, index) => (
@@ -375,12 +382,12 @@ export default function AddNewInvoice() {
             <div className=" w-full grid grid-cols-2 gap-3">
               <h6 className=" font-semibold text-lg">Total Amount Paid:</h6>
               <TextInput
-                inputType="text"
+                inputType="number"
                 isRequired={true}
-                value={invoiceStartingNumber}
-                setValue={setInvoiceStartingNumber}
-                id="tax-starting-number"
-                placeholder="Enter Invoice STarting Number"
+                value={total}
+                setValue={setTotal}
+                id="total-amount"
+                placeholder="Enter total amount"
               />
             </div>
             <div className=" w-full grid grid-cols-2 gap-3">

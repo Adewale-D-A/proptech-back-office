@@ -43,7 +43,7 @@ export default function InvoicesTabWrapper() {
           <NavTab tabList={tabList} />
           <div className="w-fit whitespace-nowrap">
             <LinkButton
-              url="/invoices/add-new-invoice"
+              url="/invoices/add-invoice"
               label="New Invoice"
               startIcon={<PlusIcon />}
             />
