@@ -82,7 +82,7 @@ export default function Requests() {
         title="Add New Request"
         className=" max-w-md"
       >
-        <NewRequest setValue={setOpenNewRequest} componentId="request" />
+        <NewRequest setValue={setOpenNewRequest} />
       </ModalTemplate>
     </>
   );

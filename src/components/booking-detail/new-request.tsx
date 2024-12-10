@@ -3,83 +3,50 @@ import Select from "../inputs/select";
 import LoadingButton from "../button";
 import Search from "../inputs/search";
 import TextAreaInput from "../inputs/textArea";
-import TextInput from "../inputs/textInput";
-import DateInput from "../inputs/dateInput";
-import TimeInput from "../inputs/timeInput";
 import { useAppDispatch } from "../../stores/hooks";
-import { addAdditionalServicesToList } from "../../stores/apiData/additional-services-lists";
 import { addRequestsToList } from "../../stores/apiData/requests-lists";
 import { customersById } from "../../types/apiData/customers";
-import { apartmentById } from "../../types/apiData/apartment";
 import useAxios from "../../useHooks/useAxios";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import useGetBookingsByUserId from "../../services-hooks/bookings/bookingsByUserId";
+import TextInput from "../inputs/textInput";
 
-export default function NewRequest({
-  setValue,
-  isDateRestricted,
-  componentId,
-}: {
-  setValue: Function;
-  isDateRestricted?: boolean;
-  componentId: "request" | "additional-services";
-}) {
+export default function NewRequest({ setValue }: { setValue: Function }) {
   const dispatch = useAppDispatch();
   const axios = useAxios();
   const [seletedCustomer, setSelectedCustomer] = useState<customersById>(
     {} as any
   );
-  const [selectedApartment, setSelectedApartment] = useState<apartmentById>(
-    {} as any
-  );
-  const [type, setType] = useState("");
+  const [apartmentId, setApartmentId] = useState("");
+  const [subject, setSubject] = useState("");
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
   const [isAdding, setIsAdding] = useState(false);
+
+  const { data: user_bookings } = useGetBookingsByUserId({
+    id: String(seletedCustomer?.id || ""),
+  });
 
   const addService = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
-      if (selectedApartment?.id && seletedCustomer?.id) {
+      if (apartmentId && seletedCustomer?.id) {
         try {
           setIsAdding(true);
-          if (componentId === "request") {
-            const payload = {
-              user_id: seletedCustomer?.id,
-              shortlet_id: selectedApartment?.id,
-              subject: type,
-              description: description,
-            };
-            const response = await axios.post("/admin/user-request", payload);
-            const { data, messsage } = response?.data || {};
-            dispatch(addRequestsToList(data));
-            dispatch(
-              openSnackbar({
-                message: messsage || "User request created succefully",
-                isError: false,
-              })
-            );
-          }
-          // if (componentId === "additional-services") {
-          //   const payload = {
-          //     user_id: seletedCustomer?.id,
-          //     shortlet_id: selectedApartment?.id,
-          //     subject: type,
-          //     description: description,
-          //   };
-          //   const response = await axios.post(
-          //     "/admin/additional-service",
-          //     payload
-          //   );
-          //   const { data, messsage } = response?.data || {};
-          //   dispatch(addRequestsToList(data));
-          //   dispatch(
-          //     openSnackbar({
-          //       message: messsage || "User request created succefully",
-          //       isError: false,
-          //     })
-          //   );
-          // }
+          const payload = {
+            user_id: seletedCustomer?.id,
+            shortlet_id: apartmentId,
+            subject: subject,
+            description: description,
+          };
+          const response = await axios.post("/admin/user-request", payload);
+          const { data, messsage } = response?.data || {};
+          dispatch(addRequestsToList(data));
+          dispatch(
+            openSnackbar({
+              message: messsage || "User request created succefully",
+              isError: false,
+            })
+          );
           setValue(false);
         } catch (error) {
         } finally {
@@ -89,25 +56,13 @@ export default function NewRequest({
         dispatch(
           openSnackbar({
             message:
-              "Please select an apartment and a user by using the search and select feature",
+              "Please select a user by using the search and select feature",
             isError: true,
           })
         );
       }
-      // dispatch(
-      //   addAdditionalServicesToList({
-      //     id: "random-service",
-      //     customerName: "new user",
-      //     apartmentName: "new apartment",
-      //     requestDate: `${date} ${time}`,
-      //     serviceType: type,
-      //     description: description,
-      //     escalateStatus: "NO",
-      //     status: "pending",
-      //   })
-      // );
     },
-    [date, time, type, description, seletedCustomer, selectedApartment]
+    [subject, description, apartmentId, seletedCustomer]
   );
   return (
     <form onSubmit={addService} className="w-full flex flex-col gap-3">
@@ -117,63 +72,35 @@ export default function NewRequest({
         setValue={setSelectedCustomer}
         componentId="customer"
       />
-      <Search
-        id="customers-apartment"
-        placeholder="Search apartment"
-        setValue={setSelectedApartment}
-        componentId="apartment"
-      />
       <Select
         isRequired={true}
-        value={type}
-        setValue={setType}
-        id="request-type"
+        value={apartmentId}
+        setValue={setApartmentId}
+        id="select-booking-apartment"
+        label="Booking Apartment"
       >
         <option value="" disabled>
-          Select Request Type
+          Select applicable booking apartment
         </option>
-        {/* <option value="internet">Internet</option> */}
-        <option value="Dstv">DSTV</option>
+        {user_bookings?.map((item) => (
+          <option value={item?.shortlet_id}>{item?.shortlet?.name}</option>
+        ))}
       </Select>
-      {isDateRestricted ? (
-        <div className=" flex flex-col gap-3">
-          <div className=" grid grid-cols-1 md:grid-cols-2 gap-3">
-            <DateInput
-              inputType="date"
-              isRequired={true}
-              value={date}
-              setValue={setDate}
-              id="check-in-date"
-              placeholder="Select Date"
-              label="select-date"
-            />
-            <TimeInput
-              inputType="time"
-              isRequired={true}
-              value={time}
-              setValue={setTime}
-              id="time"
-              placeholder="Select Time"
-              label="select-time"
-            />
-          </div>
-          <TextInput
-            id="message"
-            placeholder="Type Message"
-            value={description}
-            setValue={setDescription}
-            inputType="text"
-          />
-        </div>
-      ) : (
-        <TextAreaInput
-          isRequired={true}
-          value={description}
-          setValue={setDescription}
-          id="description"
-          placeholder="Description"
-        />
-      )}
+      <TextInput
+        id="subject"
+        placeholder="Subject"
+        isRequired={true}
+        value={subject}
+        setValue={setSubject}
+        inputType="text"
+      />
+      <TextAreaInput
+        isRequired={true}
+        value={description}
+        setValue={setDescription}
+        id="description"
+        placeholder="Description"
+      />
       <div className=" flex items-center gap-5 mt-10">
         <LoadingButton
           type="button"

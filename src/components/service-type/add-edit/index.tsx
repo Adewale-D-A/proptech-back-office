@@ -46,7 +46,7 @@ export default function AddEditServiceType({
   const handleSubmit = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
-
+      setIsSubmiting(true);
       const payload = {
         name: name,
         price: price,
@@ -65,9 +65,9 @@ export default function AddEditServiceType({
           );
         } else {
           const response = await axios.post("/admin/service-type", payload);
+          console.log({ response });
           const { data, message } = response?.data;
-
-          dispatch(addServiceTypeToList(data));
+          dispatch(addServiceTypeToList(data?.serviceType));
           dispatch(
             openSnackbar({
               message: message || "Service type successfully created",

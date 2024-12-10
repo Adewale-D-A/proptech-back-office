@@ -1,3 +1,9 @@
+##### 10.12.2024
+
+> booking by user endpoint integration
+> Additional services enpoint integrations completion
+> Invoice creation endpoint integrations completion
+
 ##### 9.12.2024
 
 > Location extra details on apartment creation and updates

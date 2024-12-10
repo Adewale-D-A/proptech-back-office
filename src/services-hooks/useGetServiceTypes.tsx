@@ -60,9 +60,9 @@ export default function useGetServiceTypes({
                 search || ""
               }&page=${page}`
         );
-        const { users } = response?.data?.data;
+        const { serviceTypes } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
-          users;
+          serviceTypes;
         const paginationDataset = {
           current_page,
           last_page,

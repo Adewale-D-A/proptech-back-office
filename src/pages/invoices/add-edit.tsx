@@ -13,6 +13,8 @@ import AddTax from "../../components/tax/addTax";
 import { addInvoiceToList } from "../../stores/apiData/invoice/invoice-lists";
 import useAxios from "../../useHooks/useAxios";
 import { customersById } from "../../types/apiData/customers";
+import useGetBookingsByUserId from "../../services-hooks/bookings/bookingsByUserId";
+import Select from "../../components/inputs/select";
 // import useGetInvoice from "../../services-hooks/invoice/useGetInvoice";
 
 export default function AddEditInvoice({ id }: { id?: string }) {
@@ -26,6 +28,7 @@ export default function AddEditInvoice({ id }: { id?: string }) {
   const [invoiceSuffix, setInvoiceSuffix] = useState("");
   const [companyInfo, setCompanyInfo] = useState("");
   const [user, setUser] = useState<customersById>({} as any);
+  const [bookingId, setBookingId] = useState<string>("");
   const [total, setTotal] = useState("");
   const [customerNote, setCustomerNote] = useState("");
 
@@ -38,6 +41,9 @@ export default function AddEditInvoice({ id }: { id?: string }) {
     { id: string; name: string; amount: string; isCompound: boolean }[]
   >([]);
 
+  const { data: user_bookings } = useGetBookingsByUserId({
+    id: String(user?.id || ""),
+  });
   //   const { data } = useGetInvoice({ id });
   // populate fields
   //   useEffect(() => {
@@ -134,7 +140,7 @@ export default function AddEditInvoice({ id }: { id?: string }) {
       e.preventDefault();
       setIsSaving(true);
       const payload = {
-        booking_id: user?.id,
+        booking_id: bookingId,
         user_id: user?.id,
         invoice_starting_number: invoiceNumber,
         invoice_number_suffix: invoiceSuffix,
@@ -163,6 +169,7 @@ export default function AddEditInvoice({ id }: { id?: string }) {
     },
     [
       user,
+      bookingId,
       invoiceNumber,
       invoiceSuffix,
       companyInfo,
@@ -199,6 +206,21 @@ export default function AddEditInvoice({ id }: { id?: string }) {
                 componentId="customer"
                 placeholder="Existing Customer name, ID, etc..."
               />
+
+              <Select
+                isRequired={true}
+                value={bookingId}
+                setValue={setBookingId}
+                id="select-booking"
+                label="Booking"
+              >
+                <option value="" disabled>
+                  Select applicable booking
+                </option>
+                {user_bookings?.map((item) => (
+                  <option value={item?.id}>{item?.shortlet?.name}</option>
+                ))}
+              </Select>
             </div>
           </div>
           <div className=" w-full flex flex-col items-center gap-4 border rounded-md">

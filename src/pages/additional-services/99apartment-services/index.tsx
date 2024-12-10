@@ -8,7 +8,7 @@ import PlusIcon from "../../../assets/icons/plus";
 import AdditionalServiceListTable from "../../../components/tables/additionalServices";
 import LoadingButton from "../../../components/button";
 import ModalTemplate from "../../../components/modal";
-import NewRequest from "../../../components/booking-detail/new-request";
+import AddEditAdditionalService from "../add-edit-additonal-service";
 
 const breadCrumb = [
   {
@@ -74,14 +74,10 @@ export default function AptAdditionalServicesList() {
         open={openNewRequest}
         setOpen={setOpenNewRequest}
         showXicon={true}
-        title="Add New Service"
+        title="Add additional service"
         className=" max-w-md"
       >
-        <NewRequest
-          componentId="additional-services"
-          setValue={setOpenNewRequest}
-          isDateRestricted
-        />
+        <AddEditAdditionalService setIsOpen={setOpenNewRequest} />
       </ModalTemplate>
     </>
   );
