@@ -63,9 +63,9 @@ export default function AddEditCustomerCompany({ id }: { id?: string }) {
       };
       dispatch(updateCustomerCompany(payload));
       if (id) {
-        navigate(`/edit-customer/customer-sales-channel/${id}`);
+        navigate(`/customers/edit-customer/customer-sales-channel/${id}`);
       } else {
-        navigate(`/add-customer/customer-sales-channel`);
+        navigate(`/customers/add-customer/customer-sales-channel`);
       }
     },
     [
@@ -176,8 +176,8 @@ export default function AddEditCustomerCompany({ id }: { id?: string }) {
             <LinkButton
               url={
                 id
-                  ? `/edit-customer/customer-verification/${id}`
-                  : "/add-customer/customer-verification"
+                  ? `/customers/edit-customer/customer-verification/${id}`
+                  : "/customers/add-customer/customer-verification"
               }
               label="Back"
               variant={2}
@@ -187,8 +187,8 @@ export default function AddEditCustomerCompany({ id }: { id?: string }) {
             <LinkButton
               url={
                 id
-                  ? `/edit-customer/customer-sales-channel/${id}`
-                  : "/add-customer/customer-sales-channel"
+                  ? `/customers/edit-customer/customer-sales-channel/${id}`
+                  : "/customers/add-customer/customer-sales-channel"
               }
               label="Skip & Continue"
               variant={2}

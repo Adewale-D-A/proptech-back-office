@@ -1,5 +1,5 @@
 import { useCallback, useLayoutEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 import AddEditRoles from "../add-edit-roles";
 import { useAppDispatch } from "../../../../stores/hooks";
 import { openSnackbar } from "../../../../stores/appFunctionality/snackbar";
@@ -7,13 +7,18 @@ import { updatePageProperties } from "../../../../stores/appFunctionality/pagePr
 import MenuIcon from "../../../../assets/icons/menu";
 import useAxios from "../../../../useHooks/useAxios";
 import { addRolesToList } from "../../../../stores/apiData/roles-lists";
-import { useNavigate } from "react-router-dom";
+import UserPlusIcon from "../../../../assets/icons/user-plus";
 
 const breadCrumb = [
   {
-    url: "/admin-users-management",
-    label: "Admin",
+    url: "/admin/users-roles",
+    label: "Admin Roles",
     icon: <MenuIcon />,
+  },
+  {
+    url: "#",
+    label: "New Admin Role",
+    icon: <UserPlusIcon />,
   },
 ];
 

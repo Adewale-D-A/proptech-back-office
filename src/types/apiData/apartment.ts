@@ -37,6 +37,7 @@ export type apartmentLists = {
 export type apartmentById = {
   id: number;
   name: string;
+  slug: string;
   description: string;
   location: string;
   currency: string;
@@ -45,15 +46,23 @@ export type apartmentById = {
   tax_fee: number;
   no_of_bedrooms: number;
   no_of_bathrooms: number;
+  min_guests: number;
   max_guests: number;
-  room_option: string;
-  extra_option: string;
-  safety_and_security: string;
   point_of_interest: string;
   cancellation_policy: string;
   availability_status: string;
+  is_deleted: number;
+  deleted_at: string;
   created_at: string;
   updated_at: string;
+  room_option_id: number;
+  city: string;
+  state: string;
+  country: string;
+  longitude: string;
+  latitude: string;
+  location_group_id: number;
+  average_rating: number;
   amenities: {
     id: number;
     name: string;
@@ -61,6 +70,8 @@ export type apartmentById = {
     description: string;
     image: string;
     ordering_position: number;
+    is_deleted: 0 | 1;
+    deleted_at: string;
     created_at: string;
     updated_at: string;
     pivot: {
@@ -72,7 +83,10 @@ export type apartmentById = {
     id: number;
     shortlet_id: number;
     path: string;
-    order: number;
+    is_featured: number;
+    ordering_position: number;
+    is_deleted: 0 | 1;
+    deleted_at: string;
     created_at: string;
     updated_at: string;
   }[];
@@ -81,6 +95,8 @@ export type apartmentById = {
     name: string;
     slug: string;
     ordering_position: number;
+    is_deleted: 0 | 1;
+    deleted_at: string;
     created_at: string;
     updated_at: string;
     pivot: {
@@ -88,28 +104,42 @@ export type apartmentById = {
       rule_id: number;
     };
   }[];
-  room_options: {
+  room_option: {
     id: number;
+    name: string;
+    number_of_rooms: number;
+    slug: string;
+    description: string;
+    is_deleted: 0 | 1;
+    deleted_at: string;
+    created_at: string;
+    updated_at: string;
+  };
+  extra_option_items: {
+    id: number;
+    extra_option_id: number;
     name: string;
     slug: string;
     description: string;
+    ordering_position: number;
+    is_deleted: 0 | 1;
+    deleted_at: string;
     created_at: string;
     updated_at: string;
     pivot: {
       shortlet_id: number;
-      room_option_id: number;
+      extra_option_item_id: number;
     };
-  }[];
-  extra_options: {
-    id: number;
-    name: string;
-    slug: string;
-    description: string;
-    created_at: string;
-    updated_at: string;
-    pivot: {
-      shortlet_id: number;
-      extra_option_id: number;
+    extra_option: {
+      id: number;
+      name: string;
+      slug: string;
+      description: string;
+      ordering_position: number;
+      is_deleted: 0 | 1;
+      deleted_at: null;
+      created_at: string;
+      updated_at: string;
     };
   }[];
   safeties: {
@@ -117,7 +147,9 @@ export type apartmentById = {
     name: string;
     slug: string;
     description: string;
-    image: string;
+    ordering_position: number;
+    is_deleted: 0 | 1;
+    deleted_at: string;
     created_at: string;
     updated_at: string;
     pivot: {
@@ -125,4 +157,13 @@ export type apartmentById = {
       safety_id: number;
     };
   }[];
+  location_group: {
+    id: number;
+    name: string;
+    is_deleted: 0 | 1;
+    deleted_at: string;
+    deleted_by: string;
+    created_at: string;
+    updated_at: string;
+  };
 };

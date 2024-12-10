@@ -52,7 +52,7 @@ export default function AddEditAdditionalService({
             quantity: quantity,
             request_date: date,
             description: description,
-            payment_method: paymentMethod,
+            // payment_method: paymentMethod,
             status: status, //Payment Confirmed or Awating Payment
           };
           const response = await axios.post(
@@ -153,7 +153,7 @@ export default function AddEditAdditionalService({
         id="description"
         placeholder="Description"
       />
-      <Select
+      {/* <Select
         isRequired={true}
         value={paymentMethod}
         setValue={setPaymentMethod}
@@ -163,7 +163,7 @@ export default function AddEditAdditionalService({
           Select payment method
         </option>
         <option value="Admin">Admin</option>
-      </Select>
+      </Select> */}
       <Select isRequired={true} value={status} setValue={setStatus} id="status">
         <option value="" disabled>
           Select payment status

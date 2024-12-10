@@ -11,6 +11,7 @@ import TextInput from "../../../components/inputs/textInput";
 import PriceRateList from "../../../components/tables/pricingRateLists";
 import { apartmentById } from "../../../types/apiData/apartment";
 import Search from "../../../components/inputs/search";
+import useAxios from "../../../useHooks/useAxios";
 
 const breadCrumb = [
   {
@@ -25,6 +26,7 @@ const breadCrumb = [
   },
 ];
 export default function RateTable() {
+  const axios = useAxios();
   const dispatch = useAppDispatch();
 
   // update page props on component mount
@@ -47,10 +49,28 @@ export default function RateTable() {
   const [rate, setRate] = useState("");
   const [cautionFee, setCautionFee] = useState("");
   const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submitRate = useCallback((e: SyntheticEvent) => {
-    e.preventDefault();
-  }, []);
+  const submitRate = useCallback(
+    async (e: SyntheticEvent) => {
+      e.preventDefault();
+      setIsSubmitting(true);
+      try {
+        const response = await axios.post(`/admin/rate-list`, {
+          shortlet_id: selectedAprt?.id,
+          from: from,
+          to: to,
+          price: rate,
+          caution_fee: cautionFee,
+        });
+      } catch (error) {
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [selectedAprt, rate, cautionFee, from, to]
+  );
+
   return (
     <section className="w-full flex flex-col items-center my-10">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
@@ -128,7 +148,12 @@ export default function RateTable() {
                   id="caution-fee"
                   placeholder="Enter Caution Fee"
                 />
-                <LoadingButton label="Insert" isLoading={false} type="submit" />
+                <LoadingButton
+                  label="Insert"
+                  disabled={!Boolean(selectedAprt?.id)}
+                  isLoading={isSubmitting}
+                  type="submit"
+                />
               </form>
             </div>
           </div>
@@ -139,36 +164,17 @@ export default function RateTable() {
                 <h4 className="text-lg font-semibold flex items-center gap-3">
                   <ReceiptIcon /> <span>Rate List</span>
                 </h4>
-                <div className=" w-fit">
+                {/* <div className=" w-fit">
                   <LoadingButton
                     label="Update Rates"
                     isLoading={false}
                     type="button"
                     variant={2}
                   />
-                </div>
+                </div> */}
               </div>
               <div className="w-full">
-                <PriceRateList
-                  header={[
-                    "S/N",
-                    "Rates Per Nights",
-                    "Standard Rates",
-                    "Action",
-                  ]}
-                  data={[
-                    {
-                      id: 1,
-                      nights: 2,
-                      standardRate: "10000",
-                    },
-                    {
-                      id: 2,
-                      nights: 3,
-                      standardRate: "40000",
-                    },
-                  ]}
-                />
+                <PriceRateList apartmentId={String(selectedAprt?.id || "")} />
               </div>
             </div>
           </div>

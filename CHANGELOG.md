@@ -1,5 +1,6 @@
 ##### 10.12.2024
 
+> Apartment, bookings rate lists, customers endpoint integrations, corrections and updates
 > booking by user endpoint integration
 > Additional services enpoint integrations completion
 > Invoice creation endpoint integrations completion

@@ -85,9 +85,9 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
       };
       dispatch(updateApartmentFeatures(payload));
       if (id) {
-        naviagte(`/edit-apartment/apartment-policies/${id}`);
+        naviagte(`/apartments/edit-apartment/apartment-policies/${id}`);
       } else {
-        naviagte(`/add-apartment/apartment-policies`);
+        naviagte(`/apartments/add-apartment/apartment-policies`);
       }
     },
     [
@@ -259,8 +259,8 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
             <LinkButton
               url={
                 id
-                  ? `/edit-apartment/apartment-details/${id}`
-                  : `/add-apartment/apartment-details`
+                  ? `/apartments/edit-apartment/apartment-details/${id}`
+                  : `/apartments/add-apartment/apartment-details`
               }
               label="Previous Page"
               variant={2}

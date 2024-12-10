@@ -12,8 +12,13 @@ import { removeApartmentInList } from "../../stores/apiData/apartment-lists";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import TableSearch from "../inputs/search/table-search";
 import MobileApartmentTable from "./mobile/apartment";
+import ReceiptIcon from "../../assets/icons/receipt";
+import ModalTemplate from "../modal";
+import CalculateRate from "../check-availability/calculate-rate";
+import useAxios from "../../useHooks/useAxios";
 
 export default function ApartmentListsTable() {
+  const axios = useAxios();
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -21,13 +26,21 @@ export default function ApartmentListsTable() {
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteId, setDeleteId] = useState("1");
+  const [openRate, setOpenRate] = useState(false);
+  const [selectedId, setSelectedId] = useState("");
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetAllApartmentLists({ page: currentPage, search });
 
-  const deleteApartment = useCallback(() => {
+  const handleOpenCalculateRate = useCallback((id: number) => {
+    setSelectedId(String(id || ""));
+    setOpenRate(true);
+  }, []);
+
+  const deleteApartment = useCallback(async () => {
     setIsDeleting(true);
     try {
+      await axios.delete(`/admin/shortlet/${deleteId}`);
       dispatch(removeApartmentInList({ id: deleteId }));
       setOpenDeleteConfirmation(false);
     } catch (error) {
@@ -98,30 +111,31 @@ export default function ApartmentListsTable() {
                         <span className=" p-2 text-lg">...</span>
                         <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                           <Link
-                            to={`/apartments-details/${request?.id}`}
+                            to={`/apartments/apartment-details/${request?.id}`}
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             View Apartment
                           </Link>
                           <Link
-                            to={`/edit-apartment/apartment-details/${request?.id}`}
+                            to={`/apartments/edit-apartment/apartment-details/${request?.id}`}
                             className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Edit Apartment
                           </Link>
                           <Link
-                            to={`/apartment-caledar/${request?.id}`}
+                            to={`/apartments/apartment-caledar/${request?.id}`}
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Check Calender
                           </Link>
-                          <Link
-                            to="#"
+                          <button
+                            type="button"
+                            onClick={() => handleOpenCalculateRate(request?.id)}
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
-                            View Rates
-                          </Link>
-                          <button
+                            View Rate
+                          </button>
+                          {/* <button
                             type="button"
                             onClick={() => {
                               setDeleteId(String(request?.id));
@@ -130,7 +144,7 @@ export default function ApartmentListsTable() {
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Delete Apartment
-                          </button>
+                          </button> */}
                         </span>
                       </td>
                     </tr>
@@ -161,6 +175,19 @@ export default function ApartmentListsTable() {
           setOpen={setOpenDeleteConfirmation}
         />
       </div>
+      {/*check availability */}
+      <ModalTemplate
+        open={openRate}
+        setOpen={setOpenRate}
+        showXicon={true}
+        titleIcon={<ReceiptIcon />}
+        title="Calculate rate"
+        className=" max-w-md"
+      >
+        <div className="w-full">
+          <CalculateRate apartmentId={selectedId} setIsOpen={setOpenRate} />
+        </div>
+      </ModalTemplate>
     </>
   );
 }

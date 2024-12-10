@@ -18,6 +18,7 @@ import Sort from "../filterAndSort/sort";
 import useGetTopApartmentLists from "../../services-hooks/dashboards/useGetTopApartment";
 import ChevronRightIcon from "../../assets/icons/chevron-right";
 import { apartment } from "../../types/apiData/apartment";
+import CalculateRate from "../check-availability/calculate-rate";
 
 export default function ApartmentTable({
   header,
@@ -37,8 +38,8 @@ export default function ApartmentTable({
   const [sort, setSort] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
   const [openReservation, setOpenReservation] = useState(false);
-  const [openAvailability, setOpenAvailability] = useState(false);
-  const [availabilityResponset, setAvailabilityResponse] = useState();
+  const [openRate, setOpenRate] = useState(false);
+  const [selectedId, setSelectedId] = useState("");
 
   const { data, pagination, isLoading } = useGetTopApartmentLists({
     page: currentPage,
@@ -53,6 +54,11 @@ export default function ApartmentTable({
     },
     []
   );
+
+  const handleOpenCalculateRate = useCallback((id: number) => {
+    setSelectedId(String(id || ""));
+    setOpenRate(true);
+  }, []);
 
   return (
     <>
@@ -125,7 +131,7 @@ export default function ApartmentTable({
                           </button>
                           <button
                             type="button"
-                            onClick={() => setOpenAvailability(true)}
+                            onClick={() => handleOpenCalculateRate(request?.id)}
                             className="text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Calculate Rate
@@ -150,7 +156,7 @@ export default function ApartmentTable({
         <div className="w-full block md:hidden">
           <MobileTable
             data={data}
-            setOpenAvailability={setOpenAvailability}
+            setOpenCalculateRate={handleOpenCalculateRate}
             setOpenReservation={setOpenReservation}
           />
         </div>
@@ -183,17 +189,15 @@ export default function ApartmentTable({
 
       {/*check availability */}
       <ModalTemplate
-        open={openAvailability}
-        setOpen={setOpenAvailability}
+        open={openRate}
+        setOpen={setOpenRate}
         showXicon={true}
         titleIcon={<CalendarIcon />}
-        title="Check Availability"
+        title="Calculate rate"
         className=" max-w-md"
       >
         <div className="w-full">
-          <CheckAvailability
-            setAvailabilityResponse={setAvailabilityResponse}
-          />
+          <CalculateRate apartmentId={selectedId} setIsOpen={setOpenRate} />
         </div>
       </ModalTemplate>
     </>
@@ -203,11 +207,11 @@ export default function ApartmentTable({
 function MobileTable({
   data,
   setOpenReservation,
-  setOpenAvailability,
+  setOpenCalculateRate,
 }: {
   data: apartment[];
   setOpenReservation: Function;
-  setOpenAvailability: Function;
+  setOpenCalculateRate: (id: number) => void;
 }) {
   return (
     <div className=" w-full flex flex-col gap-4">
@@ -261,7 +265,7 @@ function MobileTable({
                         </button>
                         <button
                           type="button"
-                          onClick={() => setOpenAvailability(true)}
+                          onClick={() => setOpenCalculateRate(item?.id)}
                           className="text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Calculate Rate

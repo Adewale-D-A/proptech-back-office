@@ -44,9 +44,7 @@ export default function AddressAutocompleteInput({
           latitude: lat,
         });
       }
-    } catch (error) {
-      console.log("errors");
-    }
+    } catch (error) {}
   };
 
   return (

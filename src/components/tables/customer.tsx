@@ -94,7 +94,7 @@ export default function CustomersListTable({ header }: { header: string[] }) {
                           Generate Invoice
                         </Link>
                         <Link
-                          to={`/edit-customer/customer-details/${request?.id}`}
+                          to={`/customers/edit-customer/customer-details/${request?.id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Edit Customer

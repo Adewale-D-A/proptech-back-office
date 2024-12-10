@@ -24,12 +24,12 @@ const tabList = [
     label: "Tax Rates",
     url: "/plans-and-promotions/tax-rates",
   },
-  {
-    id: 2,
-    icon: <TagsIcon />,
-    label: "Types of Prices",
-    url: "/plans-and-promotions/types-of-prices",
-  },
+  // {
+  //   id: 2,
+  //   icon: <TagsIcon />,
+  //   label: "Types of Prices",
+  //   url: "/plans-and-promotions/types-of-prices",
+  // },
   {
     id: 3,
     icon: <PercentageBadgeIcon />,

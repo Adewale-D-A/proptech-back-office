@@ -2,32 +2,49 @@ import Pagination from "../pagination";
 import { useCallback, useState } from "react";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import BinIcon from "../../assets/icons/bin-icon";
+import useGetRateListByApartmentId from "../../services-hooks/pricing/useGetRateListByApartmentId";
+import useAxios from "../../useHooks/useAxios";
+import { useAppDispatch } from "../../stores/hooks";
+import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 
 export default function PriceRateList({
-  header,
-  data,
+  apartmentId,
 }: {
-  header: string[];
-  data: {
-    id: number;
-    nights: number;
-    standardRate: string;
-  }[];
+  apartmentId: string;
 }) {
+  const axios = useAxios();
+  const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [selectedId, setSelectedId] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const { data, pagination, isLoading } = useGetRateListByApartmentId({
+    page: currentPage,
+    apartmentId: apartmentId,
+  });
+
+  const handleOpenDelete = useCallback((id: number) => {
+    setSelectedId(String(id || ""));
+    setOpenDelete(true);
+  }, []);
 
   const handleDelete = useCallback(async () => {
     setIsDeleting(true);
     try {
+      await axios.delete(`/admin/rate-list/${selectedId}`);
+      dispatch(
+        openSnackbar({
+          message: "Rate successfully deleted",
+          isError: false,
+        })
+      );
       setOpenDelete(false);
     } catch (error) {
     } finally {
       setIsDeleting(false);
     }
-  }, []);
+  }, [selectedId]);
 
   return (
     <>
@@ -35,20 +52,25 @@ export default function PriceRateList({
         <table className=" w-full overflow-x-auto">
           <thead className="">
             <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-              {header.map((head) => (
-                <th key={head}>{head}</th>
-              ))}
+              {["S/N", "Rates Per Nights", "Standard Rates", "Action"].map(
+                (head) => (
+                  <th key={head}>{head}</th>
+                )
+              )}
             </tr>
           </thead>
           <tbody className="">
-            {data.map((request, index) => {
+            {data.map((item, index) => {
               return (
-                <tr key={request?.id} className=" border-b">
+                <tr key={item?.id} className=" border-b">
                   <td>{index + 1}</td>
-                  <td>{request?.nights} Nights</td>
-                  <td>{request?.standardRate}</td>
+                  <td>{item?.number_of_nights} Nights</td>
+                  <td>{item?.price}</td>
                   <td className="">
-                    <button title="delete" onClick={() => setOpenDelete(true)}>
+                    <button
+                      title="delete"
+                      onClick={() => handleOpenDelete(item?.id)}
+                    >
                       <BinIcon className=" text-red-500 h-6 w-6" />
                     </button>
                   </td>
@@ -58,16 +80,9 @@ export default function PriceRateList({
           </tbody>
         </table>
         <Pagination
-          pagination={{
-            current_page: 1,
-            last_page: 2,
-            per_page: 20,
-            total: 24,
-            from: 1,
-            to: 1,
-          }}
+          pagination={pagination}
           setCurrentPage={setCurrentPage}
-          isLoading={false}
+          isLoading={isLoading}
           label="rates"
         />
       </div>

@@ -23,6 +23,7 @@ import formatDate from "../../../utils/isoDateConverter";
 
 export default function BookingsOverview() {
   const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
+  const [searchedAptd, setSearchedApt] = useState<apartmentById>({} as any);
   const [availabilityResponse, setAvailabilityResponse] =
     useState<availabilityOptions>();
 
@@ -75,7 +76,7 @@ export default function BookingsOverview() {
                 },
                 {
                   id: 4,
-                  value: `${visitorCount?.turnout}%`,
+                  value: `${visitorCount?.turnout || ""}%`,
                   label: "Turnout",
                 },
               ].map((item) => (
@@ -98,9 +99,15 @@ export default function BookingsOverview() {
             <h4 className="text-lg font-semibold border-b p-3 flex items-center gap-2">
               <CalendarIcon /> <span>Check Availability</span>{" "}
             </h4>
-            <div className=" p-3">
+            <div className=" p-3 flex flex-col gap-4">
+              <Search
+                setValue={setSearchedApt}
+                id="apartment-search"
+                componentId="apartment"
+                placeholder="Search apartment..."
+              />
               <CheckAvailability
-                variant={2}
+                apartmentId={String(searchedAptd || "")}
                 setAvailabilityResponse={setAvailabilityResponse}
               />
             </div>
@@ -115,7 +122,7 @@ export default function BookingsOverview() {
             </h4>
             <div className=" w-fit">
               <LinkButton
-                url="/new-booking"
+                url="/bookings/new-booking"
                 label="New Booking"
                 startIcon={<PlusIcon />}
               />

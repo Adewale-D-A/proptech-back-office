@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   ChangeEvent,
   SyntheticEvent,
@@ -20,10 +20,13 @@ import {
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import LinkButton from "../button/linkButton";
 import useGetRoomOptions from "../../services-hooks/useGetRoomOptions";
+import useGetLocationGroupings from "../../services-hooks/apartment/useGetLocationGroupings";
 
 export default function AddEditApartmentDetails({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
   const storeAptDetails = useAppSelector(
     (state) => state.addEditApartmentInfo.value.data.apartmentDetails
   );
@@ -32,6 +35,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
   const [roomOption, setRoomOption] = useState("");
   const [images, setImages] = useState([]);
   const [price, setPrice] = useState("");
+  const [loactionGroupId, setLocationGroupId] = useState("");
   const [location, setLocation] = useState("");
   const [aboutLocation, setAboutLocation] = useState("");
   const [extraLocationDetails, setExtraLocationDetails] = useState<{
@@ -64,6 +68,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
           roomOption: roomOption,
           images: images,
           amount: price,
+          location_group: loactionGroupId,
           location: location,
           aboutLocation: aboutLocation,
           ...extraLocationDetails,
@@ -71,9 +76,9 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
         dispatch(updateApartmentDetails(payload));
         dispatch(updateApartmentInfoId({ id: "updated" }));
         if (id) {
-          navigate(`/edit-apartment/apartment-features/${id}`);
+          navigate(`/apartments/edit-apartment/apartment-features/${id}`);
         } else {
-          navigate(`/add-apartment/apartment-features`);
+          navigate(`/apartments/add-apartment/apartment-features`);
         }
       } else {
         dispatch(
@@ -81,11 +86,21 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
         );
       }
     },
-    [name, roomOption, images, price, location, aboutLocation, id]
+    [
+      name,
+      roomOption,
+      images,
+      price,
+      location,
+      aboutLocation,
+      loactionGroupId,
+      id,
+    ]
   );
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetRoomOptions({ page: 1, limit: 20 });
+  const { data: location_groups } = useGetLocationGroupings({ page: 1 });
 
   return (
     <form className=" flex flex-col gap-5" onSubmit={addApartmentDetails}>
@@ -172,6 +187,28 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
           </span>
         </div>
       </div>
+      <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
+        <div className=" max-w-md">
+          <h6 className=" text-lg font-semibold">Apartment Location Group</h6>
+          <p className=" text-gray-500">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
+            labore.
+          </p>
+        </div>
+        <Select
+          isRequired={true}
+          value={loactionGroupId}
+          setValue={setLocationGroupId}
+          id="location-group"
+        >
+          <option value="" disabled>
+            Location Group
+          </option>
+          {location_groups?.map((item) => (
+            <option value={item?.id}>{item?.name}</option>
+          ))}
+        </Select>
+      </div>
       {/* apartment location */}
       <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
         <div className=" max-w-md">
@@ -209,7 +246,15 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
       <div className=" w-full flex justify-end mt-10">
         <div className=" flex items-center justify-between gap-4">
           <div className=" w-fit">
-            <LinkButton url="/apartments" label="Cancel" variant={2} />
+            <LinkButton
+              url={
+                searchParams?.get("redirect")
+                  ? `${searchParams?.get("redirect")}`
+                  : "/apartments/view-all"
+              }
+              label="Cancel"
+              variant={2}
+            />
           </div>
           <div className=" w-fit">
             <LoadingButton

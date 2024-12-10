@@ -4,7 +4,7 @@ import { updatePageProperties } from "../../../stores/appFunctionality/pagePrope
 import Timeline from "../../../components/timeline";
 import UsersIcon from "../../../assets/icons/users";
 import { clearAllCustomerInfo } from "../../../stores/inAppDataInterations/addEditCustomerInfo";
-import AddCustomerFinalStep from "../../../components/add-edit-customer/customer-final-step";
+import AddCustomerCompany from "../../../components/add-edit-customer/customer-company";
 
 const breadCrumb = [
   {
@@ -53,7 +53,7 @@ export default function AddNewCustomerCompany() {
             <Timeline currentStep={3} id="customer" />
           </div>
           <div className="w-full border-t py-10 px-5">
-            <AddCustomerFinalStep />
+            <AddCustomerCompany />
           </div>
         </div>
       </div>

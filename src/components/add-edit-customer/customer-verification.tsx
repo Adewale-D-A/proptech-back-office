@@ -48,7 +48,6 @@ export default function AddEditCustomerVerification({ id }: { id?: string }) {
 
   const generatePassword = useCallback(() => {
     const randomString = Math.random().toString(20).substr(2, 8);
-    console.log({ randomString });
     setPinGenerated(randomString);
   }, []);
   //update redux store and naviagte to next timeline
@@ -66,9 +65,9 @@ export default function AddEditCustomerVerification({ id }: { id?: string }) {
         };
         dispatch(updateCustomerVerification(payload));
         if (id) {
-          navigate(`/edit-customer/customer-company/${id}`);
+          navigate(`/customers/edit-customer/customer-company/${id}`);
         } else {
-          navigate(`/add-customer/customer-company`);
+          navigate(`/customers/add-customer/customer-company`);
         }
       } else {
         dispatch(
@@ -166,8 +165,8 @@ export default function AddEditCustomerVerification({ id }: { id?: string }) {
             <LinkButton
               url={
                 id
-                  ? `/edit-customer/customer-details/${id}`
-                  : "/add-customer/customer-details"
+                  ? `/customers/edit-customer/customer-details/${id}`
+                  : "/customers/add-customer/customer-details"
               }
               label="Back"
               variant={2}
@@ -177,8 +176,8 @@ export default function AddEditCustomerVerification({ id }: { id?: string }) {
             <LinkButton
               url={
                 id
-                  ? `/edit-customer/customer-company/${id}`
-                  : "/add-customer/customer-company"
+                  ? `/customers/edit-customer/customer-company/${id}`
+                  : "/customers/add-customer/customer-company"
               }
               label="Skip & Continue"
               variant={2}

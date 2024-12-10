@@ -78,7 +78,9 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
           first_name: firstname,
           last_name: lastname,
           email,
-          phone: phoneNumber,
+          phone: phoneNumber?.includes("+")
+            ? phoneNumber
+            : `+${countryCode?.split("+")[1]}${phoneNumber}`,
           profile_photo: profileImg,
           gender,
           dob,
@@ -90,9 +92,9 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
         dispatch(updateCustomerDetails(payload));
         dispatch(updateCustomerInfoId({ id: "updated" }));
         if (id) {
-          navigate(`/edit-customer/customer-verification/${id}`);
+          navigate(`/customers/edit-customer/customer-verification/${id}`);
         } else {
-          navigate(`/add-customer/customer-verification`);
+          navigate(`/customers/add-customer/customer-verification`);
         }
       } else {
         dispatch(
@@ -241,17 +243,17 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
               variant={2}
             />
           </div>
-          <div className=" w-fit">
+          {/* <div className=" w-fit">
             <LinkButton
               url={
                 id
-                  ? `/edit-customer/customer-verification/${id}`
-                  : "/add-customer/customer-verification"
+                  ? `/customers/edit-customer/customer-verification/${id}`
+                  : "/customers/add-customer/customer-verification"
               }
               label="Skip & Continue"
               variant={2}
             />
-          </div>
+          </div> */}
           <div className=" w-fit">
             <LoadingButton
               label="Save and continue"

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useCallback, useLayoutEffect, useState } from "react";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
@@ -9,17 +9,18 @@ import PlusIcon from "../../../assets/icons/plus";
 import WriteIcon from "../../../assets/icons/write";
 import ImageCarousel from "../../../components/cards/image-carousel";
 import LocationPinIcon from "../../../assets/icons/location";
-import Map from "../../../components/maps";
+import Map from "../../../components/maps/map-base";
 import CautionIcon from "../../../assets/icons/caution";
 import VehicleIcon from "../../../assets/icons/vehicle";
 import LinkButton from "../../../components/button/linkButton";
 import useGetApartmentById from "../../../services-hooks/useGetApartmentById";
 import BathIcon from "../../../assets/icons/bath";
 import DeleteConfirmation from "../../../components/infoModal/delete-confirmation";
+import GetMapDirections from "../../../components/maps/direction-mapping";
 
 const breadCrumb = [
   {
-    url: "/apartments",
+    url: "/apartments/view-all",
     label: "Apartments",
     icon: <BuildingIcon />,
   },
@@ -32,6 +33,7 @@ const breadCrumb = [
 export default function ApartmentDetail() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const location = useLocation();
   const { data, isLoading, isFailed, setIsFailed, retryFunction } =
     useGetApartmentById(id ? id : undefined);
   // update page props on component mount
@@ -63,7 +65,7 @@ export default function ApartmentDetail() {
           <div className="w-full flex gap-5 justify-between items-center ">
             <h2 className="text-xl font-semibold">Apartment Details</h2>
             <div className=" flex items-center gap-3 text-sm">
-              <LoadingButton
+              {/* <LoadingButton
                 isLoading={isDeleting}
                 clickHandler={() => setOpenDeleteConfirmation(true)}
                 type="button"
@@ -71,15 +73,15 @@ export default function ApartmentDetail() {
                 variant={3}
                 className=" text-red-500"
                 endIcon={<BinIcon className="h-5 w-5" />}
-              />
+              /> */}
               <LinkButton
-                url={`/edit-apartment/apartment-details/${id}`}
+                url={`/apartments/edit-apartment/apartment-details/${id}?redirect=${location?.pathname}`}
                 label="Edit"
                 variant={2}
                 endIcon={<WriteIcon className="h-5 w-5" />}
               />
               <LinkButton
-                url="/add-apartment/apartment-details"
+                url={`/apartments/add-apartment/apartment-details?redirect=${location?.pathname}`}
                 label="New Apartment"
                 endIcon={<PlusIcon className="h-5 w-5" />}
               />
@@ -122,19 +124,19 @@ export default function ApartmentDetail() {
                   </div>
                   <div>
                     <h4 className="text-lg font-semibold">{data?.location}</h4>
-                    <span className=" text-sm text-gray-500">***</span>
+                    <span className=" text-sm text-gray-500">
+                      {data?.state}
+                    </span>
                   </div>
                 </div>
-                <h6 className=" font-semibold">The Neighborhood : ***</h6>
-                <p className=" text-gray-500">***</p>
-                <Map zoom={17} center={{ lat: 9.082, lng: 8.6753 }} />
-                <div className=" w-fit">
-                  <LoadingButton
-                    type="button"
-                    label="Get Directions"
-                    isLoading={false}
-                  />
-                </div>
+                <h6 className=" font-semibold">The Neighborhood :</h6>
+                <p className=" text-gray-500">{data?.point_of_interest}</p>
+                <GetMapDirections
+                  center={{
+                    lat: Number(data?.latitude || 9.082),
+                    lng: Number(data?.longitude || 8.6753),
+                  }}
+                />
               </div>
             </div>
             <div className=" w-full flex flex-col gap-4">

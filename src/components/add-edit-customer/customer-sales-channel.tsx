@@ -15,10 +15,10 @@ import {
   addCustomersToList,
   replaceCustomersInList,
 } from "../../stores/apiData/customers-lists";
-import useAxios from "../../useHooks/useAxios";
+import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
 
 export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
-  const axios = useAxios();
+  const axios = useAxiosMultipart();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const storeCustomerDatast = useAppSelector(
@@ -99,7 +99,10 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
         }
         dispatch(clearAllCustomerInfo());
         navigate(`/customers`);
-      } catch (error) {}
+      } catch (error) {
+      } finally {
+        setIsSubmitting(false);
+      }
     },
     [
       storeCustomerDatast,
@@ -129,7 +132,7 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
           </div>
           <TextInput
             inputType="text"
-            isRequired={true}
+            isRequired={false}
             value={channelName}
             setValue={setChannelName}
             id="first-name"
@@ -138,7 +141,7 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
           />
           <TextInput
             inputType="text"
-            isRequired={true}
+            isRequired={false}
             value={commision}
             setValue={setCommission}
             id="commission-per-booking"
@@ -146,7 +149,7 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
             label="Commission per booking*"
           />
           <Select
-            isRequired={true}
+            isRequired={false}
             value={calculateCommission}
             setValue={setCalculateCommission}
             id="calculate-commission"
@@ -156,7 +159,7 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
             <option value="frequency">frequency</option>
           </Select>
           <Select
-            isRequired={true}
+            isRequired={false}
             value={applyCommission}
             setValue={setApplyCommission}
             id="apply-commission-on"
@@ -175,8 +178,8 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
             <LinkButton
               url={
                 id
-                  ? `/edit-customer/customer-company/${id}`
-                  : "/add-customer/customer-company"
+                  ? `/customers/edit-customer/customer-company/${id}`
+                  : "/customers/add-customer/customer-company"
               }
               label="Back"
               variant={2}

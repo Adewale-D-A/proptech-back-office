@@ -7,12 +7,18 @@ import AddEditAdminUser from "../add-edit-users";
 import { addAdminsToList } from "../../../../stores/apiData/admins-list";
 import { openSnackbar } from "../../../../stores/appFunctionality/snackbar";
 import { useNavigate } from "react-router-dom";
+import UserPlusIcon from "../../../../assets/icons/user-plus";
 
 const breadCrumb = [
   {
-    url: "/admin-users-management",
+    url: "/admin/admin-users",
     label: "Admin",
     icon: <MenuIcon />,
+  },
+  {
+    url: "#",
+    label: "New Admin",
+    icon: <UserPlusIcon />,
   },
 ];
 export default function AddAdminUser() {

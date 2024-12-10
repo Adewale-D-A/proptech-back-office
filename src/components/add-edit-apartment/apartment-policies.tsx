@@ -65,6 +65,7 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
         roomOption,
         images,
         amount,
+        location_group,
         location,
         aboutLocation,
         city,
@@ -99,14 +100,10 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
         rules: rules,
         amenities: whatToExpect,
         room_option: roomOption,
-        // extra_option: [],
         safeties: safetyAndSecurity,
         images: images,
-        // rules: []
-        // amenities:[],
         extra_option_items: extraOptions,
-        // safeties: []
-        // location_group, //ID
+        location_group, //ID
         city,
         state,
         country,
@@ -149,7 +146,7 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
           dispatch(addApartmentToList(shortlet));
         }
         dispatch(clearAllApartmentInfo());
-        navigate("/apartments");
+        navigate("/apartments/view-all");
       } catch (error) {
       } finally {
         setIsSubmitting(false);
@@ -268,8 +265,8 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
             <LinkButton
               url={
                 id
-                  ? `/edit-apartment/apartment-features/${id}`
-                  : `/add-apartment/apartment-features`
+                  ? `/apartments/edit-apartment/apartment-features/${id}`
+                  : `/apartments/add-apartment/apartment-features`
               }
               label="Previous Page"
               variant={2}

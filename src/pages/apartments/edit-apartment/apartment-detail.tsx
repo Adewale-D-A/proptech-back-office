@@ -13,12 +13,12 @@ export default function EditApartmentDetails() {
   const breadCrumb = useMemo(
     () => [
       {
-        url: "/apartments",
+        url: "/apartments/view-all",
         label: "Apartments",
         icon: <BuildingIcon />,
       },
       {
-        url: `/apartments-details/${id}`,
+        url: `/apartments/edit-apartment/apartment-details/${id}`,
         label: "Apartment Details",
         icon: "",
       },

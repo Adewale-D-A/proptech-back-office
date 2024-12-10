@@ -170,34 +170,37 @@ function App() {
 
             {/* view single apartment  */}
             <Route
-              path="/apartments-details/:id"
+              path="/apartments/apartment-details/:id"
               element={<ApartmentDetail />}
             />
-            <Route path="/apartment-caledar/:id" element={<CheckCalendar />} />
+            <Route
+              path="/apartments/apartment-caledar/:id"
+              element={<CheckCalendar />}
+            />
             {/* add */}
             <Route
-              path="/add-apartment/apartment-details"
+              path="/apartments/add-apartment/apartment-details"
               element={<AddNewApartmentDetails />}
             />
             <Route
-              path="/add-apartment/apartment-features"
+              path="/apartments/add-apartment/apartment-features"
               element={<AddNewApartmentFeatures />}
             />
             <Route
-              path="/add-apartment/apartment-policies"
+              path="/apartments/add-apartment/apartment-policies"
               element={<AddNewApartmentPolicies />}
             />
             {/* edits */}
             <Route
-              path="/edit-apartment/apartment-details/:id"
+              path="/apartments/edit-apartment/apartment-details/:id"
               element={<EditApartmentDetails />}
             />
             <Route
-              path="/edit-apartment/apartment-features/:id"
+              path="/apartments/edit-apartment/apartment-features/:id"
               element={<EditApartmentFeatures />}
             />
             <Route
-              path="/edit-apartment/apartment-policies/:id"
+              path="/apartments/edit-apartment/apartment-policies/:id"
               element={<EditApartmentPolicies />}
             />
             {/* apartment flows */}
@@ -225,13 +228,13 @@ function App() {
                 element={<BookingAdministrationById />}
               />
             </Route>
-            <Route path="/new-booking" element={<NewBookings />} />
+            <Route path="/bookings/new-booking" element={<NewBookings />} />
             <Route
-              path="/booking-details/edit-reservation/:id"
+              path="/bookings/booking-details/edit-reservation/:id"
               element={<EditBookingReservation />}
             />
             <Route
-              path="/request-details/:id"
+              path="/bookings/request-details/:id"
               element={<RequestDetailsById />}
             />
             {/* <Route path="/bookings-calendar" element={<BookingsCalendar />} /> */}
@@ -263,35 +266,35 @@ function App() {
             <Route path="/customers" element={<Customers />} />
             {/* add */}
             <Route
-              path="/add-customer/customer-details"
+              path="/customers/add-customer/customer-details"
               element={<AddNewCustomerDetails />}
             />
             <Route
-              path="/add-customer/customer-verification"
+              path="/customers/add-customer/customer-verification"
               element={<AddNewCustomerVerifiation />}
             />
             <Route
-              path="/add-customer/customer-company"
+              path="/customers/add-customer/customer-company"
               element={<AddNewCustomerCompany />}
             />
             <Route
-              path="/add-customer/customer-sales-channel"
+              path="/customers/add-customer/customer-sales-channel"
               element={<AddNewCustomerSalesChannel />}
             />
             <Route
-              path="/edit-customer/customer-details/:id"
+              path="/customers/edit-customer/customer-details/:id"
               element={<EditCustomerDetailsPage />}
             />
             <Route
-              path="/edit-customer/customer-verification/:id"
+              path="/customers/edit-customer/customer-verification/:id"
               element={<EditCustomerVerifiationPage />}
             />
             <Route
-              path="/edit-customer/customer-company/:id"
+              path="/customers/edit-customer/customer-company/:id"
               element={<EditCustomerCompanyPage />}
             />
             <Route
-              path="/edit-customer/customer-sales-channel/:id"
+              path="/customers/edit-customer/customer-sales-channel/:id"
               element={<EditCustomerSalesChannelPage />}
             />
 
@@ -309,8 +312,8 @@ function App() {
             </Route>
             <Route path="/admin/add" element={<AddAdminUser />} />
             <Route path="/admin/edit/:id" element={<EditAdminUser />} />
-            <Route path="/admin-roles/add" element={<AddRoles />} />
-            <Route path="/admin-roles/edit/:id" element={<EditRoles />} />
+            <Route path="admin/admin-roles/add" element={<AddRoles />} />
+            <Route path="admin/admin-roles/edit/:id" element={<EditRoles />} />
 
             {/* pricing flows wrapper */}
             <Route element={<PricingTabWrapper />}>

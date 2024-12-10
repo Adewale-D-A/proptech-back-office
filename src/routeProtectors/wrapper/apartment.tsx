@@ -84,7 +84,7 @@ export default function ApartmentTabWrapper() {
           <div className="w-fit whitespace-nowrap">
             {trackTab === 1 ? (
               <LinkButton
-                url="/add-apartment/apartment-details"
+                url="/apartments/add-apartment/apartment-details"
                 label="Add New Apartment"
                 startIcon={<PlusIcon />}
               />

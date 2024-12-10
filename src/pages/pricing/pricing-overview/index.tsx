@@ -13,7 +13,7 @@ export default function PricingOverview() {
 
   return (
     <div className="w-full my-10 flex flex-col gap-8">
-      <div className=" p-5 rounded-md border">
+      {/* <div className=" p-5 rounded-md border">
         <div className=" border rounded-md">
           <Search
             setValue={setSelectedApt}
@@ -22,7 +22,7 @@ export default function PricingOverview() {
             placeholder="Search apartment..."
           />
         </div>
-      </div>
+      </div> */}
       <ForecastDash />
       <div className="rounded-md border">
         <h4 className="text-lg font-semibold border-b p-3 flex items-center gap-2">
@@ -30,7 +30,7 @@ export default function PricingOverview() {
         </h4>
         <div className=" p-3">
           <CheckAvailability
-            variant={3}
+            apartmentId={String(selectedApt?.id || "")}
             className=" w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3"
             setAvailabilityResponse={setAvailabilityResponse}
           />

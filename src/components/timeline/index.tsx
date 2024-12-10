@@ -13,10 +13,10 @@ const customerTimelineData = [
     id: 3,
     label: "Company Details",
   },
-  // {
-  //   id: 4,
-  //   label: "Sales Channel",
-  // },
+  {
+    id: 4,
+    label: "Sales Channel",
+  },
 ];
 
 const apartmentTimelineData = [
