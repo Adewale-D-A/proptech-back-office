@@ -1,12 +1,10 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import { Disclosure } from "@headlessui/react";
 import Status from "../status";
 import LocationPinIcon from "../../assets/icons/location";
 import Pagination from "../pagination";
 import ModalTemplate from "../modal";
 import QuickReservationFlow from "../quickReservationFlow";
-import CheckAvailability from "../check-availability";
 import CalendarIcon from "../../assets/icons/calendar";
 import Search from "../inputs/search";
 import AssignCustomer from "../quickReservationFlow/assignToCustomer";
@@ -16,9 +14,8 @@ import NoResult from "../noResult";
 import Filter from "../filterAndSort/filter";
 import Sort from "../filterAndSort/sort";
 import useGetTopApartmentLists from "../../services-hooks/dashboards/useGetTopApartment";
-import ChevronRightIcon from "../../assets/icons/chevron-right";
-import { apartment } from "../../types/apiData/apartment";
 import CalculateRate from "../check-availability/calculate-rate";
+import MobileTopApartmentTable from "./mobile/top-apartment";
 
 export default function ApartmentTable({
   header,
@@ -40,6 +37,7 @@ export default function ApartmentTable({
   const [openReservation, setOpenReservation] = useState(false);
   const [openRate, setOpenRate] = useState(false);
   const [selectedId, setSelectedId] = useState("");
+  const [apartmentName, setApartmentName] = useState("");
 
   const { data, pagination, isLoading } = useGetTopApartmentLists({
     page: currentPage,
@@ -58,6 +56,12 @@ export default function ApartmentTable({
   const handleOpenCalculateRate = useCallback((id: number) => {
     setSelectedId(String(id || ""));
     setOpenRate(true);
+  }, []);
+
+  const handleOpenQuickReservation = useCallback((id: number, name: string) => {
+    setSelectedId(String(id || ""));
+    setApartmentName(name);
+    setOpenReservation(true);
   }, []);
 
   return (
@@ -85,31 +89,35 @@ export default function ApartmentTable({
                 </tr>
               </thead>
               <tbody className="">
-                {data.map((request, index) => {
+                {data.map((item, index) => {
                   return (
-                    <tr key={request?.id} className=" border-b">
+                    <tr key={item?.id} className=" border-b">
                       <td className=" min-w-16">{index + 1}</td>
                       <td className=" flex gap-2 items-center min-w-36">
                         <img
                           src={"/logo_blue.png"}
-                          alt={request?.name}
+                          alt={item?.name}
                           className=" h-10 w-10 rounded aspect-square"
                         />
                         <span className=" flex flex-col gap-1">
-                          <span>{request?.name}</span>
+                          <span>{item?.name}</span>
                           <span className=" text-xs text-gray-500 flex items-center gap-1">
                             <LocationPinIcon className=" h-3 w-3" />
-                            {request?.location}
+                            {item?.location}
                           </span>
                         </span>
                       </td>
-                      <td className=" text-lg  min-w-36">{`${request?.currency} ${request?.price}`}</td>
-                      <td>{`${formatDate(
-                        request?.last_booking_date
-                      )} ${formatTime(request?.last_booking_date)}`}</td>
-                      <td>{request?.no_of_bookings}</td>
+                      <td className=" text-lg  min-w-36">{`${item?.currency} ${item?.price}`}</td>
                       <td>
-                        <Status status={request?.availability_status} />
+                        {item?.last_booking_date
+                          ? `${formatDate(
+                              item?.last_booking_date
+                            )} ${formatTime(item?.last_booking_date)}`
+                          : ""}
+                      </td>
+                      <td>{item?.no_of_bookings}</td>
+                      <td>
+                        <Status status={item?.availability_status} />
                       </td>
                       <td className=" group relative">
                         <span className=" p-2 text-lg bg-primary/15  rounded-lg">
@@ -117,27 +125,29 @@ export default function ApartmentTable({
                         </span>
                         <span className="z-10 group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                           <Link
-                            to={`/apartments-details/${request?.id}`}
+                            to={`/apartments/apartment-details/${item?.id}`}
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             View Details
                           </Link>
                           <button
                             type="button"
-                            onClick={() => setOpenReservation(true)}
+                            onClick={() =>
+                              handleOpenQuickReservation(item?.id, item?.name)
+                            }
                             className="text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Quick Reservation
                           </button>
                           <button
                             type="button"
-                            onClick={() => handleOpenCalculateRate(request?.id)}
+                            onClick={() => handleOpenCalculateRate(item?.id)}
                             className="text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Calculate Rate
                           </button>
                           <Link
-                            to={`/edit-apartment/apartment-details/${request?.id}`}
+                            to={`/apartments/edit-apartment/apartment-details/${item?.id}`}
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Edit Apartment
@@ -154,10 +164,10 @@ export default function ApartmentTable({
           )}
         </div>
         <div className="w-full block md:hidden">
-          <MobileTable
+          <MobileTopApartmentTable
             data={data}
             setOpenCalculateRate={handleOpenCalculateRate}
-            setOpenReservation={setOpenReservation}
+            setOpenReservation={handleOpenQuickReservation}
           />
         </div>
         <Pagination
@@ -179,11 +189,11 @@ export default function ApartmentTable({
         }
       >
         <div className="w-full">
-          {openAssignToCustomerView ? (
-            <AssignCustomer />
-          ) : (
-            <QuickReservationFlow />
-          )}
+          <QuickReservationFlow
+            apartment_id={selectedId}
+            apartment_name={apartmentName}
+            setOpen={setOpenReservation}
+          />
         </div>
       </ModalTemplate>
 
@@ -201,90 +211,5 @@ export default function ApartmentTable({
         </div>
       </ModalTemplate>
     </>
-  );
-}
-
-function MobileTable({
-  data,
-  setOpenReservation,
-  setOpenCalculateRate,
-}: {
-  data: apartment[];
-  setOpenReservation: Function;
-  setOpenCalculateRate: (id: number) => void;
-}) {
-  return (
-    <div className=" w-full flex flex-col gap-4">
-      <div className=" flex items-center justify-between py-3 font-semibold text-gray-500 text-sm bg-gray-100  px-3">
-        <span>Name</span>
-        <span>Status</span>
-      </div>
-      {data.map((item, index) => {
-        return (
-          <Disclosure key={index}>
-            {({ open }) => (
-              <div className="text-sm flex flex-col">
-                <Disclosure.Button
-                  className={`${
-                    open ? " bg-gray-100" : ""
-                  } flex px-5 py-4 w-full justify-between items-center transition-all gap-4 text-left font-medium focus:outline-none focus-visible:ring focus-visible:ring-black focus-visible:ring-opacity-75`}
-                >
-                  <div className={`flex items-center gap-3`}>
-                    <ChevronRightIcon
-                      className={`w-4 h-4 ${
-                        open ? "rotate-90 transform" : "rotate-0"
-                      } text-black`}
-                    />
-                    <p className="">{item.name}</p>
-                  </div>
-                  <Status status={item?.availability_status} />
-                </Disclosure.Button>
-                <Disclosure.Panel className="w-full">
-                  <div className="w-full flex items-center justify-between  px-2 bg-primary/5 py-4">
-                    <p className="">
-                      {item?.currency} {item.price}/Night
-                    </p>
-
-                    <div className=" group relative">
-                      <span className=" p-2 text-lg bg-primary/15  rounded-lg">
-                        ...
-                      </span>
-                      <span className="z-10 group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                        <Link
-                          to={`/apartments-details/${item?.id}`}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          View Details
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => setOpenReservation(true)}
-                          className="text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Quick Reservation
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setOpenCalculateRate(item?.id)}
-                          className="text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Calculate Rate
-                        </button>
-                        <Link
-                          to={`/edit-apartment/apartment-details/${item?.id}`}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Edit Apartment
-                        </Link>
-                      </span>
-                    </div>
-                  </div>
-                </Disclosure.Panel>
-              </div>
-            )}
-          </Disclosure>
-        );
-      })}
-    </div>
   );
 }

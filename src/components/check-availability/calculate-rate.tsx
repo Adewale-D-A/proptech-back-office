@@ -35,13 +35,16 @@ export default function CalculateRate({
       e.preventDefault();
       setCalculating(true);
       try {
-        const response = await axios.post("/admin/booking/rate", {
-          shortlet_id: apartmentId,
-          check_in_day: checkInDate,
-          check_out_day: checkOutDate,
-          check_in_time: checkinTime,
-          check_out_time: checkoutTime,
-        });
+        const response = await axios.post(
+          `/admin/shortlet/price-rate/${apartmentId}`,
+          {
+            // shortlet_id: apartmentId,
+            check_in_day: checkInDate,
+            check_out_day: checkOutDate,
+            // check_in_time: checkinTime,
+            // check_out_time: checkoutTime,
+          }
+        );
         const data = response?.data?.data;
         setRateResult(data);
       } catch (error) {

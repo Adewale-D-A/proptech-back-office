@@ -7,7 +7,7 @@ import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import BinIcon from "../../../assets/icons/bin-icon";
 
 interface Props {
-  value: { name: string; size: number }[];
+  value: { name: string; size: number; preview: string }[];
   setValue: Function;
   label?: string;
   isRequired?: boolean;
@@ -61,7 +61,8 @@ export default function MultipleFileInput({
         <div className=" flex items-center flex-wrap gap-3">
           {value.map((item, index) => (
             <div key={index} className=" flex gap-2 items-center">
-              <div className=" bg-primary/10 text-primary rounded-full p-2">
+              <div>
+                {/* <div className=" bg-primary/10 text-primary rounded-full p-2">
                 <PhotoIcon className=" h-6 w-6" />
               </div>
               <div className=" flex flex-col">
@@ -71,6 +72,12 @@ export default function MultipleFileInput({
                 <span className=" text-xs">
                   {Math.floor(item?.size / 1000)}kb
                 </span>
+              </div> */}
+                <img
+                  src={item?.preview}
+                  alt={item?.name}
+                  className=" w-28 h-auto rounded-sm"
+                />
               </div>
               <button
                 title="cancel"

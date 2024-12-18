@@ -27,15 +27,18 @@ export default function CheckAvailability({
       e.preventDefault();
       setIsChecking(true);
       try {
-        // const response = await axios.post("/admin/booking/check-availability", {
-        //   shortlet_id: apartmentId,
-        //   check_in_day: checkInDate,
-        //   check_out_day: checkOutDate,
-        // });
+        const response = await axios.post("/admin/shortlet/availability", {
+          shortlet_id: apartmentId,
+          check_in_day: checkInDate,
+          check_out_day: checkOutDate,
+        });
+        const isAvailable = response?.data?.data?.is_available;
         dispatch(
           openSnackbar({
-            message: "Apartment is available",
-            isError: false,
+            message: isAvailable
+              ? "Apartment is available"
+              : "Apartment is not available for the selected dates",
+            isError: !Boolean(isAvailable),
           })
         );
       } catch (error) {

@@ -7,26 +7,25 @@ import {
 } from "react";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { useNavigate } from "react-router-dom";
-import {
-  clearAllApartmentInfo,
-  updateApartmentPolicies,
-} from "../../stores/inAppDataInterations/addEditApartmentInfo";
+import { updateApartmentPolicies } from "../../stores/inAppDataInterations/addEditApartmentInfo";
 import LinkButton from "../button/linkButton";
 import LoadingButton from "../button";
-import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-import {
-  addApartmentToList,
-  replaceApartmentInList,
-} from "../../stores/apiData/apartment-lists";
 import MultipleSelect from "../inputs/select/multipleSelect";
 import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
 import useGetHouseRules from "../../services-hooks/useGetAllRules";
 import Select from "../inputs/select";
+import { requestPayload } from "../../types/apiData/apartment/request-payload";
 
-export default function AddEditApartmentPolicies({ id }: { id?: string }) {
+export default function AddEditApartmentPolicies({
+  id,
+  isSubmitting,
+  handleSubmit,
+}: {
+  id?: string;
+  isSubmitting: boolean;
+  handleSubmit: (payload: requestPayload) => void;
+}) {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const axios = useAxiosMultipart();
   const storeAptDataset = useAppSelector(
     (state) => state.addEditApartmentInfo.value.data
   );
@@ -43,7 +42,6 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
   const [cancellationPolicy, setCancellationPolicy] = useState("");
   const [maxGuest, setMaxGuests] = useState("");
   const [cautionFee, setCautionFee] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   // populate apartment details interface
   useEffect(() => {
     const { rules, cancellationPolicies, maxGuest, cautionFee } =
@@ -58,7 +56,6 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
   const uploadApartmentInformation = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
-      setIsSubmitting(true);
       const { apartmentDetails, apartmentFeatures } = storeAptDataset;
       const {
         name,
@@ -119,38 +116,8 @@ export default function AddEditApartmentPolicies({ id }: { id?: string }) {
         })
       );
       try {
-        if (id) {
-          //run update endpoint
-          const response = await axios.put(
-            `/admin/shortlet/${id}`,
-            uploadPayload
-          );
-          const { shortlet } = response?.data?.data;
-          dispatch(
-            openSnackbar({
-              message: "Apartment informaton successfully updated",
-              isError: false,
-            })
-          );
-          dispatch(replaceApartmentInList(shortlet));
-        } else {
-          //run update endpoint
-          const response = await axios.post(`/admin/shortlet`, uploadPayload);
-          const { shortlet } = response?.data?.data;
-          dispatch(
-            openSnackbar({
-              message: "Apartment informaton successfully created",
-              isError: false,
-            })
-          );
-          dispatch(addApartmentToList(shortlet));
-        }
-        dispatch(clearAllApartmentInfo());
-        navigate("/apartments/view-all");
-      } catch (error) {
-      } finally {
-        setIsSubmitting(false);
-      }
+        handleSubmit(uploadPayload);
+      } catch (error) {}
     },
     [rules, cancellationPolicy, maxGuest, cautionFee, storeAptDataset, id]
   );

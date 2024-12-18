@@ -1,3 +1,8 @@
+##### 18.12.2024
+
+> Top apartment quick reservation logic redefintion
+> Edit apartment UI and flow logic cleanup
+
 ##### 10.12.2024
 
 > Apartment, bookings rate lists, customers endpoint integrations, corrections and updates

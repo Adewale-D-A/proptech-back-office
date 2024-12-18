@@ -18,7 +18,7 @@ export default function EditApartmentDetails() {
         icon: <BuildingIcon />,
       },
       {
-        url: `/apartments/edit-apartment/apartment-details/${id}`,
+        url: `/apartments/apartment-details/${id}`,
         label: "Apartment Details",
         icon: "",
       },

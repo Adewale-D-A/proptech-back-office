@@ -59,7 +59,10 @@ export default function useGetApartmentById(id?: string) {
         updateApartmentDetails({
           name: name,
           roomOption: room_option,
-          images: images,
+          images: images?.map((item: { id: number; path: string }) => ({
+            id: item.id,
+            preview: item.path,
+          })),
           amount: price,
           location_group,
           location: location,
