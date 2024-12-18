@@ -6,7 +6,7 @@ import ApartmentCalendarView from "../../../components/calendar/apartment-calend
 
 const breadCrumb = [
   {
-    url: "/apartments",
+    url: "/apartments/view-all",
     label: "Apartments",
     icon: <BuildingIcon />,
   },

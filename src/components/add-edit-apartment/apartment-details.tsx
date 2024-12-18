@@ -28,7 +28,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
   const [searchParams] = useSearchParams();
 
   const storeAptDetails = useAppSelector(
-    (state) => state.addEditApartmentInfo.value.data.apartmentDetails
+    (state) => state.addEditApartmentInfo.value.data?.apartmentDetails
   );
 
   const [name, setName] = useState("");
@@ -48,14 +48,22 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
 
   // populate apartment details interface
   useEffect(() => {
-    const { name, roomOption, images, amount, location, aboutLocation } =
-      storeAptDetails;
+    const {
+      name,
+      roomOption,
+      images,
+      amount,
+      location,
+      aboutLocation,
+      location_group,
+    } = storeAptDetails;
     setName(name);
     setRoomOption(roomOption);
     setImages(images);
     setPrice(amount);
     setLocation(location);
     setAboutLocation(aboutLocation);
+    setLocationGroupId(location_group);
   }, [storeAptDetails]);
 
   //update redux store and naviagte to next timeline
@@ -205,7 +213,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
             Location Group
           </option>
           {location_groups?.map((item) => (
-            <option value={item?.id}>{item?.name}</option>
+            <option value={String(item?.id)}>{item?.name}</option>
           ))}
         </Select>
       </div>

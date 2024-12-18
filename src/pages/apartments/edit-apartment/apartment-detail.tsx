@@ -1,7 +1,7 @@
 import { useLayoutEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import BuildingIcon from "../../../assets/icons/building";
-import { useAppDispatch } from "../../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import Timeline from "../../../components/timeline";
 import AddEditApartmentDetails from "../../../components/add-edit-apartment/apartment-details";
@@ -45,9 +45,14 @@ export default function EditApartmentDetails() {
       })
     );
   }, [breadCrumb]);
-
+  // to prevent data already updated re-write on every visit to page,
+  //prefetched value is already overwritten with -id: "update" tag on the apartment
+  //details store value
+  const storeAptDetails = useAppSelector(
+    (state) => state.addEditApartmentInfo.value.data
+  );
   const { data, isLoading, isFailed, setIsFailed, retryFunction } =
-    useGetApartmentById(id);
+    useGetApartmentById(storeAptDetails?.id === "updated" ? "" : id);
 
   return (
     <section className="w-full flex flex-col items-center">

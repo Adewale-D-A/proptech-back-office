@@ -54,7 +54,6 @@ export default function AddNewApartmentPolicies() {
         })
       );
       dispatch(addApartmentToList(shortlet));
-
       dispatch(clearAllApartmentInfo());
       navigate("/apartments/view-all");
     } catch (error) {

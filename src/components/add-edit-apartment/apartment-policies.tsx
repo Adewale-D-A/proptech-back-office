@@ -6,12 +6,10 @@ import {
   useState,
 } from "react";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
-import { useNavigate } from "react-router-dom";
 import { updateApartmentPolicies } from "../../stores/inAppDataInterations/addEditApartmentInfo";
 import LinkButton from "../button/linkButton";
 import LoadingButton from "../button";
 import MultipleSelect from "../inputs/select/multipleSelect";
-import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
 import useGetHouseRules from "../../services-hooks/useGetAllRules";
 import Select from "../inputs/select";
 import { requestPayload } from "../../types/apiData/apartment/request-payload";

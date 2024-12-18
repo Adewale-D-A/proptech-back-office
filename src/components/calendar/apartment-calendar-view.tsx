@@ -13,6 +13,7 @@ import useGetApartmentCalendar from "../../services-hooks/apartmentCalendar";
 import dateRangeIterator from "../../utils/dateRangeIterator";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import { apartmentById } from "../../types/apiData/apartment";
+import { useParams } from "react-router-dom";
 
 // const sampleBookedDates = [
 //   new Date(2024, 8, 27),
@@ -25,6 +26,7 @@ const nextMonthString = new Date(today?.getFullYear(), today?.getMonth() + 2, 0)
   ?.toISOString()
   ?.slice(0, 10);
 export default function ApartmentCalendarView() {
+  const { id } = useParams();
   const dispatch = useAppDispatch();
   const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
 
@@ -45,7 +47,7 @@ export default function ApartmentCalendarView() {
 
   // calendar data fetching based on filtered dates
   const { data } = useGetApartmentCalendar({
-    id: String(selectedAprt?.id || ""),
+    id: String(selectedAprt?.id || id || ""),
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,
   });
@@ -102,6 +104,7 @@ export default function ApartmentCalendarView() {
               <div className="w-full p-2">
                 <QuickReservationFlow
                   variant={2}
+                  apartment_name={selectedAprt?.name || ""}
                   setSelectedApt={setSelectedApt}
                 />
               </div>

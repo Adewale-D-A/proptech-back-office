@@ -1,5 +1,6 @@
 ##### 18.12.2024
 
+> Update apartment details bug fixes
 > Top apartment quick reservation logic redefintion
 > Edit apartment UI and flow logic cleanup
 

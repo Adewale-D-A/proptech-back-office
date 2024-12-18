@@ -14,6 +14,8 @@ import useAxios from "../../useHooks/useAxios";
 import { addBookingsToList } from "../../stores/apiData/bookings-lists";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import AssignCustomer from "./assignToCustomer";
+import { useParams } from "react-router-dom";
+import useGetApartmentById from "../../services-hooks/useGetApartmentById";
 
 export default function QuickReservationFlow({
   variant = 1,
@@ -30,10 +32,13 @@ export default function QuickReservationFlow({
 }) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
+  const { id } = useParams();
 
   const { open: openAssignToCustomer } = useAppSelector(
     (state) => state.assignCustomer.value
   );
+
+  const { data: apartment_info } = useGetApartmentById(id ? id : undefined);
 
   const { data } = useAppSelector((state) => state.assignCustomer.value);
   const [apartment, setApartment] = useState<apartmentById>({} as any);
@@ -54,9 +59,9 @@ export default function QuickReservationFlow({
   // update selected apartment
   useEffect(() => {
     if (setSelectedApt) {
-      setSelectedApt(apartment);
+      setSelectedApt(apartment?.id ? apartment : apartment_info);
     }
-  }, [apartment]);
+  }, [apartment, apartment_info]);
 
   const assignCustomer = useCallback(() => {
     dispatch(openAssignToCustomerView());
@@ -68,7 +73,7 @@ export default function QuickReservationFlow({
       setIsMakingReservation(true);
       try {
         const payload = {
-          shortlet_id: apartment_id || apartment?.id,
+          shortlet_id: apartment_id || apartment?.id || apartment_info?.id,
           check_in_day: checkInDate,
           check_out_day: checkOutDate,
           check_in_time: checkInTime,
@@ -117,6 +122,7 @@ export default function QuickReservationFlow({
     [
       apartment_id,
       apartment,
+      apartment_info,
       checkInDate,
       checkOutDate,
       checkInTime,

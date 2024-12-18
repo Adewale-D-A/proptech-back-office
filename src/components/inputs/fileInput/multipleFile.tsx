@@ -5,9 +5,10 @@ import CancelIcon from "../../../assets/icons/cancel";
 import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import BinIcon from "../../../assets/icons/bin-icon";
+import { addRemovableImages } from "../../../stores/inAppDataInterations/addEditApartmentInfo";
 
 interface Props {
-  value: { name: string; size: number; preview: string }[];
+  value: { name: string; size: number; preview: string; id?: number }[];
   setValue: Function;
   label?: string;
   isRequired?: boolean;
@@ -47,13 +48,24 @@ export default function MultipleFileInput({
     setValue((prev: any) => [...prev, ...imageArray]);
   }, []);
 
-  const removeImage = useCallback((index: number) => {
-    setValue((prev: any) => {
-      const deepCopy = [...prev];
-      deepCopy.splice(index, 1);
-      return deepCopy;
-    });
-  }, []);
+  const removeImage = useCallback(
+    (index: number) => {
+      // provided the image already has an ID appended, that essentially,
+      //means the image is already in the database and wants to be romoved
+      //this redux state stores the ID of the removed images to use in
+      //querying the db to remove these sets of images
+      const imageData = value[index];
+      if (imageData?.id) {
+        dispatch(addRemovableImages({ id: imageData?.id }));
+      }
+      setValue((prev: any) => {
+        const deepCopy = [...prev];
+        deepCopy.splice(index, 1);
+        return deepCopy;
+      });
+    },
+    [value]
+  );
 
   return (
     <div className="w-full flex items-center justify-between gap-3 p-3 rounded-lg border bg-gray-200/15">

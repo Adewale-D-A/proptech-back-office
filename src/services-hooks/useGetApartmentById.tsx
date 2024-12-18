@@ -38,7 +38,9 @@ export default function useGetApartmentById(id?: string) {
         no_of_bathrooms,
         max_guests,
         room_option,
-        extra_option,
+        extra_option_items,
+        room_option_id,
+        location_group_id,
         safety_and_security,
         point_of_interest,
         cancellation_policy,
@@ -58,13 +60,13 @@ export default function useGetApartmentById(id?: string) {
       dispatch(
         updateApartmentDetails({
           name: name,
-          roomOption: room_option,
+          roomOption: room_option_id,
           images: images?.map((item: { id: number; path: string }) => ({
             id: item.id,
             preview: item.path,
           })),
           amount: price,
-          location_group,
+          location_group: location_group_id,
           location: location,
           aboutLocation: description,
           city,
@@ -78,16 +80,22 @@ export default function useGetApartmentById(id?: string) {
         updateApartmentFeatures({
           noBeds: no_of_bedrooms,
           noBaths: no_of_bathrooms,
-          whatToExpect: amenities,
-          extraOptions: extra_option,
+          whatToExpect: amenities?.map((item: { id: number }) =>
+            String(item?.id)
+          ),
+          extraOptions: extra_option_items?.map((item: { id: number }) =>
+            String(item?.id)
+          ),
           pointOfInterest: point_of_interest,
-          safetyAndSecurity: safeties,
+          safetyAndSecurity: safeties?.map((item: { id: number }) =>
+            String(item?.id)
+          ),
           availabilityStatus: availability_status,
         })
       );
       dispatch(
         updateApartmentPolicies({
-          rules,
+          rules: rules?.map((item: { id: number }) => String(item?.id)),
           cautionFee: caution_fee,
           maxGuest: max_guests,
           cancellationPolicies: cancellation_policy,
