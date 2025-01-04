@@ -107,7 +107,7 @@ export default function BookingsOverview() {
                 placeholder="Search apartment..."
               />
               <CheckAvailability
-                apartmentId={String(searchedAptd || "")}
+                apartmentId={String(searchedAptd?.id || "")}
                 setAvailabilityResponse={setAvailabilityResponse}
               />
             </div>
