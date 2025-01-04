@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { customers } from "../../types/apiData/customers";
+import { customers, customersById } from "../../types/apiData/customers";
 import { pagination } from "../../types/pagination";
 
 export const customersListData = createSlice({
@@ -9,9 +9,9 @@ export const customersListData = createSlice({
       status: false,
       pagination: [] as {
         pagination_data: pagination;
-        data: customers[];
+        data: customersById[];
       }[],
-      data: [] as customers[],
+      data: [] as customersById[],
     },
   },
   reducers: {

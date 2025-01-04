@@ -119,6 +119,7 @@ import OccupancyRankingReport from "./pages/reports/occupancy-ranking";
 import DailyRoomReport from "./pages/reports/daily-room";
 import OccupancyPerTimeReport from "./pages/reports/occupancy-per-time";
 import EditInvoice from "./pages/invoices/edit-invoice";
+import CustomerDetail from "./pages/customers/customer-detail";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -264,6 +265,10 @@ function App() {
             />
             {/* customers flows  */}
             <Route path="/customers" element={<Customers />} />
+            <Route
+              path="/customers/customer-details/:id"
+              element={<CustomerDetail />}
+            />
             {/* add */}
             <Route
               path="/customers/add-customer/customer-details"

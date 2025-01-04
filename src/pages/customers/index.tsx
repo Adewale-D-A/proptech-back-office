@@ -55,17 +55,7 @@ export default function Customers() {
           </div>
         </div>
         <div>
-          <CustomersListTable
-            header={[
-              "ID",
-              "First Name",
-              "Last Name",
-              "Phone Number",
-              "Country",
-              "Total Booking",
-              "Action",
-            ]}
-          />
+          <CustomersListTable />
         </div>
       </div>
     </section>

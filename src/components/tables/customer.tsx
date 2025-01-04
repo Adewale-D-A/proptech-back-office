@@ -7,8 +7,9 @@ import Sort from "../filterAndSort/sort";
 import useGetAllCustomersLists from "../../services-hooks/useGetAllCustomersList";
 import TableSearch from "../inputs/search/table-search";
 import MobileCustomersTable from "./mobile/customers";
+import Status from "../status";
 
-export default function CustomersListTable({ header }: { header: string[] }) {
+export default function CustomersListTable() {
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
@@ -50,7 +51,15 @@ export default function CustomersListTable({ header }: { header: string[] }) {
           <table className=" w-full text-xs  overflow-x-auto">
             <thead className="">
               <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                {header.map((head) => (
+                {[
+                  "ID",
+                  "First Name",
+                  "Last Name",
+                  "Phone Number",
+                  "Total Booking",
+                  "Identuty Verified",
+                  "Action",
+                ].map((head) => (
                   <th key={head}>{head}</th>
                 ))}
               </tr>
@@ -68,30 +77,34 @@ export default function CustomersListTable({ header }: { header: string[] }) {
                     <td>{request?.last_name}</td>
                     <td>{request?.phone}</td>
                     <td>***</td>
-                    <td>***</td>
+                    <td>
+                      <Status
+                        status="identity"
+                        booleanVal={request?.identity_verified}
+                        falsyMessage="Unverified"
+                        truthyMessage="Verified"
+                      />
+                    </td>
                     <td className=" group relative">
                       <span className=" p-2 text-lg">...</span>
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                        <button
-                          //   onClick={() => {
-                          //     setSelectedId(request?.id);
-                          //     setOpenBookingDetailSummary(true);
-                          //   }}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          View Details
-                        </button>
-                        <Link
+                        {/* <Link
                           to={`#`}
                           className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Send Message
-                        </Link>
-                        <Link
+                        </Link> */}
+                        {/* <Link
                           to={`#`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Generate Invoice
+                        </Link> */}
+                        <Link
+                          to={`/customers/customer-details/${request?.id}`}
+                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          View Details
                         </Link>
                         <Link
                           to={`/customers/edit-customer/customer-details/${request?.id}`}

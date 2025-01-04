@@ -7,21 +7,26 @@ import EditCustomerDetails from "../../../components/add-edit-customer/customer-
 import Timeline from "../../../components/timeline";
 import useGetCustomerById from "../../../services-hooks/useGetCustomerById";
 
-const breadCrumb = [
-  {
-    url: "/customers",
-    label: "Customers",
-    icon: <UsersIcon />,
-  },
-  {
-    url: "#",
-    label: "Edit Customer Details",
-    icon: "",
-  },
-];
-
 export default function EditCustomerDetailsPage() {
   const { id } = useParams();
+
+  const breadCrumb = [
+    {
+      url: "/customers",
+      label: "Customers",
+      icon: <UsersIcon />,
+    },
+    {
+      url: `/customers/customer-details/${id}`,
+      label: `Customer details`,
+      icon: "",
+    },
+    {
+      url: "#",
+      label: "Edit Customer Details",
+      icon: "",
+    },
+  ];
   const dispatch = useAppDispatch();
   const storeCustomerDetails = useAppSelector(
     (state) => state.addEditCustomerInfo.value.data

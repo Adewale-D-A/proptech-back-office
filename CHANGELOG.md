@@ -1,3 +1,8 @@
+##### 04.01.2025
+
+> Identity document approval endpoint integration
+> Customer details UI development
+
 ##### 18.12.2024
 
 > Update apartment details bug fixes

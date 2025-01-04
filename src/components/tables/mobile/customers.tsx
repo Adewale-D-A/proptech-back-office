@@ -39,29 +39,14 @@ export default function MobileCustomersTable({ data }: { data: customers[] }) {
                         ...
                       </span>
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                        <button
-                          //   onClick={() => {
-                          //     setSelectedId(request?.id);
-                          //     setOpenBookingDetailSummary(true);
-                          //   }}
+                        <Link
+                          to={`/customers/customer-details/${item?.id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           View Details
-                        </button>
-                        <Link
-                          to={`#`}
-                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Send Message
                         </Link>
                         <Link
-                          to={`#`}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Generate Invoice
-                        </Link>
-                        <Link
-                          to={`/edit-customer/customer-details/${item?.id}`}
+                          to={`/customers/edit-customer/customer-details/${item?.id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Edit Customer

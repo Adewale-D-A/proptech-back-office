@@ -90,7 +90,7 @@ export default function DashboardOverview() {
               label: "Number of Apartment",
               value: data?.number_of_shortlets,
               theme: "text-[#26397B] bg-[#26397B]/20",
-              url: { src: "/apartments", label: "View Apartment" },
+              url: { src: "/apartments/view-all", label: "View Apartment" },
             },
             {
               id: 2,
@@ -98,7 +98,7 @@ export default function DashboardOverview() {
               label: "Total Bookings",
               value: `${data?.number_of_bookings} Bookings`,
               theme: "text-[#35BD29] bg-[#35BD29]/20",
-              url: { src: "/bookings", label: "View Bookings" },
+              url: { src: "/bookings/view-all", label: "View Bookings" },
             },
             {
               id: 3,
@@ -106,7 +106,7 @@ export default function DashboardOverview() {
               label: "Additional Requests",
               value: `${data?.no_of_additional_request} Requests`,
               theme: "text-[#017EFF] bg-[#017EFF]/20",
-              url: { src: "/bookings?page=requests", label: "View Requests" },
+              url: { src: "/bookings/requests", label: "View Requests" },
             },
             {
               id: 4,
