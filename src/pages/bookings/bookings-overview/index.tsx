@@ -141,7 +141,7 @@ export default function BookingsOverview() {
             {data.blocked_dates && (
               <CalendarView
                 // date={new Date(item)}
-                highlights={data?.booked_dates}
+                highlights={[...data?.booked_dates, ...data?.blocked_dates]}
               />
             )}
           </div>

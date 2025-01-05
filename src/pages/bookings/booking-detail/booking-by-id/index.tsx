@@ -6,7 +6,6 @@ import CalendarIcon from "../../../../assets/icons/calendar";
 import CustomerInfoCard from "../../../../components/booking-detail/customer-info-card";
 import ImageCarousel from "../../../../components/cards/image-carousel";
 import UserPlusIcon from "../../../../assets/icons/user-plus";
-import PhoneInput from "../../../../components/inputs/phoneInput";
 import BookingByIdList from "../../../../components/tables/bookingList";
 import useGetBookingById from "../../../../services-hooks/bookings/useGetBookingById";
 import useGetCustomerById from "../../../../services-hooks/useGetCustomerById";
@@ -14,7 +13,7 @@ import useGetApartmentById from "../../../../services-hooks/useGetApartmentById"
 
 const breadCrumb = [
   {
-    url: "/bookings",
+    url: "/bookings/overview",
     label: "Bookings",
     icon: <CalendarIcon />,
   },

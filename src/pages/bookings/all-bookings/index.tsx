@@ -10,7 +10,7 @@ import ExportSelect from "../../../components/inputs/select/exportSelect";
 
 const breadCrumb = [
   {
-    url: "/bookings",
+    url: "/bookings/overview",
     label: "Bookings",
     icon: <CalendarIcon />,
   },
@@ -45,7 +45,7 @@ export default function AllBookings() {
           <div className=" flex items-center gap-4">
             <ExportSelect id="bookings" />
             <LinkButton
-              url="/new-booking"
+              url="/bookings/new-booking"
               label="Add New Booking"
               startIcon={<PlusIcon />}
             />

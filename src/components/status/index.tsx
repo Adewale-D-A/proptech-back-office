@@ -12,10 +12,9 @@ export default function Status({
   return (
     <div className=" text-xs whitespace-nowrap">
       {status?.toLocaleLowerCase().includes("not") ||
-      status?.toLocaleLowerCase().includes("cancel") ||
-      !booleanVal ? (
+      status?.toLocaleLowerCase().includes("cancel") ? (
         <span className=" p-1 px-3 bg-red-500/15 text-red-500 rounded-full">
-          {!booleanVal ? falsyMessage : status}
+          {status}
         </span>
       ) : status?.toLocaleLowerCase().includes("confirmed") ||
         status?.toLocaleLowerCase().includes("ailable") ||
@@ -24,11 +23,11 @@ export default function Status({
         status?.toLocaleLowerCase().includes("complete") ||
         booleanVal ? (
         <span className=" p-1 px-3 bg-green-500/15 text-green-500 rounded-full">
-          {booleanVal ? truthyMessage : status}
+          {truthyMessage || status}
         </span>
       ) : (
         <span className=" p-1 px-3 bg-yellow-500/15 text-yellow-500 rounded-full">
-          {status}
+          {falsyMessage || status}
         </span>
       )}
     </div>

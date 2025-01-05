@@ -55,24 +55,24 @@ export default function MobileBookingsTable({
                           View Booking
                         </button>
                         <Link
-                          to={`/edit-apartment/apartment-details/${item?.id}`}
+                          to={`/bookings/booking-details/edit-reservation/${item?.id}`}
                           className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Edit Booking
                         </Link>
-                        <Link
+                        {/* <Link
                           to={`/apartment-caledar/${item?.id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Generate Invoice
-                        </Link>
-                        <button
+                        </Link> */}
+                        {/* <button
                           type="button"
                           onClick={() => openDelete(item?.id)}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Delete Booking
-                        </button>
+                        </button> */}
                       </span>
                     </div>
                   </div>

@@ -12,7 +12,7 @@ import LoadingButton from "../../../components/button";
 
 const breadCrumb = [
   {
-    url: "/bookings",
+    url: "/bookings/overview",
     label: "Bookings",
     icon: <CalendarIcon />,
   },

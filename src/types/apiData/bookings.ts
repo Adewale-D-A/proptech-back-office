@@ -81,6 +81,12 @@ export type bookingsById = {
     latitude: string;
     location_group_id: string;
   };
+  user: {
+    id: number;
+    first_name: string;
+    last_name: string;
+    profile_photo: string;
+  };
 };
 
 export type bookingHistory = {

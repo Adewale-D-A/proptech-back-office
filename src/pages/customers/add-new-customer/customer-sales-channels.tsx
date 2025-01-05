@@ -1,14 +1,26 @@
-import { useEffect, useLayoutEffect, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import Timeline from "../../../components/timeline";
 import UsersIcon from "../../../assets/icons/users";
 import { clearAllCustomerInfo } from "../../../stores/inAppDataInterations/addEditCustomerInfo";
 import AddCustomerSalesChannel from "../../../components/add-edit-customer/customer-sales-channel";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import { addCustomersToList } from "../../../stores/apiData/customers-lists";
+import { customerRequestPayload } from "../../../types/apiData/customers/request-payload";
+import useAxiosMultipart from "../../../useHooks/useAxiosMultipart";
 
 export default function AddNewCustomerSalesChannel() {
   const { id } = useParams();
+  const axios = useAxiosMultipart(false);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const storeCustomerDetails = useAppSelector(
     (state) => state.addEditCustomerInfo.value.data
@@ -50,6 +62,27 @@ export default function AddNewCustomerSalesChannel() {
     }
   }, []);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const handleSubmit = useCallback(async (payload: customerRequestPayload) => {
+    try {
+      setIsSubmitting(true);
+      const response = await axios.post(`/admin/user`, payload);
+      const data = response?.data?.data;
+      dispatch(
+        openSnackbar({
+          message: "Customer information successfully created",
+          isError: false,
+        })
+      );
+      dispatch(addCustomersToList(data));
+      dispatch(clearAllCustomerInfo());
+      navigate(`/customers`);
+    } catch (error) {
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, []);
+
   return (
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
@@ -58,7 +91,10 @@ export default function AddNewCustomerSalesChannel() {
             <Timeline currentStep={4} id="customer" />
           </div>
           <div className="w-full border-t py-10 px-5">
-            <AddCustomerSalesChannel />
+            <AddCustomerSalesChannel
+              handleSubmit={handleSubmit}
+              isSubmitting={isSubmitting}
+            />
           </div>
         </div>
       </div>
