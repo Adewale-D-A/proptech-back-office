@@ -1,0 +1,118 @@
+import Pagination from "../pagination";
+import { useCallback, useState } from "react";
+import Sort from "../filterAndSort/sort";
+import DeleteConfirmation from "../infoModal/delete-confirmation";
+import ModalTemplate from "../modal";
+import AddEditAmenities from "../amenities/create-amenities";
+import NoResult from "../noResult";
+import useGetAmenities from "../../services-hooks/useGetAmenities";
+
+export default function AmenitiesListsTable() {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
+    useGetAmenities({ page: currentPage });
+
+  const [selectedId, setSelectedId] = useState("");
+  const [openDelete, setOpenDelete] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [openEditAmenity, setOpenEditAmenity] = useState(false);
+
+  const handleDelete = useCallback(async () => {
+    setIsDeleting(true);
+    try {
+      setOpenDelete(false);
+    } catch (error) {
+    } finally {
+      setIsDeleting(false);
+    }
+  }, []);
+
+  return (
+    <>
+      <div className="w-full rounded-lg border p-5 flex flex-col gap-5 ">
+        <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
+          <h2 className="text-xl font-semibold">Amenities List</h2>
+          <Sort id="room-options" label="Sort List" />{" "}
+        </div>
+        {data && data.length > 0 ? (
+          <table className=" w-full overflow-x-auto">
+            <thead className="">
+              <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+                {["Amenities Name", "Icon", "Text", "Action"].map((head) => (
+                  <th key={head}>{head}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="">
+              {data.map((request, index) => {
+                return (
+                  <tr key={request?.id} className=" border-b">
+                    <td>{request?.name}</td>
+                    <td>
+                      <img
+                        src={request?.image}
+                        alt={request?.name}
+                        title={request?.name}
+                        className=" w-10 h-auto"
+                      />
+                    </td>
+                    <td>{request?.description}</td>
+                    <td className=" group relative">
+                      <span className=" p-2 text-lg">...</span>
+                      <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedId(String(request?.id));
+                            setOpenEditAmenity(true);
+                          }}
+                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit Amenity
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setOpenDelete(true)}
+                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete Amenity
+                        </button>
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ) : (
+          <NoResult />
+        )}
+        <Pagination
+          pagination={pagination}
+          setCurrentPage={setCurrentPage}
+          isLoading={isLoading}
+          label="Amenities"
+        />
+      </div>
+      <DeleteConfirmation
+        open={openDelete}
+        setOpen={setOpenDelete}
+        isLoading={isDeleting}
+        confirmationHandler={handleDelete}
+        title="Delete Amenity"
+        description="Are you sure you want to delete this amenity?"
+        btnTitle="Yes, I want to"
+      />
+      <ModalTemplate
+        open={openEditAmenity}
+        setOpen={setOpenEditAmenity}
+        showXicon={true}
+        title="Edit Amenity"
+        className=" max-w-md"
+      >
+        <AddEditAmenities setOpen={setOpenEditAmenity} id={selectedId} />
+      </ModalTemplate>
+    </>
+  );
+}

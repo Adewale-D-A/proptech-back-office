@@ -1,0 +1,23 @@
+
+.loader-img {
+  animation: image_zoom 2s linear 0s infinite forwards;
+  transition: all;
+}
+
+@keyframes image_zoom {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

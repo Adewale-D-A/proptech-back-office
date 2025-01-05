@@ -1,0 +1,22 @@
+{
+  "pagination": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 20,
+    "total": 4,
+    "from": 1,
+    "to": 1
+  },
+  "data": [
+    {
+      "id": "asasas",
+      "dateTime": "Mon, 07/01/2024 12:00PM",
+      "apartment": "Sunshine - 2 Bedroom",
+      "status": "Occupied",
+      "customer": "Dami Ibrahim",
+      "guest": "1",
+      "checkIn": "Mon, 07/01/2024",
+      "checkOut": "Tue, 08/01/2024"
+    }
+  ]
+}

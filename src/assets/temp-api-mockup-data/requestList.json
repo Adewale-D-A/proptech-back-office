@@ -1,0 +1,22 @@
+{
+  "pagination": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 20,
+    "total": 4,
+    "from": 1,
+    "to": 1
+  },
+  "data": [
+    {
+      "id": "asasas",
+      "customerName": "Jola Samson",
+      "apartnmentName": "Sunshine - 2 Bedroom",
+      "date": "15-02-2024",
+      "type": "Internet",
+      "description": "No internet connectivity in the room",
+      "isEscalated": "Yes",
+      "status": "Resolved"
+    }
+  ]
+}

@@ -1,0 +1,712 @@
+[
+  {
+    "id": 107,
+    "name": "Delete Restriction",
+    "slug": "delete-restriction",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-19T15:47:29.000000Z",
+    "updated_at": "2024-11-19T15:47:29.000000Z"
+  },
+  {
+    "id": 105,
+    "name": "Update Restriction",
+    "slug": "update-restriction",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-19T15:47:29.000000Z",
+    "updated_at": "2024-11-19T15:47:29.000000Z"
+  },
+  {
+    "id": 103,
+    "name": "View Restriction",
+    "slug": "view-restriction",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-19T15:47:29.000000Z",
+    "updated_at": "2024-11-19T15:47:29.000000Z"
+  },
+  {
+    "id": 101,
+    "name": "Create Restriction",
+    "slug": "create-restriction",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-19T15:47:29.000000Z",
+    "updated_at": "2024-11-19T15:47:29.000000Z"
+  },
+  {
+    "id": 99,
+    "name": "Delete Special Price",
+    "slug": "delete-special-price",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-19T15:47:29.000000Z",
+    "updated_at": "2024-11-19T15:47:29.000000Z"
+  },
+  {
+    "id": 97,
+    "name": "Update Special Price",
+    "slug": "update-special-price",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-19T15:47:29.000000Z",
+    "updated_at": "2024-11-19T15:47:29.000000Z"
+  },
+  {
+    "id": 95,
+    "name": "View Special Price",
+    "slug": "view-special-price",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-19T15:47:29.000000Z",
+    "updated_at": "2024-11-19T15:47:29.000000Z"
+  },
+  {
+    "id": 93,
+    "name": "Create Special Price",
+    "slug": "create-special-price",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-19T15:47:29.000000Z",
+    "updated_at": "2024-11-19T15:47:29.000000Z"
+  },
+  {
+    "id": 91,
+    "name": "Delete Invoice",
+    "slug": "delete-invoice",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-18T20:49:16.000000Z",
+    "updated_at": "2024-11-18T20:49:16.000000Z"
+  },
+  {
+    "id": 89,
+    "name": "Update Invoice",
+    "slug": "update-invoice",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-18T20:49:16.000000Z",
+    "updated_at": "2024-11-18T20:49:16.000000Z"
+  },
+  {
+    "id": 87,
+    "name": "View Invoice",
+    "slug": "view-invoice",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-18T20:49:16.000000Z",
+    "updated_at": "2024-11-18T20:49:16.000000Z"
+  },
+  {
+    "id": 85,
+    "name": "Create Invoice",
+    "slug": "create-invoice",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-18T20:49:16.000000Z",
+    "updated_at": "2024-11-18T20:49:16.000000Z"
+  },
+  {
+    "id": 83,
+    "name": "Delete Booking",
+    "slug": "delete-booking",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-12T14:37:53.000000Z",
+    "updated_at": "2024-11-12T14:37:53.000000Z"
+  },
+  {
+    "id": 81,
+    "name": "Update Booking",
+    "slug": "update-booking",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-12T14:37:53.000000Z",
+    "updated_at": "2024-11-12T14:37:53.000000Z"
+  },
+  {
+    "id": 79,
+    "name": "View Booking",
+    "slug": "view-booking",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-12T14:37:53.000000Z",
+    "updated_at": "2024-11-12T14:37:53.000000Z"
+  },
+  {
+    "id": 77,
+    "name": "Create Booking",
+    "slug": "create-booking",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-12T14:37:53.000000Z",
+    "updated_at": "2024-11-12T14:37:53.000000Z"
+  },
+  {
+    "id": 75,
+    "name": "Delete Location Group",
+    "slug": "delete-location-group",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-03T21:23:41.000000Z",
+    "updated_at": "2024-11-03T21:23:41.000000Z"
+  },
+  {
+    "id": 73,
+    "name": "Update Location Group",
+    "slug": "update-location-group",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-03T21:23:41.000000Z",
+    "updated_at": "2024-11-03T21:23:41.000000Z"
+  },
+  {
+    "id": 71,
+    "name": "View Location Group",
+    "slug": "view-location-group",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-03T21:23:41.000000Z",
+    "updated_at": "2024-11-03T21:23:41.000000Z"
+  },
+  {
+    "id": 69,
+    "name": "Create Location Group",
+    "slug": "create-location-group",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-03T21:23:41.000000Z",
+    "updated_at": "2024-11-03T21:23:41.000000Z"
+  },
+  {
+    "id": 67,
+    "name": "Delete Rate List",
+    "slug": "delete-rate-list",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-02T18:29:58.000000Z",
+    "updated_at": "2024-11-02T18:29:58.000000Z"
+  },
+  {
+    "id": 65,
+    "name": "Update Rate List",
+    "slug": "update-rate-list",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-02T18:29:58.000000Z",
+    "updated_at": "2024-11-02T18:29:58.000000Z"
+  },
+  {
+    "id": 63,
+    "name": "View Rate List",
+    "slug": "view-rate-list",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-02T18:29:58.000000Z",
+    "updated_at": "2024-11-02T18:29:58.000000Z"
+  },
+  {
+    "id": 61,
+    "name": "Create Rate List",
+    "slug": "create-rate-list",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-11-02T18:29:58.000000Z",
+    "updated_at": "2024-11-02T18:29:58.000000Z"
+  },
+  {
+    "id": 59,
+    "name": "Delete Coupon",
+    "slug": "delete-coupon",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-10-28T22:33:13.000000Z",
+    "updated_at": "2024-10-28T22:33:13.000000Z"
+  },
+  {
+    "id": 57,
+    "name": "Update Coupon",
+    "slug": "update-coupon",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-10-28T22:33:13.000000Z",
+    "updated_at": "2024-10-28T22:33:13.000000Z"
+  },
+  {
+    "id": 55,
+    "name": "View Coupon",
+    "slug": "view-coupon",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-10-28T22:33:13.000000Z",
+    "updated_at": "2024-10-28T22:33:13.000000Z"
+  },
+  {
+    "id": 53,
+    "name": "Create Coupon",
+    "slug": "create-coupon",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-10-28T22:33:13.000000Z",
+    "updated_at": "2024-10-28T22:33:13.000000Z"
+  },
+  {
+    "id": 51,
+    "name": "Create Offer",
+    "slug": "create-offer",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-10-28T22:33:13.000000Z",
+    "updated_at": "2024-10-28T22:33:13.000000Z"
+  },
+  {
+    "id": 49,
+    "name": "Update Additional Service",
+    "slug": "update-additional-service",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-10-28T22:33:13.000000Z",
+    "updated_at": "2024-10-28T22:33:13.000000Z"
+  },
+  {
+    "id": 47,
+    "name": "Delete Additional Service",
+    "slug": "delete-additional-service",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-10-28T22:33:13.000000Z",
+    "updated_at": "2024-10-28T22:33:13.000000Z"
+  },
+  {
+    "id": 45,
+    "name": "Create Additional Service",
+    "slug": "create-additional-service",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-10-28T22:33:13.000000Z",
+    "updated_at": "2024-10-28T22:33:13.000000Z"
+  },
+  {
+    "id": 43,
+    "name": "Delete Offer",
+    "slug": "delete-offer",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-10-24T13:12:18.000000Z",
+    "updated_at": "2024-10-24T13:12:18.000000Z"
+  },
+  {
+    "id": 41,
+    "name": "Update Offer",
+    "slug": "update-offer",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-10-24T13:12:18.000000Z",
+    "updated_at": "2024-10-24T13:12:18.000000Z"
+  },
+  {
+    "id": 39,
+    "name": "View Offer",
+    "slug": "view-offer",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": "2024-10-24T13:12:18.000000Z",
+    "updated_at": "2024-10-24T13:12:18.000000Z"
+  },
+  {
+    "id": 36,
+    "name": "Verify Identity Document",
+    "slug": "verify-identity-document",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 35,
+    "name": "Delete Tax",
+    "slug": "delete-tax",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 34,
+    "name": "Update Tax",
+    "slug": "update-tax",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 33,
+    "name": "Create Tax",
+    "slug": "create-tax",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 32,
+    "name": "Delete Role",
+    "slug": "delete-role",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 31,
+    "name": "Update Role",
+    "slug": "update-role",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 30,
+    "name": "Create Role",
+    "slug": "create-role",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 29,
+    "name": "View Role",
+    "slug": "view-role",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 28,
+    "name": "Manage Calendar",
+    "slug": "manage-calendar",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 27,
+    "name": "Delete Exchange Rate",
+    "slug": "delete-exchange-rate",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 26,
+    "name": "Update Exchange Rate",
+    "slug": "update-exchange-rate",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 25,
+    "name": "Create Exchange Rate",
+    "slug": "create-exchange-rate",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 24,
+    "name": "Delete Room Option",
+    "slug": "delete-room-option",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 23,
+    "name": "Update Room Option",
+    "slug": "update-room-option",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 22,
+    "name": "Create Room Option",
+    "slug": "create-room-option",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 21,
+    "name": "Delete Shortlet",
+    "slug": "delete-shortlet",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 20,
+    "name": "Update Shortlet",
+    "slug": "update-shortlet",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 19,
+    "name": "Create Shortlet",
+    "slug": "create-shortlet",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 18,
+    "name": "Delete Safety",
+    "slug": "delete-safety",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 17,
+    "name": "Update Safety",
+    "slug": "update-safety",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 16,
+    "name": "Create Safety",
+    "slug": "create-safety",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 15,
+    "name": "Delete Rule",
+    "slug": "delete-rule",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 14,
+    "name": "Update Rule",
+    "slug": "update-rule",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 13,
+    "name": "Create Rule",
+    "slug": "create-rule",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 12,
+    "name": "Delete Extra Option",
+    "slug": "delete-extra-option",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 11,
+    "name": "Update Extra Option",
+    "slug": "update-extra-option",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 10,
+    "name": "Create Extra Option",
+    "slug": "create-extra-option",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 9,
+    "name": "Delete Amenity",
+    "slug": "delete-amenity",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 8,
+    "name": "Update Amenity",
+    "slug": "update-amenity",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 7,
+    "name": "Create Amenity",
+    "slug": "create-amenity",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 6,
+    "name": "Update User",
+    "slug": "update-user",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 5,
+    "name": "View User",
+    "slug": "view-user",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 4,
+    "name": "Delete Admin",
+    "slug": "delete-admin",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 3,
+    "name": "Update Admin",
+    "slug": "update-admin",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 2,
+    "name": "View Admin",
+    "slug": "view-admin",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  },
+  {
+    "id": 1,
+    "name": "Create Admin",
+    "slug": "create-admin",
+    "guard_name": "admin",
+    "is_deleted": 0,
+    "deleted_at": null,
+    "created_at": null,
+    "updated_at": null
+  }
+]

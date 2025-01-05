@@ -1,0 +1,23 @@
+{
+  "pagination": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 20,
+    "total": 4,
+    "from": 1,
+    "to": 1
+  },
+  "data": [
+    {
+      "id": "asasas",
+      "customerName": "Jola Samson",
+      "apartnmentName": "Sunshine - 2 Bedroom",
+      "bookingDate": "15-02-2024",
+      "amount": "N150,000",
+      "exchangeRate": "$1/N1,450",
+      "checkIn": "15-02-2024",
+      "checkOut": "15-02-2024",
+      "status": "Confirmed"
+    }
+  ]
+}

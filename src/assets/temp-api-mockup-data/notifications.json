@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "image": "/logo_blue.png",
+    "read": false,
+    "name": "Chuks",
+    "action": "has submitted a new",
+    "resource": "maintenance request",
+    "time": "2 hours ago"
+  },
+  {
+    "id": 2,
+    "image": "/logo_blue.png",
+    "read": true,
+    "name": "Chuks",
+    "action": "has submitted a new",
+    "resource": "maintenance request",
+    "time": "2 hours ago"
+  },
+  {
+    "id": 3,
+    "image": "/logo_blue.png",
+    "read": false,
+    "name": "",
+    "action": "upcoming",
+    "resource": "Maintenance request - 12 Oct, 2024",
+    "time": "2 weeks ago"
+  },
+  {
+    "id": 4,
+    "image": "/logo_blue.png",
+    "read": true,
+    "name": "Ayomide",
+    "action": "sent you a message",
+    "resource": "",
+    "time": "1 Month ago"
+  }
+]

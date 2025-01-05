@@ -1,0 +1,26 @@
+{
+  "pagination": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 20,
+    "total": 4,
+    "from": 1,
+    "to": 1
+  },
+  "data": [
+    {
+      "id": "asasas",
+      "date": "Mon, 07/01/2024",
+      "roomSold": "25",
+      "nightBook": "43/56",
+      "totalBooking": "23",
+      "occupancy": "44.64",
+      "ibeRevenue": "N1,700,711.90",
+      "refunds": "N0",
+      "otaRevenue": "N0",
+      "adr": "N0",
+      "revipar": "N99,711.00",
+      "taxes": ""
+    }
+  ]
+}

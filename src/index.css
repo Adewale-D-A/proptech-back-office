@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+body {
+  color: #2d2d2d;
+  font-family: "Poppins", sans-serif;
+}
+
+td,
+th {
+  padding: 15px;
+}
+
+/* toggle button */
+.slider:before {
+  position: absolute;
+  content: "";
+  height: var(--size);
+  width: var(--size);
+  left: var(--position);
+  bottom:var(--position);
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.toggle-input:checked + .slider {
+  background-color: #2e4393;
+}
+
+.toggle-input:focus + .slider {
+  box-shadow: 0 0 1px #2e4393;
+}
+
+.toggle-input:checked + .slider:before {
+  -webkit-transform: translateX(var(--size));
+  -ms-transform: translateX(var(--size));
+  transform: translateX(var(--size));
+}
+
+/* Rounded sliders */
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* toggle button */
+
+/* target calendar on input focus */
+.date-input:focus + .label-input {
+  display: none;
+}
+/* target calendar on input focus */
+
+.backgrop-bg-filter {
+  background-color: rgb(54, 79, 0, 0.2);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.onboard-image {
+  background-image: url("/public/admin.jpg");
+}
+
+.webkit-sticky {
+  position: -webkit-sticky;
+  position: sticky;
+}
