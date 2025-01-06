@@ -1,5 +1,6 @@
 ##### 06.01.2025
 
+> Price rate table from-to bug fix
 > Reports API completion
 > Reports endpoint integrations
 > Fixed bugs, testing and inconsistencies resolutions
