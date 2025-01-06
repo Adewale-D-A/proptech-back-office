@@ -25,25 +25,32 @@ export default function CheckAvailability({
   const checkAvailability = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
-      setIsChecking(true);
-      try {
-        const response = await axios.post("/admin/shortlet/availability", {
-          shortlet_id: apartmentId,
-          check_in_day: checkInDate,
-          check_out_day: checkOutDate,
-        });
-        const isAvailable = response?.data?.data?.is_available;
+      if (apartmentId) {
+        setIsChecking(true);
+
+        try {
+          const response = await axios.post("/admin/shortlet/availability", {
+            shortlet_id: apartmentId,
+            check_in_day: checkInDate,
+            check_out_day: checkOutDate,
+          });
+          const isAvailable = response?.data?.data?.is_available;
+          dispatch(
+            openSnackbar({
+              message: isAvailable
+                ? "Apartment is available"
+                : "Apartment is not available for the selected dates",
+              isError: !Boolean(isAvailable),
+            })
+          );
+        } catch (error) {
+        } finally {
+          setIsChecking(false);
+        }
+      } else {
         dispatch(
-          openSnackbar({
-            message: isAvailable
-              ? "Apartment is available"
-              : "Apartment is not available for the selected dates",
-            isError: !Boolean(isAvailable),
-          })
+          openSnackbar({ message: "Please select an apartment", isError: true })
         );
-      } catch (error) {
-      } finally {
-        setIsChecking(false);
       }
     },
     [apartmentId, checkInDate, checkOutDate]

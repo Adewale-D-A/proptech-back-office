@@ -69,10 +69,11 @@ export default function ApartmentTable({
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">{title}</h2>
-          <Search
+          {/* <Search
             placeholder="Apartment name, type, location..."
             id="apartment-search"
-          />
+            componentId="apartment"
+          /> */}
           <div className=" flex items-center gap-3 text-sm text-gray-500 flex-col md:flex-row">
             <Filter actionHandler={handleSalesFiltering} />
             <Sort setSort={setSort} id={"sales-analytics"} label={"Sort by:"} />

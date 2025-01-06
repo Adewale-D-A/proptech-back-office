@@ -37,12 +37,12 @@ export default function EditBookingReservation() {
   const breadCrumb = useMemo(
     () => [
       {
-        url: "/bookings",
+        url: "/bookings/overview",
         label: "Bookings",
         icon: <CalendarIcon />,
       },
       {
-        url: `/booking-details/${id}`,
+        url: `/bookings/booking-details/${id}`,
         label: "Booking Details",
         icon: "",
       },

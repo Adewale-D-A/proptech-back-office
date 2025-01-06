@@ -11,7 +11,7 @@ import { openSnackbar } from "../../../../stores/appFunctionality/snackbar";
 
 const breadCrumb = [
   {
-    url: "/admin-users-management",
+    url: "/admin/admin-users",
     label: "Admin",
     icon: <MenuIcon />,
   },

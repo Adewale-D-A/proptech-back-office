@@ -2,6 +2,8 @@ import { ChangeEvent, useCallback } from "react";
 import CautionIcon from "../../../assets/icons/caution";
 import PhotoIcon from "../../../assets/icons/photo";
 import CancelIcon from "../../../assets/icons/cancel";
+import { useAppDispatch } from "../../../stores/hooks";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 
 interface Props {
   value: { name: string; size: number; preview: string };
@@ -18,16 +20,32 @@ export default function FileInput({
   isRequired = false,
   id,
 }: Props) {
+  const dispatch = useAppDispatch();
   const addUpload = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const uploadedFile = e.target.files as any;
-    setValue(uploadedFile[0]);
+    const singleImage = uploadedFile[0];
+    if (
+      singleImage.type === "image/jpeg" ||
+      singleImage.type === "image/jpg" ||
+      singleImage.type === "image/png" ||
+      singleImage.type === "image/svg+xml"
+    ) {
+      Object.assign(singleImage, {
+        preview: URL.createObjectURL(singleImage),
+      });
+      setValue(singleImage);
+    } else {
+      dispatch(
+        openSnackbar({ message: "unsupported file type", isError: true })
+      );
+    }
   }, []);
 
   return (
     <div className="w-full flex items-center justify-between gap-3 p-3 rounded-lg border bg-gray-200/15">
-      {value?.name ? (
+      {value?.preview ? (
         <div className=" flex gap-2 items-center">
-          <div className=" bg-primary/10 text-primary rounded-full p-2">
+          {/* <div className=" bg-primary/10 text-primary rounded-full p-2">
             <PhotoIcon className=" h-6 w-6" />
           </div>
           <div className=" flex flex-col">
@@ -35,6 +53,13 @@ export default function FileInput({
               {value?.name}
             </span>
             <span className=" text-xs">{Math.floor(value?.size / 1000)}kb</span>
+          </div> */}
+          <div>
+            <img
+              src={value?.preview}
+              alt={value?.name}
+              className=" w-28 h-auto rounded-sm"
+            />
           </div>
           <button
             title="cancel"

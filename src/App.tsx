@@ -317,8 +317,8 @@ function App() {
             </Route>
             <Route path="/admin/add" element={<AddAdminUser />} />
             <Route path="/admin/edit/:id" element={<EditAdminUser />} />
-            <Route path="admin/admin-roles/add" element={<AddRoles />} />
-            <Route path="admin/admin-roles/edit/:id" element={<EditRoles />} />
+            <Route path="/admin/admin-roles/add" element={<AddRoles />} />
+            <Route path="/admin/admin-roles/edit/:id" element={<EditRoles />} />
 
             {/* pricing flows wrapper */}
             <Route element={<PricingTabWrapper />}>

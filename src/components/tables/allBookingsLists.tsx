@@ -61,11 +61,11 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 ">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
-          <Search
+          {/* <Search
             placeholder="Apartment name, type, location..."
             id="apartment-search"
-          />
-          <FilterSearch />
+          /> */}
+          {/* <FilterSearch /> */}
         </div>
         <div className="hidden md:block">
           {data && data.length > 0 ? (
@@ -86,7 +86,9 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
                           {item?.id}
                         </span>
                       </td>
-                      <td>{item?.account_name}</td>
+                      <td>
+                        {item?.user?.first_name} {item?.user?.last_name}
+                      </td>
                       <td>{item?.shortlet?.name}</td>
                       <td>{formatDate(item?.created_at)}</td>
                       <td>
@@ -113,24 +115,24 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
                             View Booking
                           </button>
                           <Link
-                            to={`/booking-details/edit-reservation/${item?.id}`}
+                            to={`/bookings/booking-details/edit-reservation/${item?.id}`}
                             className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Edit Booking
                           </Link>
-                          <Link
+                          {/* <Link
                             to={`/apartment-caledar/${item?.id}`}
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Generate Invoice
-                          </Link>
-                          <button
+                          </Link> */}
+                          {/* <button
                             type="button"
                             onClick={() => openDelete(item?.id)}
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Delete Booking
-                          </button>
+                          </button> */}
                         </span>
                       </td>
                     </tr>

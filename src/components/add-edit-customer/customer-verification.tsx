@@ -125,27 +125,29 @@ export default function AddEditCustomerVerification({ id }: { id?: string }) {
               isRequired={false}
               id="id-scan-image"
             />
-            <div className=" flex items-end">
-              <TextInput
-                inputType="text"
-                isRequired={true}
-                value={pinGenerated}
-                setValue={setPinGenerated}
-                id="pin-password"
-                placeholder=""
-                label="Password"
-              />
-              <div className=" w-fit">
-                <LoadingButton
-                  type="button"
-                  variant={3}
-                  className="border border-primary rounded-md hover:border-primary/30 hover:text-primary transition-all"
-                  isLoading={false}
-                  label="Generate Password"
-                  clickHandler={() => generatePassword()}
+            {!id && (
+              <div className=" flex items-end">
+                <TextInput
+                  inputType="text"
+                  isRequired={true}
+                  value={pinGenerated}
+                  setValue={setPinGenerated}
+                  id="pin-password"
+                  placeholder=""
+                  label="Password"
                 />
+                <div className=" w-fit">
+                  <LoadingButton
+                    type="button"
+                    variant={3}
+                    className="border border-primary rounded-md hover:border-primary/30 hover:text-primary transition-all"
+                    isLoading={false}
+                    label="Generate Password"
+                    clickHandler={() => generatePassword()}
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <TextAreaInput
             isRequired={false}

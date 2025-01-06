@@ -18,7 +18,7 @@ import CustomTab from "../../../../components/tab";
 
 const breadCrumb = [
   {
-    url: "/bookings",
+    url: "/bookings/overview",
     label: "Bookings",
     icon: <CalendarIcon />,
   },

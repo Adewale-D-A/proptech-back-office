@@ -6,7 +6,7 @@ import ManageRoleTableData from "../../../components/tables/manageRolesTable";
 
 const breadCrumb = [
   {
-    url: "/admin-users-management",
+    url: "/admin/admin-users",
     label: "Admin users roles",
     icon: <MenuIcon />,
   },

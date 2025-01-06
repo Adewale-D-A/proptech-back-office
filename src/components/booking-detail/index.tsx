@@ -25,7 +25,7 @@ export default function BookingDetailSummary({ id }: { id: string }) {
         />
 
         <LinkButton
-          url={`/booking-details/edit-reservation/${id}`}
+          url={`/bookings/booking-details/edit-reservation/${id}`}
           label="Edit Reservation"
         />
       </div>

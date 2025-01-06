@@ -132,7 +132,10 @@ export default function ApartmentCalendarView() {
                         <div key={index} className=" border-r px-3">
                           <CalendarView
                             date={new Date(item)}
-                            highlights={data?.booked_dates}
+                            highlights={[
+                              ...data?.booked_dates,
+                              ...data?.blocked_dates,
+                            ]}
                           />
                         </div>
                       ))}

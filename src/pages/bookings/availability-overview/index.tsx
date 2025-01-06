@@ -22,7 +22,7 @@ import useGetApartmentCalendar from "../../../services-hooks/apartmentCalendar";
 
 const breadCrumb = [
   {
-    url: "/bookings",
+    url: "/bookings/overview",
     label: "Bookings",
     icon: <CalendarIcon />,
   },
@@ -93,7 +93,10 @@ export default function AvailabilityOverview() {
   const generateDays = useCallback(() => {
     const daysArray = generateCalendarData({
       selectedDate: currentDay,
-      highlights: calendarDates?.booked_dates,
+      highlights: [
+        ...calendarDates?.booked_dates,
+        ...calendarDates?.blocked_dates,
+      ],
     });
     setCurrentDays(daysArray);
   }, [currentDay, calendarDates]);

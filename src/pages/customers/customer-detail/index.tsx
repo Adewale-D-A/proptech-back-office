@@ -126,13 +126,19 @@ export default function CustomerDetail() {
         {/* Identity document */}
         <h3 className=" text-lg font-semibold">Identity Verification</h3>
         <div className=" w-full shadow-sm rounded-md p-5 ">
-          {data?.identity_verification_status === "submitted" ? (
+          {data?.identity_verification_document ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-              <div>
+              <div className=" flex items-start gap-3">
                 <img
                   src={data?.identity_verification_document || "/logo_blue.png"}
                   className=" w-48 h-auto object-cover rounded-md"
                 />
+                <p className=" flex flex-col gap-2">
+                  <span>Identity Verification Status:</span>
+                  <b className=" font-semibold">
+                    {data?.identity_verification_status}
+                  </b>
+                </p>
               </div>
               {!data?.identity_verified && (
                 <form

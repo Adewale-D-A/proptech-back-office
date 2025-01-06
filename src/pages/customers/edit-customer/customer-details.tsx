@@ -47,7 +47,7 @@ export default function EditCustomerDetailsPage() {
     );
   }, []);
 
-  useGetCustomerById(storeCustomerDetails?.id === "updated" ? undefined : id);
+  useGetCustomerById(storeCustomerDetails?.id === "updated" ? "" : id);
 
   return (
     <section className="w-full flex flex-col items-center">
