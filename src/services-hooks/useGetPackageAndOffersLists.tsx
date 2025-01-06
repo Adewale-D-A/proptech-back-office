@@ -5,6 +5,7 @@ import {
   updatePackageAndOfferList,
   addToPaginationHistory,
 } from "../stores/apiData/packages-and-offers";
+import { pagination } from "../types/pagination";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetAllPackagesAndOffers({
@@ -24,14 +25,7 @@ export default function useGetAllPackagesAndOffers({
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const [pagination, setPagination] = useState<{
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    from: number;
-    to: number;
-  }>({} as any);
+  const [pagination, setPagination] = useState<pagination>({} as any);
 
   const getPackageAndOffersLists = useCallback(async () => {
     setIsLoading(true);

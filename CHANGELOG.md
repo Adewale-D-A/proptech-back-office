@@ -1,5 +1,7 @@
 ##### 06.01.2025
 
+> Reports API completion
+> Reports endpoint integrations
 > Fixed bugs, testing and inconsistencies resolutions
 
 ##### 05.01.2025
