@@ -6,12 +6,12 @@ import ImageCarousel from "../../../components/cards/image-carousel";
 import LocationPinIcon from "../../../assets/icons/location";
 import BathIcon from "../../../assets/icons/bath";
 import LoadingButton from "../../../components/button";
-import DateInput from "../../../components/inputs/dateInput";
 import TextInput from "../../../components/inputs/textInput";
 import PriceRateList from "../../../components/tables/pricingRateLists";
 import { apartmentById } from "../../../types/apiData/apartment";
 import Search from "../../../components/inputs/search";
 import useAxios from "../../../useHooks/useAxios";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 
 const breadCrumb = [
   {
@@ -63,6 +63,16 @@ export default function RateTable() {
           price: rate,
           caution_fee: cautionFee,
         });
+        dispatch(
+          openSnackbar({
+            message: "Success",
+            isError: false,
+          })
+        );
+        setFrom("");
+        setTo("");
+        setRate("");
+        setCautionFee("");
       } catch (error) {
       } finally {
         setIsSubmitting(false);
@@ -111,23 +121,21 @@ export default function RateTable() {
             <div className="pb-3">
               <form onSubmit={submitRate} className="flex flex-col gap-3">
                 <h6 className="text-md font-semibold">Add Rates Per Night</h6>
-                <DateInput
-                  inputType="date"
+                <TextInput
+                  inputType="number"
                   isRequired={true}
                   value={from}
                   setValue={setFrom}
                   id="from-date"
                   placeholder="From"
-                  label="From"
                 />
-                <DateInput
-                  inputType="date"
+                <TextInput
+                  inputType="number"
                   isRequired={true}
                   value={to}
                   setValue={setTo}
                   id="to-date"
                   placeholder="To"
-                  label="To"
                 />
                 <h6 className="text-md font-semibold border-t py-3">
                   Add Rates Per Night
