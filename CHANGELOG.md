@@ -1,5 +1,6 @@
 ##### 06.01.2025
 
+> Tax rates bug fix
 > Price rate table from-to bug fix
 > Reports API completion
 > Reports endpoint integrations

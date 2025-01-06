@@ -43,7 +43,7 @@ export default function TaxRates() {
               "Tax Rate",
               "Created On",
               "Tax Breakdown",
-              "Action",
+              // "Action",
             ]}
           />
         </div>
