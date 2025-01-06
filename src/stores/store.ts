@@ -48,6 +48,8 @@ import houseRulesData from "./apiData/house-rules";
 import locationGroupings from "./apiData/apartment/location-groupings";
 
 import chatListData from "./apiData/chat-list";
+// report
+import revenueReports from "./apiData/reports/revenue";
 // admins
 import adminsListData from "./apiData/admins-list";
 import rolesListData from "./apiData/roles-lists";
@@ -120,6 +122,8 @@ export const adminStore = () => {
       allVendorServices: vendorServiceListData,
       chatList: chatListData,
 
+      // reports
+      revenueReports: revenueReports,
       // admins
       allAdminsLists: adminsListData,
       allRolesLists: rolesListData,

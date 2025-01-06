@@ -1,16 +1,15 @@
 export type revenueReportList = {
-  id: string;
   date: string;
-  roomSold: string;
-  nightBook: string;
-  totalBooking: string;
-  occupancy: string;
-  ibeRevenue: string;
-  refunds: string;
-  otaRevenue: string;
-  adr: string;
-  revipar: string;
-  taxes: string;
+  rooms_sold: number;
+  nights_booked: string;
+  nights_available: number;
+  occupancy_rate: string;
+  adr: number;
+  revpar: number;
+  ibe_revenue: number;
+  ota_revenue: number;
+  taxes: number;
+  caution_fee: number;
 };
 
 export type dailyRoomReportList = {
@@ -26,12 +25,12 @@ export type dailyRoomReportList = {
 };
 
 export type occupancyTimeReportList = {
-  id: string;
-  dateTime: string;
-  apartment: string;
-  status: string;
-  customer: string;
-  guest: string;
-  checkIn: string;
-  checkOut: string;
+  date: string;
+  shortlet_id: number;
+  shortlet_name: string;
+  occupancy_status: string;
+  occupant_name: string;
+  number_of_guests: string;
+  check_in_date: string;
+  check_out_date: string;
 };
