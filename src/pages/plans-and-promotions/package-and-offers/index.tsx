@@ -6,7 +6,7 @@ import PackagesAndOfferList from "../../../components/tables/packagesAndOfferLis
 
 const breadCrumb = [
   {
-    url: "#",
+    url: "/plans-and-promotions/tax-rates",
     label: "Plans & Promotions",
     icon: <PercentageBadgeIcon />,
   },

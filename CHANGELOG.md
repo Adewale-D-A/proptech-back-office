@@ -1,3 +1,7 @@
+##### 06.01.2025
+
+> Fixed bugs, testing and inconsistencies resolutions
+
 ##### 05.01.2025
 
 > Fixed Updating customer information bug

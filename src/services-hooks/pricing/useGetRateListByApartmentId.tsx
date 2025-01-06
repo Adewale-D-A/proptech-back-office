@@ -24,7 +24,7 @@ export default function useGetRateListByApartmentId({
     setIsFailed(false);
     try {
       const response = await axios.get(
-        `/admin/rate-list/${apartmentId}?imit=${limit}&page=${page}`
+        `/admin/rate-list/${apartmentId}?limit=${limit}&page=${page}`
       );
       const { rate_list } = response?.data?.data;
       const { data, current_page, last_page, per_page, total, from, to } =
@@ -48,7 +48,9 @@ export default function useGetRateListByApartmentId({
   }, [page, limit, apartmentId]);
 
   useEffect(() => {
-    getRateListByApartmentId();
+    if (apartmentId) {
+      getRateListByApartmentId();
+    }
   }, [page, limit, apartmentId]);
 
   return {

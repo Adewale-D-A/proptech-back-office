@@ -28,7 +28,7 @@ import useGetOffer from "../../../../services-hooks/userGetOffer";
 
 const breadCrumb = [
   {
-    url: "/plans-and-promotions",
+    url: "/plans-and-promotions/tax-rates",
     label: "Plans & Promotions",
     icon: <PercentageBadgeIcon />,
   },
@@ -134,7 +134,7 @@ export default function AddNewPackageAndOffer() {
     }
   }, [data]);
   const saveAndClose = useCallback(() => {
-    naviagte("/plans-and-promotions");
+    naviagte("/plans-and-promotions/tax-rates");
   }, []);
 
   const handleSubmit = useCallback(
@@ -225,7 +225,7 @@ export default function AddNewPackageAndOffer() {
             <LoadingButton
               type="button"
               isLoading={false}
-              label="Save and Close"
+              label="Close"
               variant={2}
               clickHandler={() => saveAndClose()}
             />
