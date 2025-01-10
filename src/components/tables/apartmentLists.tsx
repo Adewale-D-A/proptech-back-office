@@ -157,7 +157,10 @@ export default function ApartmentListsTable() {
           )}
         </div>
         <div className="w-full block md:hidden">
-          <MobileApartmentTable data={data} />
+          <MobileApartmentTable
+            data={data}
+            handleOpenCalculateRate={handleOpenCalculateRate}
+          />
         </div>
         <Pagination
           pagination={pagination}

@@ -187,7 +187,7 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
             label="Date of Birth"
           />
           <Select
-            isRequired={true}
+            isRequired={false}
             value={country}
             setValue={setCountry}
             id="country"

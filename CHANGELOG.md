@@ -1,3 +1,8 @@
+##### 10.01.2025
+
+> Fixed customers flow mobile responsiveness
+> Fixed apartment flow mobile responsiveness
+
 ##### 06.01.2025
 
 > Tax rates bug fix

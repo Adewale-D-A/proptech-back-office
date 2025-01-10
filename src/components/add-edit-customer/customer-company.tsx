@@ -90,7 +90,7 @@ export default function AddEditCustomerCompany({ id }: { id?: string }) {
         <div className=" w-full grid grid-cols-1  gap-3 md:gap-5 items-end">
           <TextInput
             inputType="text"
-            isRequired={true}
+            isRequired={false}
             value={companyName}
             setValue={setCompanyName}
             id="company-name"
@@ -99,7 +99,7 @@ export default function AddEditCustomerCompany({ id }: { id?: string }) {
           />
           <TextInput
             inputType="text"
-            isRequired={true}
+            isRequired={false}
             value={VATid}
             setValue={setVATid}
             id="VAT-id"
@@ -109,7 +109,7 @@ export default function AddEditCustomerCompany({ id }: { id?: string }) {
           <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3">
             <TextInput
               inputType="email"
-              isRequired={true}
+              isRequired={false}
               value={companyEmail}
               setValue={setCompanyEmail}
               id="companu-email"
@@ -118,7 +118,7 @@ export default function AddEditCustomerCompany({ id }: { id?: string }) {
             />
             <TextInput
               inputType="text"
-              isRequired={true}
+              isRequired={false}
               value={companyId}
               setValue={setCompanyId}
               id="company-id"
@@ -126,7 +126,7 @@ export default function AddEditCustomerCompany({ id }: { id?: string }) {
               label="Company ID"
             />
             <Select
-              isRequired={true}
+              isRequired={false}
               value={companyCountry}
               setValue={setCompanyCountry}
               id="country"
@@ -170,8 +170,8 @@ export default function AddEditCustomerCompany({ id }: { id?: string }) {
       </div>
 
       {/* submit and cancel buttons */}
-      <div className=" w-full flex justify-end mt-10">
-        <div className=" flex items-center justify-between gap-4">
+      <div className=" w-full flex justify-center md:justify-end mt-10">
+        <div className=" flex items-center flex-col md:flex-row gap-4">
           <div className=" w-fit">
             <LinkButton
               url={

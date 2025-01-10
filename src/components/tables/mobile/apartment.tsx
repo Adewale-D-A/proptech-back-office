@@ -7,8 +7,10 @@ import Status from "../../status";
 
 export default function MobileApartmentTable({
   data,
+  handleOpenCalculateRate,
 }: {
   data: apartmentById[];
+  handleOpenCalculateRate: (id: number) => void;
 }) {
   return (
     <div className=" w-full flex flex-col gap-4">
@@ -48,39 +50,40 @@ export default function MobileApartmentTable({
                       </span>{" "}
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                         <Link
-                          to={`/apartments-details/${item?.id}`}
+                          to={`/apartments/apartment-details/${item?.id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           View Apartment
                         </Link>
                         <Link
-                          to={`/edit-apartment/apartment-details/${item?.id}`}
+                          to={`/apartments/edit-apartment/apartment-details/${item?.id}`}
                           className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Edit Apartment
                         </Link>
                         <Link
-                          to={`/apartment-caledar/${item?.id}`}
+                          to={`/apartments/apartment-caledar/${item?.id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Check Calender
                         </Link>
-                        <Link
-                          to="#"
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          View Rates
-                        </Link>
-                        {/* <button
+                        <button
                           type="button"
-                          onClick={() => {
-                            setDeleteId(String(request?.id));
-                            setOpenDeleteConfirmation(true);
-                          }}
+                          onClick={() => handleOpenCalculateRate(item?.id)}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
-                          Delete Apartment
-                        </button> */}
+                          View Rate
+                        </button>
+                        {/* <button
+                            type="button"
+                            onClick={() => {
+                              setDeleteId(String(request?.id));
+                              setOpenDeleteConfirmation(true);
+                            }}
+                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                          >
+                            Delete Apartment
+                          </button> */}
                       </span>
                     </div>
                   </div>

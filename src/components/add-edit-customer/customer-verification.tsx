@@ -161,8 +161,8 @@ export default function AddEditCustomerVerification({ id }: { id?: string }) {
       </div>
 
       {/* submit and cancel buttons */}
-      <div className=" w-full flex justify-end mt-10">
-        <div className=" flex items-center gap-4">
+      <div className=" w-full flex justify-center md:justify-end mt-10">
+        <div className=" flex items-center flex-col md:flex-row gap-4">
           <div className=" w-fit">
             <LinkButton
               url={
