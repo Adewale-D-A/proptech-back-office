@@ -52,8 +52,12 @@ run **npm start** (start application on port:3000)
 
 [FIGMA File](https://www.figma.com/design/foJk9S0rCJImkVXY0EgxId/proptech?node-id=4400-64&node-type=&t=ZI2UUvFyHO0J3pWZ-0)
 
-[MISSING SCREEN UI](https://www.figma.com/design/sJXTHB9vabVu6hd3TXH9uk/99-APPs?node-id=100-24433&node-type=canvas&t=jbtAxyNdljLvbX97-0)
+[Super App + Additions](https://www.figma.com/design/sJXTHB9vabVu6hd3TXH9uk/99-APPs?node-id=396-44772&p=f&t=96dXJsuOSOwwVNLx-0)
 
 [OPERATIONS FIGMA](https://www.figma.com/proto/sJXTHB9vabVu6hd3TXH9uk/99-APPs?page-id=51%3A91251&node-id=51-91253&node-type=frame&viewport=7324%2C17129%2C0.22&t=44IpZvZVOOxQuZCO-1&scaling=min-zoom&content-scaling=fixed)
 
+[MISSING SCREEN UI](https://www.figma.com/design/sJXTHB9vabVu6hd3TXH9uk/99-APPs?node-id=100-24433&node-type=canvas&t=jbtAxyNdljLvbX97-0)
+
 [backend main api doc](https://documenter.getpostman.com/view/36930652/2sAXjNXAMk)
+
+[Bug list](https://writer.zoho.com/writer/open/lljmv08c7bcf6fbc54a4ba3bd075ae69fe72a)
