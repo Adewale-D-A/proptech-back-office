@@ -59,7 +59,7 @@ export default function AddEditAmenities({
       setIsCreating(true);
       const payload = {
         name: title,
-        desciption: description,
+        description: description,
         image: file,
         ordering_position: ordering,
       };

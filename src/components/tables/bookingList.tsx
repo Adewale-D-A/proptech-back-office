@@ -45,7 +45,7 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
         {[
           {
             id: data?.id,
-            customerName: `${data?.account_name}`,
+            customerName: `${data?.user?.first_name} ${data?.user?.last_name}`,
             apartnmentName: data?.shortlet?.name,
             bookingDate: formatDate(data?.created_at),
             noOfRooms: data?.shortlet?.no_of_bedrooms,

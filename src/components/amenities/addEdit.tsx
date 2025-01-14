@@ -60,7 +60,7 @@ export default function AddEdit({
       setIsAdding(true);
       const payload = {
         name: title,
-        desciption: description,
+        description: description,
         image: "",
       };
       try {

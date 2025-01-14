@@ -1,3 +1,8 @@
+##### 14.01.2025
+
+> Bug list resolution
+> Bugs sheet url added to README
+
 ##### 10.01.2025
 
 > Fixed customers flow mobile responsiveness

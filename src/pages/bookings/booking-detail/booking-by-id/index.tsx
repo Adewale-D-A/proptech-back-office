@@ -54,7 +54,7 @@ export default function BookingDetailsById() {
   return (
     <section className="w-full flex flex-col items-center my-5">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
-        <BookingByIdList data={data} />
+        <BookingByIdList data={{ ...data, user: customer }} />
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className=" w-full flex flex-col gap-4 border rounded-md">
             {/* Customer Details */}

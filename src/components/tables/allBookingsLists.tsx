@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../pagination";
 import NoResult from "../noResult";
-import Search from "../inputs/search";
 import FilterSearch from "../filterAndSort/filter-search";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import Status from "../status";
@@ -13,9 +12,11 @@ import ModalTemplate from "../modal";
 import BookingDetailSummary from "../booking-detail";
 import formatDate from "../../utils/isoDateConverter";
 import MobileBookingsTable from "./mobile/bookings";
+import TableSearch from "../inputs/search/table-search";
 
 export default function AllBookingsListTable({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
+  const [search, setSearch] = useState("");
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
@@ -28,6 +29,7 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
       sort: sort,
+      search,
     });
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
@@ -61,10 +63,12 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 ">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
-          {/* <Search
-            placeholder="Apartment name, type, location..."
-            id="apartment-search"
-          /> */}
+          <div className=" max-w-md">
+            <TableSearch
+              setValue={setSearch}
+              placeholder="Search name, type, location..."
+            />
+          </div>
           {/* <FilterSearch /> */}
         </div>
         <div className="hidden md:block">

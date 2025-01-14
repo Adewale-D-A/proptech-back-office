@@ -60,4 +60,6 @@ run **npm start** (start application on port:3000)
 
 [backend main api doc](https://documenter.getpostman.com/view/36930652/2sAXjNXAMk)
 
-[Bug list](https://writer.zoho.com/writer/open/lljmv08c7bcf6fbc54a4ba3bd075ae69fe72a)
+[Bug list - 99Apt Agents](https://writer.zoho.com/writer/open/lljmv08c7bcf6fbc54a4ba3bd075ae69fe72a)
+
+[Bug list - Reformed and re-translated](https://docs.google.com/spreadsheets/d/1hg1SBdeoIuYGga-goTEt5K5MztbEye2Wfkg9Jaw6kI8/edit?usp=sharing)

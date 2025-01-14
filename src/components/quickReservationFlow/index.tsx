@@ -16,6 +16,8 @@ import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import AssignCustomer from "./assignToCustomer";
 import { useParams } from "react-router-dom";
 import useGetApartmentById from "../../services-hooks/useGetApartmentById";
+import TextInput from "../inputs/textInput";
+import CaretDownIcon from "../../assets/icons/caret-down";
 
 export default function QuickReservationFlow({
   variant = 1,
@@ -49,7 +51,7 @@ export default function QuickReservationFlow({
   const [guestNo, setGuestNo] = useState("");
   const [payment, setPayment] = useState("");
   // const [rate, setRate] = useState("");
-  // const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [bookingStatus, setBookingStatus] = useState("");
   const [closeRoom, setCloseRoom] = useState(false);
 
@@ -62,6 +64,11 @@ export default function QuickReservationFlow({
       setSelectedApt(apartment?.id ? apartment : apartment_info);
     }
   }, [apartment, apartment_info]);
+
+  // auto populate email on customer assignment
+  useEffect(() => {
+    setEmail(data?.email || "");
+  }, [data]);
 
   const assignCustomer = useCallback(() => {
     dispatch(openAssignToCustomerView());
@@ -134,6 +141,12 @@ export default function QuickReservationFlow({
     ]
   );
 
+  const clearSeletecApartment = useCallback(() => {
+    if (setSelectedApt) {
+      setSelectedApt({} as any);
+    }
+  }, [setSelectedApt]);
+
   return (
     <>
       {openAssignToCustomer ? (
@@ -166,9 +179,12 @@ export default function QuickReservationFlow({
                   setValue={setApartment}
                 />
               ) : (
-                <span className="w-full p-3 rounded-lg border  bg-gray-200/15 ">
-                  {apartment_name}
-                </span>
+                <div className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between">
+                  <span className="">{apartment_name}</span>
+                  <button onClick={() => clearSeletecApartment()}>
+                    <CaretDownIcon />
+                  </button>
+                </div>
               )}
               <Select
                 isRequired={true}
@@ -190,14 +206,6 @@ export default function QuickReservationFlow({
                 placeholder="Check-in Date"
                 label="Check-in Date"
               />
-              {/* <Select
-            isRequired={true}
-            value={rate}
-            setValue={setRate}
-            id="seclect-custom-rate"
-          >
-            <option value="">Select Custom Rate</option>
-          </Select> */}
               <TimeInput
                 inputType="time"
                 isRequired={true}
@@ -207,14 +215,6 @@ export default function QuickReservationFlow({
                 placeholder="Check-in Time"
                 label="Check-in Time"
               />
-              {/* <TextInput
-            inputType="email"
-            isRequired={true}
-            value={email}
-            setValue={setEmail}
-            id="customer-email"
-            placeholder="Customer Email"
-          /> */}
               <DateInput
                 inputType="date"
                 isRequired={true}
@@ -284,12 +284,29 @@ export default function QuickReservationFlow({
                 </button>
               </div>
             </div>
+            {/* <Select
+              isRequired={true}
+              value={rate}
+              setValue={setRate}
+              id="seclect-custom-rate"
+            >
+              <option value="">Select Custom Rate</option>
+            </Select> */}
+            <TextInput
+              inputType="email"
+              isRequired={true}
+              value={email}
+              setValue={setEmail}
+              id="customer-email-quick-reservation"
+              placeholder="Customer Email"
+              readonly={data?.email ? true : false}
+            />
             <TextAreaInput
               value={customerMetaData}
               setValue={setCustomerMetadata}
               id="customer-information"
               isRequired={true}
-              placeholder="customer information"
+              placeholder="Customer information"
             />
             <LoadingButton
               type="submit"
