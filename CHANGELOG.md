@@ -1,3 +1,7 @@
+##### 17.01.2025
+
+> Apartment tab items update and delete bug fixes
+
 ##### 14.01.2025
 
 > Bug list resolution

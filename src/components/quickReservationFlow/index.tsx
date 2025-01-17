@@ -18,6 +18,7 @@ import { useParams } from "react-router-dom";
 import useGetApartmentById from "../../services-hooks/useGetApartmentById";
 import TextInput from "../inputs/textInput";
 import CaretDownIcon from "../../assets/icons/caret-down";
+import reservationValidator from "../../utils/reservation-validator";
 
 export default function QuickReservationFlow({
   variant = 1,
@@ -77,6 +78,24 @@ export default function QuickReservationFlow({
   const makeReservation = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
+      const validatorResponse = reservationValidator({
+        data: {
+          "Check in date": checkInDate,
+          "Check out date": checkOutDate,
+          "Check in time": checkInTime,
+          "Check out time": checkOutTime,
+        },
+      });
+      if (!validatorResponse?.success) {
+        dispatch(
+          openSnackbar({
+            message: validatorResponse?.message,
+            isError: true,
+          })
+        );
+        return;
+      }
+      // if (checkInDate && checkOutDate && checkInTime && checkOutTime) {
       setIsMakingReservation(true);
       try {
         const payload = {
@@ -94,7 +113,6 @@ export default function QuickReservationFlow({
           email: data?.email, // required if no user_id
           phone: data?.phone, // required if no user_id
         };
-
         // conditionally remove from payload if no change was made
         const newPayload = Object.fromEntries(
           Object.entries(payload).filter(([key]) =>
@@ -199,7 +217,7 @@ export default function QuickReservationFlow({
               </Select>
               <DateInput
                 inputType="date"
-                isRequired={true}
+                isRequired={false}
                 value={checkInDate}
                 setValue={setCheckInDate}
                 id="check-in-date"
@@ -208,7 +226,7 @@ export default function QuickReservationFlow({
               />
               <TimeInput
                 inputType="time"
-                isRequired={true}
+                isRequired={false}
                 value={checkInTime}
                 setValue={setCheckInTime}
                 id="check-in-time"
@@ -217,7 +235,7 @@ export default function QuickReservationFlow({
               />
               <DateInput
                 inputType="date"
-                isRequired={true}
+                isRequired={false}
                 value={checkOutDate}
                 setValue={setCheckOutDate}
                 id="check-out-date"
@@ -226,7 +244,7 @@ export default function QuickReservationFlow({
               />
               <TimeInput
                 inputType="time"
-                isRequired={true}
+                isRequired={false}
                 value={checkOutTime}
                 setValue={setCheckOutTime}
                 id="check-out-time"

@@ -6,8 +6,13 @@ import ModalTemplate from "../modal";
 import AddEdit from "../amenities/addEdit";
 import useGetHouseRules from "../../services-hooks/useGetAllRules";
 import NoResult from "../noResult";
+import useAxios from "../../useHooks/useAxios";
+import { useAppDispatch } from "../../stores/hooks";
+import { removeHouseRule } from "../../stores/apiData/house-rules";
 
 export default function RulesLists() {
+  const axios = useAxios(false);
+  const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
@@ -21,12 +26,14 @@ export default function RulesLists() {
   const handleDelete = useCallback(async () => {
     setIsDeleting(true);
     try {
+      await axios.delete(`/admin/rule/${selectedId}`);
+      dispatch(removeHouseRule({ id: Number(selectedId) }));
       setOpenDelete(false);
     } catch (error) {
     } finally {
       setIsDeleting(false);
     }
-  }, []);
+  }, [selectedId]);
 
   return (
     <>
@@ -65,7 +72,10 @@ export default function RulesLists() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => setOpenDelete(true)}
+                          onClick={() => {
+                            setSelectedId(String(request?.id));
+                            setOpenDelete(true);
+                          }}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Delete
