@@ -11,6 +11,7 @@ import Pagination from "../../pagination";
 import formatDate from "../../../utils/isoDateConverter";
 import useGetRevenueReport from "../../../services-hooks/reports/revenue";
 import useGetReportSummary from "../../../services-hooks/reports/report-summary";
+import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
 
 export default function DailyRoomReportTable() {
   const [type, setType] = useState("");
@@ -64,11 +65,10 @@ export default function DailyRoomReportTable() {
             <option value="departing">Departing</option>
           </Select>
         </div>
-        <Search
-          id="apartment-search"
-          componentId="apartment"
+        <ApartmentSingleSearch
           placeholder="Apartment name..."
-          setValue={setApartment}
+          selected={apartment}
+          setSelected={setApartment}
         />
         <div className=" flex items-center gap-4">
           <LoadingButton

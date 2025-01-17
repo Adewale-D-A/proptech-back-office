@@ -1,5 +1,6 @@
 ##### 17.01.2025
 
+> Apartment, customer, location groupings search and select UI and logic re-work
 > Apartment tab items update and delete bug fixes
 
 ##### 14.01.2025

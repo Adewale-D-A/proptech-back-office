@@ -12,6 +12,7 @@ import PhoneInput from "../inputs/phoneInput";
 import { customersById } from "../../types/apiData/customers";
 import AddressAutocompleteInput from "../inputs/addressAutocompleteInout";
 import BinIcon from "../../assets/icons/bin-icon";
+import CustomersSingleSearch from "../inputs/search/customer-single-search";
 
 export default function AssignCustomer() {
   const dispatch = useAppDispatch();
@@ -94,11 +95,10 @@ export default function AssignCustomer() {
           <label htmlFor="exisitng-customer" className=" font-semibold">
             Existing User
           </label>
-          <Search
-            id="exisitng-customer"
+          <CustomersSingleSearch
             placeholder="Exisitng customer name, ID, etc..."
-            componentId="customer"
-            setValue={setSearcchedUser}
+            selected={searchedUser}
+            setSelected={setSearcchedUser}
           />
         </div>
         <div className=" w-full grid grid-cols-1 gap-5">

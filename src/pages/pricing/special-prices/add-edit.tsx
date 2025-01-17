@@ -23,6 +23,7 @@ import useAxios from "../../../useHooks/useAxios";
 import useGetSpecialPrice from "../../../services-hooks/pricing/useSpecialPrice";
 import LinkButton from "../../../components/button/linkButton";
 import Search from "../../../components/inputs/search";
+import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
 
 const breadCrumb = [
   {

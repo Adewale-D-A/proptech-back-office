@@ -10,6 +10,7 @@ import useAxios from "../../useHooks/useAxios";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import useGetBookingsByUserId from "../../services-hooks/bookings/bookingsByUserId";
 import TextInput from "../inputs/textInput";
+import CustomersSingleSearch from "../inputs/search/customer-single-search";
 
 export default function NewRequest({ setValue }: { setValue: Function }) {
   const dispatch = useAppDispatch();
@@ -66,11 +67,10 @@ export default function NewRequest({ setValue }: { setValue: Function }) {
   );
   return (
     <form onSubmit={addService} className="w-full flex flex-col gap-3">
-      <Search
-        id="customers-search"
+      <CustomersSingleSearch
         placeholder="Search customer to assign to"
-        setValue={setSelectedCustomer}
-        componentId="customer"
+        selected={seletedCustomer}
+        setSelected={setSelectedCustomer}
       />
       <Select
         isRequired={true}

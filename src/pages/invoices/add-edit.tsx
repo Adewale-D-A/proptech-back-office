@@ -2,7 +2,6 @@ import { useLocation } from "react-router-dom";
 import { useAppDispatch } from "../../stores/hooks";
 import { ChangeEvent, SyntheticEvent, useCallback, useState } from "react";
 import LinkButton from "../../components/button/linkButton";
-import Search from "../../components/inputs/search";
 import TextInput from "../../components/inputs/textInput";
 import TextAreaInput from "../../components/inputs/textArea";
 import BinIcon from "../../assets/icons/bin-icon";
@@ -15,6 +14,7 @@ import useAxios from "../../useHooks/useAxios";
 import { customersById } from "../../types/apiData/customers";
 import useGetBookingsByUserId from "../../services-hooks/bookings/bookingsByUserId";
 import Select from "../../components/inputs/select";
+import CustomersSingleSearch from "../../components/inputs/search/customer-single-search";
 // import useGetInvoice from "../../services-hooks/invoice/useGetInvoice";
 
 export default function AddEditInvoice({ id }: { id?: string }) {
@@ -200,11 +200,10 @@ export default function AddEditInvoice({ id }: { id?: string }) {
               </div>
             </div>
             <div className="w-full p-3 flex flex-col gap-6 max-w-screen-md">
-              <Search
-                setValue={setUser}
-                id="customer-search"
-                componentId="customer"
+              <CustomersSingleSearch
                 placeholder="Existing Customer name, ID, etc..."
+                selected={user}
+                setSelected={setUser}
               />
 
               <Select

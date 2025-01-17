@@ -8,7 +8,6 @@ import DateInput from "../inputs/dateInput";
 import TimeInput from "../inputs/timeInput";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { openAssignToCustomerView } from "../../stores/inAppDataInterations/assignCustomer";
-import Search from "../inputs/search";
 import { apartmentById } from "../../types/apiData/apartment";
 import useAxios from "../../useHooks/useAxios";
 import { addBookingsToList } from "../../stores/apiData/bookings-lists";
@@ -19,6 +18,7 @@ import useGetApartmentById from "../../services-hooks/useGetApartmentById";
 import TextInput from "../inputs/textInput";
 import CaretDownIcon from "../../assets/icons/caret-down";
 import reservationValidator from "../../utils/reservation-validator";
+import ApartmentSingleSearch from "../inputs/search/apartment-single-search";
 
 export default function QuickReservationFlow({
   variant = 1,
@@ -26,12 +26,14 @@ export default function QuickReservationFlow({
   apartment_id,
   setSelectedApt,
   setOpen,
+  allowApartmentUpdate = true,
 }: {
   variant?: number;
   apartment_id?: string;
   apartment_name?: string;
   setSelectedApt?: (data: apartmentById) => void;
   setOpen?: (st: boolean) => void;
+  allowApartmentUpdate?: boolean;
 }) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
@@ -189,21 +191,23 @@ export default function QuickReservationFlow({
           >
             <option value="">1 Bedroom apartment</option>
           </Select> */}
-              {variant === 2 && !apartment_name ? (
-                <Search
-                  id="apartment-search"
+              {variant === 2 && allowApartmentUpdate ? (
+                <ApartmentSingleSearch
                   placeholder="Search apartment by name"
-                  componentId="apartment"
-                  setValue={setApartment}
+                  selected={apartment}
+                  setSelected={setApartment}
                 />
               ) : (
                 <div className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between">
                   <span className="">{apartment_name}</span>
-                  <button onClick={() => clearSeletecApartment()}>
-                    <CaretDownIcon />
-                  </button>
                 </div>
               )}
+              {/* <ApartmentSingleSearch
+                placeholder="Search apartment by name"
+                selected={apartment}
+                setSelected={setApartment}
+                readOnly={apartment_name}
+              /> */}
               <Select
                 isRequired={true}
                 value={payment}

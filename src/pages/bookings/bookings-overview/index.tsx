@@ -20,6 +20,7 @@ import useGetApartmentCalendar from "../../../services-hooks/apartmentCalendar";
 import useGetVisitorCount from "../../../services-hooks/bookings/useGetVisitorCOunter";
 import useGetWeeklyBookingCount from "../../../services-hooks/bookings/useGetWeeklyBookingCount";
 import formatDate from "../../../utils/isoDateConverter";
+import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
 
 export default function BookingsOverview() {
   const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
@@ -100,11 +101,10 @@ export default function BookingsOverview() {
               <CalendarIcon /> <span>Check Availability</span>{" "}
             </h4>
             <div className=" p-3 flex flex-col gap-4">
-              <Search
-                setValue={setSearchedApt}
-                id="apartment-search"
-                componentId="apartment"
+              <ApartmentSingleSearch
                 placeholder="Search apartment..."
+                selected={searchedAptd}
+                setSelected={setSearchedApt}
               />
               <CheckAvailability
                 apartmentId={String(searchedAptd?.id || "")}
@@ -130,11 +130,10 @@ export default function BookingsOverview() {
           </div>
           <div className=" px-3 flex flex-col gap-3 justify-center items-center">
             <div className="w-full flex flex-col gap-3">
-              <Search
-                id="apartment-search"
-                componentId="apartment"
+              <ApartmentSingleSearch
                 placeholder="Apartment name..."
-                setValue={setSelectedApt}
+                selected={selectedAprt}
+                setSelected={setSelectedApt}
               />
             </div>
             <CalendarAvailabilitySymbol />
