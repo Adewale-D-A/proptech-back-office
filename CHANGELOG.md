@@ -1,3 +1,7 @@
+##### 18.01.2025
+
+> Bug Fix: Date input logic re-work
+
 ##### 17.01.2025
 
 > Apartment, customer, location groupings search and select UI and logic re-work
