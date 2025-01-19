@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import useAxios from "../useHooks/useAxios";
+import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
+import ApartmentsCalendarDataTranslator from "../utils/apartments-calendar-data-translator";
+import { reformedApartmentCalendar } from "../types/apiData/apartment/reformed-apartment-calendar";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetApartmentsCalendar({
@@ -10,32 +13,29 @@ export default function useGetApartmentsCalendar({
   end_date?: string;
 }) {
   const axios = useAxios();
-  const [data, setData] = useState<{
-    [key: string]: {
-      booked_dates: {
-        [key: string]: string;
-      };
-      blocked_dates: {
-        [key: string]: string;
-      };
-    };
-  }>({ booked_dates: [], blocked_dates: [] } as any);
+  const [data, setData] = useState<reformedApartmentCalendar[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const getApartmentsCalendar = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
-      const response = await axios.get(
-        start_date && end_date
-          ? `/admin/calendar/all?start_date=${start_date}&end_date=${end_date}`
-          : `/admin/calendar/all`
-      );
+      const { queryString, remakeRequest } = ApiQueryParamsExtractor({
+        dataset: {
+          start_date: start_date,
+          end_date: end_date,
+        },
+      });
+      const response = await axios.get(`/admin/calendar/all?${queryString}`);
       const result = response?.data?.data;
-      setData(result);
-      setIsLoading(false);
+      const reformed = ApartmentsCalendarDataTranslator({ dataset: result });
+      console.log({ reformed });
+      setData(reformed?.reformed || []);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [start_date, end_date]);
 
