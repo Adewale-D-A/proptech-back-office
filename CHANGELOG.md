@@ -1,3 +1,7 @@
+##### 19.01.2025
+
+> Bug fix: Time input hover
+
 ##### 18.01.2025
 
 > Bug Fix: Date input logic re-work
