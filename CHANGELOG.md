@@ -1,5 +1,8 @@
 ##### 19.01.2025
 
+> Feature: Bookings filter API, logic and UI updates
+> Feature: Api query parameter extractor UTIL function creation
+> Feature: Custom API hook for all apartments calendar created (will be used for the calendar view to fix the highlighted design behaviour)
 > Bug fix: Time input hover
 
 ##### 18.01.2025

@@ -29,7 +29,12 @@ export default function ApartmentCalendarView() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
-
+  const [defaultReservationsDateTime, setDefaultReservtionDateTime] = useState<{
+    checkIn: string;
+    checkOut: string;
+    checkInTime: string;
+    checkOutTime: string;
+  }>();
   // store assigned customer state
   const { open: openAssignToCustomerView } = useAppSelector(
     (state) => state.assignCustomer.value
@@ -92,6 +97,23 @@ export default function ApartmentCalendarView() {
   }, [data]);
   //spread date range into objects for the calendar view to render
 
+  const handleDateClick = useCallback((date: Date) => {
+    const toDate = new Date(
+      date?.getFullYear(),
+      date?.getMonth(),
+      date?.getDate() + 1
+    )
+      .toISOString()
+      ?.slice(0, 10);
+    setDefaultReservtionDateTime((prev) => {
+      return {
+        checkIn: prev?.checkIn ? prev?.checkIn : toDate,
+        checkOut: prev?.checkIn ? toDate : "",
+        checkInTime: prev?.checkIn ? "15:00" : "",
+        checkOutTime: prev?.checkIn ? "11:00" : "",
+      };
+    });
+  }, []);
   return (
     <>
       <section className="w-full flex flex-col items-center my-5">
@@ -106,6 +128,7 @@ export default function ApartmentCalendarView() {
                   variant={2}
                   apartment_name={selectedAprt?.name || ""}
                   setSelectedApt={setSelectedApt}
+                  defaultDateTime={defaultReservationsDateTime}
                 />
               </div>
             </div>
@@ -129,13 +152,14 @@ export default function ApartmentCalendarView() {
                     <CalendarAvailabilitySymbol />
                     <div className="w-full flex flex-wrap gap-8 gap-y-16 justify-center items-start">
                       {calendarVewData?.map((item, index) => (
-                        <div key={index} className=" border-r px-3">
+                        <div key={item?.toString()} className=" border-r px-3">
                           <CalendarView
                             date={new Date(item)}
                             highlights={[
                               ...data?.booked_dates,
                               ...data?.blocked_dates,
                             ]}
+                            onDateClick={handleDateClick}
                           />
                         </div>
                       ))}

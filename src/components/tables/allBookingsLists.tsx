@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../pagination";
 import NoResult from "../noResult";
-import FilterSearch from "../filterAndSort/filter-search";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import Status from "../status";
 import useGetAllBookingsLists from "../../services-hooks/useGetAllBookingsLists";
@@ -13,10 +12,13 @@ import BookingDetailSummary from "../booking-detail";
 import formatDate from "../../utils/isoDateConverter";
 import MobileBookingsTable from "./mobile/bookings";
 import TableSearch from "../inputs/search/table-search";
+import BookingsFilterSearch from "../filterAndSort/bookings-filter";
+import { BookingFilterPayload } from "../../types/apiData/bookings/booking-filter-options";
 
 export default function AllBookingsListTable({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<BookingFilterPayload>();
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
@@ -30,6 +32,7 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
       end_date: filterDates?.end_date,
       sort: sort,
       search,
+      ...filter,
     });
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
@@ -69,7 +72,7 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
               placeholder="Search name, type, location..."
             />
           </div>
-          {/* <FilterSearch /> */}
+          <BookingsFilterSearch setData={setFilter} />
         </div>
         <div className="hidden md:block">
           {data && data.length > 0 ? (

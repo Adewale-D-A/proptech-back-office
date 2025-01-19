@@ -42,9 +42,10 @@ export default function TimeInput({
       {!value && (
         <label
           htmlFor={id}
-          className="w-fit h-full bg-white group-hover:hidden absolute top-0 left-0 px-3 label-input flex items-center"
+          className="w-full h-full bg-white group-hover:hidden absolute top-0 left-0 px-3 label-input flex items-center justify-between"
         >
           <span>{label}</span>
+          <TimeIcon />
         </label>
       )}
     </div>

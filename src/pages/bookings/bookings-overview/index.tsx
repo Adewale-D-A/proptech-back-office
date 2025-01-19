@@ -49,6 +49,7 @@ export default function BookingsOverview() {
     id: String(selectedAprt?.id || ""),
   });
   const { data: visitorCount } = useGetVisitorCount();
+  const handleDateClick = useCallback((date: Date) => {}, []);
 
   return (
     <div className=" w-full flex flex-col gap-5 my-5">
@@ -141,6 +142,7 @@ export default function BookingsOverview() {
               <CalendarView
                 // date={new Date(item)}
                 highlights={[...data?.booked_dates, ...data?.blocked_dates]}
+                onDateClick={handleDateClick}
               />
             )}
           </div>

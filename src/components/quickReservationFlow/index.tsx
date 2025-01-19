@@ -16,7 +16,6 @@ import AssignCustomer from "./assignToCustomer";
 import { useParams } from "react-router-dom";
 import useGetApartmentById from "../../services-hooks/useGetApartmentById";
 import TextInput from "../inputs/textInput";
-import CaretDownIcon from "../../assets/icons/caret-down";
 import reservationValidator from "../../utils/reservation-validator";
 import ApartmentSingleSearch from "../inputs/search/apartment-single-search";
 
@@ -27,6 +26,7 @@ export default function QuickReservationFlow({
   setSelectedApt,
   setOpen,
   allowApartmentUpdate = true,
+  defaultDateTime,
 }: {
   variant?: number;
   apartment_id?: string;
@@ -34,6 +34,12 @@ export default function QuickReservationFlow({
   setSelectedApt?: (data: apartmentById) => void;
   setOpen?: (st: boolean) => void;
   allowApartmentUpdate?: boolean;
+  defaultDateTime?: {
+    checkIn: string;
+    checkOut: string;
+    checkInTime: string;
+    checkOutTime: string;
+  };
 }) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
@@ -67,11 +73,20 @@ export default function QuickReservationFlow({
       setSelectedApt(apartment?.id ? apartment : apartment_info);
     }
   }, [apartment, apartment_info]);
-
   // auto populate email on customer assignment
   useEffect(() => {
     setEmail(data?.email || "");
   }, [data]);
+
+  // auto populate datetime based of tracked changes
+  useEffect(() => {
+    if (defaultDateTime) {
+      setCheckInDate(defaultDateTime?.checkIn || "");
+      setCheckOutDate(defaultDateTime?.checkOut || "");
+      setCheckInTime(defaultDateTime?.checkInTime || "");
+      setCheckOutTime(defaultDateTime?.checkOutTime || "");
+    }
+  }, [defaultDateTime]);
 
   const assignCustomer = useCallback(() => {
     dispatch(openAssignToCustomerView());
@@ -107,6 +122,13 @@ export default function QuickReservationFlow({
           check_in_time: checkInTime,
           check_out_time: checkOutTime,
           number_of_guests: guestNo,
+          // "custom_rate" : {
+          //     "booking_cost" : 50000,
+          //     "tax_fee" : 5000,
+          //     "caution_fee" : 4000.99,
+          //     "currency" : "NGN",//USD or USD
+          //     "exchange_rate" : 1
+          // },
           payment_method: payment,
           status: bookingStatus, //Payment Confirmed or Awaiting Payment
           user_id: data?.id,

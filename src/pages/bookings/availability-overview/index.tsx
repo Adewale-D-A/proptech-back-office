@@ -19,6 +19,7 @@ import LoaderIcon from "../../../assets/icons/loader";
 import SearchIcon from "../../../assets/icons/search";
 import { apartmentById } from "../../../types/apiData/apartment";
 import useGetApartmentCalendar from "../../../services-hooks/apartmentCalendar";
+import useGetApartmentsCalendar from "../../../services-hooks/useGetApartmentsCalendar";
 
 const breadCrumb = [
   {
@@ -82,6 +83,10 @@ export default function AvailabilityOverview() {
   const { data: calendarDates } = useGetApartmentCalendar({
     id: String(selectedApt?.id || ""),
   });
+  // const { data } = useGetApartmentsCalendar({
+  //   start_date: "",
+  //   end_date: ""
+  // });
 
   const changeHandler = useCallback(
     (event: { year: number; month: number; day: number }) => {
