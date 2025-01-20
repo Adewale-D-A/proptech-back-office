@@ -77,7 +77,7 @@ export default function AddTax({
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setAmount(e.target.value)
             }
-            type={"text"}
+            type={"number"}
             className=" w-full outline-none"
           />
           <div className="p-2 px-6 bg-gray-200 rounded-md flex items-center text-gray-400">

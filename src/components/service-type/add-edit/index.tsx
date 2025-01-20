@@ -7,7 +7,7 @@ import useGetServiceType from "../../../services-hooks/useGetServiceType";
 import { useAppDispatch } from "../../../stores/hooks";
 import {
   addServiceTypeToList,
-  removeServiceTypeInList,
+  replaceServiceTypeInList,
 } from "../../../stores/apiData/service-types";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 
@@ -37,7 +37,7 @@ export default function AddEditServiceType({
       setPrice(price || "");
       setDescription(description || "");
     }
-  }, [data]);
+  }, [data, id]);
 
   const close = useCallback(() => {
     setOpen(false);
@@ -54,9 +54,12 @@ export default function AddEditServiceType({
       };
       try {
         if (id) {
-          const response = await axios.put("/admin/service-type", payload);
+          const response = await axios.put(
+            `/admin/service-type/${id}`,
+            payload
+          );
           const { data, message } = response?.data;
-          dispatch(removeServiceTypeInList(data));
+          dispatch(replaceServiceTypeInList(data?.serviceType));
           dispatch(
             openSnackbar({
               message: message || "Service type successfully updated",
@@ -65,7 +68,6 @@ export default function AddEditServiceType({
           );
         } else {
           const response = await axios.post("/admin/service-type", payload);
-          console.log({ response });
           const { data, message } = response?.data;
           dispatch(addServiceTypeToList(data?.serviceType));
           dispatch(

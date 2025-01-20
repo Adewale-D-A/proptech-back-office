@@ -1,3 +1,7 @@
+##### 20.01.2025
+
+> BUG Fixes and inconsistencies adjustments
+
 ##### 19.01.2025
 
 > Feature: Bookings overview Maintenance, Booked hue indicator feature developed

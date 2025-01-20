@@ -29,11 +29,7 @@ export default function PricingOverview() {
           <CalendarIcon /> <span>Check Availability</span>{" "}
         </h4>
         <div className=" p-3 ">
-          <CheckAvailability
-            apartmentId={String(selectedApt?.id || "")}
-            className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3"
-            setAvailabilityResponse={setAvailabilityResponse}
-          />
+          <CheckAvailability className=" w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3" />
         </div>
       </div>
     </div>

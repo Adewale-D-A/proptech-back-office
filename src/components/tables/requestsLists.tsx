@@ -99,7 +99,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
               {data.map((request, index) => {
                 return (
                   <tr key={request?.id} className=" border-b">
-                    <td>{request?.user_id}</td>
+                    <td>***</td>
                     <td>{request?.shortlet?.name}</td>
                     <td>
                       {formatDate(request?.created_at)}{" "}
@@ -107,7 +107,14 @@ export default function RequestsListTable({ header }: { header: string[] }) {
                     </td>
                     <td>{request?.subject}</td>
                     <td>{request?.description}</td>
-                    <td>{request?.is_escalated > 0 ? "Yes" : "No"}</td>
+                    <td>
+                      <Status
+                        status="additional-service-escalte"
+                        booleanVal={Boolean(request?.is_escalated)}
+                        falsyMessage="Not Escalated"
+                        truthyMessage="Escalated"
+                      />
+                    </td>
                     <td>
                       <Status status={request?.status} />
                     </td>
@@ -115,7 +122,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
                       <span className=" p-2 text-lg">...</span>
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                         <Link
-                          to={`/request-details/${request?.id}`}
+                          to={`/bookings/request-details/${request?.id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           View Details

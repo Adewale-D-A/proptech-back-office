@@ -56,7 +56,7 @@ export const serviceTypeData = createSlice({
       const { id } = action?.payload;
       const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
-        (v: { id: number }) => v.id === id
+        (v: { id: number }) => String(v.id) === String(id)
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1);
@@ -66,7 +66,7 @@ export const serviceTypeData = createSlice({
       const pagination_data = [...state.value.pagination];
       const removed = pagination_data.map((item, index) => {
         const sencondFilter = item.data.filter((data, i) => {
-          return !(Number(data.id) === Number(id));
+          return !(String(data.id) === String(id));
         });
         return {
           pagination_data: { ...item.pagination_data },
@@ -79,7 +79,7 @@ export const serviceTypeData = createSlice({
       const { id } = action?.payload;
       const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
-        (v: { id: number }) => v.id === id
+        (v: { id: number }) => String(v.id) === String(id)
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1, action?.payload);
@@ -89,7 +89,7 @@ export const serviceTypeData = createSlice({
       const pagination_data = [...state.value.pagination];
       const replacedItem = pagination_data.map((item, index) => {
         const sencondFilter = item.data.map((data, i) => {
-          if (Number(data.id) === Number(id)) {
+          if (String(data.id) === String(id)) {
             return { ...action.payload };
           } else {
             return data;

@@ -24,7 +24,6 @@ import ApartmentSingleSearch from "../../../components/inputs/search/apartment-s
 
 export default function BookingsOverview() {
   const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
-  const [searchedAptd, setSearchedApt] = useState<apartmentById>({} as any);
   const [availabilityResponse, setAvailabilityResponse] =
     useState<availabilityOptions>();
 
@@ -102,15 +101,7 @@ export default function BookingsOverview() {
               <CalendarIcon /> <span>Check Availability</span>{" "}
             </h4>
             <div className=" p-3 flex flex-col gap-4">
-              <ApartmentSingleSearch
-                placeholder="Search apartment..."
-                selected={searchedAptd}
-                setSelected={setSearchedApt}
-              />
-              <CheckAvailability
-                apartmentId={String(searchedAptd?.id || "")}
-                setAvailabilityResponse={setAvailabilityResponse}
-              />
+              <CheckAvailability />
             </div>
           </div>
           {availabilityResponse?.options && <CalculatedAvailabilityOptions />}
@@ -140,7 +131,7 @@ export default function BookingsOverview() {
             <CalendarAvailabilitySymbol />
             {data.blocked_dates && (
               <CalendarView
-                // date={new Date(item)}
+                date={new Date()}
                 highlights={[...data?.booked_dates, ...data?.blocked_dates]}
                 onDateClick={handleDateClick}
               />

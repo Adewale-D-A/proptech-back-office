@@ -151,7 +151,7 @@ export default function ServiceTypeTable() {
         title="Edit Service Type"
         className=" max-w-md"
       >
-        <AddEditServiceType setOpen={setOpenEdit} />
+        <AddEditServiceType setOpen={setOpenEdit} id={selectedId} />
       </ModalTemplate>
     </>
   );

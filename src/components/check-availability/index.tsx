@@ -1,36 +1,36 @@
 import { SyntheticEvent, useCallback, useState } from "react";
 import LoadingButton from "../button";
 import DateInput from "../inputs/dateInput";
-import availabilityOptionDummyData from "../../assets/temp-api-mockup-data/availabilityOptionMockup.json";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import ApartmentSingleSearch from "../inputs/search/apartment-single-search";
+import { apartmentById } from "../../types/apiData/apartment";
+import Select from "../inputs/select";
 
 export default function CheckAvailability({
-  apartmentId,
   className,
-  setAvailabilityResponse,
 }: {
-  apartmentId: string;
   className?: string;
-  setAvailabilityResponse: Function;
 }) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
+  const [selectedApt, setSelectedApt] = useState<apartmentById>({} as any);
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
+  const [guestNo, setGuestNo] = useState("");
 
   const [isChecking, setIsChecking] = useState(false);
 
   const checkAvailability = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
-      if (apartmentId) {
+      if (selectedApt?.id) {
         setIsChecking(true);
 
         try {
           const response = await axios.post("/admin/shortlet/availability", {
-            shortlet_id: apartmentId,
+            shortlet_id: selectedApt?.id,
             check_in_day: checkInDate,
             check_out_day: checkOutDate,
           });
@@ -53,13 +53,18 @@ export default function CheckAvailability({
         );
       }
     },
-    [apartmentId, checkInDate, checkOutDate]
+    [selectedApt, checkInDate, checkOutDate]
   );
 
   return (
     <div className="w-full flex flex-col gap-10">
       <form className=" flex flex-col gap-5" onSubmit={checkAvailability}>
         <div className={className || " w-full grid grid-cols-1 gap-5"}>
+          <ApartmentSingleSearch
+            placeholder="Search apartment..."
+            selected={selectedApt}
+            setSelected={setSelectedApt}
+          />
           <DateInput
             inputType="date"
             isRequired={true}
@@ -78,6 +83,22 @@ export default function CheckAvailability({
             placeholder="Check-out Date"
             label="Check-out Date"
           />
+
+          <Select
+            isRequired={true}
+            value={guestNo}
+            setValue={setGuestNo}
+            id="no-of-guests"
+          >
+            <option value="" disabled>
+              No of Guests
+            </option>
+            {Array.from({ length: 8 }, (_, index) => (
+              <option key={index} value={`${index + 1}`}>
+                {index + 1}
+              </option>
+            ))}
+          </Select>
         </div>
         <LoadingButton
           type="submit"

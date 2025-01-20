@@ -12,6 +12,8 @@ import formatDate from "../../../utils/isoDateConverter";
 import useGetRevenueReport from "../../../services-hooks/reports/revenue";
 import useGetReportSummary from "../../../services-hooks/reports/report-summary";
 import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
+import { useAppDispatch } from "../../../stores/hooks";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 
 export default function DailyRoomReportTable() {
   const [type, setType] = useState("");
@@ -20,6 +22,7 @@ export default function DailyRoomReportTable() {
     start_date: string;
     end_date: string;
   }>();
+  const dispatch = useAppDispatch();
   const [apartment, setApartment] = useState<apartmentById>({} as any);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -31,6 +34,19 @@ export default function DailyRoomReportTable() {
       end_date: filterDates?.end_date,
       group: "day",
     });
+
+  const handleLoadData = useCallback(() => {
+    if (apartment?.id) {
+      retryFunction();
+    } else {
+      dispatch(
+        openSnackbar({
+          message: "Please select an apartment to view its reports",
+          isError: true,
+        })
+      );
+    }
+  }, [apartment?.id]);
 
   const { data: reportSummary } = useGetReportSummary({
     apartmentId: String(apartment?.id || ""),
@@ -76,6 +92,7 @@ export default function DailyRoomReportTable() {
             variant={2}
             isLoading={false}
             type="button"
+            clickHandler={() => handleLoadData()}
           />
           <ExportSelect id="report" />
         </div>
