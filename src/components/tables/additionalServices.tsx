@@ -2,8 +2,6 @@ import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../pagination";
 import NoResult from "../noResult";
-import Search from "../inputs/search";
-import FilterSearch from "../filterAndSort/filter-search";
 import useGetAllAdditionalServiceLists from "../../services-hooks/useGetAllAdditionalServiceLists";
 import Status from "../status";
 import { useAppDispatch } from "../../stores/hooks";
@@ -82,7 +80,10 @@ export default function AdditionalServiceListTable({
                 {data?.map((item) => {
                   return (
                     <tr key={item?.id} className=" border-b">
-                      <td>***</td>
+                      <td>
+                        {" "}
+                        {item?.user?.first_name} {item?.user?.last_name}
+                      </td>
                       <td>{item?.booking?.shortlet?.name}</td>
                       <td>{formatDate(item?.created_at)}</td>
                       <td>{item?.service_type?.name}</td>
