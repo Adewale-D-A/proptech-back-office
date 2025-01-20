@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { requests } from "../../types/apiData/requests";
+import { pagination } from "../../types/pagination";
 
 export const requestListsData = createSlice({
   name: "requests lists",
@@ -7,14 +8,7 @@ export const requestListsData = createSlice({
     value: {
       status: false,
       pagination: [] as {
-        pagination_data: {
-          current_page: number;
-          last_page: number;
-          per_page: number;
-          total: number;
-          from: number;
-          to: number;
-        };
+        pagination_data: pagination;
         data: requests[];
       }[],
       data: [] as requests[],
@@ -62,7 +56,7 @@ export const requestListsData = createSlice({
       const { id } = action?.payload;
       const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
-        (v: { id: number }) => v.id === id
+        (v: { id: number }) => String(v.id) === String(id)
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1);
@@ -72,7 +66,7 @@ export const requestListsData = createSlice({
       const pagination_data = [...state.value.pagination];
       const removed = pagination_data.map((item, index) => {
         const sencondFilter = item.data.filter((data, i) => {
-          return !(Number(data.id) === Number(id));
+          return !(String(data.id) === String(id));
         });
         return {
           pagination_data: { ...item.pagination_data },
@@ -95,7 +89,7 @@ export const requestListsData = createSlice({
       const pagination_data = [...state.value.pagination];
       const replacedItem = pagination_data.map((item, index) => {
         const sencondFilter = item.data.map((data, i) => {
-          if (Number(data.id) === Number(id)) {
+          if (String(data.id) === String(id)) {
             return { ...action.payload };
           } else {
             return data;

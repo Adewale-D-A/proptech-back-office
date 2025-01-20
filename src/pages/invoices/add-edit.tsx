@@ -15,6 +15,7 @@ import { customersById } from "../../types/apiData/customers";
 import useGetBookingsByUserId from "../../services-hooks/bookings/bookingsByUserId";
 import Select from "../../components/inputs/select";
 import CustomersSingleSearch from "../../components/inputs/search/customer-single-search";
+import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 // import useGetInvoice from "../../services-hooks/invoice/useGetInvoice";
 
 export default function AddEditInvoice({ id }: { id?: string }) {
@@ -187,9 +188,14 @@ export default function AddEditInvoice({ id }: { id?: string }) {
       };
       try {
         const response = await axios.post("/admin/invoice", payload);
-        const data = response.data;
-
+        const data = response?.data?.data;
         dispatch(addInvoiceToList(data));
+        dispatch(
+          openSnackbar({
+            message: "Invoice successfully created",
+            isError: false,
+          })
+        );
       } catch (error) {
       } finally {
         setIsSaving(false);
@@ -246,7 +252,9 @@ export default function AddEditInvoice({ id }: { id?: string }) {
                   Select applicable booking
                 </option>
                 {user_bookings?.map((item) => (
-                  <option value={item?.id}>{item?.shortlet?.name}</option>
+                  <option key={item?.id} value={item?.id}>
+                    {item?.shortlet?.name}
+                  </option>
                 ))}
               </Select>
             </div>

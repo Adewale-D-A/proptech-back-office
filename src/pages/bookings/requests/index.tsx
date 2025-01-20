@@ -45,9 +45,9 @@ export default function Requests() {
     <>
       <section className="w-full flex flex-col items-center my-10">
         <div className="w-full max-w-screen-xl flex flex-col gap-10">
-          <div className=" w-full flex justify-between">
+          <div className=" w-full flex justify-between flex-col md:flex-row gap-3">
             <h2 className="text-xl font-semibold">All Requests List</h2>
-            <div className=" flex items-center gap-4">
+            <div className=" flex items-center gap-4 flex-col md:flex-row ">
               <ExportSelect id="bookings" />
               <LoadingButton
                 clickHandler={() => setOpenNewRequest(true)}

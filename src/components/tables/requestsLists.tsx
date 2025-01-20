@@ -73,7 +73,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
 
   return (
     <>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+      <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <div>
             <TableSearch
@@ -81,7 +81,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
               placeholder="Apartment name, type, location..."
             />
           </div>
-          <div className=" flex items-center gap-2">
+          <div className=" flex items-center gap-2 flex-col md:flex-row">
             <Filter actionHandler={handleCustomersFiltering} />
             <Sort setSort={setSort} id="sort-by" label="Sort by" />
           </div>
@@ -99,7 +99,9 @@ export default function RequestsListTable({ header }: { header: string[] }) {
               {data.map((request, index) => {
                 return (
                   <tr key={request?.id} className=" border-b">
-                    <td>***</td>
+                    <td>
+                      {request?.user?.first_name} {request?.user?.last_name}
+                    </td>
                     <td>{request?.shortlet?.name}</td>
                     <td>
                       {formatDate(request?.created_at)}{" "}

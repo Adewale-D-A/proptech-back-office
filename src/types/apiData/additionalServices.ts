@@ -1,3 +1,5 @@
+import { customersById } from "./customers";
+
 export type additionalService = {
   id: number;
   request_id: string;
@@ -71,4 +73,5 @@ export type additionalService = {
     id: number;
     name: string;
   };
+  user: customersById;
 };
