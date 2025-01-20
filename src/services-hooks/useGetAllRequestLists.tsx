@@ -56,7 +56,6 @@ export default function useGetAllRequestLists({
           `admin/user-request?limit=${limit}&page=${page}`
         );
         const { user_requests } = response?.data?.data;
-        console.log({ user_requests });
         const { data, current_page, last_page, per_page, total, from, to } =
           user_requests;
         const paginationDataset = {

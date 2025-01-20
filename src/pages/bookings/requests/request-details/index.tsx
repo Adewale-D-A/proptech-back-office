@@ -9,6 +9,7 @@ import RequestInformation from "../../../../components/booking-detail/request-in
 import useGetRequest from "../../../../services-hooks/useGetRequest";
 import useGetApartmentById from "../../../../services-hooks/useGetApartmentById";
 import useGetCustomerById from "../../../../services-hooks/useGetCustomerById";
+// import useGetBookingsByUserId from "../../../../services-hooks/bookings/bookingsByUserId";
 
 const breadCrumb = [
   {
@@ -46,6 +47,9 @@ export default function RequestDetailsById() {
   );
   const { data: customer } = useGetCustomerById(String(data?.user_id || ""));
 
+  // const { data: user_bookings } = useGetBookingsByUserId({
+  //   id: String(data?.user_id || ""),
+  // });
   return (
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">

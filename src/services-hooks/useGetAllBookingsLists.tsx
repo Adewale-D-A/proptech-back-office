@@ -112,7 +112,6 @@ export default function useGetAllBookingsLists({
   ]);
 
   useEffect(() => {
-    console.log("rerendering");
     getAllBookingstList();
   }, [
     page,
