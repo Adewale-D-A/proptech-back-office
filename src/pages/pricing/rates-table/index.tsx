@@ -12,6 +12,7 @@ import { apartmentById } from "../../../types/apiData/apartment";
 import Search from "../../../components/inputs/search";
 import useAxios from "../../../useHooks/useAxios";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
 
 const breadCrumb = [
   {
@@ -86,11 +87,10 @@ export default function RateTable() {
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
         <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5">
           <div className=" w-full rounded-md border p-2 flex flex-col gap-3">
-            <Search
-              id="apartment-search"
-              componentId="apartment"
+            <ApartmentSingleSearch
+              setSelected={setSelectedApt}
+              selected={selectedAprt}
               placeholder="Apartment name..."
-              setValue={setSelectedApt}
             />
             {selectedAprt?.id && (
               <div className=" flex flex-col gap-3">

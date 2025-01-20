@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
+import { useCallback, useState } from "react";
 import Status from "../status";
 import LocationPinIcon from "../../assets/icons/location";
 import Pagination from "../pagination";
-import { useCallback, useState } from "react";
-import Search from "../inputs/search";
 import Sort from "../filterAndSort/sort";
 import useGetAllApartmentLists from "../../services-hooks/useGetAllApartmentLists";
 import NoResult from "../noResult";
@@ -22,6 +21,7 @@ export default function ApartmentListsTable() {
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("desc");
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -30,7 +30,7 @@ export default function ApartmentListsTable() {
   const [selectedId, setSelectedId] = useState("");
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllApartmentLists({ page: currentPage, search });
+    useGetAllApartmentLists({ page: currentPage, search, sort: sort });
 
   const handleOpenCalculateRate = useCallback((id: number) => {
     setSelectedId(String(id || ""));
@@ -60,7 +60,7 @@ export default function ApartmentListsTable() {
               placeholder="Apartment name, type, location..."
             />
           </div>
-          <Sort id="apartment-lists" label="Sort Category" />{" "}
+          <Sort setSort={setSort} id="sort-by" label="Sort by" />
         </div>
         <div className="hidden md:block px-5">
           {data && data.length > 0 ? (
@@ -101,7 +101,7 @@ export default function ApartmentListsTable() {
                       <td className=" text-lg  min-w-36">
                         {request?.max_guests} Guests
                       </td>
-                      <td>**</td>
+                      <td>{request?.room_option?.name}</td>
                       <td>**</td>
                       <td>**</td>
                       <td>
@@ -157,7 +157,10 @@ export default function ApartmentListsTable() {
           )}
         </div>
         <div className="w-full block md:hidden">
-          <MobileApartmentTable data={data} />
+          <MobileApartmentTable
+            data={data}
+            handleOpenCalculateRate={handleOpenCalculateRate}
+          />
         </div>
         <Pagination
           pagination={pagination}

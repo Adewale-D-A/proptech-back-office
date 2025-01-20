@@ -11,6 +11,7 @@ import { removeAdditionalServicesInList } from "../../stores/apiData/additional-
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import MobileAdditionalServicesTable from "./mobile/additionalServises";
 import formatDate from "../../utils/isoDateConverter";
+import TableSearch from "../inputs/search/table-search";
 
 export default function AdditionalServiceListTable({
   header,
@@ -24,6 +25,7 @@ export default function AdditionalServiceListTable({
     end_date: string;
   }>();
   const [sort, setSort] = useState("desc");
+  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetAllAdditionalServiceLists({
@@ -31,6 +33,7 @@ export default function AdditionalServiceListTable({
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
       sort: sort,
+      search,
     });
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
@@ -57,11 +60,13 @@ export default function AdditionalServiceListTable({
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
-          <Search
-            placeholder="Apartment name, customer name..."
-            id="apartment-search"
-          />
-          <FilterSearch />
+          <div className=" max-w-md">
+            <TableSearch
+              setValue={setSearch}
+              placeholder="Search service name, apartment name..."
+            />
+          </div>
+          {/* <FilterSearch /> */}
         </div>
         <div className="hidden md:block px-5">
           {data && data.length > 0 ? (
@@ -82,7 +87,14 @@ export default function AdditionalServiceListTable({
                       <td>{formatDate(item?.created_at)}</td>
                       <td>{item?.service_type?.name}</td>
                       <td>{item?.description}</td>
-                      <td>***</td>
+                      <td>
+                        <Status
+                          status="additional-service-escalte"
+                          booleanVal={Boolean(item?.is_escalated)}
+                          falsyMessage="Not Escalated"
+                          truthyMessage="Escalated"
+                        />
+                      </td>
                       <td>
                         <Status status={item?.status} />
                       </td>

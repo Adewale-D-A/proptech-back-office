@@ -11,8 +11,11 @@ import formatDate from "../../../utils/isoDateConverter";
 import useGetOccupancyPerTimeReport from "../../../services-hooks/reports/occupancy-per-time";
 import useGetReportSummary from "../../../services-hooks/reports/report-summary";
 import Status from "../../status";
+import { useAppDispatch } from "../../../stores/hooks";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 
 export default function OccupancyPerTimeReportTable() {
+  const dispatch = useAppDispatch();
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
@@ -27,6 +30,19 @@ export default function OccupancyPerTimeReportTable() {
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
     });
+
+  const handleLoadData = useCallback(() => {
+    if (apartment?.id) {
+      retryFunction();
+    } else {
+      dispatch(
+        openSnackbar({
+          message: "Please select an apartment to view its reports",
+          isError: true,
+        })
+      );
+    }
+  }, [apartment?.id]);
 
   const handleCustomersFiltering = useCallback(
     (start_date: string, end_date: string) => {
@@ -62,7 +78,7 @@ export default function OccupancyPerTimeReportTable() {
             variant={2}
             isLoading={false}
             type="button"
-            clickHandler={() => retryFunction()}
+            clickHandler={() => handleLoadData()}
           />
           <ExportSelect id="report" />
         </div>

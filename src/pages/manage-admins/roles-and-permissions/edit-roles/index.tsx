@@ -58,7 +58,7 @@ export default function EditRoles() {
             isError: false,
           })
         );
-        navigate("/admin-users-management?redirect=roles");
+        navigate("/admin/users-roles");
       } catch (error: any) {}
     },
     []

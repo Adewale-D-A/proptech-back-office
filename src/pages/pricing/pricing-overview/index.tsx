@@ -5,6 +5,7 @@ import CalendarIcon from "../../../assets/icons/calendar";
 import CheckAvailability from "../../../components/check-availability";
 import Search from "../../../components/inputs/search";
 import { apartmentById } from "../../../types/apiData/apartment";
+import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
 
 export default function PricingOverview() {
   const [selectedOption, setSelectedOption] = useState("");
@@ -15,11 +16,10 @@ export default function PricingOverview() {
     <div className="w-full my-10 flex flex-col gap-8">
       <div className=" p-5 rounded-md border">
         <div className=" border rounded-md">
-          <Search
-            setValue={setSelectedApt}
-            id="apartment-search"
-            componentId="apartment"
+          <ApartmentSingleSearch
             placeholder="Search apartment..."
+            selected={selectedApt}
+            setSelected={setSelectedApt}
           />
         </div>
       </div>
@@ -29,11 +29,7 @@ export default function PricingOverview() {
           <CalendarIcon /> <span>Check Availability</span>{" "}
         </h4>
         <div className=" p-3 ">
-          <CheckAvailability
-            apartmentId={String(selectedApt?.id || "")}
-            className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3"
-            setAvailabilityResponse={setAvailabilityResponse}
-          />
+          <CheckAvailability className=" w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3" />
         </div>
       </div>
     </div>

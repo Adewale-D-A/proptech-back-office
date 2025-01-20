@@ -20,10 +20,10 @@ import useGetApartmentCalendar from "../../../services-hooks/apartmentCalendar";
 import useGetVisitorCount from "../../../services-hooks/bookings/useGetVisitorCOunter";
 import useGetWeeklyBookingCount from "../../../services-hooks/bookings/useGetWeeklyBookingCount";
 import formatDate from "../../../utils/isoDateConverter";
+import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
 
 export default function BookingsOverview() {
   const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
-  const [searchedAptd, setSearchedApt] = useState<apartmentById>({} as any);
   const [availabilityResponse, setAvailabilityResponse] =
     useState<availabilityOptions>();
 
@@ -48,6 +48,7 @@ export default function BookingsOverview() {
     id: String(selectedAprt?.id || ""),
   });
   const { data: visitorCount } = useGetVisitorCount();
+  const handleDateClick = useCallback((date: Date) => {}, []);
 
   return (
     <div className=" w-full flex flex-col gap-5 my-5">
@@ -100,16 +101,7 @@ export default function BookingsOverview() {
               <CalendarIcon /> <span>Check Availability</span>{" "}
             </h4>
             <div className=" p-3 flex flex-col gap-4">
-              <Search
-                setValue={setSearchedApt}
-                id="apartment-search"
-                componentId="apartment"
-                placeholder="Search apartment..."
-              />
-              <CheckAvailability
-                apartmentId={String(searchedAptd?.id || "")}
-                setAvailabilityResponse={setAvailabilityResponse}
-              />
+              <CheckAvailability />
             </div>
           </div>
           {availabilityResponse?.options && <CalculatedAvailabilityOptions />}
@@ -130,18 +122,18 @@ export default function BookingsOverview() {
           </div>
           <div className=" px-3 flex flex-col gap-3 justify-center items-center">
             <div className="w-full flex flex-col gap-3">
-              <Search
-                id="apartment-search"
-                componentId="apartment"
+              <ApartmentSingleSearch
                 placeholder="Apartment name..."
-                setValue={setSelectedApt}
+                selected={selectedAprt}
+                setSelected={setSelectedApt}
               />
             </div>
             <CalendarAvailabilitySymbol />
             {data.blocked_dates && (
               <CalendarView
-                // date={new Date(item)}
+                date={new Date()}
                 highlights={[...data?.booked_dates, ...data?.blocked_dates]}
+                onDateClick={handleDateClick}
               />
             )}
           </div>

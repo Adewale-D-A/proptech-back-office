@@ -1,3 +1,36 @@
+##### 20.01.2025
+
+> View booking details bug fixes
+> BUG Fixes and inconsistencies adjustments
+
+##### 19.01.2025
+
+> Feature: Bookings overview Maintenance, Booked hue indicator feature developed
+> Feature: Apartments calendar response reformater UTIL function created
+> Feature: Bookings filter API, logic and UI updates
+> Feature: Api query parameter extractor UTIL function creation
+> Feature: Custom API hook for all apartments calendar created (will be used for the calendar view to fix the highlighted design behaviour)
+> Bug fix: Time input hover
+
+##### 18.01.2025
+
+> Bug Fix: Date input logic re-work
+
+##### 17.01.2025
+
+> Apartment, customer, location groupings search and select UI and logic re-work
+> Apartment tab items update and delete bug fixes
+
+##### 14.01.2025
+
+> Bug list resolution
+> Bugs sheet url added to README
+
+##### 10.01.2025
+
+> Fixed customers flow mobile responsiveness
+> Fixed apartment flow mobile responsiveness
+
 ##### 06.01.2025
 
 > Tax rates bug fix

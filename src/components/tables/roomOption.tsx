@@ -5,8 +5,13 @@ import DeleteConfirmation from "../infoModal/delete-confirmation";
 import ModalTemplate from "../modal";
 import AddEditRoomOption from "../room-extra-options/add-edit-options";
 import useGetRoomOptions from "../../services-hooks/useGetRoomOptions";
+import useAxios from "../../useHooks/useAxios";
+import { useAppDispatch } from "../../stores/hooks";
+import { removeRoomOption } from "../../stores/apiData/room-options";
 
 export default function RoomOptionTable() {
+  const axios = useAxios(false);
+  const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
@@ -19,12 +24,14 @@ export default function RoomOptionTable() {
   const handleDelete = useCallback(async () => {
     setIsDeleting(true);
     try {
+      await axios.delete(`/admin/room-option/${selectedId}`);
+      dispatch(removeRoomOption({ id: Number(selectedId) }));
       setOpenDelete(false);
     } catch (error) {
     } finally {
       setIsDeleting(false);
     }
-  }, []);
+  }, [selectedId]);
 
   return (
     <>
@@ -62,7 +69,10 @@ export default function RoomOptionTable() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => setOpenDelete(true)}
+                        onClick={() => {
+                          setSelectedId(String(request?.id));
+                          setOpenDelete(true);
+                        }}
                         className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                       >
                         Delete Room Option

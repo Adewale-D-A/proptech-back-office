@@ -17,11 +17,14 @@ import ChartIcon from "../../../assets/icons/chart";
 import formatDate from "../../../utils/isoDateConverter";
 import useGetRevenueReport from "../../../services-hooks/reports/revenue";
 import useGetReportSummary from "../../../services-hooks/reports/report-summary";
+import { useAppDispatch } from "../../../stores/hooks";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 
 export default function OccupancyRankingReportTable() {
   const [group, setGroup] = useState("");
   const [viewType, setViewType] = useState("sheet");
 
+  const dispatch = useAppDispatch();
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
@@ -38,6 +41,18 @@ export default function OccupancyRankingReportTable() {
       group: group,
     });
 
+  const handleLoadData = useCallback(() => {
+    if (apartment?.id) {
+      retryFunction();
+    } else {
+      dispatch(
+        openSnackbar({
+          message: "Please select an apartment to view its reports",
+          isError: true,
+        })
+      );
+    }
+  }, [apartment?.id]);
   const { data: reportSummary } = useGetReportSummary({
     apartmentId: String(apartment?.id || ""),
     start_date: filterDates?.start_date,
@@ -88,7 +103,7 @@ export default function OccupancyRankingReportTable() {
                 variant={2}
                 isLoading={false}
                 type="button"
-                clickHandler={() => retryFunction()}
+                clickHandler={() => handleLoadData()}
               />
               <ExportSelect id="report" />
             </div>

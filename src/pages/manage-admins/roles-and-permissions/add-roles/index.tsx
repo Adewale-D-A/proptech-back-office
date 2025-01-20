@@ -57,7 +57,7 @@ export default function AddRoles() {
             isError: false,
           })
         );
-        navigate("/admin-users-management?redirect=roles");
+        navigate("/admin/users-roles");
       } catch (error: any) {
       } finally {
       }

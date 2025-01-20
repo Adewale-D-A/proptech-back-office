@@ -6,8 +6,6 @@ import Pagination from "../pagination";
 import ModalTemplate from "../modal";
 import QuickReservationFlow from "../quickReservationFlow";
 import CalendarIcon from "../../assets/icons/calendar";
-import Search from "../inputs/search";
-import AssignCustomer from "../quickReservationFlow/assignToCustomer";
 import { useAppSelector } from "../../stores/hooks";
 import formatDate, { formatTime } from "../../utils/isoDateConverter";
 import NoResult from "../noResult";
@@ -194,6 +192,7 @@ export default function ApartmentTable({
             apartment_id={selectedId}
             apartment_name={apartmentName}
             setOpen={setOpenReservation}
+            allowApartmentUpdate={false}
           />
         </div>
       </ModalTemplate>

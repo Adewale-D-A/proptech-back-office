@@ -10,12 +10,16 @@ import Pagination from "../../pagination";
 import formatDate from "../../../utils/isoDateConverter";
 import useGetRevenueReport from "../../../services-hooks/reports/revenue";
 import useGetReportSummary from "../../../services-hooks/reports/report-summary";
+import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
+import { useAppDispatch } from "../../../stores/hooks";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 
 export default function RevenueReportTable() {
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
   }>();
+  const dispatch = useAppDispatch();
   const [apartment, setApartment] = useState<apartmentById>({} as any);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -26,6 +30,19 @@ export default function RevenueReportTable() {
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
     });
+
+  const handleLoadData = useCallback(() => {
+    if (apartment?.id) {
+      retryFunction();
+    } else {
+      dispatch(
+        openSnackbar({
+          message: "Please select an apartment to view its reports",
+          isError: true,
+        })
+      );
+    }
+  }, [apartment?.id]);
 
   const { data: reportSummary } = useGetReportSummary({
     apartmentId: String(apartment?.id || ""),
@@ -45,11 +62,10 @@ export default function RevenueReportTable() {
         <div>
           <Filter actionHandler={handleCustomersFiltering} />
         </div>
-        <Search
-          id="apartment-search"
-          componentId="apartment"
+        <ApartmentSingleSearch
           placeholder="Apartment name..."
-          setValue={setApartment}
+          selected={apartment}
+          setSelected={setApartment}
         />
         <div className=" flex items-center gap-4">
           <LoadingButton
@@ -57,7 +73,7 @@ export default function RevenueReportTable() {
             variant={2}
             isLoading={false}
             type="button"
-            clickHandler={() => retryFunction()}
+            clickHandler={() => handleLoadData()}
           />
           <ExportSelect id="report" />
         </div>

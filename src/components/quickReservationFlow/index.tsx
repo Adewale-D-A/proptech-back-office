@@ -8,7 +8,6 @@ import DateInput from "../inputs/dateInput";
 import TimeInput from "../inputs/timeInput";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { openAssignToCustomerView } from "../../stores/inAppDataInterations/assignCustomer";
-import Search from "../inputs/search";
 import { apartmentById } from "../../types/apiData/apartment";
 import useAxios from "../../useHooks/useAxios";
 import { addBookingsToList } from "../../stores/apiData/bookings-lists";
@@ -16,6 +15,9 @@ import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import AssignCustomer from "./assignToCustomer";
 import { useParams } from "react-router-dom";
 import useGetApartmentById from "../../services-hooks/useGetApartmentById";
+import TextInput from "../inputs/textInput";
+import reservationValidator from "../../utils/reservation-validator";
+import ApartmentSingleSearch from "../inputs/search/apartment-single-search";
 
 export default function QuickReservationFlow({
   variant = 1,
@@ -23,12 +25,21 @@ export default function QuickReservationFlow({
   apartment_id,
   setSelectedApt,
   setOpen,
+  allowApartmentUpdate = true,
+  defaultDateTime,
 }: {
   variant?: number;
   apartment_id?: string;
   apartment_name?: string;
   setSelectedApt?: (data: apartmentById) => void;
   setOpen?: (st: boolean) => void;
+  allowApartmentUpdate?: boolean;
+  defaultDateTime?: {
+    checkIn: string;
+    checkOut: string;
+    checkInTime: string;
+    checkOutTime: string;
+  };
 }) {
   const axios = useAxios();
   const dispatch = useAppDispatch();
@@ -49,7 +60,7 @@ export default function QuickReservationFlow({
   const [guestNo, setGuestNo] = useState("");
   const [payment, setPayment] = useState("");
   // const [rate, setRate] = useState("");
-  // const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [bookingStatus, setBookingStatus] = useState("");
   const [closeRoom, setCloseRoom] = useState(false);
 
@@ -62,6 +73,20 @@ export default function QuickReservationFlow({
       setSelectedApt(apartment?.id ? apartment : apartment_info);
     }
   }, [apartment, apartment_info]);
+  // auto populate email on customer assignment
+  useEffect(() => {
+    setEmail(data?.email || "");
+  }, [data]);
+
+  // auto populate datetime based of tracked changes
+  useEffect(() => {
+    if (defaultDateTime) {
+      setCheckInDate(defaultDateTime?.checkIn || "");
+      setCheckOutDate(defaultDateTime?.checkOut || "");
+      setCheckInTime(defaultDateTime?.checkInTime || "");
+      setCheckOutTime(defaultDateTime?.checkOutTime || "");
+    }
+  }, [defaultDateTime]);
 
   const assignCustomer = useCallback(() => {
     dispatch(openAssignToCustomerView());
@@ -70,6 +95,24 @@ export default function QuickReservationFlow({
   const makeReservation = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
+      const validatorResponse = reservationValidator({
+        data: {
+          "Check in date": checkInDate,
+          "Check out date": checkOutDate,
+          "Check in time": checkInTime,
+          "Check out time": checkOutTime,
+        },
+      });
+      if (!validatorResponse?.success) {
+        dispatch(
+          openSnackbar({
+            message: validatorResponse?.message,
+            isError: true,
+          })
+        );
+        return;
+      }
+      // if (checkInDate && checkOutDate && checkInTime && checkOutTime) {
       setIsMakingReservation(true);
       try {
         const payload = {
@@ -79,6 +122,13 @@ export default function QuickReservationFlow({
           check_in_time: checkInTime,
           check_out_time: checkOutTime,
           number_of_guests: guestNo,
+          // "custom_rate" : {
+          //     "booking_cost" : 50000,
+          //     "tax_fee" : 5000,
+          //     "caution_fee" : 4000.99,
+          //     "currency" : "NGN",//USD or USD
+          //     "exchange_rate" : 1
+          // },
           payment_method: payment,
           status: bookingStatus, //Payment Confirmed or Awaiting Payment
           user_id: data?.id,
@@ -87,7 +137,6 @@ export default function QuickReservationFlow({
           email: data?.email, // required if no user_id
           phone: data?.phone, // required if no user_id
         };
-
         // conditionally remove from payload if no change was made
         const newPayload = Object.fromEntries(
           Object.entries(payload).filter(([key]) =>
@@ -134,6 +183,12 @@ export default function QuickReservationFlow({
     ]
   );
 
+  const clearSeletecApartment = useCallback(() => {
+    if (setSelectedApt) {
+      setSelectedApt({} as any);
+    }
+  }, [setSelectedApt]);
+
   return (
     <>
       {openAssignToCustomer ? (
@@ -158,18 +213,23 @@ export default function QuickReservationFlow({
           >
             <option value="">1 Bedroom apartment</option>
           </Select> */}
-              {variant === 2 && !apartment_name ? (
-                <Search
-                  id="apartment-search"
+              {variant === 2 && allowApartmentUpdate ? (
+                <ApartmentSingleSearch
                   placeholder="Search apartment by name"
-                  componentId="apartment"
-                  setValue={setApartment}
+                  selected={apartment}
+                  setSelected={setApartment}
                 />
               ) : (
-                <span className="w-full p-3 rounded-lg border  bg-gray-200/15 ">
-                  {apartment_name}
-                </span>
+                <div className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between">
+                  <span className="">{apartment_name}</span>
+                </div>
               )}
+              {/* <ApartmentSingleSearch
+                placeholder="Search apartment by name"
+                selected={apartment}
+                setSelected={setApartment}
+                readOnly={apartment_name}
+              /> */}
               <Select
                 isRequired={true}
                 value={payment}
@@ -183,41 +243,25 @@ export default function QuickReservationFlow({
               </Select>
               <DateInput
                 inputType="date"
-                isRequired={true}
+                isRequired={false}
                 value={checkInDate}
                 setValue={setCheckInDate}
                 id="check-in-date"
                 placeholder="Check-in Date"
                 label="Check-in Date"
               />
-              {/* <Select
-            isRequired={true}
-            value={rate}
-            setValue={setRate}
-            id="seclect-custom-rate"
-          >
-            <option value="">Select Custom Rate</option>
-          </Select> */}
               <TimeInput
                 inputType="time"
-                isRequired={true}
+                isRequired={false}
                 value={checkInTime}
                 setValue={setCheckInTime}
                 id="check-in-time"
                 placeholder="Check-in Time"
                 label="Check-in Time"
               />
-              {/* <TextInput
-            inputType="email"
-            isRequired={true}
-            value={email}
-            setValue={setEmail}
-            id="customer-email"
-            placeholder="Customer Email"
-          /> */}
               <DateInput
                 inputType="date"
-                isRequired={true}
+                isRequired={false}
                 value={checkOutDate}
                 setValue={setCheckOutDate}
                 id="check-out-date"
@@ -226,7 +270,7 @@ export default function QuickReservationFlow({
               />
               <TimeInput
                 inputType="time"
-                isRequired={true}
+                isRequired={false}
                 value={checkOutTime}
                 setValue={setCheckOutTime}
                 id="check-out-time"
@@ -284,12 +328,29 @@ export default function QuickReservationFlow({
                 </button>
               </div>
             </div>
+            {/* <Select
+              isRequired={true}
+              value={rate}
+              setValue={setRate}
+              id="seclect-custom-rate"
+            >
+              <option value="">Select Custom Rate</option>
+            </Select> */}
+            <TextInput
+              inputType="email"
+              isRequired={true}
+              value={email}
+              setValue={setEmail}
+              id="customer-email-quick-reservation"
+              placeholder="Customer Email"
+              readonly={data?.email ? true : false}
+            />
             <TextAreaInput
               value={customerMetaData}
               setValue={setCustomerMetadata}
               id="customer-information"
               isRequired={true}
-              placeholder="customer information"
+              placeholder="Customer information"
             />
             <LoadingButton
               type="submit"

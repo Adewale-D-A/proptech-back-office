@@ -9,14 +9,16 @@ import ChevronRightIcon from "../../assets/icons/chevron-right";
 // const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const sampleBookedDates = [new Date(2024, 8, 23), new Date(2024, 8, 22)];
 
+const dateValue = new Date();
 export default function CalendarView({
   date,
   highlights = sampleBookedDates,
+  onDateClick,
 }: {
   date?: Date;
   highlights?: Date[];
+  onDateClick: (date: Date) => void;
 }) {
-  const dateValue = new Date();
   const [currentDay, setCurrentDay] = useState(date ? date : dateValue);
 
   const [currentDays, setCurrentDays] = useState<
@@ -35,6 +37,7 @@ export default function CalendarView({
     (event: { year: number; month: number; day: number }) => {
       const selectedDate = new Date(event.year, event.month, event.day);
       setCurrentDay(selectedDate);
+      onDateClick(selectedDate);
     },
     []
   );
@@ -51,6 +54,7 @@ export default function CalendarView({
     generateDays();
   }, [currentDay]);
 
+  // automatically adjust calendar to highlight updates and changes
   useEffect(() => {
     setCurrentDay(date ? date : dateValue);
   }, [date]);
@@ -93,7 +97,7 @@ export default function CalendarView({
             type="button"
             title="days of calendar"
             key={index}
-            className={`${item?.selected ? " bg-primary text-white" : ""} ${
+            className={`${item?.selected ? " " : ""} ${
               item?.currentMonth ? "" : " text-gray-400"
             } aspect-square p-1 bg-gray-200 rounded-md relative overflow-hidden`}
             onClick={() => changeHandler(item)}

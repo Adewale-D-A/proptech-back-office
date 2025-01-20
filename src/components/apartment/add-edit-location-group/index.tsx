@@ -8,6 +8,7 @@ import useGetlocationGrouping from "../../../services-hooks/apartment/useGetLoca
 import {
   addLocationGroupingToList,
   removeLocationGroupingInList,
+  replaceLocationGroupingInList,
 } from "../../../stores/apiData/apartment/location-groupings";
 
 export default function AddEditLocationGroup({
@@ -47,9 +48,13 @@ export default function AddEditLocationGroup({
       };
       try {
         if (id) {
-          const response = await axios.put("/admin/location-group", payload);
+          const response = await axios.put(
+            `/admin/location-group/${id}`,
+            payload
+          );
           const { data, message } = response?.data;
-          dispatch(removeLocationGroupingInList(data?.location_group));
+
+          dispatch(replaceLocationGroupingInList(data?.location_group));
           dispatch(
             openSnackbar({
               message: message || "Location group  successfully updated",

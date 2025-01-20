@@ -57,7 +57,7 @@ function MainLayout({ children }: layoutProps) {
                 {breadCrumb[0]?.icon ? breadCrumb[0]?.icon : <MenuIcon />}
               </button>
               <div className="w-full flex justify-between">
-                <div className=" flex items-center gap-2 whitespace-nowrap">
+                <div className=" flex items-center flex-wrap md:flex-nowrap gap-2 whitespace-nowrap">
                   {breadCrumb.map((crumb, index) => {
                     return (
                       <Link
@@ -66,7 +66,9 @@ function MainLayout({ children }: layoutProps) {
                         className="flex items-center gap-1 hover:text-primary/60 transition-all"
                       >
                         {index !== 0 && ">"}
-                        <h6 className=" text-lg w-full">{crumb?.label}</h6>
+                        <h6 className=" tsxt-xs md:text-lg w-full">
+                          {crumb?.label}
+                        </h6>
                       </Link>
                     );
                   })}

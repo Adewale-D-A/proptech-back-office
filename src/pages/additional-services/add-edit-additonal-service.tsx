@@ -12,6 +12,7 @@ import DateInput from "../../components/inputs/dateInput";
 import { addAdditionalServicesToList } from "../../stores/apiData/additional-services-lists";
 import useGetServiceTypes from "../../services-hooks/useGetServiceTypes";
 import TextInput from "../../components/inputs/textInput";
+import CustomersSingleSearch from "../../components/inputs/search/customer-single-search";
 
 export default function AddEditAdditionalService({
   setIsOpen,
@@ -59,14 +60,15 @@ export default function AddEditAdditionalService({
             "/admin/additional-service",
             payload
           );
-          const { data, messsage } = response?.data || {};
-          dispatch(addAdditionalServicesToList(data));
+          const { additional_service } = response?.data?.data || {};
+          dispatch(addAdditionalServicesToList(additional_service));
           dispatch(
             openSnackbar({
-              message: messsage || "Additional service successfully created",
+              message: "Additional service successfully created",
               isError: false,
             })
           );
+          setIsOpen(false);
         } catch (error) {
         } finally {
           setIsAdding(false);
@@ -75,7 +77,7 @@ export default function AddEditAdditionalService({
         dispatch(
           openSnackbar({
             message:
-              "Please select a customer and also the booking associated with this additional service",
+              "Please select a customer and also the active booking associated with this additional service",
             isError: true,
           })
         );
@@ -94,11 +96,10 @@ export default function AddEditAdditionalService({
   );
   return (
     <form onSubmit={addService} className="w-full flex flex-col gap-3">
-      <Search
-        id="customers-search"
+      <CustomersSingleSearch
         placeholder="Search customer to assign to"
-        setValue={setSelectedCustomer}
-        componentId="customer"
+        setSelected={setSelectedCustomer}
+        selected={seletedCustomer}
       />
 
       <Select
@@ -109,7 +110,7 @@ export default function AddEditAdditionalService({
         label="Booking"
       >
         <option value="" disabled>
-          Select applicable booking
+          Select applicable active booking
         </option>
         {user_bookings?.map((item) => (
           <option value={item?.id}>{item?.shortlet?.name}</option>

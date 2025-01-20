@@ -2,7 +2,6 @@ import { useLocation } from "react-router-dom";
 import { useAppDispatch } from "../../stores/hooks";
 import { ChangeEvent, SyntheticEvent, useCallback, useState } from "react";
 import LinkButton from "../../components/button/linkButton";
-import Search from "../../components/inputs/search";
 import TextInput from "../../components/inputs/textInput";
 import TextAreaInput from "../../components/inputs/textArea";
 import BinIcon from "../../assets/icons/bin-icon";
@@ -15,6 +14,7 @@ import useAxios from "../../useHooks/useAxios";
 import { customersById } from "../../types/apiData/customers";
 import useGetBookingsByUserId from "../../services-hooks/bookings/bookingsByUserId";
 import Select from "../../components/inputs/select";
+import CustomersSingleSearch from "../../components/inputs/search/customer-single-search";
 // import useGetInvoice from "../../services-hooks/invoice/useGetInvoice";
 
 export default function AddEditInvoice({ id }: { id?: string }) {
@@ -31,6 +31,7 @@ export default function AddEditInvoice({ id }: { id?: string }) {
   const [bookingId, setBookingId] = useState<string>("");
   const [total, setTotal] = useState("");
   const [customerNote, setCustomerNote] = useState("");
+  const [status, setStatus] = useState("pending");
 
   //   service details
   const [serviceDetails, setServiceDetails] = useState<
@@ -74,6 +75,7 @@ export default function AddEditInvoice({ id }: { id?: string }) {
     ]);
   }, []);
 
+  // service
   const handleServiceNameInput = useCallback(
     (e: ChangeEvent<HTMLInputElement>, index: number) => {
       setServiceDetails((prev) => {
@@ -95,7 +97,32 @@ export default function AddEditInvoice({ id }: { id?: string }) {
     },
     []
   );
+  // service
+  // tax
 
+  const handleTaxNameInput = useCallback(
+    (e: ChangeEvent<HTMLInputElement>, index: number) => {
+      setServiceTaxes((prev) => {
+        const deepCopy = [...prev];
+        deepCopy[index].name = e.target.value;
+        return deepCopy;
+      });
+    },
+    []
+  );
+
+  const handleTaxAmountInput = useCallback(
+    (e: ChangeEvent<HTMLInputElement>, index: number) => {
+      setServiceTaxes((prev) => {
+        const deepCopy = [...prev];
+        deepCopy[index].amount = e.target.value;
+        return deepCopy;
+      });
+    },
+    []
+  );
+
+  // tax
   const remove = useCallback((index: number) => {
     setServiceDetails((prev) => {
       const deepCopy = [...prev];
@@ -124,7 +151,7 @@ export default function AddEditInvoice({ id }: { id?: string }) {
         {
           id: item?.id,
           name: item?.name,
-          amount: `${item?.amount}%`,
+          amount: item?.amount,
           isCompound: item?.isCompound,
         },
       ]);
@@ -156,9 +183,10 @@ export default function AddEditInvoice({ id }: { id?: string }) {
         })),
         note: customerNote,
         total_amount: total,
+        status,
       };
       try {
-        const response = await axios.post("admin/invoice", payload);
+        const response = await axios.post("/admin/invoice", payload);
         const data = response.data;
 
         dispatch(addInvoiceToList(data));
@@ -168,6 +196,7 @@ export default function AddEditInvoice({ id }: { id?: string }) {
       }
     },
     [
+      status,
       user,
       bookingId,
       invoiceNumber,
@@ -200,11 +229,10 @@ export default function AddEditInvoice({ id }: { id?: string }) {
               </div>
             </div>
             <div className="w-full p-3 flex flex-col gap-6 max-w-screen-md">
-              <Search
-                setValue={setUser}
-                id="customer-search"
-                componentId="customer"
+              <CustomersSingleSearch
                 placeholder="Existing Customer name, ID, etc..."
+                selected={user}
+                setSelected={setUser}
               />
 
               <Select
@@ -363,10 +391,10 @@ export default function AddEditInvoice({ id }: { id?: string }) {
                     <input
                       placeholder={"Enter Service Tax Name"}
                       required={true}
-                      readOnly
+                      // readOnly
                       value={item?.name}
                       onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        handleServiceNameInput(e, index)
+                        handleTaxNameInput(e, index)
                       }
                       type={"text"}
                       className="w-full p-3 rounded-lg border  bg-gray-100/15 focus:ring-[#17594F] focus:border-[#17594F]"
@@ -375,12 +403,12 @@ export default function AddEditInvoice({ id }: { id?: string }) {
                   <input
                     placeholder={"Enter Service Tax Amount"}
                     required={true}
-                    readOnly
+                    // readOnly
                     value={item?.amount}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      handleServiceAmountInput(e, index)
+                      handleTaxAmountInput(e, index)
                     }
-                    type={"text"}
+                    type={"number"}
                     className="w-full p-3 rounded-lg border  bg-gray-100/15 focus:ring-[#17594F] focus:border-[#17594F]"
                   />
                 </div>
@@ -421,6 +449,23 @@ export default function AddEditInvoice({ id }: { id?: string }) {
                 id="customer-note"
                 placeholder="Description"
               />
+            </div>
+            <div className=" w-full grid grid-cols-2 gap-3">
+              <h6 className=" font-semibold text-lg">Status:</h6>
+
+              <Select
+                isRequired={true}
+                value={status}
+                setValue={setStatus}
+                id="invoice-status"
+              >
+                <option value="" disabled>
+                  Select Invoice Status
+                </option>
+                <option value="pending">Pending</option>
+                <option value="paid">Paid</option>
+                <option value="cancelled">Cancelled</option>
+              </Select>
             </div>
           </div>
 

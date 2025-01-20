@@ -23,10 +23,13 @@ import useAxios from "../../../useHooks/useAxios";
 import useGetSpecialPrice from "../../../services-hooks/pricing/useSpecialPrice";
 import LinkButton from "../../../components/button/linkButton";
 import Search from "../../../components/inputs/search";
+import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
+import DateInput from "../../../components/inputs/dateInput";
+import reservationValidator from "../../../utils/reservation-validator";
 
 const breadCrumb = [
   {
-    url: "#",
+    url: "/pricing/special-prices",
     label: "Pricing",
     icon: <ReceiptIcon />,
   },
@@ -118,6 +121,21 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
   const submitSpecialPrices = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
+      const validatorResponse = reservationValidator({
+        data: {
+          "Check in date": checkIn,
+          "Check out date": checkOut,
+        },
+      });
+      if (!validatorResponse?.success) {
+        dispatch(
+          openSnackbar({
+            message: validatorResponse?.message,
+            isError: true,
+          })
+        );
+        return;
+      }
       try {
         setIsSaving(true);
         const payload = {
@@ -218,13 +236,14 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                     Quae labore.
                   </p>
                 </div>
-                <TextInput
-                  inputType="text"
-                  isRequired={true}
+                <DateInput
+                  inputType="date"
+                  isRequired={false}
                   value={checkIn}
                   setValue={setCheckIn}
                   id="check-in-date"
-                  placeholder="Check-in date"
+                  placeholder="Check-in Date"
+                  label="Check-in Date"
                 />
               </div>
               <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
@@ -235,13 +254,14 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                     Quae labore.
                   </p>
                 </div>
-                <TextInput
-                  inputType="text"
-                  isRequired={true}
+                <DateInput
+                  inputType="date"
+                  isRequired={false}
                   value={checkOut}
                   setValue={setCheckOut}
-                  id="check-out"
-                  placeholder="Check-out"
+                  id="check-out-date"
+                  placeholder="Check-out Date"
+                  label="Check-out Date"
                 />
               </div>
               {/* select */}
