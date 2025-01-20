@@ -70,7 +70,7 @@ export default function AddAdminUser() {
           isError: false,
         })
       );
-      navigate("/admin-users-management?redirect=admins");
+      navigate("/admin/admin-users");
     },
     []
   );

@@ -1,5 +1,5 @@
 import DoubleCheckIcon from "../../assets/icons/double-check";
-import { chatHistory } from "../../types/apiData/chat";
+import { chatList } from "../../types/apiData/chat";
 import { formatTime } from "../../utils/isoDateConverter";
 import NotifierNumber from "../status/notifierNumber";
 
@@ -13,8 +13,8 @@ export default function InboxCard({
   isActive: boolean;
   variant?: "group-chat" | "dm";
   groupName?: string;
-  conversation: chatHistory;
-  setChatId: Function;
+  conversation: chatList;
+  setChatId: (id: any) => void;
 }) {
   return (
     <div className=" border-b py-1">
@@ -32,7 +32,9 @@ export default function InboxCard({
           />
           <div className=" w-full">
             <h6 className=" font-semibold">
-              {variant === "dm" ? conversation?.sender : groupName}
+              {variant === "dm"
+                ? conversation?.last_message?.sender
+                : groupName}
             </h6>
             <div className=" flex items-center gap-1">
               {false && (
@@ -40,8 +42,8 @@ export default function InboxCard({
               )}
               <span className=" overflow-ellipsis line-clamp-1 text-gray-500 text-sm">
                 {variant === "dm"
-                  ? conversation?.message
-                  : `${conversation?.sender}: ${conversation?.message}`}
+                  ? conversation?.last_message?.message
+                  : `${conversation?.last_message?.sender}: ${conversation?.last_message?.message}`}
               </span>
             </div>
           </div>

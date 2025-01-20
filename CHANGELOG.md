@@ -1,5 +1,6 @@
 ##### 20.01.2025
 
+> BUG Fix: Creating user naviagtion URL bug fixed
 > BUG FIX: Additional service missing customer information added
 > BUG FIX: Fixed invoice creation bug
 > BUG FIX: Fixed customer information unavailability on booking-requests table

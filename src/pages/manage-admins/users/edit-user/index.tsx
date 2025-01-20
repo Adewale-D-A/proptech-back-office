@@ -63,7 +63,7 @@ export default function EditAdminUser() {
           isError: false,
         })
       );
-      navigate("/admin-users-management?redirect=admins");
+      navigate("/admin/admin-users");
     },
     [id]
   );
