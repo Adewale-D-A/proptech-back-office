@@ -1,8 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Status from "../status";
 import { apartmentById } from "../../types/apiData/apartment";
 import { bookingsById } from "../../types/apiData/bookings";
 import formatDate from "../../utils/isoDateConverter";
+import { useCallback, useState } from "react";
+import useAxios from "../../useHooks/useAxios";
+import { useAppDispatch } from "../../stores/hooks";
+import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 
 type props = {
   //   header,
@@ -22,6 +26,27 @@ type props = {
   //   }[];
 };
 export default function BookingByIdList({ data }: { data: bookingsById }) {
+  const { id } = useParams();
+  const axios = useAxios();
+  const dispatch = useAppDispatch();
+  const [confirming, setConfirming] = useState(false);
+  const confirmReservation = useCallback(async () => {
+    setConfirming(true);
+    try {
+      await axios.put(`/admin/booking/status/${id}`, {
+        status: "Confirmed",
+      });
+      dispatch(
+        openSnackbar({
+          message: "Reervation succefully confirmed",
+          isError: false,
+        })
+      );
+    } catch (error) {
+    } finally {
+      setConfirming(false);
+    }
+  }, [id]);
   return (
     <table className=" w-full text-xs overflow-x-auto">
       <thead className="">
@@ -77,7 +102,7 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
                     Resend Email
                   </button>
                   <Link
-                    to={`/booking-details/edit-reservation/${request?.id}`}
+                    to={`/bookings/booking-details/edit-reservation/${request?.id}`}
                     className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                   >
                     Edit Reservation
@@ -88,14 +113,15 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
                   >
                     View In Front Site
                   </Link>
-                  <button
+                  {/* <button
                     type="button"
                     className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                   >
                     Delete Reservation
-                  </button>
+                  </button> */}
                   <button
                     type="button"
+                    onClick={() => confirmReservation()}
                     className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                   >
                     Set To Be Confirmed

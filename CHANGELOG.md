@@ -1,5 +1,6 @@
 ##### 20.01.2025
 
+> View booking details bug fixes
 > BUG Fixes and inconsistencies adjustments
 
 ##### 19.01.2025

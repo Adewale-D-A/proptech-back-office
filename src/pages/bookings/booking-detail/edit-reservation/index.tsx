@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useCallback,
   useEffect,
@@ -30,9 +30,14 @@ import SplitStay from "../../../../components/booking-detail/split-stay";
 import AddRoom from "../../../../components/booking-detail/add-room";
 import useGetBookingById from "../../../../services-hooks/bookings/useGetBookingById";
 import useGetCustomerById from "../../../../services-hooks/useGetCustomerById";
+import useAxios from "../../../../useHooks/useAxios";
+import { removeBookingsInList } from "../../../../stores/apiData/bookings-lists";
+import { openSnackbar } from "../../../../stores/appFunctionality/snackbar";
 
 export default function EditBookingReservation() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const axios = useAxios();
   const dispatch = useAppDispatch();
   const breadCrumb = useMemo(
     () => [
@@ -134,26 +139,41 @@ export default function EditBookingReservation() {
     }
   }, [customer]);
 
-  const deleteReservation = useCallback(() => {
-    console.log({ id });
-    setOpenDeleteConfirmation(false);
+  const deleteReservation = useCallback(async () => {
+    setIsDeleting(true);
+    try {
+      await axios.delete(`/admin/booking/${id}`);
+      dispatch(removeBookingsInList({ id: Number(id) }));
+      setOpenDeleteConfirmation(false);
+      navigate("/bookings/view-all");
+    } catch (error) {
+    } finally {
+      setIsDeleting(false);
+    }
   }, [id]);
 
   const saveReservation = useCallback(() => {
     console.log({ id });
+    dispatch(
+      openSnackbar({
+        message: "Reservation successfully saved",
+        isError: false,
+      })
+    );
+    navigate("/bookings/view-all");
   }, [id]);
 
   return (
     <>
       <section className="w-full flex flex-col items-center">
         <div className="w-full max-w-screen-xl flex flex-col gap-10">
-          <BookingByIdList data={data} />
+          <BookingByIdList data={{ ...data, user: customer }} />
           <div className="w-full flex gap-5 flex-col md:flex-row justify-center items-center md:justify-between md:items-end  border-b">
             <h2 className="text-xl font-semibold flex items-center gap-3 border-b-2 border-primary pb-3 text-primary">
               <WriteIcon /> <span>Edit Reservation</span>
             </h2>
             <div className=" flex items-center flex-col md:flex-row gap-3 text-sm pb-2">
-              <LoadingButton
+              {/* <LoadingButton
                 isLoading={isDeleting}
                 clickHandler={() => setOpenDeleteConfirmation(true)}
                 type="button"
@@ -161,7 +181,7 @@ export default function EditBookingReservation() {
                 variant={3}
                 className=" text-red-500"
                 startIcon={<BinIcon className="h-5 w-5" />}
-              />
+              /> */}
               <LoadingButton
                 isLoading={false}
                 type="button"

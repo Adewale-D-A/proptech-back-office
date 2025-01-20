@@ -51,11 +51,10 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
     setOpenDeleteConfirmation(true);
   }, []);
 
-  const deleteApartment = useCallback(() => {
+  const deleteBooking = useCallback(() => {
     setIsDeleting(true);
     try {
       dispatch(removeBookingsInList({ id: selectedId }));
-
       setOpenDeleteConfirmation(false);
     } catch (error) {
     } finally {
@@ -166,7 +165,7 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
         />
       </div>
       <DeleteConfirmation
-        confirmationHandler={deleteApartment}
+        confirmationHandler={deleteBooking}
         isLoading={isDeleting}
         btnTitle="Yes, I want to"
         title="Delete Booking"
