@@ -45,7 +45,7 @@ export default function RequestDetailsById() {
   const { data: apartment_data } = useGetApartmentById(
     data?.shortlet_id ? String(data?.shortlet_id) : undefined
   );
-  const { data: customer } = useGetCustomerById(String(data?.user_id || ""));
+  // const { data: customer } = useGetCustomerById(String(data?.user_id || ""));
 
   // const { data: user_bookings } = useGetBookingsByUserId({
   //   id: String(data?.user_id || ""),
@@ -60,7 +60,7 @@ export default function RequestDetailsById() {
               Customer Details
             </h4>
             <div className=" p-3 flex flex-col gap-6">
-              <ConfirmationCard data={customer} />{" "}
+              <ConfirmationCard data={data?.user} />{" "}
               <RequestInformation request_details={data} />
             </div>
           </div>

@@ -110,6 +110,7 @@ export default function AddEditUser({
             },
           ].map((field) => (
             <TextInput
+              key={field?.id}
               inputType={field?.type}
               isRequired={true}
               value={field?.value}
