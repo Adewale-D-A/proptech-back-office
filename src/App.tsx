@@ -350,7 +350,6 @@ function App() {
               path="/pricing/edit-restriction/:id"
               element={<EditRestriction />}
             />
-
             {/* plans and promotions flows wrapper */}
             <Route element={<PlansAndPromotionsTabWrapper />}>
               <Route
@@ -370,7 +369,6 @@ function App() {
                 element={<PackagesAndOffers />}
               />
             </Route>
-
             <Route
               path="/plans-and-promotions/package-and-offer/add-new-package-and-offer"
               element={<AddNewPackageAndOffer />}

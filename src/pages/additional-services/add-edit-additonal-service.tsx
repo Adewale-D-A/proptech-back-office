@@ -20,7 +20,7 @@ export default function AddEditAdditionalService({
   setIsOpen: (val: boolean) => void;
 }) {
   const dispatch = useAppDispatch();
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [seletedCustomer, setSelectedCustomer] = useState<customersById>(
     {} as any
   );

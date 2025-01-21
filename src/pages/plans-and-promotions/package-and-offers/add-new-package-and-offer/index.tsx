@@ -40,7 +40,10 @@ const breadCrumb = [
 ];
 export default function AddNewPackageAndOffer() {
   const { id } = useParams();
-  const axios = useAxiosMultipart();
+  const axios = useAxiosMultipart({
+    disableSuccMssg: false,
+    disableErrMssg: false,
+  });
   const naviagte = useNavigate();
   const dispatch = useAppDispatch();
 

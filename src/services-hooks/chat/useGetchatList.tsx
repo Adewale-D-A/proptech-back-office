@@ -17,7 +17,7 @@ export default function useGetChatList({
   sort?: "desc" | "asc" | string;
   limit?: number;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const {
     status,
@@ -41,11 +41,9 @@ export default function useGetChatList({
         dispatch(updateChatList({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          `/admin/chat?sort=${sort}&limit=20&page=${page}`
+          `/admin/chat?sort=${sort}&limit=100&page=${page}`
         );
-        console.log({ response });
-        const { data } = response?.data?.data;
-        console.log({ data });
+        const result = response?.data?.data;
         const {
           data: chatData,
           current_page,
@@ -54,7 +52,7 @@ export default function useGetChatList({
           total,
           from,
           to,
-        } = data;
+        } = result;
         const paginationDataset = {
           current_page,
           last_page,
@@ -80,7 +78,7 @@ export default function useGetChatList({
   }, [page, limit, sort]);
 
   useEffect(() => {
-    // getChatList();
+    getChatList();
   }, [page, limit, sort]);
 
   return {

@@ -11,7 +11,7 @@ import { removeSpecialPricesInList } from "../../stores/apiData/special-prices";
 import TableSearch from "../inputs/search/table-search";
 
 export default function SpecialPricesTable() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);

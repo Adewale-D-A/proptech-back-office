@@ -88,9 +88,13 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
                   return (
                     <tr key={item?.id} className=" border-b">
                       <td>
-                        <span className=" rounded-full p-2 border border-primary">
+                        {" "}
+                        <Link
+                          to={`/bookings/booking-details/edit-reservation/${item?.id}`}
+                          className=" rounded-full p-2 border border-primary"
+                        >
                           {item?.id}
-                        </span>
+                        </Link>
                       </td>
                       <td>
                         {item?.user?.first_name} {item?.user?.last_name}

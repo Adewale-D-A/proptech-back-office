@@ -18,7 +18,7 @@ export default function AddEditLocationGroup({
   id?: string;
   setOpen: (val: boolean) => void;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
 
   const [name, setName] = useState("");

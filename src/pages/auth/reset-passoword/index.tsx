@@ -8,7 +8,7 @@ import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 
 export default function ResetPassword() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [isSendingCode, setIsSendingCode] = useState(false);

@@ -4,7 +4,7 @@ import { locationGrouping } from "../../types/apiData/apartment/locationGrouping
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetlocationGrouping({ id }: { id?: string }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [data, setData] = useState<locationGrouping>({} as any);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);

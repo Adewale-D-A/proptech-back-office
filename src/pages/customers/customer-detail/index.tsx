@@ -28,7 +28,7 @@ const breadCrumb = [
 ];
 export default function CustomerDetail() {
   const { id } = useParams();
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { data, isLoading, isFailed, setIsFailed, retryFunction } =
     useGetCustomerById(id);

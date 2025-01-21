@@ -13,7 +13,10 @@ import useAxiosMultipart from "../../../useHooks/useAxiosMultipart";
 export default function EditApartmentPolicies() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const axios = useAxiosMultipart();
+  const axios = useAxiosMultipart({
+    disableSuccMssg: false,
+    disableErrMssg: false,
+  });
   const breadCrumb = useMemo(
     () => [
       {

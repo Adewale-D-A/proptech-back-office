@@ -11,7 +11,7 @@ export default function CalculateRate({
   apartmentId: string;
   setIsOpen: (val: boolean) => void;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [checkInDate, setCheckInDate] = useState("");
   const [checkinTime, setCheckinTime] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");

@@ -18,7 +18,7 @@ import LinkButton from "../../../components/button/linkButton";
 
 export default function AddEditRestriction({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const { data } = useGetRestriction({ id });
 
   const [restrictionName, setRestrictionName] = useState("");

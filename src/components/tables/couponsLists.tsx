@@ -16,7 +16,7 @@ import ModalTemplate from "../modal";
 import AddNewCoupon from "../inputs/plansAndPromotions/coupons";
 
 export default function CouponList({ header }: { header: string[] }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [filterDates, setFilterDates] = useState<{
     start_date: string;

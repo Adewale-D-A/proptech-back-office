@@ -10,7 +10,7 @@ export default function useGetBookingForecast({
   start_date?: string;
   end_date?: string;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 

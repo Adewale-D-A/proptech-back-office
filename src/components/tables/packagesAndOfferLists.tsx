@@ -12,7 +12,7 @@ import useAxios from "../../useHooks/useAxios";
 
 export default function PackagesAndOfferList({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
 

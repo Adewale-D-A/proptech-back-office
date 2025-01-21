@@ -13,7 +13,7 @@ import { removeServiceTypeInList } from "../../stores/apiData/service-types";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 
 export default function ServiceTypeTable() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [filterDates, setFilterDates] = useState<{
     start_date: string;

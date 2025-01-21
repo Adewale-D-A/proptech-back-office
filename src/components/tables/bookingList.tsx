@@ -27,7 +27,7 @@ type props = {
 };
 export default function BookingByIdList({ data }: { data: bookingsById }) {
   const { id } = useParams();
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [confirming, setConfirming] = useState(false);
   const confirmReservation = useCallback(async () => {

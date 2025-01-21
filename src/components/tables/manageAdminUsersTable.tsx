@@ -14,7 +14,7 @@ import DeleteConfirmation from "../infoModal/delete-confirmation";
 import MobileAdminTable from "./mobile/admins";
 
 export default function ManageAdminUsersTable() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useDispatch();
 
   const [openDelete, setOpenDelete] = useState(false);

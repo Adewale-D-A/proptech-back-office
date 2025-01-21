@@ -19,7 +19,10 @@ export default function AddEditCustomerSalesChannel({
   handleSubmit: (payload: customerRequestPayload) => void;
   isSubmitting: boolean;
 }) {
-  const axios = useAxiosMultipart();
+  const axios = useAxiosMultipart({
+    disableSuccMssg: false,
+    disableErrMssg: false,
+  });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const storeCustomerDatast = useAppSelector(

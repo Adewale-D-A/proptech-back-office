@@ -12,7 +12,7 @@ export default function useGetApartmentsCalendar({
   start_date?: string;
   end_date?: string;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [data, setData] = useState<reformedApartmentCalendar[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);

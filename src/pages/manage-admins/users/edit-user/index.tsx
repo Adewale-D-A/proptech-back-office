@@ -17,7 +17,7 @@ const breadCrumb = [
   },
 ];
 export default function EditAdminUser() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -63,7 +63,7 @@ export default function EditAdminUser() {
           isError: false,
         })
       );
-      navigate("/admin-users-management?redirect=admins");
+      navigate("/admin/admin-users");
     },
     [id]
   );

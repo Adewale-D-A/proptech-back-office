@@ -11,7 +11,7 @@ import { removeRestrictionssInList } from "../../stores/apiData/restrictions";
 import TableSearch from "../inputs/search/table-search";
 
 export default function PricingRestrictionsTable() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);

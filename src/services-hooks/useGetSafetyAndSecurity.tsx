@@ -4,7 +4,7 @@ import { safetyAndSecurity } from "../types/apiData/safetyAndSecurity";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetSafetyAndSecurity({ id }: { id?: string }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [data, setData] = useState<safetyAndSecurity>({} as any);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);

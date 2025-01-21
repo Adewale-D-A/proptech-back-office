@@ -13,7 +13,7 @@ export default function CheckAvailability({
 }: {
   className?: string;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [selectedApt, setSelectedApt] = useState<apartmentById>({} as any);
   const [checkInDate, setCheckInDate] = useState("");

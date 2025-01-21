@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import Filter from "../../filterAndSort/filter";
-import Search from "../../inputs/search";
+// import Search from "../../inputs/search";
 import { apartmentById } from "../../../types/apiData/apartment";
 import LoadingButton from "../../button";
 import ExportSelect from "../../inputs/select/exportSelect";

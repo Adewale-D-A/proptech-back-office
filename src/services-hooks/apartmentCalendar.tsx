@@ -11,7 +11,7 @@ export default function useGetApartmentCalendar({
   start_date?: string;
   end_date?: string;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [data, setData] = useState<{
     booked_dates: Date[];
     blocked_dates: Date[];

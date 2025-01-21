@@ -17,7 +17,7 @@ import CalculateRate from "../check-availability/calculate-rate";
 import useAxios from "../../useHooks/useAxios";
 
 export default function ApartmentListsTable() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");

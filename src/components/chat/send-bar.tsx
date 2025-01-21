@@ -1,39 +1,23 @@
 import { SyntheticEvent, useCallback, useState } from "react";
-import PaperClip from "../../assets/icons/paper-clip";
+// import PaperClip from "../../assets/icons/paper-clip";
 import PaperplaneIcon from "../../assets/icons/paperplane";
 import LoadingButton from "../button";
-import useAxios from "../../useHooks/useAxios";
 
 export default function SendBar({
-  user_id,
-  setSentHistory,
+  isSending,
+  handleSendMessage,
 }: {
-  user_id: string;
-  setSentHistory: Function;
+  isSending: boolean;
+  handleSendMessage: (message: string) => void;
 }) {
-  const axios = useAxios();
   const [message, setMessage] = useState("");
-  const [isSending, setIsSending] = useState(false);
 
   const sendMessage = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
-      try {
-        setIsSending(false);
-        const response = await axios.post(`/admin/chat/send`, {
-          message,
-          user_id,
-        });
-        setSentHistory((prev: { message: string }[]) => [
-          ...prev,
-          { message: message },
-        ]);
-      } catch (error) {
-      } finally {
-        setIsSending(false);
-      }
+      handleSendMessage(message);
     },
-    [message, user_id]
+    [message]
   );
 
   return (
@@ -45,10 +29,13 @@ export default function SendBar({
         <input
           type="text"
           id="bar"
+          required
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
           className=" w-full p-3 bg-transparent focus:border-none focus:ring-0 focus:outline-none"
           placeholder="Type your message"
         />
-        <PaperClip />
+        {/* <PaperClip /> */}
         <div className=" w-fit">
           <LoadingButton
             type="submit"

@@ -25,7 +25,7 @@ export default function AddEditOptions({
   setOpenOption: Function;
   componentId?: "extra" | "room";
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { data: roomOptionData } = useGetRoomOption({
     id: componentId === "room" ? id : undefined,

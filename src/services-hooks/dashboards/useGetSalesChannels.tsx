@@ -10,7 +10,7 @@ export default function useGetSalesChannels({
   start_date?: string;
   end_date?: string;
 }) {
-  const axios = useAxios(true);
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { status, data } = useAppSelector((state) => state.salesChannels.value);
   const [isLoading, setIsLoading] = useState(false);

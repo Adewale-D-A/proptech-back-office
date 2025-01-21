@@ -10,7 +10,7 @@ import { useAppDispatch } from "../../stores/hooks";
 import { removeRoomOption } from "../../stores/apiData/room-options";
 
 export default function RoomOptionTable() {
-  const axios = useAxios(false);
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
 

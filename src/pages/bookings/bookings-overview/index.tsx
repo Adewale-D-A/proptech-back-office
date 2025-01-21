@@ -8,7 +8,6 @@ import CalendarView from "../../../components/calendar";
 import CalendarAvailabilitySymbol from "../../../components/calender-availability-symbol";
 import CheckAvailability from "../../../components/check-availability";
 import Filter from "../../../components/filterAndSort/filter";
-import Search from "../../../components/inputs/search";
 import BookingsListTable from "../../../components/tables/bookingsLists";
 import BarChart from "../../../components/charts/bar-chart";
 import RoomOccupancyListTable from "../../../components/tables/roomOccupancy";
@@ -104,7 +103,8 @@ export default function BookingsOverview() {
               <CheckAvailability />
             </div>
           </div>
-          {availabilityResponse?.options && <CalculatedAvailabilityOptions />}
+          {/* Available apartmnets suggestions and split stays suggestions */}
+          {/* {<CalculatedAvailabilityOptions />} */}
         </div>
         <div className=" w-full flex flex-col gap-4 border rounded-md">
           {/* Bookings Calendar */}

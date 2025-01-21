@@ -11,7 +11,7 @@ import { useAppDispatch } from "../../stores/hooks";
 import { removeSafetyAndSecurity } from "../../stores/apiData/safety-and-security";
 
 export default function SafetyAndSecurityList() {
-  const axios = useAxios(false);
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
 

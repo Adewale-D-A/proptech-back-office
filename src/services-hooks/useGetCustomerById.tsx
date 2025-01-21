@@ -12,7 +12,7 @@ import {
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetCustomerById(id?: string) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
 
   const [isLoading, setIsLoading] = useState(true);

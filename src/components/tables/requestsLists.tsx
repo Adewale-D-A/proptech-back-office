@@ -17,7 +17,7 @@ import RequestStatusUpdate from "../booking-detail/request-status-update";
 import { requests } from "../../types/apiData/requests";
 
 export default function RequestsListTable({ header }: { header: string[] }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);

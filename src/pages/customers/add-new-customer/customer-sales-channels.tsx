@@ -19,7 +19,10 @@ import useAxiosMultipart from "../../../useHooks/useAxiosMultipart";
 
 export default function AddNewCustomerSalesChannel() {
   const { id } = useParams();
-  const axios = useAxiosMultipart(false);
+  const axios = useAxiosMultipart({
+    disableSuccMssg: false,
+    disableErrMssg: false,
+  });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const storeCustomerDetails = useAppSelector(
