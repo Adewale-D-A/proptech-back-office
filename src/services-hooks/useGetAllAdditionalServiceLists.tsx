@@ -22,7 +22,7 @@ export default function useGetAllAdditionalServiceLists({
   sort?: "desc" | "asc" | string;
   search?: string;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const {
     status,

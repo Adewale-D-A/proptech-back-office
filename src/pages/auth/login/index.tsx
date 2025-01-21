@@ -13,7 +13,7 @@ import storeToken from "../../../utils/auth/storeToken";
 const encrypt = new Criptic();
 const authKey = process.env.REACT_APP_AUTH_KEY || "";
 function Login() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();

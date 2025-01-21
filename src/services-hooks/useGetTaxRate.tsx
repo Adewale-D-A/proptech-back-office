@@ -4,7 +4,7 @@ import { taxRates } from "../types/apiData/taxRates";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetTaxRate({ id }: { id?: string }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [data, setData] = useState<taxRates>({} as any);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);

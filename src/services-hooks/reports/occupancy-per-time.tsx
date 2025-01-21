@@ -14,7 +14,7 @@ export default function useGetOccupancyPerTimeReport({
   end_date?: string;
   apartmentId: string;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<occupancyTimeReportList[]>([]);
   const [isFailed, setIsFailed] = useState(false);

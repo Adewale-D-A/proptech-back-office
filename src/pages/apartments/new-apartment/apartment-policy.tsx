@@ -23,7 +23,10 @@ const breadCrumb = [
   },
 ];
 export default function AddNewApartmentPolicies() {
-  const axios = useAxiosMultipart();
+  const axios = useAxiosMultipart({
+    disableSuccMssg: false,
+    disableErrMssg: false,
+  });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   // update page props on component mount

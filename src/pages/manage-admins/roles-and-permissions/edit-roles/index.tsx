@@ -21,7 +21,7 @@ const breadCrumb = [
 export default function EditRoles() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction } = useGetRole({

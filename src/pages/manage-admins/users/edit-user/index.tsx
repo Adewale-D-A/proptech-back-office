@@ -17,7 +17,7 @@ const breadCrumb = [
   },
 ];
 export default function EditAdminUser() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const navigate = useNavigate();
   const { id } = useParams();
 

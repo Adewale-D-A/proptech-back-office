@@ -15,7 +15,7 @@ export default function RequestStatusUpdate({
   id: string;
   currentStatus: string;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [requestStatus, setRequestStatus] = useState(currentStatus || "");
   const [isResolving, setIsResolving] = useState(false);

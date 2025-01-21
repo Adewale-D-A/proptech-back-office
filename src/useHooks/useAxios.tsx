@@ -10,7 +10,13 @@ import { updateToken } from "../stores/authUser/auth";
 import signOut from "../utils/auth/signOut";
 import extractToken from "../utils/auth/extractToken";
 
-const useAxios = (disableErrorPrompt?: boolean) => {
+const useAxios = ({
+  disableSuccMssg,
+  disableErrMssg,
+}: {
+  disableSuccMssg?: boolean;
+  disableErrMssg?: boolean;
+}) => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { token } = extractToken();
@@ -60,7 +66,7 @@ const useAxios = (disableErrorPrompt?: boolean) => {
         } else if (hadUnauthenticated) {
           signOut(location?.pathname);
           return Promise.reject(error);
-        } else if (!disableErrorPrompt) {
+        } else if (!disableErrMssg) {
           dispatch(
             openSnackbar({
               message: errMssg || "Please try again later",

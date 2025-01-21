@@ -40,7 +40,7 @@ const breadCrumb = [
   },
 ];
 export default function AddEditSpecialPrices({ id }: { id?: string }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { data } = useGetSpecialPrice({ id });
 

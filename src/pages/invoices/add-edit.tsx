@@ -19,7 +19,7 @@ import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 // import useGetInvoice from "../../services-hooks/invoice/useGetInvoice";
 
 export default function AddEditInvoice({ id }: { id?: string }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const location = useLocation();
   const dispatch = useAppDispatch();
 

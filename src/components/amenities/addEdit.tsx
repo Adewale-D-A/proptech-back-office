@@ -25,7 +25,7 @@ export default function AddEdit({
   setOpen: Function;
   componentId?: "safety" | "rule";
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { data: safety } = useGetSafetyAndSecurity({
     id: componentId === "safety" ? id : undefined,

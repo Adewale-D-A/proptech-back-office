@@ -23,7 +23,7 @@ const breadCrumb = [
 ];
 
 export default function AddRoles() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 

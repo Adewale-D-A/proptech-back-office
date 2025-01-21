@@ -17,7 +17,7 @@ export default function useGetChatList({
   sort?: "desc" | "asc" | string;
   limit?: number;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const {
     status,

@@ -24,7 +24,10 @@ const breadCrumb = [
 
 export default function EditCustomerSalesChannelPage() {
   const { id } = useParams();
-  const axios = useAxiosMultipart(false);
+  const axios = useAxiosMultipart({
+    disableSuccMssg: false,
+    disableErrMssg: false,
+  });
   const dispatch = useAppDispatch();
 
   // update page props on component mount

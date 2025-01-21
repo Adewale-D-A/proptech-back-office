@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { axiosMultipartInstance } from "../services-hooks/base";
 import { useAppDispatch } from "../stores/hooks";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { updateToken } from "../stores/authUser/auth";
 import { openSnackbar } from "../stores/appFunctionality/snackbar";
 import refreshToken from "../services-hooks/base/refreshToken";
@@ -10,7 +10,13 @@ import extractToken from "../utils/auth/extractToken";
 import signOut from "../utils/auth/signOut";
 
 //axios instace interceptor for access token integration and refresh tokens
-const useAxiosMultipart = (disableErrorPrompt?: boolean) => {
+const useAxiosMultipart = ({
+  disableSuccMssg,
+  disableErrMssg,
+}: {
+  disableSuccMssg?: boolean;
+  disableErrMssg?: boolean;
+}) => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { token } = extractToken();
@@ -62,7 +68,7 @@ const useAxiosMultipart = (disableErrorPrompt?: boolean) => {
           // navigate(`/?redirect=${location?.pathname}`);
           signOut(location?.pathname);
           return Promise.reject(error);
-        } else if (!disableErrorPrompt) {
+        } else if (!disableErrMssg) {
           dispatch(
             openSnackbar({
               message: errMssg || "Please try again later",

@@ -11,7 +11,7 @@ import { useAppDispatch } from "../../stores/hooks";
 import { removeAmenity } from "../../stores/apiData/amenities";
 
 export default function AmenitiesListsTable() {
-  const axios = useAxios(false);
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
 

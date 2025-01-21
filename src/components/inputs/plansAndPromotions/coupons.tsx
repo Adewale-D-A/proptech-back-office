@@ -21,7 +21,7 @@ export default function AddNewCoupon({
   id?: string;
 }) {
   const dispatch = useAppDispatch();
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction } =
     useGetCoupon({ id });

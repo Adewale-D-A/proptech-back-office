@@ -15,7 +15,7 @@ import useAxios from "../../useHooks/useAxios";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 
 export default function InvoiceListsTable({ header }: { header: string[] }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [sort, setSort] = useState("desc");
   const [search, setSearch] = useState("");

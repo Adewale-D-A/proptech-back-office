@@ -37,7 +37,7 @@ import { openSnackbar } from "../../../../stores/appFunctionality/snackbar";
 export default function EditBookingReservation() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const breadCrumb = useMemo(
     () => [

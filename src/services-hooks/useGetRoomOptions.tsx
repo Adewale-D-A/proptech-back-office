@@ -15,7 +15,7 @@ export default function useGetRoomOptions({
   page?: number;
   limit?: number;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const {
     status,

@@ -47,7 +47,7 @@ const tabList = [
 ];
 export default function PlansAndPromotionsTabWrapper() {
   const location = useLocation();
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [trackTab, setTrackTab] = useState(1);
   // tax rates

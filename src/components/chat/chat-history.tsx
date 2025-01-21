@@ -15,7 +15,7 @@ export default function ChatHistory({
   variant?: "dm" | "group-chat";
   chatItem?: chatList;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
 
   const { user: authUser } = useAppSelector(
     (state) => state.userAuthentication.value

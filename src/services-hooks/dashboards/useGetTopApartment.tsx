@@ -19,7 +19,7 @@ export default function useGetTopApartmentLists({
   end_date?: string;
   sort?: "desc" | "asc" | string;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const {
     status,

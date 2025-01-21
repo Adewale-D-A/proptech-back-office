@@ -32,7 +32,7 @@ export default function useGetAllBookingsLists({
   status?: string;
   search?: string;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { data, pagination: store_pagination } = useAppSelector(
     (state) => state.allBookingsLists.value

@@ -27,7 +27,7 @@ export default function useGetSalesAnalytics({
   start_date?: string;
   end_date?: string;
 }) {
-  const axios = useAxios(true);
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { status, data, monthlyAmountsStatistics } = useAppSelector(
     (state) => state.salesAnalytics.value

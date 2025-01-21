@@ -12,7 +12,7 @@ export default function PriceRateList({
 }: {
   apartmentId: string;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
 

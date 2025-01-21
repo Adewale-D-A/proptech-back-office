@@ -13,7 +13,7 @@ export default function useGetRateListByApartmentId({
   limit?: number;
   apartmentId?: string;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
   const [data, setData] = useState<rateList[]>([]);

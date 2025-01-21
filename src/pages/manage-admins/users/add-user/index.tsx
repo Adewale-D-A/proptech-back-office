@@ -22,7 +22,7 @@ const breadCrumb = [
   },
 ];
 export default function AddAdminUser() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 

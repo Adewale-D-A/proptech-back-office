@@ -10,7 +10,7 @@ import { useAppDispatch } from "../../stores/hooks";
 import { removeExtraOption } from "../../stores/apiData/extra-options";
 
 export default function ExtraOptionTable() {
-  const axios = useAxios(false);
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
 

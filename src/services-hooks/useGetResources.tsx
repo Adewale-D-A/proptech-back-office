@@ -6,7 +6,7 @@ import reformResources from "../utils/admin/reformResource";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetAllResources() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { status, rawdata, reformedData } = useAppSelector(
     (state) => state.resources.value

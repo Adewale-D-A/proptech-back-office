@@ -17,7 +17,10 @@ export default function AddEditAmenities({
   id?: string;
   setOpen: Function;
 }) {
-  const axios = useAxiosMultipart();
+  const axios = useAxiosMultipart({
+    disableSuccMssg: false,
+    disableErrMssg: false,
+  });
   const dispatch = useAppDispatch();
   const { data } = useGetAmenity({ id });
   const [title, setTitle] = useState("");

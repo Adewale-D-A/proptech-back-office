@@ -9,7 +9,7 @@ import {
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetPriceTypeLists({ page = 1 }: { page?: number }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const {
     status,

@@ -5,7 +5,7 @@ import useAxios from "../../useHooks/useAxios";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetVisitorCount() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { status, data } = useAppSelector((state) => state.visitorCount.value);
   const [isLoading, setIsLoading] = useState(false);

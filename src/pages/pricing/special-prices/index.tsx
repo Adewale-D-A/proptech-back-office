@@ -20,7 +20,7 @@ const breadCrumb = [
   },
 ];
 export default function SpecialPricesViewAll() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
 
   // update page props on component mount

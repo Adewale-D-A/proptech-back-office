@@ -14,7 +14,7 @@ import ModalTemplate from "../modal";
 import AddTax from "../tax/addTax";
 
 export default function TaxRateLists({ header }: { header: string[] }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
