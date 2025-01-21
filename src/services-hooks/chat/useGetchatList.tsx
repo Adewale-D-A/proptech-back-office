@@ -45,7 +45,6 @@ export default function useGetChatList({
         );
         console.log({ response });
         const { data } = response?.data?.data;
-        console.log({ data });
         const {
           data: chatData,
           current_page,
@@ -80,7 +79,7 @@ export default function useGetChatList({
   }, [page, limit, sort]);
 
   useEffect(() => {
-    // getChatList();
+    getChatList();
   }, [page, limit, sort]);
 
   return {

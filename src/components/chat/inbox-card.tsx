@@ -14,26 +14,26 @@ export default function InboxCard({
   variant?: "group-chat" | "dm";
   groupName?: string;
   conversation: chatList;
-  setChatId: (id: any) => void;
+  setChatId: (chatItem: any) => void;
 }) {
   return (
     <div className=" border-b py-1">
       <button
-        onClick={() => setChatId(conversation?.id)}
+        onClick={() => setChatId(conversation)}
         className={`w-full flex  gap-2 justify-between rounded-lg p-2 ${
           isActive ? "bg-primary/5" : ""
         } `}
       >
         <div className=" flex items-center gap-2">
           <img
-            src={"/logo_blue.png"}
+            src={conversation?.user?.profile_photo}
             alt="avatar"
             className=" object-cover rounded-full size-10 aspect-square"
           />
           <div className=" w-full">
             <h6 className=" font-semibold">
               {variant === "dm"
-                ? conversation?.last_message?.sender
+                ? `${conversation?.user?.first_name} ${conversation?.user?.last_name}`
                 : groupName}
             </h6>
             <div className=" flex items-center gap-1">

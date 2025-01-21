@@ -1,3 +1,7 @@
+##### 21.01.2025
+
+> API Integration: Guest chat API and logic integration
+
 ##### 20.01.2025
 
 > BUG Fix: Creating user naviagtion URL bug fixed

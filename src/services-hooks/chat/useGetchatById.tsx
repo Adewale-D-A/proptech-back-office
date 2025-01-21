@@ -10,14 +10,27 @@ export default function useGetChatById({ id }: { id?: string }) {
   const [isFailed, setIsFailed] = useState(false);
 
   const getChatById = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/chat/${id}`);
-      console.log({ response });
-      setData([]);
-      setIsLoading(false);
+      const result = response?.data?.data;
+      const { data, current_page, last_page, per_page, total, from, to } =
+        result;
+      const paginationDataset = {
+        current_page,
+        last_page,
+        per_page,
+        total,
+        from,
+        to,
+        length: data?.length,
+      };
+      setData(data);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

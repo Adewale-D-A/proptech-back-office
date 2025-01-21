@@ -57,7 +57,7 @@ export default function ChatModule({
               ))}
         </div>
       </div>
-      <ChatHistory variant={variant} id={selectedChatId} />
+      {/* <ChatHistory variant={variant} id={selectedChatId} /> */}
     </div>
   );
 }
