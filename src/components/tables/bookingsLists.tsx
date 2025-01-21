@@ -67,9 +67,12 @@ export default function BookingsListTable({
               return (
                 <tr key={request?.id} className=" border-b">
                   <td>
-                    <span className=" rounded-full p-2 border border-primary">
+                    <Link
+                      to={`/bookings/booking-details/edit-reservation/${request?.id}`}
+                      className=" rounded-full p-2 border border-primary"
+                    >
                       {request?.id}
-                    </span>
+                    </Link>
                   </td>
                   <td>
                     {request?.user?.first_name} {request?.user?.last_name}
@@ -78,7 +81,10 @@ export default function BookingsListTable({
                   <td>{formatDate(request?.check_in_date)}</td>
                   {variant === "action" ? (
                     <td>
-                      <Link to={`#`} className=" text-primary">
+                      <Link
+                        to={`/bookings/booking-details/edit-reservation/${request?.id}`}
+                        className=" text-primary"
+                      >
                         View Details
                       </Link>
                     </td>

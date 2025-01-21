@@ -114,7 +114,7 @@ export default function PlansAndPromotionsTabWrapper() {
                 type="button"
                 isLoading={false}
                 clickHandler={() => setOpenNewTax(true)}
-                label="New Tax Rates"
+                label="Update Tax Rate"
                 startIcon={<PlusIcon />}
               />
             ) : trackTab === 2 ? (

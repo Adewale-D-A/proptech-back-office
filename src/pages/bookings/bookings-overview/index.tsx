@@ -8,7 +8,6 @@ import CalendarView from "../../../components/calendar";
 import CalendarAvailabilitySymbol from "../../../components/calender-availability-symbol";
 import CheckAvailability from "../../../components/check-availability";
 import Filter from "../../../components/filterAndSort/filter";
-import Search from "../../../components/inputs/search";
 import BookingsListTable from "../../../components/tables/bookingsLists";
 import BarChart from "../../../components/charts/bar-chart";
 import RoomOccupancyListTable from "../../../components/tables/roomOccupancy";
