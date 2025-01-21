@@ -103,7 +103,8 @@ export default function BookingsOverview() {
               <CheckAvailability />
             </div>
           </div>
-          {availabilityResponse?.options && <CalculatedAvailabilityOptions />}
+          {/* Available apartmnets suggestions and split stays suggestions */}
+          {/* {<CalculatedAvailabilityOptions />} */}
         </div>
         <div className=" w-full flex flex-col gap-4 border rounded-md">
           {/* Bookings Calendar */}
