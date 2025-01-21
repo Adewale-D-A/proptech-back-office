@@ -26,12 +26,12 @@ export default function InboxCard({
       >
         <div className=" flex items-center gap-2">
           <img
-            src={conversation?.user?.profile_photo}
+            src={conversation?.user?.profile_photo || "/logo_blue.png"}
             alt="avatar"
             className=" object-cover rounded-full size-10 aspect-square"
           />
           <div className=" w-full">
-            <h6 className=" font-semibold">
+            <h6 className=" font-semibold text-left">
               {variant === "dm"
                 ? `${conversation?.user?.first_name} ${conversation?.user?.last_name}`
                 : groupName}
@@ -40,7 +40,7 @@ export default function InboxCard({
               {false && (
                 <DoubleCheckIcon className=" min-w-5 size-5 text-blue-500" />
               )}
-              <span className=" overflow-ellipsis line-clamp-1 text-gray-500 text-sm">
+              <span className=" text-left overflow-ellipsis line-clamp-1 text-gray-500 text-sm">
                 {variant === "dm"
                   ? conversation?.last_message?.message
                   : `${conversation?.last_message?.sender}: ${conversation?.last_message?.message}`}

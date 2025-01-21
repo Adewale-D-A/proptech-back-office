@@ -22,7 +22,7 @@ export default function ChatHistory({
   );
   const [sentHistory, setSentHistory] = useState<chatHistory[]>([]);
   const { data, isLoading, isFailed, setIsFailed, retryFunction } =
-    useGetChatById({ id: String(chatItem?.id || "") });
+    useGetChatById({ id: String(chatItem?.user_id || "") });
 
   const [isSendingMessage, setIsSendingMessage] = useState(false);
 
@@ -34,19 +34,28 @@ export default function ChatHistory({
           message,
           user_id: chatItem?.user_id,
         });
+        const {
+          sender,
+          // message,
+          chat_id,
+          user_id,
+          updated_at,
+          created_at,
+          id,
+        } = response?.data?.data;
         setSentHistory((prev: any) => [
           ...prev,
           {
-            id: 1,
+            id: id,
             message,
-            sender: authUser?.first_name,
+            sender: sender,
             files: "",
             message_type: "text",
-            chat_id: chatItem?.last_message?.chat_id,
-            user_id: authUser?.id,
+            chat_id: chat_id,
+            user_id: user_id,
             admin_id: "",
-            created_at: new Date().toString(),
-            updated_at: new Date().toString(),
+            created_at: created_at,
+            updated_at: updated_at,
           },
         ]);
       } catch (error) {

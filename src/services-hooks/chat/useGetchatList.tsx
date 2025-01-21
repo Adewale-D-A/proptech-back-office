@@ -41,10 +41,9 @@ export default function useGetChatList({
         dispatch(updateChatList({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          `/admin/chat?sort=${sort}&limit=20&page=${page}`
+          `/admin/chat?sort=${sort}&limit=100&page=${page}`
         );
-        console.log({ response });
-        const { data } = response?.data?.data;
+        const result = response?.data?.data;
         const {
           data: chatData,
           current_page,
@@ -53,7 +52,7 @@ export default function useGetChatList({
           total,
           from,
           to,
-        } = data;
+        } = result;
         const paginationDataset = {
           current_page,
           last_page,

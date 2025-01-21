@@ -4,7 +4,7 @@ import useAxios from "../../useHooks/useAxios";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetChatById({ id }: { id?: string }) {
-  const axios = useAxios();
+  const axios = useAxios(true);
   const [data, setData] = useState<chatHistory[]>([] as any);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
