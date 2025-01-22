@@ -1,5 +1,6 @@
 ##### 22.01.2025
 
+> Check availability code commenting to show where to comment out and where to un-comment when apartment suggestions response is being returned from the API
 > Clear message field after sending
 
 ##### 21.01.2025

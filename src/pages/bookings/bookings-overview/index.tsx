@@ -103,6 +103,7 @@ export default function BookingsOverview() {
               <CheckAvailability />
             </div>
           </div>
+          {/* TODO: Uncomment out when the suggested apartments response is available of "Check Availability" endpoint */}
           {/* Available apartmnets suggestions and split stays suggestions */}
           {/* {<CalculatedAvailabilityOptions />} */}
         </div>
