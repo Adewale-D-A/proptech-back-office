@@ -4,14 +4,16 @@ import PaperplaneIcon from "../../assets/icons/paperplane";
 import LoadingButton from "../button";
 
 export default function SendBar({
+  message,
+  setMessage,
   isSending,
   handleSendMessage,
 }: {
+  message: string;
   isSending: boolean;
   handleSendMessage: (message: string) => void;
+  setMessage: (message: string) => void;
 }) {
-  const [message, setMessage] = useState("");
-
   const sendMessage = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();

@@ -24,6 +24,7 @@ export default function ChatHistory({
   const { data, isLoading, isFailed, setIsFailed, retryFunction } =
     useGetChatById({ id: String(chatItem?.user_id || "") });
 
+  const [message, setMessage] = useState("");
   const [isSendingMessage, setIsSendingMessage] = useState(false);
 
   const handleSendMessage = useCallback(
@@ -58,6 +59,7 @@ export default function ChatHistory({
             updated_at: updated_at,
           },
         ]);
+        setMessage("");
       } catch (error) {
       } finally {
         setIsSendingMessage(false);
@@ -97,6 +99,8 @@ export default function ChatHistory({
             ))}
           </div>
           <SendBar
+            message={message}
+            setMessage={setMessage}
             isSending={isSendingMessage}
             handleSendMessage={handleSendMessage}
           />

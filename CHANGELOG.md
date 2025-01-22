@@ -1,3 +1,7 @@
+##### 22.01.2025
+
+> Clear message field after sending
+
 ##### 21.01.2025
 
 > Axios hook successPrompt and errorPrompt parameters
