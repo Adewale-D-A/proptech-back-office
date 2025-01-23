@@ -1,10 +1,4 @@
-import {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import CalendarIcon from "../../../assets/icons/calendar";
@@ -88,13 +82,13 @@ export default function AvailabilityOverview() {
     end_date: "",
   });
 
-  const changeHandler = useCallback(
-    (event: { year: number; month: number; day: number }) => {
-      const selectedDate = new Date(event.year, event.month, event.day);
-      setCurrentDay(selectedDate);
-    },
-    []
-  );
+  // const changeHandler = useCallback(
+  //   (event: { year: number; month: number; day: number }) => {
+  //     const selectedDate = new Date(event.year, event.month, event.day);
+  //     setCurrentDay(selectedDate);
+  //   },
+  //   []
+  // );
   const generateDays = useCallback(() => {
     const daysArray = generateCalendarData({
       selectedDate: currentDay,
