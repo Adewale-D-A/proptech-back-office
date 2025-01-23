@@ -124,6 +124,7 @@ export default function EditBookingReservation() {
         check_out_time,
       } = data || {};
       setGuests(String(number_of_guests));
+      setTravellerNoGuests(String(number_of_guests));
       setCheckInDate(check_in_date);
       setCheckInTime(check_in_time);
       setCheckOutDate(check_out_date);
@@ -135,7 +136,7 @@ export default function EditBookingReservation() {
     if (customer?.first_name) {
       const { first_name, last_name } = customer || {};
       setFirstname(customer?.first_name);
-      setLastname(customer?.first_name);
+      setLastname(customer?.last_name);
     }
   }, [customer]);
 
@@ -153,7 +154,7 @@ export default function EditBookingReservation() {
   }, [id]);
 
   const saveReservation = useCallback(() => {
-    console.log({ id });
+    // console.log({ id });
     dispatch(
       openSnackbar({
         message: "Reservation successfully saved",
@@ -182,14 +183,14 @@ export default function EditBookingReservation() {
                 className=" text-red-500"
                 startIcon={<BinIcon className="h-5 w-5" />}
               /> */}
-              <LoadingButton
+              {/* <LoadingButton
                 isLoading={false}
                 type="button"
                 clickHandler={() => setOpenSplitStay(true)}
                 label="Split Stay"
                 variant={3}
                 className=" px-3 p-2 text-primary bg-primary/15 hover:bg-primary/30 transition-all"
-              />
+              /> */}
               <LoadingButton
                 isLoading={isSaving}
                 clickHandler={() => saveReservation()}
@@ -262,7 +263,7 @@ export default function EditBookingReservation() {
                   </h4>
                   <div className=" px-3 flex flex-col gap-3">
                     <div className=" p-3 flex items-center gap-3 bg-gray-200 rounded-lg">
-                      <BuildingIcon /> <h6>Garden Roese 99</h6>
+                      <BuildingIcon /> <h6>{data?.shortlet?.name}</h6>
                     </div>
                     <Select
                       isRequired={true}
@@ -341,7 +342,9 @@ export default function EditBookingReservation() {
                         values={[
                           {
                             id: "standard-rate",
-                            title: "N110,000",
+                            title: String(
+                              data?.total_price?.toLocaleString() || ""
+                            ),
                             value: "standard-rate",
                             defaultChecked: true,
                             label: "Standard Rate",
@@ -403,7 +406,7 @@ export default function EditBookingReservation() {
                         values={[
                           {
                             id: "caution-fee",
-                            title: "Caution Fee (N50,000)",
+                            title: `Caution Fee (N${data?.caution_fee_NGN?.toLocaleString()})`,
                             value: "caution-fee",
                             defaultChecked: true,
                           },

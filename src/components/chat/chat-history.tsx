@@ -20,6 +20,7 @@ export default function ChatHistory({
   const { user: authUser } = useAppSelector(
     (state) => state.userAuthentication.value
   );
+
   const [sentHistory, setSentHistory] = useState<chatHistory[]>([]);
   const { data, isLoading, isFailed, setIsFailed, retryFunction } =
     useGetChatById({ id: String(chatItem?.user_id || "") });

@@ -13,12 +13,14 @@ export default function MessageItemIdentifier({
   return (
     <div
       className={`w-full flex ${
-        authUser?.id === messageItem?.user_id ? "justify-end" : "justify-start"
+        String(authUser?.id) === String(messageItem?.admin_id)
+          ? "justify-end"
+          : "justify-start"
       }`}
     >
       <div
         className={`p-2 rounded-md ${
-          authUser?.id === messageItem?.user_id
+          String(authUser?.id) === String(messageItem?.admin_id)
             ? "bg-primary/15"
             : "bg-primary/5"
         }`}
