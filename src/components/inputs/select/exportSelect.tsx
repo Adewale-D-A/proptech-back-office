@@ -5,7 +5,7 @@ import CustomersInfoExport from "../../export-options/customers-export";
 export default function ExportSelect({
   id,
 }: {
-  id: "customers" | "bookings" | "report";
+  id: "customers" | "bookings" | "report" | "ratings-and-reviews";
 }) {
   const [openModal, setOpenModal] = useState(false);
   const [value, setValue] = useState("");
@@ -28,7 +28,7 @@ export default function ExportSelect({
           onChange={(e) => onChange(e)}
           className="w-full sm:text-md bg-transparent"
         >
-          <option value="">Export Report</option>
+          <option value="">Export</option>
           <option value="csv"> CSV</option>
           <option value="excel">Excel</option>
           <option value="print">Print</option>

@@ -13,6 +13,7 @@ import ClipBoardIcon from "./icons/clipboard";
 import NotificationIcon from "./icons/notification";
 import CaretDownIcon from "./icons/caret-down";
 import { useCallback, useState } from "react";
+import HeadsetIcon from "./icons/headset";
 
 export default function NavigationMenuItems() {
   const location = useLocation();
@@ -115,6 +116,25 @@ export default function NavigationMenuItems() {
           value: "customers",
           show: true,
           icon: <UsersIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 14,
+          url: "/customer-engagements/ratings-and-reviews",
+          label: "Customers Engagement",
+          value: "customer-engagements",
+          show: true,
+          icon: <HeadsetIcon />,
           hasSubMenu: false,
           subMenu: [
             {

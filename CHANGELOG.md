@@ -1,5 +1,6 @@
 ##### 23.01.2025
 
+> Completed Rating and Reviews with Referrals screens
 > Completed Calendar view UI
 >
 > > > > > OPERATIONS MODULES INTEGRATIONS BEGINS

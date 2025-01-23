@@ -124,6 +124,9 @@ import CustomerDetail from "./pages/customers/customer-detail";
 import MaintenanceCalendar from "./pages/calendar/maintenance-calendar";
 import CalendarTabWrapper from "./routeProtectors/wrapper/calendar";
 import BookingCalendarPage from "./pages/calendar/booking-calendar";
+import CustomerEngagementsTabWrapper from "./routeProtectors/wrapper/customer-engagement";
+import RatingsAndReviews from "./pages/customer-engagements/ratings-and-reviews";
+import Referrals from "./pages/customer-engagements/referrals";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -306,6 +309,17 @@ function App() {
               path="/customers/edit-customer/customer-sales-channel/:id"
               element={<EditCustomerSalesChannelPage />}
             />
+            {/* customer engaements */}
+            <Route element={<CustomerEngagementsTabWrapper />}>
+              <Route
+                path="/customer-engagements/ratings-and-reviews"
+                element={<RatingsAndReviews />}
+              />
+              <Route
+                path="/customer-engagements/referrals"
+                element={<Referrals />}
+              />
+            </Route>
 
             {/* Admin management */}
             {/* admin users flows wrapper */}
