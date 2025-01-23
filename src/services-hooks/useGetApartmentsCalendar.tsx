@@ -30,7 +30,6 @@ export default function useGetApartmentsCalendar({
       const response = await axios.get(`/admin/calendar/all?${queryString}`);
       const result = response?.data?.data;
       const reformed = ApartmentsCalendarDataTranslator({ dataset: result });
-      console.log({ reformed });
       setData(reformed?.reformed || []);
     } catch (error) {
       setIsFailed(true);

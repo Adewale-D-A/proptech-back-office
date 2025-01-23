@@ -1,5 +1,12 @@
+##### 23.01.2025
+
+> Booking details administrative view chat functional chat component addition
+> Update reservation auto populate fields adjustments
+> Chnaged logic to ditinguish sent and received chat messages from message user id to message admin ID
+
 ##### 22.01.2025
 
+> Check availability code commenting to show where to comment out and where to un-comment when apartment suggestions response is being returned from the API
 > Clear message field after sending
 
 ##### 21.01.2025

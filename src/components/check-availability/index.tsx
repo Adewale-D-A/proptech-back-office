@@ -19,6 +19,7 @@ export default function CheckAvailability({
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [guestNo, setGuestNo] = useState("");
+  const [location, setLocation] = useState("");
 
   const [isChecking, setIsChecking] = useState(false);
 
@@ -60,6 +61,7 @@ export default function CheckAvailability({
     <div className="w-full flex flex-col gap-10">
       <form className=" flex flex-col gap-5" onSubmit={checkAvailability}>
         <div className={className || " w-full grid grid-cols-1 gap-5"}>
+          {/* TODO: Comment out search apartment, apartment should be auto suggested */}
           <ApartmentSingleSearch
             placeholder="Search apartment..."
             selected={selectedApt}
@@ -99,6 +101,22 @@ export default function CheckAvailability({
               </option>
             ))}
           </Select>
+          {/* TODO: Uncomment location selection, this feature should be optional though and not required */}
+          {/* <Select
+            isRequired={false}
+            value={location}
+            setValue={setLocation}
+            id="locations"
+          >
+            <option value="" disabled>
+              Select location
+            </option>
+            {Array.from({ length: 8 }, (_, index) => (
+              <option key={index} value={`${index + 1}`}>
+                {index + 1}
+              </option>
+            ))}
+          </Select> */}
         </div>
         <LoadingButton
           type="submit"
