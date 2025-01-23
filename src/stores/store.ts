@@ -52,6 +52,9 @@ import chatListData from "./apiData/chat-list";
 // customer engagements
 import ratingsAndReviewsListData from "./apiData/rating-and-reviews";
 import referralsListData from "./apiData/reeferrals";
+// requisition request
+import requisitionRequestsListData from "./apiData/requisition-requests";
+
 // report
 import revenueReports from "./apiData/reports/revenue";
 // admins
@@ -129,6 +132,8 @@ export const adminStore = () => {
       // customer engagements
       ratingsAndReviews: ratingsAndReviewsListData,
       referralsData: referralsListData,
+      // request
+      requisitionRequestsList: requisitionRequestsListData,
       // reports
       revenueReports: revenueReports,
       // admins

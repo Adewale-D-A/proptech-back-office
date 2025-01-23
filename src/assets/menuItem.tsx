@@ -14,6 +14,7 @@ import NotificationIcon from "./icons/notification";
 import CaretDownIcon from "./icons/caret-down";
 import { useCallback, useState } from "react";
 import HeadsetIcon from "./icons/headset";
+import DoubleDocumentIcon from "./icons/double-document";
 
 export default function NavigationMenuItems() {
   const location = useLocation();
@@ -192,6 +193,25 @@ export default function NavigationMenuItems() {
           value: "plans-and-promotions",
           show: true,
           icon: <PercentageIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 15,
+          url: "/requests/requisition-requests",
+          label: "Requests",
+          value: "requests",
+          show: true,
+          icon: <DoubleDocumentIcon />,
           hasSubMenu: false,
           subMenu: [
             {

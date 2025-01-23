@@ -23,8 +23,13 @@ export default function Status({
         status?.toLocaleLowerCase().includes("complete") ||
         status?.toLocaleLowerCase().includes("occupied") ||
         status?.toLocaleLowerCase().includes("boarded") ||
+        status?.toLocaleLowerCase().includes("paid") ||
         booleanVal ? (
         <span className=" p-1 px-3 bg-green-500/15 text-green-500 rounded-full">
+          {truthyMessage || status}
+        </span>
+      ) : status?.toLocaleLowerCase().includes("approved") ? (
+        <span className=" p-1 px-3 bg-blue-500/15 text-blue-500 rounded-full">
           {truthyMessage || status}
         </span>
       ) : (

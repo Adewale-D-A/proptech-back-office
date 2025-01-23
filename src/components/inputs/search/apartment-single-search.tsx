@@ -10,11 +10,13 @@ export default function ApartmentSingleSearch({
   selected,
   setSelected,
   readOnly,
+  label,
 }: {
   placeholder: string;
   selected: apartmentById;
   readOnly?: boolean;
   setSelected: (item: apartmentById) => void;
+  label?: string;
 }) {
   const wrapperRef = useRef(null) as any;
   const [isMenuDocked, setIsMenuDocked] = useState(true);
@@ -57,51 +59,58 @@ export default function ApartmentSingleSearch({
   }, []);
 
   return (
-    <div className=" relative" ref={wrapperRef}>
-      <div
-        onClick={() => toggleMenuDock()}
-        className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between"
-      >
-        {selected?.name ? (
-          <span className="">{selected?.name}</span>
-        ) : (
-          <div className=" flex items-center text-gray-400 gap-3">
-            {apt_loading ? (
-              <LoaderIcon className=" animate-spin size-6" />
-            ) : (
-              <SearchIcon />
-            )}
-            <span className=" ">{placeholder}</span>
+    <div className=" w-full flex flex-col gap-2">
+      {label && (
+        <label htmlFor={"customer-search-feature"} className=" font-medium">
+          {label}
+        </label>
+      )}
+      <div className=" relative" ref={wrapperRef}>
+        <div
+          onClick={() => toggleMenuDock()}
+          className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between"
+        >
+          {selected?.name ? (
+            <span className="">{selected?.name}</span>
+          ) : (
+            <div className=" flex items-center text-gray-400 gap-3">
+              {apt_loading ? (
+                <LoaderIcon className=" animate-spin size-6" />
+              ) : (
+                <SearchIcon />
+              )}
+              <span className=" ">{placeholder}</span>
+            </div>
+          )}
+          <CaretDownIcon
+            className={`size-6 ${
+              isMenuDocked ? "rotate-0" : "rotate-180"
+            } transition-all`}
+          />
+        </div>
+        {!isMenuDocked && (
+          <div className="w-full p-2 border z-10 absolute top-14 left-0 bg-gray-50">
+            <input
+              id="search-feature"
+              placeholder={placeholder}
+              value={keywords}
+              onChange={(e) => setKeywords(e.target.value)}
+              className=" border rounded-md p-3 w-full bg-gray-100"
+            />
+            <div className=" flex flex-col gap-1 max-h-64 overflow-auto">
+              {apartments.map((apartment) => (
+                <button
+                  key={apartment?.id}
+                  onClick={() => handleSelection(apartment)}
+                  className=" p-2 hover:border-primary hover:border transition-all text-left"
+                >
+                  {apartment?.name}
+                </button>
+              ))}
+            </div>
           </div>
         )}
-        <CaretDownIcon
-          className={`size-6 ${
-            isMenuDocked ? "rotate-0" : "rotate-180"
-          } transition-all`}
-        />
       </div>
-      {!isMenuDocked && (
-        <div className="w-full p-2 border z-10 absolute top-14 left-0 bg-gray-50">
-          <input
-            id="search-feature"
-            placeholder={placeholder}
-            value={keywords}
-            onChange={(e) => setKeywords(e.target.value)}
-            className=" border rounded-md p-3 w-full bg-gray-100"
-          />
-          <div className=" flex flex-col gap-1 max-h-64 overflow-auto">
-            {apartments.map((apartment) => (
-              <button
-                key={apartment?.id}
-                onClick={() => handleSelection(apartment)}
-                className=" p-2 hover:border-primary hover:border transition-all text-left"
-              >
-                {apartment?.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

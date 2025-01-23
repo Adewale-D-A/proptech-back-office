@@ -25,7 +25,7 @@ function TextInput({
     setValue(e.target.value);
   };
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col gap-2">
       {label && (
         <label htmlFor={id} className=" font-medium">
           {label}

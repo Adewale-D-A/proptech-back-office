@@ -105,7 +105,7 @@ export default function RatingsAndReviewsTable() {
           pagination={pagination}
           setCurrentPage={setCurrentPage}
           isLoading={isLoading}
-          label="Apartment"
+          label="Ratings and Reviews"
         />
       </div>
     </div>

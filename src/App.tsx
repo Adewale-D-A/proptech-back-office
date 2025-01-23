@@ -127,6 +127,9 @@ import BookingCalendarPage from "./pages/calendar/booking-calendar";
 import CustomerEngagementsTabWrapper from "./routeProtectors/wrapper/customer-engagement";
 import RatingsAndReviews from "./pages/customer-engagements/ratings-and-reviews";
 import Referrals from "./pages/customer-engagements/referrals";
+import RequisitionRequests from "./pages/requests/requisition-requests";
+import RequestsTabWrapper from "./routeProtectors/wrapper/requests";
+import MaintenanceRequests from "./pages/requests/maintenance-requests";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -395,6 +398,18 @@ function App() {
               path="/plans-and-promotions/package-and-offer/edit-new-package-and-offer/:id"
               element={<AddNewPackageAndOffer />}
             />
+            {/* requests */}
+            <Route element={<RequestsTabWrapper />}>
+              <Route
+                path="/requests/maintenance-requests"
+                element={<MaintenanceRequests />}
+              />
+              <Route
+                path="/requests/requisition-requests"
+                element={<RequisitionRequests />}
+              />
+            </Route>
+
             {/* calendar */}
             <Route element={<CalendarTabWrapper />}>
               <Route
