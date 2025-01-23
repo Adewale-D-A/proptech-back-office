@@ -120,6 +120,10 @@ import DailyRoomReport from "./pages/reports/daily-room";
 import OccupancyPerTimeReport from "./pages/reports/occupancy-per-time";
 import EditInvoice from "./pages/invoices/edit-invoice";
 import CustomerDetail from "./pages/customers/customer-detail";
+// calendar views
+import MaintenanceCalendar from "./pages/calendar/maintenance-calendar";
+import CalendarTabWrapper from "./routeProtectors/wrapper/calendar";
+import BookingCalendarPage from "./pages/calendar/booking-calendar";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -377,6 +381,17 @@ function App() {
               path="/plans-and-promotions/package-and-offer/edit-new-package-and-offer/:id"
               element={<AddNewPackageAndOffer />}
             />
+            {/* calendar */}
+            <Route element={<CalendarTabWrapper />}>
+              <Route
+                path="/calendar/maintenance-calendar"
+                element={<MaintenanceCalendar />}
+              />
+              <Route
+                path="/calendar/boooking-calendar"
+                element={<BookingCalendarPage />}
+              />
+            </Route>
 
             {/* chats flows wrapper */}
             <Route element={<ChatsTabWrapper />}>

@@ -185,6 +185,25 @@ export default function NavigationMenuItems() {
           ],
         },
         {
+          id: 13,
+          url: "/calendar/maintenance-calendar",
+          label: "Calendar",
+          value: "calendar",
+          show: true,
+          icon: <CalendarIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
           id: 8,
           url: "/chat/guest",
           label: "Chat",
