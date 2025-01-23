@@ -48,6 +48,8 @@ run **npm install** (to install all the dependencies)
 step 2:
 run **npm start** (start application on port:3000)
 
+[LIVE API](https://web-app-web-back-office.vercel.app/)
+
 [MIME TYPES](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types)
 
 [FIGMA File](https://www.figma.com/design/foJk9S0rCJImkVXY0EgxId/proptech?node-id=4400-64&node-type=&t=ZI2UUvFyHO0J3pWZ-0)

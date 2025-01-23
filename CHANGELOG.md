@@ -1,5 +1,7 @@
 ##### 23.01.2025
 
+> > > > > OPERATIONS MODULES INTEGRATIONS BEGINS
+
 > Booking details administrative view chat functional chat component addition
 > Update reservation auto populate fields adjustments
 > Chnaged logic to ditinguish sent and received chat messages from message user id to message admin ID
