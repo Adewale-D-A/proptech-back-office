@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import useAxios from "../../useHooks/useAxios";
 import { pagination } from "../../types/pagination";
+import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
 
 export default function useGetReportSummary({
   page = 1,
@@ -28,10 +29,16 @@ export default function useGetReportSummary({
     setIsLoading(true);
     setIsFailed(false);
     try {
+      const { queryString, remakeRequest } = ApiQueryParamsExtractor({
+        dataset: {
+          page: page,
+          start_date: start_date,
+          end_date: end_date,
+          shortlet_id: apartmentId,
+        },
+      });
       const response = await axios.get(
-        start_date && end_date
-          ? `/admin/report/dashboard?shortlet_id=${apartmentId}&start_date=${start_date}&end_date=${end_date}`
-          : `/admin/report/dashboard?shortlet_id=${apartmentId}`
+        `/admin/report/dashboard?${queryString}`
       );
       const data = response?.data?.data;
       setData(data);
@@ -43,9 +50,7 @@ export default function useGetReportSummary({
   }, [apartmentId, start_date, end_date]);
 
   useEffect(() => {
-    if (apartmentId) {
-      getReportSummary();
-    }
+    getReportSummary();
   }, [apartmentId, start_date, end_date]);
 
   return {

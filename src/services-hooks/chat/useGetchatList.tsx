@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
-import {
-  addToPaginationHistory,
-  updateChatList,
-} from "../../stores/apiData/chat-list";
+import { updateChatList } from "../../stores/apiData/chat-list";
 import useAxios from "../../useHooks/useAxios";
 import { pagination } from "../../types/pagination";
 
@@ -43,33 +40,8 @@ export default function useGetChatList({
         const response = await axios.get(
           `/admin/chat?sort=${sort}&limit=100&page=${page}`
         );
-        const result = response?.data?.data;
-        const {
-          data: chatData,
-          current_page,
-          last_page,
-          per_page,
-          total,
-          from,
-          to,
-        } = result;
-        const paginationDataset = {
-          current_page,
-          last_page,
-          per_page,
-          total,
-          from,
-          to,
-          length: data?.length,
-        };
-        dispatch(updateChatList({ data: chatData }));
-        dispatch(
-          addToPaginationHistory({
-            pagination_data: paginationDataset,
-            data: chatData,
-          })
-        );
-        setPagination(paginationDataset);
+        const chat = response?.data?.data;
+        dispatch(updateChatList({ data: chat }));
       }
       setIsLoading(false);
     } catch (error) {

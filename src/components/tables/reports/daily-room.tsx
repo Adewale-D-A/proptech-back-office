@@ -98,7 +98,7 @@ export default function DailyRoomReportTable() {
         </div>
       </div>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">
-        {data && data.length > 0 && apartment?.id ? (
+        {data && data.length > 0 ? (
           <>
             <table className=" w-full text-xs overflow-x-auto">
               <thead className="">
@@ -196,7 +196,7 @@ export default function DailyRoomReportTable() {
           pagination={pagination}
           setCurrentPage={setCurrentPage}
           isLoading={isLoading}
-          label="Entries"
+          label="Daily room reports"
         />
       </div>
     </div>

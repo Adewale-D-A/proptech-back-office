@@ -80,7 +80,7 @@ export default function RevenueReportTable() {
       </div>
       {/* table */}{" "}
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">
-        {data && data.length > 0 && apartment?.id ? (
+        {data && data.length > 0 ? (
           <table className=" w-full text-xs overflow-x-auto">
             <thead className="">
               <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
@@ -138,7 +138,7 @@ export default function RevenueReportTable() {
           pagination={pagination}
           setCurrentPage={setCurrentPage}
           isLoading={isLoading}
-          label="Entries"
+          label="Revenue report"
         />
       </div>
     </div>

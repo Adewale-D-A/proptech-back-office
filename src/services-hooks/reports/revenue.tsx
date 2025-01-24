@@ -3,6 +3,7 @@ import useAxios from "../../useHooks/useAxios";
 import { pagination } from "../../types/pagination";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { updateRevenueReport } from "../../stores/apiData/reports/revenue";
+import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetRevenueReport({
   page = 1,
@@ -34,11 +35,16 @@ export default function useGetRevenueReport({
     setIsLoading(true);
     setIsFailed(false);
     try {
-      const response = await axios.get(
-        start_date && end_date
-          ? `/admin/report/revenue?shortlet_id=${apartmentId}&limit=20&page=${page}&start_date=${start_date}&end_date=${end_date}&group=${group}`
-          : `/admin/report/revenue?shortlet_id=${apartmentId}&limit=20&page=${page}&group=${group}`
-      );
+      const { queryString, remakeRequest } = ApiQueryParamsExtractor({
+        dataset: {
+          page: page,
+          start_date: start_date,
+          end_date: end_date,
+          shortlet_id: apartmentId,
+          group,
+        },
+      });
+      const response = await axios.get(`/admin/report/revenue?${queryString}`);
       const { report } = response?.data?.data;
       const { data, current_page, last_page, per_page, total, from, to } =
         report;
@@ -61,9 +67,7 @@ export default function useGetRevenueReport({
   }, [page, apartmentId, start_date, end_date, group]);
 
   useEffect(() => {
-    if (apartmentId) {
-      getRevenueReports();
-    }
+    getRevenueReports();
   }, [page, apartmentId, start_date, end_date, group]);
 
   return {

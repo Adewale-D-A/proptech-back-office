@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import useAxios from "../../useHooks/useAxios";
 import { pagination } from "../../types/pagination";
 import { occupancyTimeReportList } from "../../types/apiData/reports";
+import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetOccupancyPerTimeReport({
   page = 1,
@@ -25,10 +26,16 @@ export default function useGetOccupancyPerTimeReport({
     setIsLoading(true);
     setIsFailed(false);
     try {
+      const { queryString, remakeRequest } = ApiQueryParamsExtractor({
+        dataset: {
+          page: page,
+          start_date: start_date,
+          end_date: end_date,
+          shortlet_id: apartmentId,
+        },
+      });
       const response = await axios.get(
-        start_date && end_date
-          ? `/admin/report/occupancy-per-time?shortlet_id=${apartmentId}&limit=20&page=${page}&start_date=${start_date}&end_date=${end_date}`
-          : `/admin/report/occupancy-per-time?shortlet_id=${apartmentId}&limit=20&page=${page}`
+        `/admin/report/occupancy-per-time?${queryString}`
       );
       const data = response?.data?.data;
       const {
@@ -59,9 +66,7 @@ export default function useGetOccupancyPerTimeReport({
   }, [page, apartmentId, start_date, end_date]);
 
   useEffect(() => {
-    if (apartmentId) {
-      getOccupancyPerTimeReports();
-    }
+    getOccupancyPerTimeReports();
   }, [page, apartmentId, start_date, end_date]);
 
   return {
