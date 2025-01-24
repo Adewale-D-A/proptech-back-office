@@ -1,3 +1,8 @@
+##### 24.01.2025
+
+> Chat module bug fixed
+> Reporting data retrieval with and without selecting apartments
+
 ##### 23.01.2025
 
 > Booking details administrative view chat functional chat component addition

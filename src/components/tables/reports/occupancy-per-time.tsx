@@ -13,6 +13,7 @@ import useGetReportSummary from "../../../services-hooks/reports/report-summary"
 import Status from "../../status";
 import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
 
 export default function OccupancyPerTimeReportTable() {
   const dispatch = useAppDispatch();
@@ -66,11 +67,11 @@ export default function OccupancyPerTimeReportTable() {
         <div>
           <TimeRangeSelector />
         </div>
-        <Search
-          id="apartment-search"
-          componentId="apartment"
+
+        <ApartmentSingleSearch
           placeholder="Apartment name..."
-          setValue={setApartment}
+          selected={apartment}
+          setSelected={setApartment}
         />
         <div className=" flex items-center gap-4">
           <LoadingButton
@@ -85,7 +86,7 @@ export default function OccupancyPerTimeReportTable() {
       </div>
       {/* table */}{" "}
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">
-        {data && data.length > 0 && apartment?.id ? (
+        {data && data.length > 0 ? (
           <>
             <table className=" w-full text-xs overflow-x-auto">
               <thead className="">
@@ -157,7 +158,7 @@ export default function OccupancyPerTimeReportTable() {
           pagination={pagination}
           setCurrentPage={setCurrentPage}
           isLoading={isLoading}
-          label="Entries"
+          label="Occupancy per time report"
         />
       </div>
     </div>

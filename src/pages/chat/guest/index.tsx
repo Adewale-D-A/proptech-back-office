@@ -113,7 +113,7 @@ export default function GuestChatModule() {
           </div>
           {/* message list  */}
           <div className=" bg-gray-50/10 border-t flex flex-col gap-2 p-2">
-            {data.map((item) => (
+            {data?.map((item) => (
               <InboxCard
                 key={item?.id}
                 isActive={chatIdSeleted?.id === item?.id}

@@ -19,6 +19,7 @@ import useGetRevenueReport from "../../../services-hooks/reports/revenue";
 import useGetReportSummary from "../../../services-hooks/reports/report-summary";
 import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
 
 export default function OccupancyRankingReportTable() {
   const [group, setGroup] = useState("");
@@ -91,11 +92,10 @@ export default function OccupancyRankingReportTable() {
                 </Select>
               </div>
             </div>
-            <Search
-              id="apartment-search"
-              componentId="apartment"
+            <ApartmentSingleSearch
               placeholder="Apartment name..."
-              setValue={setApartment}
+              selected={apartment}
+              setSelected={setApartment}
             />
             <div className=" flex items-center gap-4">
               <LoadingButton
@@ -124,157 +124,153 @@ export default function OccupancyRankingReportTable() {
             </div>
           </div>
         </>
-        {apartment?.id ? (
-          <div
-            className={
-              viewType === "chart-sheet"
-                ? " w-full grid grid-cols-1 md:grid-cols-2 gap-5"
-                : " w-full flex gap-5 flex-col md:flex-row"
-            }
-          >
-            {/* table view ONLY*/}
-            {!(viewType === "chart") && (
-              <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">
-                {data && data.length > 0 ? (
-                  <table className=" w-full text-xs overflow-x-auto">
-                    <thead className="">
-                      <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                        {[
-                          "Date",
-                          "Rooms Sold",
-                          "Nights Books",
-                          "Total Bookings",
-                          "%Occupancy",
-                          "IBE Revenue",
-                          "OTA Revenue",
-                          "ADR",
-                          "REVPAR",
-                          "Taxes/Fees",
-                        ].map((head) => (
-                          <th key={head}>{head}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody className="">
-                      {data.map((request: revenueReportList, index: number) => {
-                        return (
-                          <tr key={index} className=" border-b">
-                            <td>{formatDate(request?.date)}</td>
-                            <td>{request?.rooms_sold}</td>
-                            <td>{request?.nights_booked}</td>
-                            <td>***</td>
-                            <td>{request?.occupancy_rate}</td>
-                            <td>{request?.ibe_revenue}</td>
-                            <td>{request?.ota_revenue}</td>
-                            <td>{request?.adr}</td>
-                            <td>{request?.revpar}</td>
-                            <td>{request?.taxes}</td>
-                          </tr>
-                        );
-                      })}
-                      <tr className=" border-b font-semibold">
-                        <td>Total</td>
-                        <td></td>
-                        <td>{reportSummary?.total_nights_booked}</td>
-                        <td>{reportSummary?.total_bookings}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>{reportSummary?.total_revenue}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                ) : (
-                  <NoResult />
-                )}
-                <Pagination
-                  pagination={pagination}
-                  setCurrentPage={setCurrentPage}
-                  isLoading={isLoading}
-                  label="Entries"
-                />
-              </div>
-            )}
-            {/* chart ONLY*/}
-            {(viewType === "chart" || viewType === "chart-sheet") && (
-              <div className="w-full flex flex-col gap-10">
-                <div className=" flex flex-col gap-5">
-                  <h4 className=" font-semibold text-xl">Totals</h4>
-                  <div
-                    className={
-                      viewType === "chart-sheet"
-                        ? "w-full grid grid-cols-2 gap-3"
-                        : "w-full grid grid-cols-2 md:grid-cols-3 gap-5"
-                    }
-                  >
-                    {[
-                      {
-                        id: 1,
-                        icon: <CalendarIcon className="w-5 h-5" />,
-                        label: "Total Revenue Rate",
-                        value: `N${reportSummary?.total_revenue}`,
-                        theme: "text-[#26397B] bg-[#26397B]/20",
-                      },
-                      {
-                        id: 2,
-                        icon: <UserPlusIcon className="w-5 h-5" />,
-                        label: "Total Bookings",
-                        value: reportSummary?.total_bookings,
-                        theme: "text-[#017EFF] bg-[#017EFF]/20",
-                      },
-                      {
-                        id: 3,
-                        icon: <UsersIcon className="w-5 h-5" />,
-                        label: "Total Nights Booked",
-                        value: reportSummary?.total_nights_booked,
-                        theme: "text-[#017EFF] bg-[#017EFF]/20",
-                      },
-                    ].map((item) => (
-                      <DashboardCard
-                        key={item?.id}
-                        theme={item.theme}
-                        icon={item?.icon}
-                        label={item?.label}
-                        value={item?.value}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <div className=" flex flex-col gap-5">
-                  <h4 className=" font-semibold text-xl">Occupancy Ranking</h4>
-                  <div className=" border p-5 rounded-md h-full w-full flex justify-center">
-                    <BarChart
-                      data={{
-                        labels: [
-                          "MONDAY",
-                          "TUESDAY",
-                          "WEDNESDAY",
-                          "THURSDAY",
-                          "FRIDAY",
-                          "SATURDAY",
-                          "SUNDAY",
-                        ],
-                        datasets: [
-                          {
-                            label: "Occupancy Ranking",
-                            data: [0, 0, 0, 0, 0, 0, 0],
-                            backgroundColor: "#2E4393",
-                            indexAxis: "x",
-                            borderRadius: 50,
-                          },
-                        ],
-                      }}
+        <div
+          className={
+            viewType === "chart-sheet"
+              ? " w-full grid grid-cols-1 md:grid-cols-2 gap-5"
+              : " w-full flex gap-5 flex-col md:flex-row"
+          }
+        >
+          {/* table view ONLY*/}
+          {!(viewType === "chart") && (
+            <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">
+              {data && data.length > 0 ? (
+                <table className=" w-full text-xs overflow-x-auto">
+                  <thead className="">
+                    <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+                      {[
+                        "Date",
+                        "Rooms Sold",
+                        "Nights Books",
+                        "Total Bookings",
+                        "%Occupancy",
+                        "IBE Revenue",
+                        "OTA Revenue",
+                        "ADR",
+                        "REVPAR",
+                        "Taxes/Fees",
+                      ].map((head) => (
+                        <th key={head}>{head}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="">
+                    {data.map((request: revenueReportList, index: number) => {
+                      return (
+                        <tr key={index} className=" border-b">
+                          <td>{formatDate(request?.date)}</td>
+                          <td>{request?.rooms_sold}</td>
+                          <td>{request?.nights_booked}</td>
+                          <td>***</td>
+                          <td>{request?.occupancy_rate}</td>
+                          <td>{request?.ibe_revenue}</td>
+                          <td>{request?.ota_revenue}</td>
+                          <td>{request?.adr}</td>
+                          <td>{request?.revpar}</td>
+                          <td>{request?.taxes}</td>
+                        </tr>
+                      );
+                    })}
+                    <tr className=" border-b font-semibold">
+                      <td>Total</td>
+                      <td></td>
+                      <td>{reportSummary?.total_nights_booked}</td>
+                      <td>{reportSummary?.total_bookings}</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>{reportSummary?.total_revenue}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              ) : (
+                <NoResult />
+              )}
+              <Pagination
+                pagination={pagination}
+                setCurrentPage={setCurrentPage}
+                isLoading={isLoading}
+                label="Entries"
+              />
+            </div>
+          )}
+          {/* chart ONLY*/}
+          {(viewType === "chart" || viewType === "chart-sheet") && (
+            <div className="w-full flex flex-col gap-10">
+              <div className=" flex flex-col gap-5">
+                <h4 className=" font-semibold text-xl">Totals</h4>
+                <div
+                  className={
+                    viewType === "chart-sheet"
+                      ? "w-full grid grid-cols-2 gap-3"
+                      : "w-full grid grid-cols-2 md:grid-cols-3 gap-5"
+                  }
+                >
+                  {[
+                    {
+                      id: 1,
+                      icon: <CalendarIcon className="w-5 h-5" />,
+                      label: "Total Revenue Rate",
+                      value: `N${reportSummary?.total_revenue}`,
+                      theme: "text-[#26397B] bg-[#26397B]/20",
+                    },
+                    {
+                      id: 2,
+                      icon: <UserPlusIcon className="w-5 h-5" />,
+                      label: "Total Bookings",
+                      value: reportSummary?.total_bookings,
+                      theme: "text-[#017EFF] bg-[#017EFF]/20",
+                    },
+                    {
+                      id: 3,
+                      icon: <UsersIcon className="w-5 h-5" />,
+                      label: "Total Nights Booked",
+                      value: reportSummary?.total_nights_booked,
+                      theme: "text-[#017EFF] bg-[#017EFF]/20",
+                    },
+                  ].map((item) => (
+                    <DashboardCard
+                      key={item?.id}
+                      theme={item.theme}
+                      icon={item?.icon}
+                      label={item?.label}
+                      value={item?.value}
                     />
-                  </div>
+                  ))}
                 </div>
               </div>
-            )}
-          </div>
-        ) : (
-          <NoResult title="No data found" message="No data found" />
-        )}
+              <div className=" flex flex-col gap-5">
+                <h4 className=" font-semibold text-xl">Occupancy Ranking</h4>
+                <div className=" border p-5 rounded-md h-full w-full flex justify-center">
+                  <BarChart
+                    data={{
+                      labels: [
+                        "MONDAY",
+                        "TUESDAY",
+                        "WEDNESDAY",
+                        "THURSDAY",
+                        "FRIDAY",
+                        "SATURDAY",
+                        "SUNDAY",
+                      ],
+                      datasets: [
+                        {
+                          label: "Occupancy Ranking",
+                          data: [0, 0, 0, 0, 0, 0, 0],
+                          backgroundColor: "#2E4393",
+                          indexAxis: "x",
+                          borderRadius: 50,
+                        },
+                      ],
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

@@ -14,19 +14,8 @@ export default function useGetChatById({ id }: { id?: string }) {
     setIsFailed(false);
     try {
       const response = await axios.get(`/admin/chat/${id}`);
-      const result = response?.data?.data;
-      const { data, current_page, last_page, per_page, total, from, to } =
-        result;
-      // const paginationDataset = {
-      //   current_page,
-      //   last_page,
-      //   per_page,
-      //   total,
-      //   from,
-      //   to,
-      //   length: data?.length,
-      // };
-      setData(data);
+      const chatHistory = response?.data?.data;
+      setData(chatHistory);
     } catch (error) {
       setIsFailed(true);
     } finally {
