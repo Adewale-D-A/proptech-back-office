@@ -15,6 +15,7 @@ import CaretDownIcon from "./icons/caret-down";
 import { useCallback, useState } from "react";
 import HeadsetIcon from "./icons/headset";
 import DoubleDocumentIcon from "./icons/double-document";
+import UserGroupIcon from "./icons/user-group";
 
 export default function NavigationMenuItems() {
   const location = useLocation();
@@ -307,6 +308,25 @@ export default function NavigationMenuItems() {
           value: "notification",
           show: true,
           icon: <NotificationIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 16,
+          url: "/employees",
+          label: "Employees",
+          value: "employees",
+          show: true,
+          icon: <UserGroupIcon />,
           hasSubMenu: false,
           subMenu: [
             {

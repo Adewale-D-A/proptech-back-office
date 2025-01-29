@@ -42,6 +42,7 @@ import AddAdminUser from "./pages/manage-admins/users/add-user";
 import EditRoles from "./pages/manage-admins/roles-and-permissions/edit-roles";
 import AddRoles from "./pages/manage-admins/roles-and-permissions/add-roles";
 import Profile from "./pages/profile";
+import Employees from "./pages/employees";
 // APARTMENTS
 import ApartmentTabWrapper from "./routeProtectors/wrapper/apartment";
 
@@ -275,6 +276,10 @@ function App() {
             />
             {/* customers flows  */}
             <Route path="/customers" element={<Customers />} />
+
+            {/* employees flows  */}
+            <Route path="/employees" element={<Employees />} />
+
             <Route
               path="/customers/customer-details/:id"
               element={<CustomerDetail />}
