@@ -19,7 +19,7 @@ export default function ExportSelect({
     <>
       <label
         htmlFor={"export-report"}
-        className="w-full relative p-3 px-6 bg-primary/20 rounded-full flex items-center gap-3"
+        className="w-full relative py-2.5 px-6 bg-[#F2F4F7] text-[#1D2939] rounded-full flex items-center gap-3"
       >
         {" "}
         <select

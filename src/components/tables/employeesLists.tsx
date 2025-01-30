@@ -14,12 +14,13 @@ import BinIcon from "../../assets/icons/bin-icon";
 import LoadingButton from "../button";
 import PlusIcon from "../../assets/icons/plus";
 import ModalTemplate from "../modal";
-import AddEditRequisitionRequest from "../requisition-requests/add-edit";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { removeRequisitionRequestInList } from "../../stores/apiData/requisition-requests";
 import EyeIcon from "../../assets/icons/eye";
+import EditEmployee from "../employees/edit-employee";
+import AddEmployee from "../employees/add-employee";
 
 export default function EmployeesLists() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -33,7 +34,8 @@ export default function EmployeesLists() {
   }>();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedId, setSelectedId] = useState("");
-  const [openRequest, setOpenRequest] = useState(false);
+  const [openEmployeeEdit, setOpenEmployeeEdit] = useState(false);
+  const [openEmployeeAdd, setOpenEmployeeAdd] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -50,14 +52,14 @@ export default function EmployeesLists() {
     },
     []
   );
-  const openForNewRequest = useCallback(() => {
+  const openForNewEmployee = useCallback(() => {
     setSelectedId("");
-    setOpenRequest(true);
+    setOpenEmployeeAdd(true);
   }, []);
 
   const openForEdit = useCallback((id: number) => {
     setSelectedId(String(id || ""));
-    setOpenRequest(true);
+    setOpenEmployeeEdit(true);
   }, []);
 
   const handleOpenDelete = useCallback((id: number) => {
@@ -81,7 +83,7 @@ export default function EmployeesLists() {
     <>
       <div className="w-full flex flex-col gap-5">
         <div className="w-full flex items-center flex-col md:flex-row justify-between gap-3">
-          <div className=" max-w-md">
+          <div className=" w-[320px]">
             <TableSearch setValue={setSearch} placeholder="Search..." />
           </div>
           <div className=" flex items-center gap-3 flex-col md:flex-row">
@@ -100,9 +102,9 @@ export default function EmployeesLists() {
         </div>
         <div className="w-full rounded-lg border  flex flex-col gap-5">
           <div className=" w-full justify-between p-5 gap-6 flex items-center flex-col lg:flex-row">
-            <h2 className="text-xl font-semibold">
+            <h2 className="text-xl font-semibold flex items-center gap-2">
               Employees list{" "}
-              <span className="ml-1 bg-[#F9F5FF] rounded-full text-xs text-[#2A3F8F] px-2.5 py-1">
+              <span className=" bg-[#F9F5FF] rounded-full text-xs text-[#2A3F8F] px-2.5 py-1">
                 18 total{" "}
               </span>
             </h2>{" "}
@@ -113,7 +115,7 @@ export default function EmployeesLists() {
                 label="New employee"
                 isLoading={false}
                 type="button"
-                clickHandler={() => openForNewRequest()}
+                clickHandler={() => openForNewEmployee()}
                 startIcon={<PlusIcon />}
               />
             </div>
@@ -122,7 +124,7 @@ export default function EmployeesLists() {
             {data && data.length > 0 ? (
               <table className=" w-full overflow-x-auto">
                 <thead className="">
-                  <tr className=" text-left bg-[#F9FAFB] text-[#475467] rounded-lg">
+                  <tr className=" text-left text-xs font-medium bg-[#F9FAFB] text-[#475467] rounded-lg">
                     {[
                       "Employee",
                       "Department",
@@ -146,25 +148,33 @@ export default function EmployeesLists() {
                             className=" h-10 w-10 rounded aspect-square"
                           />
                           <span className=" flex flex-col gap-1">
-                            <span>Chukuemeka</span>
-                            <span className=" text-xs text-gray-500 flex items-center gap-1">
+                            <span className=" text-xs font-medium text-[#101828]">
+                              Chukuemeka
+                            </span>
+                            <span className=" text-xs text-[#475467] font-medium">
                               Chukwuemeka@gmail.com
                             </span>
                           </span>
                         </td>
-                        <td className=" text-lg  min-w-36">Marketing</td>
-                        <td>Digital Marketer</td>
+                        <td className=" text-xs font-medium text-[#475467]  min-w-36">
+                          Marketing
+                        </td>
+                        <td className="text-xs font-medium text-[#475467] ">
+                          Digital Marketer
+                        </td>
                         <td>
                           {" "}
                           <span className=" flex flex-col gap-1">
-                            <span>Mon - Fri</span>
-                            <span className=" text-xs text-gray-500 flex items-center gap-1">
+                            <span className="text-xs font-medium text-[#101828]">
+                              Mon - Fri
+                            </span>
+                            <span className=" text-xs text-[#475467] font-medium">
                               9:00AM - 5:00PM
                             </span>
                           </span>
                         </td>
 
-                        <td>
+                        <td className="">
                           <Status status={item?.status} />
                         </td>
                         <td>
@@ -209,18 +219,27 @@ export default function EmployeesLists() {
         setOpen={setOpenDelete}
         isLoading={isDeleting}
         confirmationHandler={handleDelete}
-        title="Delete Requisition Request"
-        description="Are you sure you want to delete this requisition request?"
-        btnTitle="Yes, I want to"
+        title="Delete employee"
+        description="This employee’s data will be permanently deleted"
+        btnTitle="Yes, confirm"
       />
       <ModalTemplate
-        open={openRequest}
-        setOpen={setOpenRequest}
+        open={openEmployeeAdd}
+        setOpen={setOpenEmployeeAdd}
         showXicon={true}
-        title="Requisition"
-        className=" max-w-screen-md"
+        title="Chukwuemeka Bellion"
+        className=" max-w-screen-lg lg:ml-40"
       >
-        <AddEditRequisitionRequest id={selectedId} setOpen={setOpenRequest} />
+        <AddEmployee id={selectedId} setOpen={setOpenEmployeeAdd} />
+      </ModalTemplate>
+      <ModalTemplate
+        open={openEmployeeEdit}
+        setOpen={setOpenEmployeeEdit}
+        showXicon={true}
+        title="Chukwuemeka Bellion"
+        className=" max-w-screen-lg lg:ml-40"
+      >
+        <EditEmployee id={selectedId} setOpen={setOpenEmployeeEdit} />
       </ModalTemplate>
     </>
   );

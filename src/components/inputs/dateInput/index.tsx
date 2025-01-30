@@ -30,7 +30,7 @@ export default function DateInput({
     <div className=" flex flex-col gap-2">
       <div>
         {staticLabel && (
-          <label htmlFor={id} className=" font-medium">
+          <label htmlFor={id} className=" text-[#344054] text-sm font-medium">
             {staticLabel}
           </label>
         )}

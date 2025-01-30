@@ -32,14 +32,15 @@ export default function TableSearch({
           className=" w-full p-2 outline-none"
         />
       </label>
-
-      <button
-        className=" text-primary hover:scale-110 transition-all"
-        title="search"
-        type="submit"
-      >
-        <ArrowCircleIcon />
-      </button>
+      <div className=" flex justify-end lg:pl-20">
+        <button
+          className=" text-primary hover:scale-110 transition-all"
+          title="search"
+          type="submit"
+        >
+          <ArrowCircleIcon />
+        </button>
+      </div>
     </form>
   );
 }
