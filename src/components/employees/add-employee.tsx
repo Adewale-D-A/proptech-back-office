@@ -188,7 +188,7 @@ export default function AddEmployee({
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <div className="w-full mb-8">
+      <div className="w-full mb-6">
         <h2 className="uppercase text-[#98A2B3] font-bold text-sm mb-6">
           Personal details
         </h2>
