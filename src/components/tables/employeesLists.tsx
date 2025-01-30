@@ -228,7 +228,7 @@ export default function EmployeesLists() {
         setOpen={setOpenEmployeeAdd}
         showXicon={true}
         title="Chukwuemeka Bellion"
-        className=" max-w-screen-lg lg:ml-40"
+        className=" max-w-[800px] lg:ml-20"
       >
         <AddEmployee id={selectedId} setOpen={setOpenEmployeeAdd} />
       </ModalTemplate>
@@ -237,7 +237,7 @@ export default function EmployeesLists() {
         setOpen={setOpenEmployeeEdit}
         showXicon={true}
         title="Chukwuemeka Bellion"
-        className=" max-w-screen-lg lg:ml-40"
+        className=" max-w-[800px] lg:ml-40"
       >
         <EditEmployee id={selectedId} setOpen={setOpenEmployeeEdit} />
       </ModalTemplate>
