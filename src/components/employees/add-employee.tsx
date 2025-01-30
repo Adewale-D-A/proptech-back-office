@@ -20,6 +20,7 @@ import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import CancelIcon from "../../assets/icons/cancel";
 import useGetRequisitionRequest from "../../services-hooks/userGetRequisitionRequest";
 import Switch from "../switch";
+import PhoneInput from "../inputs/phoneInput";
 
 export default function AddEmployee({
   id,
@@ -35,6 +36,8 @@ export default function AddEmployee({
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [dob, setDob] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [countryCode, setCountryCode] = useState("+234+Nigeria");
   const [apartment, setApartment] = useState<apartmentById>({} as any);
   const [requestDate, setRequestDate] = useState("");
   const [vendorName, setVendorName] = useState("");
@@ -200,13 +203,16 @@ export default function AddEmployee({
           label="Date of birth"
           staticLabel="Date of birth"
         />
-        <ApartmentSingleSearch
-          placeholder="Select company/apartment"
-          selected={apartment}
-          setSelected={setApartment}
-          label="Apartment"
-        />
 
+        <PhoneInput
+          isRequired={true}
+          number={phoneNumber}
+          setNumber={setPhoneNumber}
+          coutryCode={countryCode}
+          setCountryCode={setCountryCode}
+          id="phone-number"
+          label="Phone number*"
+        />
         <TextInput
           id="vendor-name"
           placeholder="Who is the vendor?"
