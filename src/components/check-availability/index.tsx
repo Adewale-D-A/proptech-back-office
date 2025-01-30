@@ -7,6 +7,8 @@ import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import ApartmentSingleSearch from "../inputs/search/apartment-single-search";
 import { apartmentById } from "../../types/apiData/apartment";
 import Select from "../inputs/select";
+import CalculatedAvailabilityOptions from "./calculated-option";
+import { Http2ServerRequest } from "http2";
 
 export default function CheckAvailability({
   className,
@@ -20,6 +22,7 @@ export default function CheckAvailability({
   const [checkOutDate, setCheckOutDate] = useState("");
   const [guestNo, setGuestNo] = useState("");
   const [location, setLocation] = useState("");
+  const [availability, setAvailability] = useState<any[]>([]);
 
   const [isChecking, setIsChecking] = useState(false);
 
@@ -30,20 +33,26 @@ export default function CheckAvailability({
         setIsChecking(true);
 
         try {
-          const response = await axios.post("/admin/shortlet/availability", {
-            shortlet_id: selectedApt?.id,
-            check_in_day: checkInDate,
-            check_out_day: checkOutDate,
-          });
-          const isAvailable = response?.data?.data?.is_available;
-          dispatch(
-            openSnackbar({
-              message: isAvailable
-                ? "Apartment is available"
-                : "Apartment is not available for the selected dates",
-              isError: !Boolean(isAvailable),
-            })
+          const response = await axios.post(
+            "/admin/shortlet/suggest-shortlets",
+            {
+              // shortlet_id: selectedApt?.id,
+              check_in_date: checkInDate,
+              check_out_date: checkOutDate,
+            }
           );
+          const availabilityResponse = response?.data?.data?.shortlets || [];
+          setAvailability(availabilityResponse);
+          console.log(availability.length);
+          // const isAvailable = response?.data?.data?.is_available;
+          // dispatch(
+          //   openSnackbar({
+          //     message: isAvailable
+          //       ? "Apartment is available"
+          //       : "Apartment is not available for the selected dates",
+          //     isError: !Boolean(isAvailable),
+          //   })
+          // );
         } catch (error) {
         } finally {
           setIsChecking(false);
@@ -124,6 +133,7 @@ export default function CheckAvailability({
           disabled={false}
           isLoading={isChecking}
         />
+        <CalculatedAvailabilityOptions data={availability} />
       </form>
     </div>
   );
