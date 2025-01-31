@@ -20,8 +20,14 @@ import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import CancelIcon from "../../assets/icons/cancel";
 import useGetRequisitionRequest from "../../services-hooks/userGetRequisitionRequest";
 import Switch from "../switch";
+import PhoneInput from "../inputs/phoneInput";
+import countries from "../../assets/Countries.json";
+import AddressAutocompleteInput from "../inputs/addressAutocompleteInout";
+import UsersIcon from "../../assets/icons/users";
+import PenIcon from "../../assets/icons/pen";
+import UserPlusIcon from "../../assets/icons/user-plus";
 
-export default function EditEmployee({
+export default function AddEmployee({
   id,
   setOpen,
 }: {
@@ -32,7 +38,20 @@ export default function EditEmployee({
   const dispatch = useAppDispatch();
   const [markAsPaid, setMarkAsPaid] = useState(false);
   const [employee, setEmployee] = useState<customersById>({} as any);
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [dob, setDob] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [countryCode, setCountryCode] = useState("+234+Nigeria");
+  const [country, setCountry] = useState("");
+  const [state, setState] = useState("");
+  const [address, setAddress] = useState("");
+  const [joinDate, setJoinDate] = useState("");
+  const [shiftDays, setShiftDays] = useState("");
+  const [shiftHours, setShiftHours] = useState("");
+  const [department, setDepartment] = useState("");
+  const [role, setRole] = useState("");
+  const [status, setStatus] = useState("");
   const [apartment, setApartment] = useState<apartmentById>({} as any);
   const [requestDate, setRequestDate] = useState("");
   const [vendorName, setVendorName] = useState("");
@@ -74,6 +93,7 @@ export default function EditEmployee({
       const payload = {
         employee: employee.id,
         email,
+        fullName,
         shortlet: apartment.id,
         request_date: requestDate,
         vendor_name: vendorName,
@@ -168,12 +188,32 @@ export default function EditEmployee({
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
-        <CustomersSingleSearch
-          placeholder="Choose employee"
-          selected={employee}
-          setSelected={setEmployee}
-          label="Requisition employee"
+      <div className="w-full mb-6">
+        <h2 className="uppercase text-[#98A2B3] font-bold text-sm mb-6">
+          Personal details
+        </h2>
+        <div className="flex gap-7 items-center">
+          <p className="font-medium text-sm text-[#344054]">Profile image</p>
+          <div className="relative">
+            <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+              <UserPlusIcon />
+            </div>
+            <div className="absolute bottom-[-0.7px] right-0 bg-white rounded-full p-1.5">
+              {/* <FaEdit className="text-gray-600" /> */}
+              <PenIcon />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-3">
+        <TextInput
+          id="fullName"
+          placeholder="John Doe"
+          isRequired={true}
+          value={fullName}
+          setValue={setFullName}
+          inputType="text"
+          label="Full name"
         />
         <TextInput
           id="email"
@@ -184,114 +224,135 @@ export default function EditEmployee({
           inputType="email"
           label="Email address"
         />
-        <ApartmentSingleSearch
-          placeholder="Select company/apartment"
-          selected={apartment}
-          setSelected={setApartment}
-          label="Apartment"
-        />
         <DateInput
           inputType="date"
           isRequired={false}
-          value={requestDate}
-          setValue={setRequestDate}
-          id="request-date"
-          placeholder="Request date"
-          label="Request Date"
-          staticLabel="Request Date"
+          value={dob}
+          setValue={setDob}
+          id="date-of-birth"
+          placeholder="01/01/2001"
+          label="Date of birth"
+          staticLabel="Date of birth"
         />
-        <TextInput
-          id="vendor-name"
-          placeholder="Who is the vendor?"
+
+        <PhoneInput
           isRequired={true}
-          value={vendorName}
-          setValue={setVendorName}
-          inputType="text"
-          label="Vendor's name"
+          number={phoneNumber}
+          setNumber={setPhoneNumber}
+          coutryCode={countryCode}
+          setCountryCode={setCountryCode}
+          id="phone-number"
+          label="Phone number"
         />
         <Select
-          isRequired={true}
-          value={vendorBank}
-          setValue={setVendorBank}
-          id="vendor-bank"
-          label="Vendor's Bank"
+          isRequired={false}
+          value={country}
+          setValue={setCountry}
+          id="country"
+          label="Country"
         >
           <option value="" disabled>
-            Select bank
+            {/* Country */}
           </option>
-          <option value="access">Access Bank</option>
+          {countries.map((country) => (
+            <option key={country.code} value={`${country?.name}`}>
+              {`${country?.flag} - ${country?.name}`}
+            </option>
+          ))}
         </Select>
-        <TextInput
-          id="account-name"
-          placeholder="What's the account name?"
-          isRequired={true}
-          value={vendorAccountName}
-          setValue={setVendorAccountName}
-          inputType="text"
-          label="Account name"
-        />
-        <TextInput
-          id="account-number"
-          placeholder="12345698700"
-          isRequired={true}
-          value={vendorAccountNumber}
-          setValue={setVendorAccountNumber}
-          inputType="number"
-          label="Account number"
-        />
-        <TextInput
-          id="amount"
-          placeholder="Amount"
-          isRequired={true}
-          value={amount}
-          setValue={setAmount}
-          inputType="number"
-          label="Amount"
-        />
+
         <Select
           isRequired={true}
-          value={currency}
-          setValue={setCurrency}
-          id="currency"
-          label="Currency"
+          value={state}
+          setValue={setState}
+          id="state"
+          label="State of origin"
         >
-          <option value="" disabled>
-            Select currency
-          </option>
-          <option value="NGN">NGN</option>
-          <option value="USD">USD</option>
+          <option value="" disabled></option>
+          {/* <option value="NGN">NGN</option>
+          <option value="USD">USD</option> */}
         </Select>
       </div>
-      <div className="w-full flex flex-col gap-2">
-        <FileInputDesignTwo
-          value={invoice}
-          setValue={setInvoice}
-          id="attach-invoice"
-          label="Attach invoice"
+      <div className="w-full pt-6 ">
+        <AddressAutocompleteInput
+          label="Full Address"
+          placeholder="Type address"
+          value={address}
+          setValue={setAddress}
         />
-        <p className=" text-sm text-gray-500">
-          .pdf files only. Max file size: 10Mb
-        </p>
-        <MultipleFileInputDesignTwo
-          value={attachedImages}
-          setValue={setAttachedImaged}
-          id="images-upload"
-        />
-        <p className=" text-sm text-gray-500">
-          .jpg and .png files only. Max file size: 10Mb
-        </p>
-        <TextAreaInput
-          isRequired={false}
-          value={additionalNotes}
-          setValue={setAdditionalNotes}
-          id="additional-noted"
-          placeholder="Leave addition notes"
-          label="Additional comments/Notes"
-        />
-        <p className=" text-sm text-gray-500">
-          Specify all apartments if it is a joint invoice. Also a description
-          should be added if its just one payment.
-        </p>
+      </div>
+      <div className="w-full pt-6">
+        <h2 className="uppercase text-[#98A2B3] font-bold text-sm mb-6">
+          Employee information
+        </h2>
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-3">
+          <DateInput
+            inputType="date"
+            isRequired={false}
+            value={joinDate}
+            setValue={setJoinDate}
+            id="join-date"
+            placeholder="01/01/2001"
+            label=""
+            staticLabel="Join date"
+          />
+          <Select
+            isRequired={true}
+            value={shiftDays}
+            setValue={setShiftDays}
+            id="shift-days"
+            label="Shift days"
+          >
+            <option value="" disabled></option>
+            {/* <option value="NGN">NGN</option>
+          <option value="USD">USD</option> */}
+          </Select>
+
+          <Select
+            isRequired={true}
+            value={shiftHours}
+            setValue={setShiftHours}
+            id="shift-hours"
+            label="Shift hours"
+          >
+            <option value="" disabled></option>
+            {/* <option value="NGN">NGN</option>
+          <option value="USD">USD</option> */}
+          </Select>
+          <Select
+            isRequired={true}
+            value={department}
+            setValue={setDepartment}
+            id="department"
+            label="Department"
+          >
+            <option value="" disabled></option>
+            {/* <option value="NGN">NGN</option>
+          <option value="USD">USD</option> */}
+          </Select>
+          <Select
+            isRequired={true}
+            value={role}
+            setValue={setRole}
+            id="role"
+            label="Role"
+          >
+            <option value="" disabled></option>
+            {/* <option value="NGN">NGN</option>
+          <option value="USD">USD</option> */}
+          </Select>
+          <Select
+            isRequired={true}
+            value={status}
+            setValue={setStatus}
+            id="status"
+            label="Status"
+          >
+            <option value="" disabled></option>
+            {/* <option value="NGN">NGN</option>
+          <option value="USD">USD</option> */}
+          </Select>
+        </div>
         <div className=" flex items-center gap-5 mt-10">
           <LoadingButton
             type="button"
