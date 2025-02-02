@@ -21,6 +21,7 @@ import { removeRequisitionRequestInList } from "../../stores/apiData/requisition
 import EyeIcon from "../../assets/icons/eye";
 import EditEmployee from "../employees/edit-employee";
 import AddEmployee from "../employees/add-employee";
+import { Link } from "react-router-dom";
 
 export default function EmployeesLists() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -179,9 +180,13 @@ export default function EmployeesLists() {
                         </td>
                         <td>
                           <div className=" flex items-center gap-4">
-                            <button title="mark as paid">
-                              <EyeIcon />
-                            </button>
+                            <Link to={`/employees/view-employee/${item?.id}`}>
+                              {" "}
+                              <button title="view employee">
+                                <EyeIcon />
+                              </button>
+                            </Link>
+
                             <button
                               title="edit"
                               onClick={() => openForEdit(item?.id)}

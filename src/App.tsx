@@ -131,6 +131,7 @@ import Referrals from "./pages/customer-engagements/referrals";
 import RequisitionRequests from "./pages/requests/requisition-requests";
 import RequestsTabWrapper from "./routeProtectors/wrapper/requests";
 import MaintenanceRequests from "./pages/requests/maintenance-requests";
+import ViewEmployee from "./pages/employees/view employee";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -279,6 +280,10 @@ function App() {
 
             {/* employees flows  */}
             <Route path="/employees" element={<Employees />} />
+            <Route
+              path="/employees/view-employee/:id"
+              element={<ViewEmployee />}
+            />
 
             <Route
               path="/customers/customer-details/:id"

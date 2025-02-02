@@ -23,7 +23,7 @@ export default function LinkButton({
   return (
     <Link
       to={url}
-      className={`w-full flex justify-center whitespace-nowrap p-3 px-6 rounded-full transition-all  
+      className={`w-full flex justify-center whitespace-nowrap text-sm font-normal gap-1 p-3 px-5 rounded-full transition-all  
         ${
           disabled
             ? "bg-primary/30 text-white"
