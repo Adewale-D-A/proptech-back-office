@@ -3,8 +3,43 @@ import MoonIcon from "../../assets/icons/moon";
 import NextArrowIcon from "../../assets/icons/next-arrow";
 import SplitArrowIcon from "../../assets/icons/split-arrow";
 import LoadingButton from "../button";
+import { format, addDays, isValid, differenceInDays } from "date-fns";
 
-export default function SplitStayOptionCard({ data }: { data: any }) {
+export default function SplitStayOptionCard({
+  data,
+  checkInDate,
+  checkOutDate,
+}: {
+  data: any;
+  checkInDate: string;
+  checkOutDate: string;
+}) {
+  const transitionDate = new Date(data?.split_stay?.transition_date);
+  if (!isValid(transitionDate)) {
+    return <div></div>;
+  }
+
+  const formattedTransitionDate = format(transitionDate, "EEE, dd/MM/yy");
+  const nextDayAfterTransition = format(
+    addDays(transitionDate, 1),
+    "EEE, dd/MM/yy"
+  );
+
+  const nightsFirstStay = differenceInDays(
+    new Date(checkInDate),
+    transitionDate
+  );
+  const nightsSecondStay = differenceInDays(
+    checkOutDate,
+    nextDayAfterTransition
+  );
+
+  console.log("checkIndate", checkInDate);
+  console.log("checkOutDate", checkOutDate);
+  console.log("transitionDate", formattedTransitionDate);
+
+  console.log(differenceInDays(new Date(checkInDate), transitionDate));
+
   return (
     <div className="w-full rounded-2xl border p-3 flex flex-col md:flex-row gap-3 md:items-center justify-between">
       <div className=" flex flex-col gap-2">
@@ -16,15 +51,15 @@ export default function SplitStayOptionCard({ data }: { data: any }) {
         </div>
         <div className="text-gray-400 flex items-center gap-1">
           <MoonIcon className=" size-4" />
-          <span className=" text-sm ">Standard rate</span>
+          <span className=" text-sm ">{nightsFirstStay} nights</span>
         </div>
         <div className="text-gray-400 flex items-center gap-1">
           <CalendarIcon className=" size-4" />
-          <span className=" text-sm ">***</span>
+          <span className=" text-sm ">{checkInDate}</span>
         </div>
         <div className="text-gray-400 flex items-center gap-1">
           <CalendarIcon className=" size-4" />
-          <span className=" text-sm ">***</span>
+          <span className=" text-sm ">{formattedTransitionDate}</span>
         </div>
       </div>
       <div className=" flex flex-col gap-2">
@@ -36,15 +71,15 @@ export default function SplitStayOptionCard({ data }: { data: any }) {
         </div>
         <div className="text-gray-400 flex items-center gap-1">
           <MoonIcon className=" size-4" />
-          <span className=" text-sm ">17 nights</span>
+          <span className=" text-sm ">{nightsSecondStay} nights</span>
         </div>
         <div className="text-gray-400 flex items-center gap-1">
           <CalendarIcon className=" size-4" />
-          <span className=" text-sm ">***</span>
+          <span className=" text-sm ">{nextDayAfterTransition}</span>
         </div>
         <div className="text-gray-400 flex items-center gap-1">
           <CalendarIcon className=" size-4" />
-          <span className=" text-sm ">***</span>
+          <span className=" text-sm ">{checkOutDate}</span>
         </div>
       </div>
       <div className=" w-fit">

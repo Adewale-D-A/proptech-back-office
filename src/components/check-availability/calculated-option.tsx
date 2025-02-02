@@ -3,8 +3,27 @@ import SplitStayOptionCard from "./split-stay-option-card";
 import NextArrowIcon from "../../assets/icons/next-arrow";
 import SplitArrowIcon from "../../assets/icons/split-arrow";
 import { Http2ServerRequest } from "http2";
+import { format, differenceInDays, isValid } from "date-fns";
 
-export default function CalculatedAvailabilityOptions({ data }: { data: any }) {
+export default function CalculatedAvailabilityOptions({
+  data,
+  checkInDate,
+  checkOutDate,
+}: {
+  data: any;
+  checkInDate: string;
+  checkOutDate: string;
+}) {
+  const checkIn = new Date(checkInDate);
+  const checkOut = new Date(checkOutDate);
+
+  if (!isValid(checkIn) || !isValid(checkOut)) {
+    return <div></div>;
+  }
+
+  const formattedCheckInDate = format(checkIn, "EEE, dd/MM/yy");
+  const formattedCheckOutDate = format(checkOut, "EEE, dd/MM/yy");
+  const numberOfNights = differenceInDays(checkOut, checkIn);
   return (
     <div className=" flex flex-col gap-10">
       {data?.single_stay ? (
@@ -12,9 +31,12 @@ export default function CalculatedAvailabilityOptions({ data }: { data: any }) {
           <div>
             <div className=" flex items-center gap-3">
               <NextArrowIcon className=" text-primary size-6" />
-              <h5 className=" font-semibold text-lg">Option available</h5>
+              <h5 className=" font-semibold text-lg">Options available</h5>
             </div>
-            <p className=" text-sm text-gray-400">***</p>
+            <p className=" text-sm text-gray-400">
+              {formattedCheckInDate} - {formattedCheckOutDate}, {numberOfNights}{" "}
+              nights , {data?.single_stay?.max_guests} adults
+            </p>
           </div>
           {data?.single_stay ? (
             <AvailabilityOptionCard data={data} />
@@ -27,7 +49,12 @@ export default function CalculatedAvailabilityOptions({ data }: { data: any }) {
           )}
         </div>
       ) : null}
-
+      <SplitStayOptionCard
+        data={data}
+        checkInDate={formattedCheckInDate}
+        checkOutDate={formattedCheckOutDate}
+      />
+      {/* 
       {data?.split_stay ? (
         <div>
           <div className=" flex flex-col gap-5">
@@ -35,17 +62,22 @@ export default function CalculatedAvailabilityOptions({ data }: { data: any }) {
               <SplitArrowIcon className=" text-primary size-6 rotate-45" />
               <h5 className=" font-semibold text-lg">Split stays</h5>
             </div>
-
-            <SplitStayOptionCard data={data} />
+            {data?.split_stay ? (
+              <SplitStayOptionCard
+                data={data}
+                checkInDate={formattedCheckInDate}
+                checkOutDate={formattedCheckOutDate}
+              />
+            ) : (
+              <div className="w-full p-5 bg-gray-200/15 rounded-lg">
+                <h4 className=" text-lg font-semibold text-center">
+                  No available split stay options
+                </h4>
+              </div>
+            )}
           </div>
         </div>
-      ) : (
-        <div className="w-full p-5 bg-gray-200/15 rounded-lg">
-          <h4 className=" text-lg font-semibold text-center">
-            No available split stay options
-          </h4>
-        </div>
-      )}
+      ) : null} */}
     </div>
   );
 }

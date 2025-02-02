@@ -133,7 +133,11 @@ export default function CheckAvailability({
           disabled={false}
           isLoading={isChecking}
         />
-        <CalculatedAvailabilityOptions data={availability} />
+        <CalculatedAvailabilityOptions
+          data={availability}
+          checkInDate={checkInDate}
+          checkOutDate={checkOutDate}
+        />
       </form>
     </div>
   );
