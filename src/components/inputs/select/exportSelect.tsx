@@ -5,7 +5,7 @@ import CustomersInfoExport from "../../export-options/customers-export";
 export default function ExportSelect({
   id,
 }: {
-  id: "customers" | "bookings" | "report" | "ratings-and-reviews";
+  id: "customers" | "bookings" | "report" | "ratings-and-reviews" | "employees";
 }) {
   const [openModal, setOpenModal] = useState(false);
   const [value, setValue] = useState("");
@@ -19,7 +19,7 @@ export default function ExportSelect({
     <>
       <label
         htmlFor={"export-report"}
-        className="w-full relative p-3 px-6 bg-primary/20 rounded-full flex items-center gap-3"
+        className="w-full relative py-2.5 px-6 bg-[#F2F4F7] text-[#1D2939] rounded-full flex items-center gap-3"
       >
         {" "}
         <select
@@ -28,7 +28,7 @@ export default function ExportSelect({
           onChange={(e) => onChange(e)}
           className="w-full sm:text-md bg-transparent"
         >
-          <option value="">Export</option>
+          <option value="">Export as</option>
           <option value="csv"> CSV</option>
           <option value="excel">Excel</option>
           <option value="print">Print</option>

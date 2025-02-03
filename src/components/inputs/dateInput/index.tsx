@@ -27,15 +27,15 @@ export default function DateInput({
     setValue(e.target.value);
   };
   return (
-    <div className=" flex flex-col gap-2">
+    <div className=" flex flex-col gap-1">
       <div>
         {staticLabel && (
-          <label htmlFor={id} className=" font-medium">
+          <label htmlFor={id} className=" text-[#344054] text-sm font-medium">
             {staticLabel}
           </label>
         )}
       </div>
-      <div className="w-full relative group border rounded-md bg-gray-200/15">
+      <div className="w-full relative group border rounded-lg bg-gray-200/15">
         <input
           id={id}
           readOnly={readonly}
@@ -44,7 +44,7 @@ export default function DateInput({
           value={value}
           onChange={(e: ChangeEvent<HTMLInputElement>) => handleInput(e)}
           type={inputType}
-          className={`w-full date-input disabled:border-gray-300 disabled:text-gray-300 p-3 focus:ring-[#17594F] focus:border-[#17594F]`}
+          className={`w-full date-input disabled:border-gray-300 disabled:text-gray-300 p-[11px]  focus:ring-[#17594F] focus:border-[#17594F]`}
         />
         {!value && (
           <label

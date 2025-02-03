@@ -42,6 +42,7 @@ import AddAdminUser from "./pages/manage-admins/users/add-user";
 import EditRoles from "./pages/manage-admins/roles-and-permissions/edit-roles";
 import AddRoles from "./pages/manage-admins/roles-and-permissions/add-roles";
 import Profile from "./pages/profile";
+import Employees from "./pages/employees";
 // APARTMENTS
 import ApartmentTabWrapper from "./routeProtectors/wrapper/apartment";
 
@@ -130,6 +131,7 @@ import Referrals from "./pages/customer-engagements/referrals";
 import RequisitionRequests from "./pages/requests/requisition-requests";
 import RequestsTabWrapper from "./routeProtectors/wrapper/requests";
 import MaintenanceRequests from "./pages/requests/maintenance-requests";
+import ViewEmployee from "./pages/employees/view employee";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -275,6 +277,14 @@ function App() {
             />
             {/* customers flows  */}
             <Route path="/customers" element={<Customers />} />
+
+            {/* employees flows  */}
+            <Route path="/employees" element={<Employees />} />
+            <Route
+              path="/employees/view-employee/:id"
+              element={<ViewEmployee />}
+            />
+
             <Route
               path="/customers/customer-details/:id"
               element={<CustomerDetail />}

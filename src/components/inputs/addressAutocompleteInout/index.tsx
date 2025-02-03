@@ -66,7 +66,14 @@ export default function AddressAutocompleteInput({
           loading: boolean;
         }) => (
           <div className="w-full">
-            {label && <label htmlFor="address-searcher">{label}</label>}
+            {label && (
+              <label
+                htmlFor="address-searcher"
+                className="text-sm font-medium text-[#344054]"
+              >
+                {label}
+              </label>
+            )}
             <input
               required={false}
               readOnly={readOnly}

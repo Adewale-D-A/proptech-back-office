@@ -9,6 +9,10 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
+.fit {
+  width: fit-content;
+}
+
 td,
 th {
   padding: 15px;
@@ -21,7 +25,7 @@ th {
   height: var(--size);
   width: var(--size);
   left: var(--position);
-  bottom:var(--position);
+  bottom: var(--position);
   background-color: white;
   -webkit-transition: 0.4s;
   transition: 0.4s;

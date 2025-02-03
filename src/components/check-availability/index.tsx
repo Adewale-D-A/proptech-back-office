@@ -30,11 +30,15 @@ export default function CheckAvailability({
         setIsChecking(true);
 
         try {
-          const response = await axios.post("/admin/shortlet/availability", {
-            shortlet_id: selectedApt?.id,
-            check_in_day: checkInDate,
-            check_out_day: checkOutDate,
-          });
+          const response = await axios.post(
+            "/admin/shortlet/suggest-shortlets",
+            {
+              // shortlet_id: selectedApt?.id,
+              check_in_day: checkInDate,
+              check_out_day: checkOutDate,
+            }
+          );
+          console.log("Availability response", response);
           const isAvailable = response?.data?.data?.is_available;
           dispatch(
             openSnackbar({

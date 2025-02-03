@@ -105,7 +105,7 @@ export default function BookingsOverview() {
           </div>
           {/* TODO: Uncomment out when the suggested apartments response is available of "Check Availability" endpoint */}
           {/* Available apartmnets suggestions and split stays suggestions */}
-          {/* {<CalculatedAvailabilityOptions />} */}
+          {<CalculatedAvailabilityOptions />}
         </div>
         <div className=" w-full flex flex-col gap-4 border rounded-md">
           {/* Bookings Calendar */}
