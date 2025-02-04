@@ -1,16 +1,16 @@
 import { Outlet } from "react-router-dom";
 import NavTab from "../../components/tab/nav-tab";
-// import WrenchIcon from "../../assets/icons/wrench";
-// import BookMarkIcon from "../../assets/icons/book-mark";
+import WrenchIcon from "../../assets/icons/wrench";
+import BookMarkIcon from "../../assets/icons/book-mark";
 import BanknoteIcon from "../../assets/icons/banknote";
 
 const tabList = [
-  //   {
-  //     id: 1,
-  //     icon: <WrenchIcon />,
-  //     label: "Maintenance requests",
-  //     url: "/requests/maintenance-requests",
-  //   },
+  {
+    id: 1,
+    icon: <WrenchIcon />,
+    label: "Maintenance requests",
+    url: "/requests/maintenance-requests",
+  },
   {
     id: 2,
     icon: <BanknoteIcon />,

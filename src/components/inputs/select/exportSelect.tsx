@@ -5,7 +5,14 @@ import CustomersInfoExport from "../../export-options/customers-export";
 export default function ExportSelect({
   id,
 }: {
-  id: "customers" | "bookings" | "report" | "ratings-and-reviews" | "employees";
+  id:
+    | "customers"
+    | "bookings"
+    | "report"
+    | "ratings-and-reviews"
+    | "employees"
+    | "maintenance-requests"
+    | "requisition-requests";
 }) {
   const [openModal, setOpenModal] = useState(false);
   const [value, setValue] = useState("");
