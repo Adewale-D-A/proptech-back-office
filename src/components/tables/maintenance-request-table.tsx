@@ -35,8 +35,10 @@ export default function MaintenanceRequestTable() {
   }>();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedId, setSelectedId] = useState("");
-  const [openEmployeeEdit, setOpenEmployeeEdit] = useState(false);
-  const [openEmployeeAdd, setOpenEmployeeAdd] = useState(false);
+  const [openMaintenanceRequestEdit, setOpenMaintenanceRequestEdit] =
+    useState(false);
+  const [openNewMaintenanceRequest, setOpenNewMaintenanceRequest] =
+    useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -53,14 +55,14 @@ export default function MaintenanceRequestTable() {
     },
     []
   );
-  const openForNewEmployee = useCallback(() => {
+  const openForNewMaintenanceRequest = useCallback(() => {
     setSelectedId("");
-    setOpenEmployeeAdd(true);
+    setOpenNewMaintenanceRequest(true);
   }, []);
 
-  const openForEdit = useCallback((id: number) => {
+  const openForEditMaintenanceRequest = useCallback((id: number) => {
     setSelectedId(String(id || ""));
-    setOpenEmployeeEdit(true);
+    setOpenMaintenanceRequestEdit(true);
   }, []);
 
   const handleOpenDelete = useCallback((id: number) => {
@@ -116,7 +118,7 @@ export default function MaintenanceRequestTable() {
                 label="New request"
                 isLoading={false}
                 type="button"
-                clickHandler={() => openForNewEmployee()}
+                clickHandler={() => openForNewMaintenanceRequest()}
                 startIcon={<PlusIcon />}
               />
             </div>
@@ -172,7 +174,9 @@ export default function MaintenanceRequestTable() {
                         </td>
                         <td>
                           <div className=" flex items-center gap-4">
-                            <Link to={`/requests/view-maintenance/${item?.id}`}>
+                            <Link
+                              to={`/requests/maintenance-requests/view-maintenance/${item?.id}`}
+                            >
                               {" "}
                               <button title="view employee">
                                 <EyeIcon />
@@ -181,7 +185,9 @@ export default function MaintenanceRequestTable() {
 
                             <button
                               title="edit"
-                              onClick={() => openForEdit(item?.id)}
+                              onClick={() =>
+                                openForEditMaintenanceRequest(item?.id)
+                              }
                             >
                               <PenIcon />
                             </button>
@@ -216,27 +222,27 @@ export default function MaintenanceRequestTable() {
         setOpen={setOpenDelete}
         isLoading={isDeleting}
         confirmationHandler={handleDelete}
-        title="Delete employee"
-        description="This employee’s data will be permanently deleted"
+        title="Delete request"
+        description="This request will be permanently deleted"
         btnTitle="Yes, confirm"
       />
       <ModalTemplate
-        open={openEmployeeAdd}
-        setOpen={setOpenEmployeeAdd}
+        open={openNewMaintenanceRequest}
+        setOpen={setOpenNewMaintenanceRequest}
         showXicon={true}
-        title="Chukwuemeka Bellion"
-        className=" max-w-[800px] lg:ml-20"
+        title="New maintenance request"
+        className=" max-w-screen-md "
       >
-        <AddEmployee id={selectedId} setOpen={setOpenEmployeeAdd} />
+        <AddEmployee id={selectedId} setOpen={setOpenNewMaintenanceRequest} />
       </ModalTemplate>
       <ModalTemplate
-        open={openEmployeeEdit}
-        setOpen={setOpenEmployeeEdit}
+        open={openMaintenanceRequestEdit}
+        setOpen={setOpenMaintenanceRequestEdit}
         showXicon={true}
-        title="Chukwuemeka Bellion"
-        className=" max-w-[800px] lg:ml-40"
+        title="Edit maintenance request"
+        className=" max-w-screen-md "
       >
-        <EditEmployee id={selectedId} setOpen={setOpenEmployeeEdit} />
+        <EditEmployee id={selectedId} setOpen={setOpenMaintenanceRequestEdit} />
       </ModalTemplate>
     </>
   );
