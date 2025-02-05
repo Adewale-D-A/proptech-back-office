@@ -233,7 +233,7 @@ export default function MaintenanceRequestTable() {
         setOpen={setOpenNewMaintenanceRequest}
         showXicon={true}
         title="New maintenance request"
-        className=" max-w-screen-md "
+        className=" max-w-screen-sm "
       >
         <NewRequest id={selectedId} setOpen={setOpenNewMaintenanceRequest} />
       </ModalTemplate>
@@ -242,7 +242,7 @@ export default function MaintenanceRequestTable() {
         setOpen={setOpenMaintenanceRequestEdit}
         showXicon={true}
         title="Edit maintenance request"
-        className=" max-w-screen-md "
+        className=" max-w-screen-sm "
       >
         <EditMaintenanceRequest
           id={selectedId}
