@@ -178,7 +178,7 @@ export default function ViewMaintenanceRequest() {
           </div>
         </div>
       </div>
-      <div className="border-l border-[#E4E7EC] px-5">
+      <div className="border-l border-b border-[#E4E7EC] px-5">
         <div className="pb-7">
           <div className="flex  items-center gap-2 pb-2">
             <TimeIcon />
@@ -218,7 +218,7 @@ export default function ViewMaintenanceRequest() {
           This item has been requested{" "}
           <span className="text-[#344054]">121</span> times{" "}
         </p>
-        <div className="space-y-3 divide-y">
+        <div className="space-y-3 divide-y pb-10">
           <div className="flex justify-between pt-3">
             <div className="space-y-1">
               <p className="text-[#1D2939] font-semibold text-xs">
