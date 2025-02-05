@@ -132,6 +132,7 @@ import RequisitionRequests from "./pages/requests/requisition-requests";
 import RequestsTabWrapper from "./routeProtectors/wrapper/requests";
 import MaintenanceRequests from "./pages/requests/maintenance-requests";
 import ViewEmployee from "./pages/employees/view employee";
+import ViewMaintenanceRequest from "./pages/requests/maintenance-requests/view-maintenance/view-maintenance";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -414,11 +415,16 @@ function App() {
                 path="/requests/maintenance-requests"
                 element={<MaintenanceRequests />}
               />
+
               <Route
                 path="/requests/requisition-requests"
                 element={<RequisitionRequests />}
               />
             </Route>
+            <Route
+              path="/requests/maintenance-requests/view-maintenance/:id"
+              element={<ViewMaintenanceRequest />}
+            />
 
             {/* calendar */}
             <Route element={<CalendarTabWrapper />}>

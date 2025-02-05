@@ -3,6 +3,7 @@ import HeadsetIcon from "../../../assets/icons/headset";
 import Starcon from "../../../assets/icons/star";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
+import MaintenanceRequestTable from "../../../components/tables/maintenance-request-table";
 
 const breadCrumb = [
   {
@@ -32,5 +33,10 @@ export default function MaintenanceRequests() {
       })
     );
   }, []);
-  return <div className=" w-full"></div>;
+  return (
+    <div className=" w-full">
+      {" "}
+      <MaintenanceRequestTable />
+    </div>
+  );
 }

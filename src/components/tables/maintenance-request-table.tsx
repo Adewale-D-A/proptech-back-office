@@ -14,13 +14,18 @@ import BinIcon from "../../assets/icons/bin-icon";
 import LoadingButton from "../button";
 import PlusIcon from "../../assets/icons/plus";
 import ModalTemplate from "../modal";
-import AddEditRequisitionRequest from "../requisition-requests/add-edit";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { removeRequisitionRequestInList } from "../../stores/apiData/requisition-requests";
+import EyeIcon from "../../assets/icons/eye";
+import EditEmployee from "../employees/edit-employee";
+import AddEmployee from "../employees/add-employee";
+import { Link } from "react-router-dom";
+import NewRequest from "../maintenance-requests/newRequest";
+import EditMaintenanceRequest from "../maintenance-requests/EditMaintenanceRequest";
 
-export default function RequisitionRequestTable() {
+export default function MaintenanceRequestTable() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
   const dispatch = useAppDispatch();
 
@@ -32,7 +37,10 @@ export default function RequisitionRequestTable() {
   }>();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedId, setSelectedId] = useState("");
-  const [openRequest, setOpenRequest] = useState(false);
+  const [openMaintenanceRequestEdit, setOpenMaintenanceRequestEdit] =
+    useState(false);
+  const [openNewMaintenanceRequest, setOpenNewMaintenanceRequest] =
+    useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -49,14 +57,14 @@ export default function RequisitionRequestTable() {
     },
     []
   );
-  const openForNewRequest = useCallback(() => {
+  const openForNewMaintenanceRequest = useCallback(() => {
     setSelectedId("");
-    setOpenRequest(true);
+    setOpenNewMaintenanceRequest(true);
   }, []);
 
-  const openForEdit = useCallback((id: number) => {
+  const openForEditMaintenanceRequest = useCallback((id: number) => {
     setSelectedId(String(id || ""));
-    setOpenRequest(true);
+    setOpenMaintenanceRequestEdit(true);
   }, []);
 
   const handleOpenDelete = useCallback((id: number) => {
@@ -80,7 +88,7 @@ export default function RequisitionRequestTable() {
     <>
       <div className="w-full flex flex-col gap-5">
         <div className="w-full flex items-center flex-col md:flex-row justify-between gap-3">
-          <div className=" max-w-md">
+          <div className=" w-[320px]">
             <TableSearch setValue={setSearch} placeholder="Search..." />
           </div>
           <div className=" flex items-center gap-3 flex-col md:flex-row">
@@ -97,31 +105,35 @@ export default function RequisitionRequestTable() {
             <Filter actionHandler={handleFiltering} />
           </div>
         </div>
-        <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
-          <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
-            <h2 className="text-xl font-semibold">Requisition Requests</h2>{" "}
+        <div className="w-full rounded-lg border  flex flex-col gap-5">
+          <div className=" w-full justify-between p-5 gap-6 flex items-center flex-col lg:flex-row">
+            <h2 className="text-xl font-semibold flex items-center gap-2">
+              Maintenance Requests{" "}
+              <span className=" bg-[#F9F5FF] rounded-full text-xs text-[#2A3F8F] px-2.5 py-1">
+                12 new requests
+              </span>
+            </h2>{" "}
             <div className=" w-fit flex items-center gap-3">
-              <ExportSelect id="ratings-and-reviews" />
+              <ExportSelect id="maintenance-requests" />
 
               <LoadingButton
                 label="New request"
                 isLoading={false}
                 type="button"
-                clickHandler={() => openForNewRequest()}
+                clickHandler={() => openForNewMaintenanceRequest()}
                 startIcon={<PlusIcon />}
               />
             </div>
           </div>
-          <div className="block px-5">
+          <div className="block">
             {data && data.length > 0 ? (
               <table className=" w-full overflow-x-auto">
                 <thead className="">
-                  <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+                  <tr className=" text-left text-xs font-medium bg-[#F9FAFB] text-[#475467] rounded-lg">
                     {[
                       "Requesting employee",
                       "Apartment",
-                      "Amount",
-                      "Currency",
+                      "Category",
                       "Request date",
                       "Status",
                       "Action",
@@ -141,29 +153,43 @@ export default function RequisitionRequestTable() {
                             className=" h-10 w-10 rounded aspect-square"
                           />
                           <span className=" flex flex-col gap-1">
-                            <span>{item?.user?.first_name}</span>
-                            <span className=" text-xs text-gray-500 flex items-center gap-1">
-                              ***
+                            <span className=" text-xs font-medium text-[#101828]">
+                              Chuks
+                            </span>
+                            <span className=" text-xs text-[#475467] font-medium">
+                              Operations
                             </span>
                           </span>
                         </td>
-                        <td className=" text-lg  min-w-36">
-                          {item?.shortlet?.name}
+                        <td className=" text-xs font-medium text-[#475467]  min-w-36">
+                          Victoria heights
                         </td>
-                        <td>{item?.amount}</td>
-                        <td>{item?.currency}</td>
-                        <td>{formatDate(item?.created_at)}</td>
-                        <td>
+                        <td className="text-xs font-medium text-[#475467] ">
+                          HVAC
+                        </td>
+
+                        <td className="text-xs font-medium text-[#475467] ">
+                          15th Sep, 2024
+                        </td>
+                        <td className="">
                           <Status status={item?.status} />
                         </td>
                         <td>
                           <div className=" flex items-center gap-4">
-                            <button title="mark as paid">
-                              <DoubleCheckIcon className=" size-8" />
-                            </button>
+                            <Link
+                              to={`/requests/maintenance-requests/view-maintenance/${item?.id}`}
+                            >
+                              {" "}
+                              <button title="view employee">
+                                <EyeIcon />
+                              </button>
+                            </Link>
+
                             <button
                               title="edit"
-                              onClick={() => openForEdit(item?.id)}
+                              onClick={() =>
+                                openForEditMaintenanceRequest(item?.id)
+                              }
                             >
                               <PenIcon />
                             </button>
@@ -188,7 +214,7 @@ export default function RequisitionRequestTable() {
             pagination={pagination}
             setCurrentPage={setCurrentPage}
             isLoading={isLoading}
-            label="Requisition requests"
+            label="Maintenance requests"
           />
         </div>
       </div>
@@ -198,18 +224,30 @@ export default function RequisitionRequestTable() {
         setOpen={setOpenDelete}
         isLoading={isDeleting}
         confirmationHandler={handleDelete}
-        title="Delete Requisition Request"
-        description="Are you sure you want to delete this requisition request?"
-        btnTitle="Yes, I want to"
+        title="Delete request"
+        description="This request will be permanently deleted"
+        btnTitle="Yes, confirm"
       />
       <ModalTemplate
-        open={openRequest}
-        setOpen={setOpenRequest}
+        open={openNewMaintenanceRequest}
+        setOpen={setOpenNewMaintenanceRequest}
         showXicon={true}
-        title="Requisition"
-        className=" max-w-screen-md"
+        title="New maintenance request"
+        className=" max-w-screen-sm "
       >
-        <AddEditRequisitionRequest id={selectedId} setOpen={setOpenRequest} />
+        <NewRequest id={selectedId} setOpen={setOpenNewMaintenanceRequest} />
+      </ModalTemplate>
+      <ModalTemplate
+        open={openMaintenanceRequestEdit}
+        setOpen={setOpenMaintenanceRequestEdit}
+        showXicon={true}
+        title="Edit maintenance request"
+        className=" max-w-screen-sm "
+      >
+        <EditMaintenanceRequest
+          id={selectedId}
+          setOpen={setOpenMaintenanceRequestEdit}
+        />
       </ModalTemplate>
     </>
   );
