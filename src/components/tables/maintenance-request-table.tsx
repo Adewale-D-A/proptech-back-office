@@ -23,6 +23,7 @@ import EditEmployee from "../employees/edit-employee";
 import AddEmployee from "../employees/add-employee";
 import { Link } from "react-router-dom";
 import NewRequest from "../maintenance-requests/newRequest";
+import EditMaintenanceRequest from "../maintenance-requests/EditMaintenanceRequest";
 
 export default function MaintenanceRequestTable() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -243,7 +244,10 @@ export default function MaintenanceRequestTable() {
         title="Edit maintenance request"
         className=" max-w-screen-md "
       >
-        <EditEmployee id={selectedId} setOpen={setOpenMaintenanceRequestEdit} />
+        <EditMaintenanceRequest
+          id={selectedId}
+          setOpen={setOpenMaintenanceRequestEdit}
+        />
       </ModalTemplate>
     </>
   );
