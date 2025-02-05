@@ -59,7 +59,10 @@ export default function CustomersSingleSearch({
   return (
     <div className=" w-full flex flex-col gap-2">
       {label && (
-        <label htmlFor={"customer-search-feature"} className=" font-medium">
+        <label
+          htmlFor={"customer-search-feature"}
+          className="  text-[#667085] font-sm font-medium"
+        >
           {label}
         </label>
       )}

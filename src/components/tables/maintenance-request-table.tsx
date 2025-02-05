@@ -22,6 +22,7 @@ import EyeIcon from "../../assets/icons/eye";
 import EditEmployee from "../employees/edit-employee";
 import AddEmployee from "../employees/add-employee";
 import { Link } from "react-router-dom";
+import NewRequest from "../maintenance-requests/newRequest";
 
 export default function MaintenanceRequestTable() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -233,7 +234,7 @@ export default function MaintenanceRequestTable() {
         title="New maintenance request"
         className=" max-w-screen-md "
       >
-        <AddEmployee id={selectedId} setOpen={setOpenNewMaintenanceRequest} />
+        <NewRequest id={selectedId} setOpen={setOpenNewMaintenanceRequest} />
       </ModalTemplate>
       <ModalTemplate
         open={openMaintenanceRequestEdit}
