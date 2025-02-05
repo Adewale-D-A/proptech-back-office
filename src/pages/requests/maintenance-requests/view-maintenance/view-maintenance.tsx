@@ -21,6 +21,13 @@ import TimeIcon from "../../../../assets/icons/time";
 import DeleteConfirmation from "../../../../components/infoModal/delete-confirmation";
 import ChatModule from "../../../../components/chat";
 import InboxCard from "../../../../components/chat/inbox-card";
+import DoubleCheckIcon from "../../../../assets/icons/double-check";
+import ModalTemplate from "../../../../components/modal";
+import ConvertToRequisition from "../../../../components/maintenance-requests/ConvertToRequisition";
+import CheckIcon from "../../../../assets/icons/check";
+import AlertModal from "../../../../components/infoModal";
+import CloseRequest from "../../../../components/infoModal/close-request";
+import CancelIcon from "../../../../assets/icons/cancel";
 
 const breadCrumb = [
   {
@@ -38,7 +45,12 @@ export default function ViewMaintenanceRequest() {
   const { id } = useParams();
   const [category, setCategory] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
+  const [openCloseRequest, setOpenCloseRequest] = useState(false);
+  const [selectedId, setSelectedId] = useState("");
+  const [openRequest, setOpenRequest] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [openConvertToRequisition, setOpenConvertToRequisition] =
+    useState(false);
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { data, isLoading, isFailed, setIsFailed, retryFunction } =
@@ -74,6 +86,17 @@ export default function ViewMaintenanceRequest() {
       setIsDeleting(false);
     }
   }, []);
+  const handleCloseRequest = useCallback(async () => {
+    setIsDeleting(true);
+    try {
+      // await axios.delete(`/admin/extra-option/${selectedId}`);
+
+      setOpenCloseRequest(false);
+    } catch (error) {
+    } finally {
+      setIsDeleting(false);
+    }
+  }, []);
 
   const verifyIdentity = useCallback(
     async (e: SyntheticEvent) => {
@@ -97,6 +120,24 @@ export default function ViewMaintenanceRequest() {
     [id, approvalStatus]
   );
 
+  const denyRequest = useCallback(async () => {
+    try {
+      const response = await axios.put(`/admin/requisition-request/${id}`, {
+        status: "deny",
+      });
+
+      // const data = {};
+      // dispatch(replaceRequisitionRequestInList(data));
+      dispatch(
+        openSnackbar({
+          message: "Requisition request successfully denied",
+          isError: false,
+        })
+      );
+      // setOpen(false);
+    } catch (error) {}
+  }, []);
+
   return (
     <section className="w-full flex gap-4 ">
       <div className="flex-1 px-5">
@@ -104,6 +145,43 @@ export default function ViewMaintenanceRequest() {
           Victoria heights
         </h2>
         <Status status="Request" />
+        <div className="py-4 flex gap-3">
+          {" "}
+          <LoadingButton
+            label="Convert to Requisition & Approve"
+            isLoading={false}
+            type="button"
+            clickHandler={() => setOpenConvertToRequisition(true)}
+            startIcon={<DoubleCheckIcon />}
+          />
+          <LoadingButton
+            label="Close request"
+            isLoading={false}
+            type="button"
+            clickHandler={() => setOpenCloseRequest(true)}
+            startIcon={<CheckIcon />}
+          />
+          <LoadingButton
+            type="button"
+            label="Deny request"
+            variant={3}
+            disabled={false}
+            isLoading={false}
+            clickHandler={() => denyRequest()}
+            className=" bg-[#F2F4F7] text-[#344054]"
+            startIcon={<CancelIcon />}
+          />
+          <LoadingButton
+            type="button"
+            label="Delete"
+            variant={3}
+            disabled={false}
+            isLoading={false}
+            clickHandler={() => setOpenDelete(true)}
+            className=" bg-[#FEF3F2] text-[#B42318]"
+            startIcon={<BinIcon />}
+          />
+        </div>
         <div className="py-5 flex w-full gap-4">
           {" "}
           <div className="border border-[#E4E7EC] rounded-[12px] p-4 w-1/2  space-y-7 ">
@@ -299,15 +377,38 @@ export default function ViewMaintenanceRequest() {
           </div>
         </div>
       </div>
+
+      <CloseRequest
+        open={openCloseRequest}
+        setOpen={setOpenCloseRequest}
+        isLoading={isDeleting}
+        confirmationHandler={handleCloseRequest}
+        title="Close request?"
+        description="Write the reason for closure below, This action cannot be undone "
+        btnTitle="Yes, confirm"
+      />
+
       <DeleteConfirmation
         open={openDelete}
         setOpen={setOpenDelete}
         isLoading={isDeleting}
         confirmationHandler={handleDelete}
-        title="Delete employee"
-        description="This employee’s data will be permanently deleted"
+        title="Delete request"
+        description="This request will be permanently deleted"
         btnTitle="Yes, confirm"
       />
+      <ModalTemplate
+        open={openConvertToRequisition}
+        setOpen={setOpenConvertToRequisition}
+        showXicon={true}
+        title="Convert to requisition"
+        className=" max-w-screen-sm"
+      >
+        <ConvertToRequisition
+          id={selectedId}
+          setOpen={setOpenConvertToRequisition}
+        />
+      </ModalTemplate>
     </section>
   );
 }

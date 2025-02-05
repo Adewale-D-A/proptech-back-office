@@ -50,7 +50,7 @@ export default function LoadingButton({
       {isLoading ? (
         <LoaderIcon className="w-6 h-6 animate-spin" />
       ) : (
-        <span className=" flex items-center gap-2 text-nowrap">
+        <span className=" flex items-center gap-2 text-xs text-nowrap">
           {startIcon} {label} {endIcon}
         </span>
       )}
