@@ -17,13 +17,14 @@ import ModalTemplate from "../modal";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
-import { removeRequisitionRequestInList } from "../../stores/apiData/requisition-requests";
 import EyeIcon from "../../assets/icons/eye";
 import EditEmployee from "../employees/edit-employee";
 import AddEmployee from "../employees/add-employee";
 import { Link } from "react-router-dom";
 import NewRequest from "../maintenance-requests/newRequest";
 import EditMaintenanceRequest from "../maintenance-requests/EditMaintenanceRequest";
+import useGetMaintenanceRequests from "../../services-hooks/useGetMaintenanceRequests";
+import { removeMaintenanceRequestInList } from "../../stores/apiData/maintenance-requests";
 
 export default function MaintenanceRequestTable() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -45,7 +46,7 @@ export default function MaintenanceRequestTable() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetRequisitionRequests({
+    useGetMaintenanceRequests({
       page: currentPage,
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
@@ -76,7 +77,7 @@ export default function MaintenanceRequestTable() {
     setIsDeleting(true);
     try {
       // await axios.delete(`/admin/extra-option/${selectedId}`);
-      dispatch(removeRequisitionRequestInList({ id: Number(selectedId) }));
+      dispatch(removeMaintenanceRequestInList({ id: Number(selectedId) }));
       setOpenDelete(false);
     } catch (error) {
     } finally {
