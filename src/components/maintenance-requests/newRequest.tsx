@@ -13,13 +13,14 @@ import MultipleFileInputDesignTwo from "../inputs/fileInput/design-two/multiple-
 import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
 import { useAppDispatch } from "../../stores/hooks";
 import {
-  addRequisitionRequestToList,
-  replaceRequisitionRequestInList,
-} from "../../stores/apiData/requisition-requests";
+  addMaintenanceRequestToList,
+  replaceMaintenanceRequestInList,
+} from "../../stores/apiData/maintenance-requests";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import CancelIcon from "../../assets/icons/cancel";
 import useGetRequisitionRequest from "../../services-hooks/userGetRequisitionRequest";
 import Switch from "../switch";
+import useGetMaintenanceRequestById from "../../services-hooks/useGetMaintenanceRequestById";
 
 export default function NewRequest({
   id,
@@ -55,13 +56,13 @@ export default function NewRequest({
 
   const [loading, setLoading] = useState(false);
 
-  const { data } = useGetRequisitionRequest({ id });
+  const { data } = useGetMaintenanceRequestById({ id });
 
   //   populate field provided id is available denoting update functionality
   useEffect(() => {
     if (id && data?.id) {
       const toDate = new Date(data?.request_date)?.toISOString()?.slice(0, 10);
-      setEmail(data?.user?.email || "");
+      setEmail(data?.admin?.email || "");
       setAmount(String(data?.amount || ""));
       setCurrency(data?.currency || "");
       setRequestDate(toDate || "");
@@ -106,20 +107,20 @@ export default function NewRequest({
         if (id) {
           //   const response = await axios.put(`/admin/requisition-request/${id}`,payload)
           //   const data = response?.data;
-          dispatch(replaceRequisitionRequestInList(dummytResponse));
+          dispatch(replaceMaintenanceRequestInList(dummytResponse));
           dispatch(
             openSnackbar({
-              message: "Requisition request successfully updated",
+              message: "Maintenance request successfully updated",
               isError: false,
             })
           );
         } else {
           //   const response = axios.post("/admin/requisition-request",payload)
           //   const data = response?.data;
-          dispatch(addRequisitionRequestToList(dummytResponse));
+          dispatch(addMaintenanceRequestToList(dummytResponse));
           dispatch(
             openSnackbar({
-              message: "Requisition request successfully added",
+              message: "Maintenance request successfully added",
               isError: false,
             })
           );
@@ -151,15 +152,15 @@ export default function NewRequest({
 
   const denyRequest = useCallback(async () => {
     try {
-      const response = await axios.put(`/admin/requisition-request/${id}`, {
+      const response = await axios.put(`/admin/maintenance-request/${id}`, {
         status: "deny",
       });
 
       // const data = {};
-      // dispatch(replaceRequisitionRequestInList(data));
+      // dispatch(replaceMaintenanceRequestInList(data));
       dispatch(
         openSnackbar({
-          message: "Requisition request successfully denied",
+          message: "Maintenance request successfully denied",
           isError: false,
         })
       );

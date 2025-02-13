@@ -149,13 +149,13 @@ export default function MaintenanceRequestTable() {
                       <tr key={item?.id} className=" border-b">
                         <td className=" flex gap-2 items-center min-w-36">
                           <img
-                            src={item?.user?.profile_photo || "/logo_blue.png"}
-                            alt={item?.user?.first_name}
+                            src={item?.admin?.profile_photo || "/logo_blue.png"}
+                            alt={item?.admin?.first_name}
                             className=" h-10 w-10 rounded aspect-square"
                           />
                           <span className=" flex flex-col gap-1">
                             <span className=" text-xs font-medium text-[#101828]">
-                              Chuks
+                              {item?.admin?.first_name} {item?.admin?.last_name}
                             </span>
                             <span className=" text-xs text-[#475467] font-medium">
                               Operations
@@ -163,14 +163,14 @@ export default function MaintenanceRequestTable() {
                           </span>
                         </td>
                         <td className=" text-xs font-medium text-[#475467]  min-w-36">
-                          Victoria heights
+                          {item?.shortlet?.name}
                         </td>
                         <td className="text-xs font-medium text-[#475467] ">
-                          HVAC
+                          {item?.category?.name}
                         </td>
 
                         <td className="text-xs font-medium text-[#475467] ">
-                          15th Sep, 2024
+                          {formatDate(item?.request_date)}
                         </td>
                         <td className="">
                           <Status status={item?.status} />
