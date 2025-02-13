@@ -28,6 +28,7 @@ import CheckIcon from "../../../../assets/icons/check";
 import AlertModal from "../../../../components/infoModal";
 import CloseRequest from "../../../../components/infoModal/close-request";
 import CancelIcon from "../../../../assets/icons/cancel";
+import ChatHistory from "../../../../components/chat/chat-history";
 
 const breadCrumb = [
   {
@@ -247,12 +248,7 @@ export default function ViewMaintenanceRequest() {
             </div>
           </div>
           <div className="border border-[#E4E7EC] rounded-[12px] p-2.5 w-1/2  ">
-            {/* <div className="flex justify-between items-center">
-              <p className=" text-[#667085] text-xs font-normal">Apartment</p>
-              <p className="text-[#101828] font-medium text-xs">
-                Victoria heights
-              </p>
-            </div> */}
+            <ChatHistory variant={"dm"} />
           </div>
         </div>
       </div>

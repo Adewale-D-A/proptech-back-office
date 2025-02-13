@@ -17,13 +17,14 @@ import ModalTemplate from "../modal";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
-import { removeRequisitionRequestInList } from "../../stores/apiData/requisition-requests";
 import EyeIcon from "../../assets/icons/eye";
 import EditEmployee from "../employees/edit-employee";
 import AddEmployee from "../employees/add-employee";
 import { Link } from "react-router-dom";
 import NewRequest from "../maintenance-requests/newRequest";
 import EditMaintenanceRequest from "../maintenance-requests/EditMaintenanceRequest";
+import useGetMaintenanceRequests from "../../services-hooks/useGetMaintenanceRequests";
+import { removeMaintenanceRequestInList } from "../../stores/apiData/maintenance-requests";
 
 export default function MaintenanceRequestTable() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -45,7 +46,7 @@ export default function MaintenanceRequestTable() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetRequisitionRequests({
+    useGetMaintenanceRequests({
       page: currentPage,
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
@@ -76,7 +77,7 @@ export default function MaintenanceRequestTable() {
     setIsDeleting(true);
     try {
       // await axios.delete(`/admin/extra-option/${selectedId}`);
-      dispatch(removeRequisitionRequestInList({ id: Number(selectedId) }));
+      dispatch(removeMaintenanceRequestInList({ id: Number(selectedId) }));
       setOpenDelete(false);
     } catch (error) {
     } finally {
@@ -148,13 +149,13 @@ export default function MaintenanceRequestTable() {
                       <tr key={item?.id} className=" border-b">
                         <td className=" flex gap-2 items-center min-w-36">
                           <img
-                            src={item?.user?.profile_photo || "/logo_blue.png"}
-                            alt={item?.user?.first_name}
+                            src={item?.admin?.profile_photo || "/logo_blue.png"}
+                            alt={item?.admin?.first_name}
                             className=" h-10 w-10 rounded aspect-square"
                           />
                           <span className=" flex flex-col gap-1">
                             <span className=" text-xs font-medium text-[#101828]">
-                              Chuks
+                              {item?.admin?.first_name} {item?.admin?.last_name}
                             </span>
                             <span className=" text-xs text-[#475467] font-medium">
                               Operations
@@ -162,14 +163,14 @@ export default function MaintenanceRequestTable() {
                           </span>
                         </td>
                         <td className=" text-xs font-medium text-[#475467]  min-w-36">
-                          Victoria heights
+                          {item?.shortlet?.name}
                         </td>
                         <td className="text-xs font-medium text-[#475467] ">
-                          HVAC
+                          {item?.category?.name}
                         </td>
 
                         <td className="text-xs font-medium text-[#475467] ">
-                          15th Sep, 2024
+                          {formatDate(item?.request_date)}
                         </td>
                         <td className="">
                           <Status status={item?.status} />

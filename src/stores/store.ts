@@ -55,6 +55,9 @@ import referralsListData from "./apiData/reeferrals";
 // requisition request
 import requisitionRequestsListData from "./apiData/requisition-requests";
 
+// maintenance request
+import maintenanceRequestsListData from "./apiData/maintenance-requests";
+
 // report
 import revenueReports from "./apiData/reports/revenue";
 // admins
@@ -133,6 +136,7 @@ export const adminStore = () => {
       ratingsAndReviews: ratingsAndReviewsListData,
       referralsData: referralsListData,
       // request
+     maintenanceRequestsList: maintenanceRequestsListData,
       requisitionRequestsList: requisitionRequestsListData,
       // reports
       revenueReports: revenueReports,
