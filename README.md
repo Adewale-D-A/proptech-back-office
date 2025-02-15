@@ -48,6 +48,8 @@ run **npm install** (to install all the dependencies)
 step 2:
 run **npm start** (start application on port:3000)
 
+[LIVE WEB](https://web-app-web-back-office.vercel.app/)
+
 [MIME TYPES](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types)
 
 [FIGMA File](https://www.figma.com/design/foJk9S0rCJImkVXY0EgxId/proptech?node-id=4400-64&node-type=&t=ZI2UUvFyHO0J3pWZ-0)
@@ -65,3 +67,5 @@ run **npm start** (start application on port:3000)
 [Bug list - Reformed and re-translated](https://docs.google.com/spreadsheets/d/1hg1SBdeoIuYGga-goTEt5K5MztbEye2Wfkg9Jaw6kI8/edit?usp=sharing)
 
 [API related fixes](https://docs.google.com/spreadsheets/d/1fBadTMVut5kAojuyC-sp2ppwcEkfPS-DKRYx0w8aqGA/edit?usp=sharing)
+
+[Separated Bug list](https://docs.google.com/document/d/1q-R5v0Dpy35JacPXKkUO8zmUBfCM_-EOvgCjnB5Of70/edit?tab=t.qtkfq9txycrb#heading=h.w5cgoius9ocr)

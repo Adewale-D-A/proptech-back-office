@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useGetChatById from "../../services-hooks/chat/useGetchatById";
 import SendBar from "./send-bar";
 import SenderCard from "./sender-card";
@@ -27,6 +27,11 @@ export default function ChatHistory({
 
   const [message, setMessage] = useState("");
   const [isSendingMessage, setIsSendingMessage] = useState(false);
+
+  // auto clear locally cached sent history on users chat id
+  useEffect(() => {
+    setSentHistory([]);
+  }, [chatItem?.user_id]);
 
   const handleSendMessage = useCallback(
     async (message: string) => {

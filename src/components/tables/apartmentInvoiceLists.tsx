@@ -115,7 +115,7 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
                       <span className=" p-2 text-lg">...</span>
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                         <Link
-                          to={`/booking-details/${item?.id}`}
+                          to={`/bookings/booking-details/${item?.booking_id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           View Booking
