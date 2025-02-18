@@ -3,13 +3,18 @@ import LoadingButton from "../button";
 import DateInput from "../inputs/dateInput";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
-import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-import ApartmentSingleSearch from "../inputs/search/apartment-single-search";
+// import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+// import ApartmentSingleSearch from "../inputs/search/apartment-single-search";
 import { apartmentById } from "../../types/apiData/apartment";
 import Select from "../inputs/select";
 import CalculatedAvailabilityOptions from "./calculated-option";
-import { Http2ServerRequest } from "http2";
+// import { Http2ServerRequest } from "http2";
+import { single_stay, split_stay } from "../../types/apiData/apartment/apt-suggestions";
 
+interface suggestion {
+  single_stay: single_stay,
+  split_stay: split_stay
+}
 export default function CheckAvailability({
   className,
 }: {
@@ -21,15 +26,14 @@ export default function CheckAvailability({
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [guestNo, setGuestNo] = useState("");
-  const [location, setLocation] = useState("");
-  const [availability, setAvailability] = useState<any[]>([]);
+  // const [location, setLocation] = useState("");
+  const [availability, setAvailability] = useState<suggestion>({} as any);
 
   const [isChecking, setIsChecking] = useState(false);
 
   const checkAvailability = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
-      if (selectedApt?.id) {
         setIsChecking(true);
 
         try {
@@ -43,7 +47,7 @@ export default function CheckAvailability({
           );
           const availabilityResponse = response?.data?.data?.shortlets || [];
           setAvailability(availabilityResponse);
-          console.log(availability.length);
+          // console.log(availability);
           // const isAvailable = response?.data?.data?.is_available;
           // dispatch(
           //   openSnackbar({
@@ -57,11 +61,6 @@ export default function CheckAvailability({
         } finally {
           setIsChecking(false);
         }
-      } else {
-        dispatch(
-          openSnackbar({ message: "Please select an apartment", isError: true })
-        );
-      }
     },
     [selectedApt, checkInDate, checkOutDate]
   );
@@ -71,11 +70,11 @@ export default function CheckAvailability({
       <form className=" flex flex-col gap-5" onSubmit={checkAvailability}>
         <div className={className || " w-full grid grid-cols-1 gap-5"}>
           {/* TODO: Comment out search apartment, apartment should be auto suggested */}
-          <ApartmentSingleSearch
+          {/* <ApartmentSingleSearch
             placeholder="Search apartment..."
             selected={selectedApt}
             setSelected={setSelectedApt}
-          />
+          /> */}
           <DateInput
             inputType="date"
             isRequired={true}
@@ -137,6 +136,7 @@ export default function CheckAvailability({
           data={availability}
           checkInDate={checkInDate}
           checkOutDate={checkOutDate}
+          noOfGuest={guestNo}
         />
       </form>
     </div>

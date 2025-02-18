@@ -4,6 +4,8 @@ import useGetAllApartmentLists from "../../../services-hooks/useGetAllApartmentL
 import { apartmentById } from "../../../types/apiData/apartment";
 import LoaderIcon from "../../../assets/icons/loader";
 import SearchIcon from "../../../assets/icons/search";
+import useGetApartmentById from "../../../services-hooks/useGetApartmentById";
+import { useSearchParams } from "react-router-dom";
 
 export default function ApartmentSingleSearch({
   placeholder,
@@ -19,6 +21,9 @@ export default function ApartmentSingleSearch({
   const wrapperRef = useRef(null) as any;
   const [isMenuDocked, setIsMenuDocked] = useState(true);
   const [keywords, setKeywords] = useState("");
+      const [searchParams] = useSearchParams();
+
+  const { data: apartment_info } = useGetApartmentById(searchParams?.get("apt_id") || undefined);
 
   // logic to close referenced container when clicked outsite the element
   useEffect(() => {
@@ -55,6 +60,11 @@ export default function ApartmentSingleSearch({
   const toggleMenuDock = useCallback(() => {
     setIsMenuDocked((prev) => !prev);
   }, []);
+
+  // auto select apartment based on query params
+  useEffect(()=>{
+    setSelected(apartment_info)
+  },[apartment_info])
 
   return (
     <div className=" relative" ref={wrapperRef}>

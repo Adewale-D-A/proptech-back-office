@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import useAxios from "../useHooks/useAxios";
+import { useSearchParams } from "react-router-dom";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetApartmentCalendar({
