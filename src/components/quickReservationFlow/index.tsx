@@ -13,7 +13,7 @@ import useAxios from "../../useHooks/useAxios";
 import { addBookingsToList } from "../../stores/apiData/bookings-lists";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import AssignCustomer from "./assignToCustomer";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import useGetApartmentById from "../../services-hooks/useGetApartmentById";
 import TextInput from "../inputs/textInput";
 import reservationValidator from "../../utils/reservation-validator";
@@ -42,14 +42,15 @@ export default function QuickReservationFlow({
   };
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();  
+    const [searchParams] = useSearchParams();
   const { id } = useParams();
 
   const { open: openAssignToCustomer } = useAppSelector(
     (state) => state.assignCustomer.value
   );
 
-  const { data: apartment_info } = useGetApartmentById(id ? id : undefined);
+  const { data: apartment_info } = useGetApartmentById(id || searchParams?.get("apt_id") || undefined);
 
   const { data } = useAppSelector((state) => state.assignCustomer.value);
   const [apartment, setApartment] = useState<apartmentById>({} as any);
@@ -66,6 +67,21 @@ export default function QuickReservationFlow({
 
   const [customerMetaData, setCustomerMetadata] = useState("");
   const [isMakingReservation, setIsMakingReservation] = useState(false);
+
+  // query params auto fill
+  useEffect(()=>{
+    const checkInDate = searchParams?.get("check_in_date")
+    const checkOutDate = searchParams?.get("check_out_date")
+    const checkInTime = searchParams?.get("check_in_time")
+    const checkOutTime = searchParams?.get("check_out_time")
+    const noOfGuest = searchParams?.get("no_of_guest")
+
+    setCheckInDate(checkInDate || "")
+    setCheckOutDate(checkOutDate || "")
+    setCheckInTime(checkInTime || "")
+    setCheckOutTime(checkOutTime || "")
+    setGuestNo(noOfGuest || "")
+  },[searchParams])
 
   // update selected apartment
   useEffect(() => {

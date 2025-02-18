@@ -14,6 +14,7 @@ import dateRangeIterator from "../../utils/dateRangeIterator";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import { apartmentById } from "../../types/apiData/apartment";
 import { useParams } from "react-router-dom";
+import defaultCheckInDateTime from "../../config/default-check-in-date-time";
 
 // const sampleBookedDates = [
 //   new Date(2024, 8, 27),
@@ -25,6 +26,7 @@ const todayString = new Date()?.toISOString()?.slice(0, 10);
 const nextMonthString = new Date(today?.getFullYear(), today?.getMonth() + 2, 0)
   ?.toISOString()
   ?.slice(0, 10);
+  const defaultDateTime = defaultCheckInDateTime()
 export default function ApartmentCalendarView() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
@@ -52,7 +54,7 @@ export default function ApartmentCalendarView() {
 
   // calendar data fetching based on filtered dates
   const { data } = useGetApartmentCalendar({
-    id: String(selectedAprt?.id || id || ""),
+    id: String(selectedAprt?.id || id  || ""),
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,
   });
@@ -109,8 +111,8 @@ export default function ApartmentCalendarView() {
       return {
         checkIn: prev?.checkIn ? prev?.checkIn : toDate,
         checkOut: prev?.checkIn ? toDate : "",
-        checkInTime: prev?.checkIn ? "15:00" : "",
-        checkOutTime: prev?.checkIn ? "11:00" : "",
+        checkInTime: prev?.checkIn ? defaultDateTime?.check_in_time : "",
+        checkOutTime: prev?.checkIn ? defaultDateTime?.check_out_time: "",
       };
     });
   }, []);

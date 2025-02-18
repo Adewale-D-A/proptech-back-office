@@ -1,3 +1,8 @@
+##### 15.02.2025
+> Feature addition -> booking check availability suggestions
+> bug-fix -> Chat module cached sent history repetition fix
+> bug-fix -> Invoice booking detail url updated fix
+
 ##### 24.01.2025
 
 > Chat module bug fixed

@@ -12,8 +12,8 @@ import BookingsListTable from "../../../components/tables/bookingsLists";
 import BarChart from "../../../components/charts/bar-chart";
 import RoomOccupancyListTable from "../../../components/tables/roomOccupancy";
 import ForecastDash from "../../../components/forecasting-dash";
-import CalculatedAvailabilityOptions from "../../../components/check-availability/calculated-option";
-import { availabilityOptions } from "../../../types/apiData/availabilityOptions";
+// import CalculatedAvailabilityOptions from "../../../components/check-availability/calculated-option";
+// import { availabilityOptions } from "../../../types/apiData/availabilityOptions";
 import { apartmentById } from "../../../types/apiData/apartment";
 import useGetApartmentCalendar from "../../../services-hooks/apartmentCalendar";
 import useGetVisitorCount from "../../../services-hooks/bookings/useGetVisitorCOunter";
@@ -23,8 +23,8 @@ import ApartmentSingleSearch from "../../../components/inputs/search/apartment-s
 
 export default function BookingsOverview() {
   const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
-  const [availabilityResponse, setAvailabilityResponse] =
-    useState<availabilityOptions>();
+  // const [availabilityResponse, setAvailabilityResponse] =
+  //   useState<availabilityOptions>();
 
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
