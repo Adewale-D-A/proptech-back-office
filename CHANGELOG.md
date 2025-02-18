@@ -1,3 +1,5 @@
+##### 18.02.2025
+> Feature -> Operations module reporting section UI development
 ##### 15.02.2025
 > Feature addition -> booking check availability suggestions
 > bug-fix -> Chat module cached sent history repetition fix

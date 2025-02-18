@@ -57,7 +57,7 @@ export default function CustomersListTable() {
                   "Last Name",
                   "Phone Number",
                   "Total Booking",
-                  "Identuty Verified",
+                  "Identity Verified",
                   "Action",
                 ].map((head) => (
                   <th key={head}>{head}</th>

@@ -133,6 +133,9 @@ import RequestsTabWrapper from "./routeProtectors/wrapper/requests";
 import MaintenanceRequests from "./pages/requests/maintenance-requests";
 import ViewEmployee from "./pages/employees/view employee";
 import ViewMaintenanceRequest from "./pages/requests/maintenance-requests/view-maintenance/view-maintenance";
+import GeneratorRuntime from "./pages/reports/generator-runtime";
+import BookingsReport from "./pages/reports/bookings";
+import MaintenanceExpenses from "./pages/reports/maintenance-expenses";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -473,6 +476,9 @@ function App() {
             {/* reports */}
             <Route element={<ReportsTabWrapper />}>
               <Route path="/reports/revenue" element={<RevenueReport />} />
+              <Route path="/reports/maintenance-expenses" element={<MaintenanceExpenses />} />
+              <Route path="/reports/bookings" element={<BookingsReport />} />
+              <Route path="/reports/generator-runtime" element={<GeneratorRuntime />} />
               <Route
                 path="/reports/occupancy-ranking"
                 element={<OccupancyRankingReport />}

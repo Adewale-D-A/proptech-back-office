@@ -1,40 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { bookingsById } from "../../types/apiData/bookings";
-import { pagination } from "../../types/pagination";
+import { pagination } from "../../../types/pagination";
+import { bookingsReport } from "../../../types/apiData/reports";
 
-export const bookingsListsData = createSlice({
-  name: "all bookings",
+export const bookingsReportReports = createSlice({
+  name: "bookings-reports",
   initialState: {
     value: {
       status: false,
       pagination: [] as {
         pagination_data: pagination;
-        data: bookingsById[];
+        data: bookingsReport[];
       }[],
-      data: [] as bookingsById[],
+      data: [] as bookingsReport[],
     },
   },
   reducers: {
-    updateBookingsList: (state, action) => {
+    updateBookingsReport: (state, action) => {
       state.value.status = true;
       state.value.data = action?.payload?.data;
-    },
-    addBookingsToList: (state, action) => {
-      state.value.data = [...state.value.data, action?.payload];
-      //include in pagination data
-      const pagination_data = [...state.value.pagination];
-      const lastIndex = pagination_data?.length - 1;
-      const addedItem = pagination_data.map((item, index) => {
-        if (lastIndex === index) {
-          return {
-            pagination_data: item?.pagination_data,
-            data: [...item.data, action?.payload],
-          };
-        } else {
-          return item;
-        }
-      });
-      state.value.pagination = addedItem;
     },
     addToPaginationHistory: (state, action) => {
       const found = state.value?.pagination?.find(
@@ -56,7 +39,7 @@ export const bookingsListsData = createSlice({
       const { id } = action?.payload;
       const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
-        (v: { id: number }) => v.id === id
+        (v: { id: number }) => String(v.id) === String(id)
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1);
@@ -66,7 +49,7 @@ export const bookingsListsData = createSlice({
       const pagination_data = [...state.value.pagination];
       const removed = pagination_data.map((item, index) => {
         const sencondFilter = item.data.filter((data, i) => {
-          return !(Number(data.id) === Number(id));
+          return !(String(data.id) === String(id));
         });
         return {
           pagination_data: { ...item.pagination_data },
@@ -79,7 +62,7 @@ export const bookingsListsData = createSlice({
       const { id } = action?.payload;
       const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
-        (v: { id: number }) => v.id === id
+        (v: { id: number }) => String(v.id) === String(id)
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1, action?.payload);
@@ -89,7 +72,7 @@ export const bookingsListsData = createSlice({
       const pagination_data = [...state.value.pagination];
       const replacedItem = pagination_data.map((item, index) => {
         const sencondFilter = item.data.map((data, i) => {
-          if (Number(data.id) === Number(id)) {
+          if (String(data.id) === String(id)) {
             return { ...action.payload };
           } else {
             return data;
@@ -102,7 +85,7 @@ export const bookingsListsData = createSlice({
       });
       state.value.pagination = replacedItem;
     },
-    clearBookingsList: (state) => {
+    clearBookingsReport: (state) => {
       state.value.status = false;
       state.value.data = [];
     },
@@ -110,12 +93,11 @@ export const bookingsListsData = createSlice({
 });
 
 export const {
-  updateBookingsList,
-  addBookingsToList,
+  updateBookingsReport,
   addToPaginationHistory,
-  removeBookingsInList,
-  replaceBookingsInList,
-  clearBookingsList,
-} = bookingsListsData.actions;
+  clearBookingsReport,
+  removeBookingsInList, 
+  replaceBookingsInList
+} = bookingsReportReports.actions;
 
-export default bookingsListsData.reducer;
+export default bookingsReportReports.reducer;

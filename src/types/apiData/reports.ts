@@ -34,3 +34,36 @@ export type occupancyTimeReportList = {
   check_in_date: string;
   check_out_date: string;
 };
+
+
+export type maintenanceExpensesReport = {
+  id: number;
+  payment_date: string;
+  apartment: number;
+  shortlet_name: string;
+  category: string;
+  item: string;
+  description_of_work: string;
+  total_amount: string;
+  status: string;
+};
+
+export type  bookingsReport= {
+  id: number;
+  customer_name: string;
+  shortlet_name: string;
+  amount: string;
+  status: string;
+  check_in_date: string;
+  check_out_date: string;
+};
+
+
+export type  generatorRuntimeReport= {
+  id: number;
+  date: string;
+  shortlet_name: string;
+  time_on: string;
+  time_off: string;
+  run_time: string;
+};
