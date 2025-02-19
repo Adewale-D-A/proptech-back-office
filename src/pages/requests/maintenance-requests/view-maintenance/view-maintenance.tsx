@@ -2,30 +2,21 @@ import { useParams } from "react-router-dom";
 import { useAppDispatch } from "../../../../stores/hooks";
 import { SyntheticEvent, useCallback, useLayoutEffect, useState } from "react";
 import { updatePageProperties } from "../../../../stores/appFunctionality/pageProperties";
-import UsersIcon from "../../../../assets/icons/users";
 import UserPlusIcon from "../../../../assets/icons/user-plus";
 import useGetCustomerById from "../../../../services-hooks/useGetCustomerById";
 import useAxios from "../../../../useHooks/useAxios";
-import formatDate from "../../../../utils/isoDateConverter";
 import Select from "../../../../components/inputs/select";
 import LoadingButton from "../../../../components/button";
-import NoResult from "../../../../components/noResult";
-import LinkButton from "../../../../components/button/linkButton";
-import WriteIcon from "../../../../assets/icons/write";
 import { openSnackbar } from "../../../../stores/appFunctionality/snackbar";
-import UserGroupIcon from "../../../../assets/icons/user-group";
 import BinIcon from "../../../../assets/icons/bin-icon";
 import Status from "../../../../components/status";
 import WrenchIcon from "../../../../assets/icons/wrench";
 import TimeIcon from "../../../../assets/icons/time";
 import DeleteConfirmation from "../../../../components/infoModal/delete-confirmation";
-import ChatModule from "../../../../components/chat";
-import InboxCard from "../../../../components/chat/inbox-card";
 import DoubleCheckIcon from "../../../../assets/icons/double-check";
 import ModalTemplate from "../../../../components/modal";
 import ConvertToRequisition from "../../../../components/maintenance-requests/ConvertToRequisition";
 import CheckIcon from "../../../../assets/icons/check";
-import AlertModal from "../../../../components/infoModal";
 import CloseRequest from "../../../../components/infoModal/close-request";
 import CancelIcon from "../../../../assets/icons/cancel";
 import ChatHistory from "../../../../components/chat/chat-history";
@@ -55,7 +46,7 @@ export default function ViewMaintenanceRequest() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { data, isLoading, isFailed, setIsFailed, retryFunction } =
-    useGetCustomerById(id);
+    useGetCustomerById("");
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
@@ -63,8 +54,8 @@ export default function ViewMaintenanceRequest() {
         breadCrumb,
         pageTitle: "View maintenance request",
         pageDescription: "View maintenance request",
-        isLoading: isLoading,
-        failedToLoad: isFailed,
+        isLoading: false,
+        failedToLoad: false,
         setFailedToLoad: setIsFailed,
         retryRequest: retryFunction,
       })
@@ -172,7 +163,7 @@ export default function ViewMaintenanceRequest() {
             className=" bg-[#F2F4F7] text-[#344054]"
             startIcon={<CancelIcon />}
           />
-          <LoadingButton
+          {/* <LoadingButton
             type="button"
             label="Delete"
             variant={3}
@@ -181,7 +172,7 @@ export default function ViewMaintenanceRequest() {
             clickHandler={() => setOpenDelete(true)}
             className=" bg-[#FEF3F2] text-[#B42318]"
             startIcon={<BinIcon />}
-          />
+          /> */}
         </div>
         <div className="py-5 flex w-full gap-4">
           {" "}

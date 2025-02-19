@@ -111,8 +111,10 @@ export default function CalendarView({
             className={`${item?.selected ? "" : ""} ${
               item?.currentMonth ? "" : " text-gray-400"
             }  ${item?.maintenance ? " bg-[#53B1FD] text-white" : ""} ${
-              item?.blocked ? " bg-[#293056] text-white" : ""
-            }  aspect-square p-1 bg-gray-200 rounded-md relative overflow-hidden`}
+              item?.blocked ? " bg-gray-600 text-red-500" : ""
+            } ${
+              item?.booked ? " bg-red-500 text-white" : ""
+            } aspect-square p-1 bg-gray-200 rounded-md relative overflow-hidden`}
             onClick={() => changeHandler(item)}
           >
             <span>{item?.day}</span>

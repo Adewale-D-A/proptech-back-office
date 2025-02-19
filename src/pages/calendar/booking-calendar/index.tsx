@@ -8,6 +8,9 @@ import CalendarView from "../../../components/calendar";
 import CalendarAvailabilitySymbol from "../../../components/calender-availability-symbol";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import dateRangeIterator from "../../../utils/dateRangeIterator";
+import { apartmentById } from "../../../types/apiData/apartment";
+import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
+import Select from "../../../components/inputs/select";
 
 const breadCrumb = [
   {
@@ -45,7 +48,7 @@ const dummyBlockedDate = [
   "2025-02-25",
 ] as any;
 
-export default function BookingCalendarPage() {
+export default function ApartmentCalendarPage() {
   const dispatch = useAppDispatch();
   // update page props on component mount
   useLayoutEffect(() => {
@@ -63,6 +66,8 @@ export default function BookingCalendarPage() {
   }, []);
 
   // component states
+  const [apartment, setApartment] = useState<apartmentById>({} as any);
+  const [buildingSelect, setBuildingSelect] = useState("");
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
@@ -112,10 +117,29 @@ export default function BookingCalendarPage() {
       <div className=" w-full rounded-md border flex-1 md:flex-[0.7] flex flex-col gap-3">
         <div className=" flex items-center justify-between flex-col md:flex-row gap-3 border-b  p-2">
           <h4 className="text-xl font-semibold flex items-center gap-2">
-            <CalendarIcon /> <span>Booking Calendar</span>
+            <CalendarIcon /> <span>Apartment Calendar</span>
           </h4>
-          <CalendarAvailabilitySymbol />
+          <div className="w-full max-w-screen-md flex items-center flex-col md:flex-row gap-2">
+            <ApartmentSingleSearch
+              placeholder="Apartment name..."
+              selected={apartment}
+              setSelected={setApartment}
+            />
+            <Select
+              value={buildingSelect}
+              setValue={setBuildingSelect}
+              id={"building-filter"}
+            >
+              <option value={""} disabled>
+                Filter by building
+              </option>
+              <option value={"all"}>All</option>
+            </Select>
+          </div>
           <Filter actionHandler={handleSalesFiltering} />
+        </div>
+        <div className=" w-full flex justify-center gap-2">
+          <CalendarAvailabilitySymbol />
         </div>
         <div className="w-full p-2 flex flex-col gap-5">
           {calendarVewData?.length > 0 && (

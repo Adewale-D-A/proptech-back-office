@@ -6,9 +6,9 @@ import Pagination from "../pagination";
 import formatDate from "../../utils/isoDateConverter";
 import ExportSelect from "../inputs/select/exportSelect";
 import Select from "../inputs/select";
-import useGetRequisitionRequests from "../../services-hooks/useGetRequisitionRequests";
+// import useGetRequisitionRequests from "../../services-hooks/useGetRequisitionRequests";
+// import DoubleCheckIcon from "../../assets/icons/double-check";
 import Status from "../status";
-import DoubleCheckIcon from "../../assets/icons/double-check";
 import PenIcon from "../../assets/icons/pen";
 import BinIcon from "../../assets/icons/bin-icon";
 import LoadingButton from "../button";
@@ -18,8 +18,8 @@ import DeleteConfirmation from "../infoModal/delete-confirmation";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import EyeIcon from "../../assets/icons/eye";
-import EditEmployee from "../employees/edit-employee";
-import AddEmployee from "../employees/add-employee";
+// import EditEmployee from "../employees/edit-employee";
+// import AddEmployee from "../employees/add-employee";
 import { Link } from "react-router-dom";
 import NewRequest from "../maintenance-requests/newRequest";
 import EditMaintenanceRequest from "../maintenance-requests/EditMaintenanceRequest";
@@ -180,10 +180,7 @@ export default function MaintenanceRequestTable() {
                             <Link
                               to={`/requests/maintenance-requests/view-maintenance/${item?.id}`}
                             >
-                              {" "}
-                              <button title="view employee">
-                                <EyeIcon />
-                              </button>
+                              <EyeIcon />
                             </Link>
 
                             <button

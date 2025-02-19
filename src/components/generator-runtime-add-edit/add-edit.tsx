@@ -59,7 +59,7 @@ export default function AddEditGeneratorRuntime({
         id: 14,
         employee: { id: 1, first_name: "John", last_name: "Doe" },
         shortlet_name: "Apartment 32",
-        request_date: new Date(),
+        date: new Date(),
         created_at: new Date(),
         time_on: timeOn,
         time_off: timeOff,

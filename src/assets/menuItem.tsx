@@ -227,7 +227,7 @@ export default function NavigationMenuItems() {
         },
         {
           id: 13,
-          url: "/calendar/maintenance-calendar",
+          url: "/calendar/apartment-calendar",
           label: "Calendar",
           value: "calendar",
           show: true,

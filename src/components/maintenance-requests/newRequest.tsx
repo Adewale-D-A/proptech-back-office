@@ -8,7 +8,7 @@ import DateInput from "../inputs/dateInput";
 import Select from "../inputs/select";
 import LoadingButton from "../button";
 import TextAreaInput from "../inputs/textArea";
-import FileInputDesignTwo from "../inputs/fileInput/design-two/file-upload";
+// import FileInputDesignTwo from "../inputs/fileInput/design-two/file-upload";
 import MultipleFileInputDesignTwo from "../inputs/fileInput/design-two/multiple-image-files";
 import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
 import { useAppDispatch } from "../../stores/hooks";
@@ -18,8 +18,8 @@ import {
 } from "../../stores/apiData/maintenance-requests";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import CancelIcon from "../../assets/icons/cancel";
-import useGetRequisitionRequest from "../../services-hooks/userGetRequisitionRequest";
-import Switch from "../switch";
+// import useGetRequisitionRequest from "../../services-hooks/userGetRequisitionRequest";
+// import Switch from "../switch";
 import useGetMaintenanceRequestById from "../../services-hooks/useGetMaintenanceRequestById";
 
 export default function NewRequest({
@@ -42,6 +42,7 @@ export default function NewRequest({
   const [vendorBank, setVendorBank] = useState("");
   const [vendorAccountNumber, setVendorAccountNumber] = useState("");
   const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState("");
   const [currency, setCurrency] = useState("");
   const [additionalNotes, setAdditionalNotes] = useState("");
   const [invoice, setInvoice] = useState<{
@@ -97,6 +98,7 @@ export default function NewRequest({
           id: 32,
           name: "Apartment 32",
         },
+        category,
         amount: amount,
         currency: currency,
         status: "pending",
@@ -136,6 +138,7 @@ export default function NewRequest({
       markAsPaid,
       employee,
       email,
+      category,
       apartment,
       requestDate,
       vendorName,
@@ -233,8 +236,8 @@ export default function NewRequest({
           id="category"
           placeholder="others"
           isRequired={true}
-          value={amount}
-          setValue={setAmount}
+          value={category}
+          setValue={setCategory}
           inputType="text"
           label="Category"
         />

@@ -124,7 +124,7 @@ import CustomerDetail from "./pages/customers/customer-detail";
 // calendar views
 import MaintenanceCalendar from "./pages/calendar/maintenance-calendar";
 import CalendarTabWrapper from "./routeProtectors/wrapper/calendar";
-import BookingCalendarPage from "./pages/calendar/booking-calendar";
+import ApartmentCalendarPage from "./pages/calendar/booking-calendar";
 import CustomerEngagementsTabWrapper from "./routeProtectors/wrapper/customer-engagement";
 import RatingsAndReviews from "./pages/customer-engagements/ratings-and-reviews";
 import Referrals from "./pages/customer-engagements/referrals";
@@ -436,8 +436,8 @@ function App() {
                 element={<MaintenanceCalendar />}
               />
               <Route
-                path="/calendar/boooking-calendar"
-                element={<BookingCalendarPage />}
+                path="/calendar/apartment-calendar"
+                element={<ApartmentCalendarPage />}
               />
             </Route>
 
@@ -476,9 +476,15 @@ function App() {
             {/* reports */}
             <Route element={<ReportsTabWrapper />}>
               <Route path="/reports/revenue" element={<RevenueReport />} />
-              <Route path="/reports/maintenance-expenses" element={<MaintenanceExpenses />} />
+              <Route
+                path="/reports/maintenance-expenses"
+                element={<MaintenanceExpenses />}
+              />
               <Route path="/reports/bookings" element={<BookingsReport />} />
-              <Route path="/reports/generator-runtime" element={<GeneratorRuntime />} />
+              <Route
+                path="/reports/generator-runtime"
+                element={<GeneratorRuntime />}
+              />
               <Route
                 path="/reports/occupancy-ranking"
                 element={<OccupancyRankingReport />}
