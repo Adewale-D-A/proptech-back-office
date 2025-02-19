@@ -61,13 +61,16 @@ export default function CustomersSingleSearch({
       {label && (
         <label
           htmlFor={"customer-search-feature"}
-          className="  text-[#667085] font-sm font-medium"
+          className="  text-[#344054] font-sm font-medium"
         >
           {label}
         </label>
       )}
       <div className=" relative" ref={wrapperRef}>
         <button
+          // title="single-customer-search"
+          // id="single-customer-search"
+          type="button"
           onClick={() => toggleMenuDock()}
           className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between"
         >

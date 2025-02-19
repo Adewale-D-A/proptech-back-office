@@ -23,9 +23,11 @@ export default function ApartmentSingleSearch({
   const wrapperRef = useRef(null) as any;
   const [isMenuDocked, setIsMenuDocked] = useState(true);
   const [keywords, setKeywords] = useState("");
-      const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
-  const { data: apartment_info } = useGetApartmentById(searchParams?.get("apt_id") || undefined);
+  const { data: apartment_info } = useGetApartmentById(
+    searchParams?.get("apt_id") || undefined
+  );
 
   // logic to close referenced container when clicked outsite the element
   useEffect(() => {
@@ -64,22 +66,23 @@ export default function ApartmentSingleSearch({
   }, []);
 
   // auto select apartment based on query params
-  useEffect(()=>{
-    setSelected(apartment_info)
-  },[apartment_info])
+  useEffect(() => {
+    setSelected(apartment_info);
+  }, [apartment_info]);
 
   return (
     <div className=" w-full flex flex-col gap-2">
       {label && (
         <label
           htmlFor={"customer-search-feature"}
-          className="  text-[#667085] font-sm font-medium"
+          className="  text-[#344054] font-sm font-medium"
         >
           {label}
         </label>
       )}
       <div className=" relative" ref={wrapperRef}>
-        <div
+        <button
+          type="button"
           onClick={() => toggleMenuDock()}
           className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between"
         >
@@ -100,7 +103,7 @@ export default function ApartmentSingleSearch({
               isMenuDocked ? "rotate-0" : "rotate-180"
             } transition-all`}
           />
-        </div>
+        </button>
         {!isMenuDocked && (
           <div className="w-full p-2 border z-10 absolute top-14 left-0 bg-gray-50">
             <input

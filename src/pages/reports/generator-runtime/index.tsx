@@ -11,7 +11,7 @@ const breadCrumb = [
     icon: <ClipBoardIcon />,
   },
 ];
-export default function GeneratorRuntime (){
+export default function GeneratorRuntime() {
   const dispatch = useAppDispatch();
 
   // update page props on component mount
@@ -28,9 +28,9 @@ export default function GeneratorRuntime (){
       })
     );
   }, []);
-    return (
-        <div className="w-full">
-          <GeneratorRuntimeReportListTable/>
-        </div>
-    )
+  return (
+    <div className="w-full">
+      <GeneratorRuntimeReportListTable />
+    </div>
+  );
 }

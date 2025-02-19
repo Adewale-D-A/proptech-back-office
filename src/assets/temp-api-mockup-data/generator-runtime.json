@@ -1,0 +1,48 @@
+{
+  "pagination": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 20,
+    "total": 4,
+    "from": 1,
+    "to": 1
+  },
+  "data": [
+    {
+      "id": 1,
+      "apartment": 1,
+     "shortlet_name": "Shortlet 1", 
+     "date": "2024-09-22T12:22:27.000000Z",
+      "time_on": "10:00pm",
+      "time_off": "03:00am",
+      "run_time": "5 hrs"
+    },
+    {
+      "id": 2,
+      "apartment": 1,
+     "shortlet_name": "Shortlet 2", 
+     "date": "2024-09-22T12:22:27.000000Z",
+      "time_on": "10:00pm",
+      "time_off": "03:00am",
+      "run_time": "5 hrs"
+    },
+    {
+      "id": 3,
+      "apartment": 1,
+     "shortlet_name": "Shortlet 3", 
+     "date": "2024-09-22T12:22:27.000000Z",
+      "time_on": "10:00pm",
+      "time_off": "03:00am",
+      "run_time": "5 hrs"
+    },
+    {
+      "id": 4,
+      "apartment": 1,
+     "shortlet_name": "Shortlet 4", 
+     "date": "2024-09-22T12:22:27.000000Z",
+      "time_on": "10:00pm",
+      "time_off": "03:00am",
+      "run_time": "5 hrs"
+    }
+  ]
+}

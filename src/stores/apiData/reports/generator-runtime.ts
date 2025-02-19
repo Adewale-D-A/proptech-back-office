@@ -19,6 +19,23 @@ export const generatorRuntimeReporteports = createSlice({
       state.value.status = true;
       state.value.data = action?.payload?.data;
     },
+    addGeneratorRuntimeToList: (state, action) => {
+      state.value.data = [...state.value.data, action?.payload];
+      //include in pagination data
+      const pagination_data = [...state.value.pagination];
+      const lastIndex = pagination_data?.length - 1;
+      const addedItem = pagination_data.map((item, index) => {
+        if (lastIndex === index) {
+          return {
+            pagination_data: item?.pagination_data,
+            data: [...item.data, action?.payload],
+          };
+        } else {
+          return item;
+        }
+      });
+      state.value.pagination = addedItem;
+    },
     addToPaginationHistory: (state, action) => {
       const found = state.value?.pagination?.find(
         (item) =>
@@ -93,7 +110,7 @@ export const generatorRuntimeReporteports = createSlice({
 });
 
 export const {
-  updateGeneratorRuntimeReport,
+  updateGeneratorRuntimeReport,addGeneratorRuntimeToList,
   addToPaginationHistory,
   clearGeneratorRuntimeReport,
   removeGeneratorRuntimeInList, 

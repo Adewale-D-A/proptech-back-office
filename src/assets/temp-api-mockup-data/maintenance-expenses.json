@@ -1,0 +1,56 @@
+{
+  "pagination": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 20,
+    "total": 4,
+    "from": 1,
+    "to": 1
+  },
+  "data": [
+    {
+      "id": 1,
+      "apartment": 1,
+     "shortlet_name": "Shortlet 1", 
+      "category": "repair",
+      "item": "New tv remote",
+      "description_of_work": "New work",
+      "total_amount": "2000",
+      "status": "Pending",
+  "payment_date": "2024-09-22T12:22:27.000000Z"
+    },
+    {
+      "id": 2,
+      "apartment": 1,
+     "shortlet_name": "Shortlet 2", 
+      "category": "repair",
+      "item": "Replaced table",
+      "description_of_work": "Replacement and purchase",
+      "total_amount": "10000",
+      "status": "approved",
+  "payment_date": "2024-09-22T12:22:27.000000Z"
+    },
+    {
+      "id": 3,
+      "apartment": 1,
+     "shortlet_name": "Shortlet 3", 
+      "category": "repair",
+      "item": "New bulb",
+      "description_of_work": "New",
+      "total_amount": "1000",
+      "status": "Pending",
+  "payment_date": "2024-09-22T12:22:27.000000Z"
+    },
+    {
+      "id": 4,
+      "apartment": 1,
+     "shortlet_name": "Shortlet 4", 
+      "category": "repair",
+      "item": "Bed frame fix",
+      "description_of_work": "New work",
+      "total_amount": "15000",
+      "status": "Pending",
+  "payment_date": "2024-09-22T12:22:27.000000Z"
+    }
+  ]
+}

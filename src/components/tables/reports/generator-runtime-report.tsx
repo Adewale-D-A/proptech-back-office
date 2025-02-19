@@ -9,8 +9,25 @@ import Sort from "../../filterAndSort/sort";
 import PenIcon from "../../../assets/icons/pen";
 import BinIcon from "../../../assets/icons/bin-icon";
 import useGetALlGeneratorRuntimeReports from "../../../services-hooks/reports/useGetAllGeneratorRuntimeReports";
+import { useAppDispatch } from "../../../stores/hooks";
+import useAxios from "../../../useHooks/useAxios";
+import { removeGeneratorRuntimeInList } from "../../../stores/apiData/reports/generator-runtime";
+import DeleteConfirmation from "../../infoModal/delete-confirmation";
+import formatDate from "../../../utils/isoDateConverter";
+import ModalTemplate from "../../modal";
+import AddEditGeneratorRuntime from "../../generator-runtime-add-edit/add-edit";
+import LoadingButton from "../../button";
+import PlusIcon from "../../../assets/icons/plus";
 
 export default function GeneratorRuntimeReportListTable() {
+  const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
+  const dispatch = useAppDispatch();
+  const [openModal, setOpenModal] = useState(false);
+
+  const [selectedId, setSelectedId] = useState("");
+  const [openDelete, setOpenDelete] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
@@ -32,101 +49,141 @@ export default function GeneratorRuntimeReportListTable() {
     },
     []
   );
+
+  const openForNewRequest = useCallback(() => {
+    setSelectedId("");
+    setOpenModal(true);
+  }, []);
+
+  const openForEdit = useCallback((id: number) => {
+    setSelectedId(String(id || ""));
+    setOpenModal(true);
+  }, []);
+
+  const handleOpenDelete = useCallback((id: number) => {
+    setSelectedId(String(id) || "");
+    setOpenDelete(true);
+  }, []);
+
+  const handleDelete = useCallback(async () => {
+    setIsDeleting(true);
+    try {
+      // await axios.delete(`/admin/extra-option/${selectedId}`);
+      dispatch(removeGeneratorRuntimeInList({ id: Number(selectedId) }));
+      setOpenDelete(false);
+    } catch (error) {
+    } finally {
+      setIsDeleting(false);
+    }
+  }, [selectedId]);
   return (
-    <div className=" w-full flex flex-col gap-3">
-<div className="w-full flex justify-between gap-4 flex-col md:flex-row">
-        <div className=" max-w-md">
-          <TableSearch
-            setValue={setSearch}
-            placeholder="Search..."
+    <>
+      <div className=" w-full flex flex-col gap-3">
+        <div className="w-full flex justify-between gap-4 flex-col md:flex-row">
+          <div className=" max-w-md">
+            <TableSearch setValue={setSearch} placeholder="Search..." />
+          </div>
+          <div className=" flex items-center gap-2 flex-col md:flex-row">
+            <Filter actionHandler={handleCustomersFiltering} />
+            <Sort setSort={setSort} id="sort-by" label="Sort by" />
+          </div>
+        </div>
+        <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+          <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
+            <div className=" flex items-center gap-4">
+              <h2 className="text-xl font-semibold">Generator run-time</h2>
+              <span className=" text-primary p-1 px-2 bg-primary/10 rounded-xl text-xs font-semibold">
+                {pagination?.total} total
+              </span>
+            </div>
+            <div className=" w-fit flex items-center gap-3">
+              <ExportSelect id="report" />
+              <LoadingButton
+                label="New entry"
+                isLoading={false}
+                type="button"
+                clickHandler={() => openForNewRequest()}
+                startIcon={<PlusIcon />}
+              />
+            </div>
+          </div>
+          <div className="block px-5">
+            {data && data.length > 0 ? (
+              <table className=" w-full text-xs  overflow-x-auto">
+                <thead className="">
+                  <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+                    {[
+                      "Apartment",
+                      "Date",
+                      "Time-On",
+                      "Time-off",
+                      "Run-time (HR:Min)",
+                      "Action",
+                    ].map((head) => (
+                      <th key={head}>{head}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="">
+                  {data.map((item) => {
+                    return (
+                      <tr key={item?.id} className=" border-b">
+                        <td>{item?.shortlet_name}</td>
+                        <td>{formatDate(item?.date)}</td>
+                        <td>{item?.time_on}</td>
+                        <td>{item?.time_off}</td>
+                        <td>{item?.run_time}</td>
+                        <td>
+                          <div className=" flex items-center gap-4">
+                            <button
+                              title="edit"
+                              onClick={() => openForEdit(item?.id)}
+                            >
+                              <PenIcon />
+                            </button>
+                            <button
+                              title="delete"
+                              onClick={() => handleOpenDelete(item?.id)}
+                            >
+                              <BinIcon className=" size-6 text-red-500" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            ) : (
+              <NoResult />
+            )}
+          </div>
+          <Pagination
+            pagination={pagination}
+            setCurrentPage={setCurrentPage}
+            isLoading={isLoading}
+            label="generator runtime"
           />
         </div>
-        <div className=" flex items-center gap-2 flex-col md:flex-row">
-          <Filter actionHandler={handleCustomersFiltering} />
-          <Sort setSort={setSort} id="sort-by" label="Sort by" />
-        </div>
-
-</div>
-    <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
-      <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
-       <div className=" flex items-center gap-4">
-        <h2 className="text-xl font-semibold">Generator run-time</h2>
-<span className=" text-primary p-1 px-2 bg-primary/10 rounded-xl text-xs font-semibold">5 total</span>
-       </div>
-        <div>
-          
-                  <ExportSelect id="report" />
-        </div>
       </div>
-      <div className="block px-5">
-        {data && data.length > 0 ? (
-          <table className=" w-full text-xs  overflow-x-auto">
-            <thead className="">
-              <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                {[
-                  "Apartment",
-                  "Date",
-                  "Time-On",
-                  "Time-off",
-                  "Run-time (HR:Min)",
-                  "Action",
-                ].map((head) => (
-                  <th key={head}>{head}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="">
-              {[].map((request: any) => {
-                return (
-                  <tr key={request?.id} className=" border-b">
-                    <td>
-                      <span className=" rounded-full p-2 border border-primary">
-                        {request?.id}
-                      </span>
-                    </td>
-                    <td>{request?.first_name}</td>
-                    <td>{request?.last_name}</td>
-                    <td>{request?.phone}</td>
-                    <td>{request?.total_bookings}</td>
-                    <td>
-                      <Status
-                        status="identity"
-                        booleanVal={request?.identity_verified}
-                        falsyMessage="Unverified"
-                        truthyMessage="Verified"
-                      />
-                    </td>
-                                            <td>
-                                              <div className=" flex items-center gap-4">
-
-                                                <button
-                                                  title="edit"
-                                                >
-                                                  <PenIcon />
-                                                </button>
-                                                <button
-                                                  title="delete"
-                                                >
-                                                  <BinIcon className=" size-6 text-red-500" />
-                                                </button>
-                                              </div>
-                                            </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        ) : (
-          <NoResult />
-        )}
-      </div>
-      <Pagination
-        pagination={pagination}
-        setCurrentPage={setCurrentPage}
-        isLoading={isLoading}
-        label="generator runtime"
+      <DeleteConfirmation
+        open={openDelete}
+        setOpen={setOpenDelete}
+        isLoading={isDeleting}
+        confirmationHandler={handleDelete}
+        title="Delete generator runtime"
+        description="Are you sure you want to delete this generator runtime?"
+        btnTitle="Yes, I want to"
       />
-    </div>
-    </div>
+      <ModalTemplate
+        open={openModal}
+        setOpen={setOpenModal}
+        showXicon={true}
+        title="Generator Runtime report"
+        className=" max-w-screen-md"
+      >
+        <AddEditGeneratorRuntime id={selectedId} setOpen={setOpenModal} />
+      </ModalTemplate>
+    </>
   );
 }
