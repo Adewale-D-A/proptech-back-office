@@ -72,7 +72,7 @@ export default function ApartmentListsTable() {
                     "No of Guests",
                     "Category",
                     "Characteristics",
-                    "Units",
+                    // "Units",
                     "Status",
                     "Action",
                   ].map((head) => (
@@ -102,8 +102,14 @@ export default function ApartmentListsTable() {
                         {request?.max_guests} Guests
                       </td>
                       <td>{request?.room_option?.name}</td>
-                      <td>**</td>
-                      <td>**</td>
+                      <td>
+                        <div className=" flex items-center gap-2">
+                          {request?.amenities?.map((item) => (
+                            <span>{item?.name},</span>
+                          ))}
+                        </div>
+                      </td>
+                      {/* <td>**</td> */}
                       <td>
                         <Status status={request?.availability_status} />
                       </td>
