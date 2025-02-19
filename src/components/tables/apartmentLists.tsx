@@ -105,7 +105,7 @@ export default function ApartmentListsTable() {
                       <td>
                         <div className=" flex items-center gap-2">
                           {request?.amenities?.map((item) => (
-                            <span>{item?.name},</span>
+                            <span key={item?.id}>{item?.name},</span>
                           ))}
                         </div>
                       </td>
