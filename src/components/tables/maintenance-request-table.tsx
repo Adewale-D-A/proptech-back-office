@@ -40,8 +40,6 @@ export default function MaintenanceRequestTable() {
   const [selectedId, setSelectedId] = useState("");
   const [openMaintenanceRequestEdit, setOpenMaintenanceRequestEdit] =
     useState(false);
-  const [openNewMaintenanceRequest, setOpenNewMaintenanceRequest] =
-    useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -58,9 +56,9 @@ export default function MaintenanceRequestTable() {
     },
     []
   );
-  const openForNewMaintenanceRequest = useCallback(() => {
+  const openForMaintenanceRequest = useCallback(() => {
     setSelectedId("");
-    setOpenNewMaintenanceRequest(true);
+    setOpenMaintenanceRequestEdit(true);
   }, []);
 
   const openForEditMaintenanceRequest = useCallback((id: number) => {
@@ -121,7 +119,7 @@ export default function MaintenanceRequestTable() {
                 label="New request"
                 isLoading={false}
                 type="button"
-                clickHandler={() => openForNewMaintenanceRequest()}
+                clickHandler={() => openForMaintenanceRequest()}
                 startIcon={<PlusIcon />}
               />
             </div>
@@ -227,15 +225,15 @@ export default function MaintenanceRequestTable() {
         btnTitle="Yes, confirm"
       />
       <ModalTemplate
-        open={openNewMaintenanceRequest}
-        setOpen={setOpenNewMaintenanceRequest}
+        open={openMaintenanceRequestEdit}
+        setOpen={setOpenMaintenanceRequestEdit}
         showXicon={true}
         title="New maintenance request"
         className=" max-w-screen-sm "
       >
-        <NewRequest id={selectedId} setOpen={setOpenNewMaintenanceRequest} />
+        <NewRequest id={selectedId} setOpen={setOpenMaintenanceRequestEdit} />
       </ModalTemplate>
-      <ModalTemplate
+      {/* <ModalTemplate
         open={openMaintenanceRequestEdit}
         setOpen={setOpenMaintenanceRequestEdit}
         showXicon={true}
@@ -246,7 +244,7 @@ export default function MaintenanceRequestTable() {
           id={selectedId}
           setOpen={setOpenMaintenanceRequestEdit}
         />
-      </ModalTemplate>
+      </ModalTemplate> */}
     </>
   );
 }

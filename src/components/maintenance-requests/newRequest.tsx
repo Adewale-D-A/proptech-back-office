@@ -21,7 +21,7 @@ import CancelIcon from "../../assets/icons/cancel";
 // import useGetRequisitionRequest from "../../services-hooks/userGetRequisitionRequest";
 // import Switch from "../switch";
 import useGetMaintenanceRequestById from "../../services-hooks/useGetMaintenanceRequestById";
-
+import categoryOptions from "../../assets/maintenance-request-category-options.json";
 export default function NewRequest({
   id,
   setOpen,
@@ -232,7 +232,7 @@ export default function NewRequest({
           inputType="number"
           label="Amount"
         />
-        <TextInput
+        {/* <TextInput
           id="category"
           placeholder="others"
           isRequired={true}
@@ -240,7 +240,24 @@ export default function NewRequest({
           setValue={setCategory}
           inputType="text"
           label="Category"
-        />
+        /> */}
+
+        <Select
+          isRequired={true}
+          value={category}
+          setValue={setCategory}
+          id="category"
+          label="Ctegory"
+        >
+          <option value="" disabled>
+            Select category
+          </option>
+          {categoryOptions?.map((item) => (
+            <option key={item?.id} value={item?.value}>
+              {item?.label}
+            </option>
+          ))}
+        </Select>
         <Select
           isRequired={true}
           value={vendorBank}

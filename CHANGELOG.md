@@ -1,5 +1,6 @@
 ##### 19.02.2025
 
+> Maintenance reuest category options assets setup
 > maintenace report, bookings report, and generator runtime fix
 
 ##### 18.02.2025

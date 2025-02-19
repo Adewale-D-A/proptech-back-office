@@ -8,7 +8,6 @@ import DateInput from "../inputs/dateInput";
 import Select from "../inputs/select";
 import LoadingButton from "../button";
 import TextAreaInput from "../inputs/textArea";
-import FileInputDesignTwo from "../inputs/fileInput/design-two/file-upload";
 import MultipleFileInputDesignTwo from "../inputs/fileInput/design-two/multiple-image-files";
 import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
 import { useAppDispatch } from "../../stores/hooks";
@@ -17,9 +16,10 @@ import {
   replaceRequisitionRequestInList,
 } from "../../stores/apiData/requisition-requests";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-import CancelIcon from "../../assets/icons/cancel";
 import useGetRequisitionRequest from "../../services-hooks/userGetRequisitionRequest";
-import Switch from "../switch";
+// import FileInputDesignTwo from "../inputs/fileInput/design-two/file-upload";
+// import CancelIcon from "../../assets/icons/cancel";
+// import Switch from "../switch";
 
 export default function EditMaintenanceRequest({
   id,

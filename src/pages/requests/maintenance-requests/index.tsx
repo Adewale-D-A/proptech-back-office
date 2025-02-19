@@ -35,7 +35,6 @@ export default function MaintenanceRequests() {
   }, []);
   return (
     <div className=" w-full">
-      {" "}
       <MaintenanceRequestTable />
     </div>
   );
