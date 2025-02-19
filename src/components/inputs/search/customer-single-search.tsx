@@ -57,6 +57,7 @@ export default function CustomersSingleSearch({
   return (
     <div className=" relative" ref={wrapperRef}>
       <button
+        type="button"
         onClick={() => toggleMenuDock()}
         className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between"
       >
