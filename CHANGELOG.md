@@ -1,5 +1,6 @@
 ##### 20.02.2025
 
+> bug-fix -> Upload profile_photo and identity document optional requirement addition
 > bug-fix -> Systematic 99Apt team bug list reviews and fixes
 
 ##### 15.02.2025

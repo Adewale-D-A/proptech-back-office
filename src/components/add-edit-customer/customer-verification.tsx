@@ -54,25 +54,19 @@ export default function AddEditCustomerVerification({ id }: { id?: string }) {
   const addCustoemrDetails = useCallback(
     (e: SyntheticEvent) => {
       e.preventDefault();
-      if (idImage) {
-        const payload = {
-          place_of_birth: placeOfBirth,
-          id_type: idType,
-          id_number: idNumber,
-          identity_document: idImage,
-          password: pinGenerated,
-          notes,
-        };
-        dispatch(updateCustomerVerification(payload));
-        if (id) {
-          navigate(`/customers/edit-customer/customer-company/${id}`);
-        } else {
-          navigate(`/customers/add-customer/customer-company`);
-        }
+      const payload = {
+        place_of_birth: placeOfBirth,
+        id_type: idType,
+        id_number: idNumber,
+        identity_document: idImage?.name ? idImage : "",
+        password: pinGenerated,
+        notes,
+      };
+      dispatch(updateCustomerVerification(payload));
+      if (id) {
+        navigate(`/customers/edit-customer/customer-company/${id}`);
       } else {
-        dispatch(
-          openSnackbar({ message: "image upload is required", isError: true })
-        );
+        navigate(`/customers/add-customer/customer-company`);
       }
     },
     [placeOfBirth, idType, idNumber, idImage, pinGenerated, notes, id]

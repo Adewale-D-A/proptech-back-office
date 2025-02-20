@@ -76,34 +76,28 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
   const addCustomerDetails = useCallback(
     (e: SyntheticEvent) => {
       e.preventDefault();
-      if (profileImg) {
-        const payload = {
-          type: usertype,
-          first_name: firstname,
-          last_name: lastname,
-          email,
-          phone: phoneNumber?.includes("+")
-            ? phoneNumber
-            : `+${countryCode?.split("+")[1]}${phoneNumber}`,
-          profile_photo: profileImg,
-          gender,
-          dob,
-          country,
-          state,
-          city,
-          address,
-        };
-        dispatch(updateCustomerDetails(payload));
-        dispatch(updateCustomerInfoId({ id: "updated" }));
-        if (id) {
-          navigate(`/customers/edit-customer/customer-verification/${id}`);
-        } else {
-          navigate(`/customers/add-customer/customer-verification`);
-        }
+      const payload = {
+        type: usertype,
+        first_name: firstname,
+        last_name: lastname,
+        email,
+        phone: phoneNumber?.includes("+")
+          ? phoneNumber
+          : `+${countryCode?.split("+")[1]}${phoneNumber}`,
+        profile_photo: profileImg?.name ? profileImg : "",
+        gender,
+        dob,
+        country,
+        state,
+        city,
+        address,
+      };
+      dispatch(updateCustomerDetails(payload));
+      dispatch(updateCustomerInfoId({ id: "updated" }));
+      if (id) {
+        navigate(`/customers/edit-customer/customer-verification/${id}`);
       } else {
-        dispatch(
-          openSnackbar({ message: "image upload is required", isError: true })
-        );
+        navigate(`/customers/add-customer/customer-verification`);
       }
     },
     [
