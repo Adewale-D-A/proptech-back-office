@@ -7,6 +7,7 @@ export const addEditCustomerInfo = createSlice({
       data: {
         id: "",
         customerDetails: {
+          type: "",
           first_name: "",
           last_name: "",
           email: "",
@@ -67,6 +68,7 @@ export const addEditCustomerInfo = createSlice({
       state.value.data = {
         id: "",
         customerDetails: {
+          type: "",
           first_name: "",
           last_name: "",
           email: "",

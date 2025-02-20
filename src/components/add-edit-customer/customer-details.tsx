@@ -24,6 +24,7 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
     (state) => state.addEditCustomerInfo.value.data.customerDetails
   );
 
+  const [usertype, setUsertype] = useState("user");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
@@ -44,6 +45,7 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
   // populate apartment details interface
   useEffect(() => {
     const {
+      type,
       first_name,
       last_name,
       email,
@@ -56,6 +58,7 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
       city,
       address,
     } = storeAptDetails;
+    setUsertype(type || "user");
     setFirstname(first_name || "");
     setLastname(last_name || "");
     setEmail(email || "");
@@ -75,6 +78,7 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
       e.preventDefault();
       if (profileImg) {
         const payload = {
+          type: usertype,
           first_name: firstname,
           last_name: lastname,
           email,
@@ -103,6 +107,7 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
       }
     },
     [
+      usertype,
       firstname,
       lastname,
       email,
@@ -123,6 +128,21 @@ export default function AddEditCustomerDetails({ id }: { id?: string }) {
       onSubmit={addCustomerDetails}
     >
       <div className="w-full flex flex-col gap-5 max-w-screen-lg">
+        <div>
+          <Select
+            isRequired={true}
+            value={usertype}
+            setValue={setUsertype}
+            id="user-type"
+            label="Usertype *"
+          >
+            <option value="" disabled>
+              User type
+            </option>
+            <option value="owner">Owner user</option>
+            <option value="user">Customer user</option>
+          </Select>
+        </div>
         <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
           <TextInput
             inputType="text"

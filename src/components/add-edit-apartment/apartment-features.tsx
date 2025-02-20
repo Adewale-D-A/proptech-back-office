@@ -2,7 +2,7 @@ import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import TextInput from "../inputs/textInput";
 import Select from "../inputs/select";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { updateApartmentFeatures } from "../../stores/inAppDataInterations/addEditApartmentInfo";
 import LinkButton from "../button/linkButton";
 import LoadingButton from "../button";
@@ -14,6 +14,7 @@ import useGetExtraOptions from "../../services-hooks/useGetExtraOptions";
 export default function AddEditApartmentFeatures({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
   const naviagte = useNavigate();
+  const [searchParams] = useSearchParams();
   const storeAptFeatures = useAppSelector(
     (state) => state.addEditApartmentInfo.value.data.apartmentFeatures
   );
@@ -85,9 +86,17 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
       };
       dispatch(updateApartmentFeatures(payload));
       if (id) {
-        naviagte(`/apartments/edit-apartment/apartment-policies/${id}`);
+        naviagte(
+          `/apartments/edit-apartment/apartment-policies/${id}?redirect=${
+            searchParams?.get("redirect") || ""
+          }`
+        );
       } else {
-        naviagte(`/apartments/add-apartment/apartment-policies`);
+        naviagte(
+          `/apartments/add-apartment/apartment-policies?redirect=${
+            searchParams?.get("redirect") || ""
+          }`
+        );
       }
     },
     [

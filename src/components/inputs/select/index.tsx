@@ -38,7 +38,7 @@ const Select: React.FC<Props> = ({
           value={value}
           required={isRequired}
           onChange={(e) => setValue(e.target.value)}
-          className="w-full sm:text-md bg-transparent p-3 px-6"
+          className="w-full sm:text-md bg-transparent p-3 px-6 disabled:border-gray-300 disabled:text-gray-300"
         >
           {children}
         </select>

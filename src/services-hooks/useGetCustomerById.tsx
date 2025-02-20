@@ -26,6 +26,7 @@ export default function useGetCustomerById(id?: string) {
       const response = await axios.get(`/admin/user/${id}`);
       const { user } = response?.data?.data;
       const {
+        type,
         id: resp_id,
         first_name,
         last_name,
@@ -77,6 +78,7 @@ export default function useGetCustomerById(id?: string) {
       dispatch(updateCustomerInfoId({ id: id }));
       dispatch(
         updateCustomerDetails({
+          type,
           first_name,
           last_name,
           email,

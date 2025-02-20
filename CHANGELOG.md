@@ -1,3 +1,7 @@
+##### 20.02.2025
+
+> bug-fix -> Systematic 99Apt team bug list reviews and fixes
+
 ##### 15.02.2025
 
 > bug-fix -> Apartment list view characteristis/amenities addition and units removal

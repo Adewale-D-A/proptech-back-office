@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useCallback, useState } from "react";
 import Status from "../status";
 import LocationPinIcon from "../../assets/icons/location";
@@ -19,6 +19,7 @@ import useAxios from "../../useHooks/useAxios";
 export default function ApartmentListsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
+  const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("desc");
@@ -123,7 +124,7 @@ export default function ApartmentListsTable() {
                             View Apartment
                           </Link>
                           <Link
-                            to={`/apartments/edit-apartment/apartment-details/${request?.id}`}
+                            to={`/apartments/edit-apartment/apartment-details/${request?.id}?redirect=${location?.pathname}`}
                             className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Edit Apartment

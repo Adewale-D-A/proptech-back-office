@@ -243,8 +243,8 @@ export default function AddNewCoupon({
           <option value="" disabled>
             Apartment
           </option>
-          <option value="all">All</option>
-          <option value="specific">Specific</option>
+          <option value="all">All apartments</option>
+          <option value="specific">Specific apartments</option>
         </Select>
         {apartmentApplicability === "specific" && !Boolean(id) && (
           <Search
@@ -263,10 +263,10 @@ export default function AddNewCoupon({
           id="user-aplicability"
         >
           <option value="" disabled>
-            User
+            Users
           </option>
-          <option value="all">All</option>
-          <option value="specific">Specific</option>
+          <option value="all">All users</option>
+          <option value="specific">Specific users</option>
         </Select>
         {userApplicability === "specific" && (
           <Search

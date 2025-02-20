@@ -2,7 +2,7 @@ import BuildingIcon from "../../../assets/icons/building";
 import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Timeline from "../../../components/timeline";
 import AddEditApartmentPolicies from "../../../components/add-edit-apartment/apartment-policies";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
@@ -13,10 +13,18 @@ import useAxiosMultipart from "../../../useHooks/useAxiosMultipart";
 export default function EditApartmentPolicies() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const axios = useAxiosMultipart({
     disableSuccMssg: false,
     disableErrMssg: false,
   });
+  const { data: room_options_data } = useAppSelector(
+    (state) => state.allRoomOptions.value
+  );
+  const { data: amenitiesOptions } = useAppSelector(
+    (state) => state.allAmenities.value
+  );
+
   const breadCrumb = useMemo(
     () => [
       {
@@ -84,8 +92,23 @@ export default function EditApartmentPolicies() {
             isError: false,
           })
         );
-        navigate(`/apartments/apartment-details/${id}`);
-        dispatch(replaceApartmentInList(shortlet));
+        navigate(
+          searchParams?.get("redirect") || `/apartments/apartment-details/${id}`
+        );
+        dispatch(
+          replaceApartmentInList({
+            ...shortlet,
+            room_option: {
+              name:
+                room_options_data?.find(
+                  (item) => String(item?.id) === String(payload?.room_option)
+                )?.name || "",
+            },
+            amenities: amenitiesOptions?.filter(
+              (item) => !payload?.amenities?.includes(String(item?.id))
+            ) || [{ id: "", name: "" }],
+          })
+        );
       } catch (error) {
       } finally {
         setIsSubmitting(false);

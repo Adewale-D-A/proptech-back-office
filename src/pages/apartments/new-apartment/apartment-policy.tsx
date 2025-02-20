@@ -1,6 +1,6 @@
 import BuildingIcon from "../../../assets/icons/building";
 import { useCallback, useLayoutEffect, useMemo, useState } from "react";
-import { useAppDispatch } from "../../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import { useNavigate, useParams } from "react-router-dom";
 import Timeline from "../../../components/timeline";
@@ -10,6 +10,7 @@ import { addApartmentToList } from "../../../stores/apiData/apartment-lists";
 import { clearAllApartmentInfo } from "../../../stores/inAppDataInterations/addEditApartmentInfo";
 import { requestPayload } from "../../../types/apiData/apartment/request-payload";
 import useAxiosMultipart from "../../../useHooks/useAxiosMultipart";
+import useGetAmenities from "../../../services-hooks/useGetAmenities";
 const breadCrumb = [
   {
     url: "/apartments/view-all",
@@ -27,6 +28,13 @@ export default function AddNewApartmentPolicies() {
     disableSuccMssg: false,
     disableErrMssg: false,
   });
+  const { data: room_options_data } = useAppSelector(
+    (state) => state.allRoomOptions.value
+  );
+  const { data: amenitiesOptions } = useAppSelector(
+    (state) => state.allAmenities.value
+  );
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   // update page props on component mount
@@ -56,7 +64,20 @@ export default function AddNewApartmentPolicies() {
           isError: false,
         })
       );
-      dispatch(addApartmentToList(shortlet));
+      dispatch(
+        addApartmentToList({
+          ...shortlet,
+          room_option: {
+            name:
+              room_options_data?.find(
+                (item) => String(item?.id) === String(payload?.room_option)
+              )?.name || "",
+          },
+          amenities: amenitiesOptions?.filter(
+            (item) => !payload?.amenities?.includes(String(item?.id))
+          ) || [{ id: "", name: "" }],
+        })
+      );
       dispatch(clearAllApartmentInfo());
       navigate("/apartments/view-all");
     } catch (error) {

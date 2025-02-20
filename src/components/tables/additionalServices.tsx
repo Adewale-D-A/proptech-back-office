@@ -5,11 +5,16 @@ import NoResult from "../noResult";
 import useGetAllAdditionalServiceLists from "../../services-hooks/useGetAllAdditionalServiceLists";
 import Status from "../status";
 import { useAppDispatch } from "../../stores/hooks";
-import { removeAdditionalServicesInList } from "../../stores/apiData/additional-services-lists";
+import {
+  markAdditionalServiceItemAsResolved,
+  removeAdditionalServicesInList,
+} from "../../stores/apiData/additional-services-lists";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import MobileAdditionalServicesTable from "./mobile/additionalServises";
 import formatDate from "../../utils/isoDateConverter";
 import TableSearch from "../inputs/search/table-search";
+import useAxios from "../../useHooks/useAxios";
+import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 
 export default function AdditionalServiceListTable({
   header,
@@ -17,7 +22,9 @@ export default function AdditionalServiceListTable({
   header: string[];
 }) {
   const dispatch = useAppDispatch();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
 
+  const [confirming, setConfirming] = useState(false);
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
@@ -48,6 +55,27 @@ export default function AdditionalServiceListTable({
       setIsDeleting(false);
     }
   }, [deleteId]);
+
+  const markedAsResolved = useCallback(async (id: number) => {
+    setConfirming(true);
+    try {
+      const response = await axios.put(
+        `/admin/additional-service/mark-resolved/${id}`
+      );
+      const result = response?.data?.data;
+      // console.log({ response });
+      dispatch(markAdditionalServiceItemAsResolved(result));
+      dispatch(
+        openSnackbar({
+          message: "Succefully marked as resolved",
+          isError: false,
+        })
+      );
+    } catch (error) {
+    } finally {
+      setConfirming(false);
+    }
+  }, []);
 
   const deleteModal = useCallback((id: number) => {
     setDeleteId(String(id));
@@ -108,12 +136,13 @@ export default function AdditionalServiceListTable({
                           >
                             View Details
                           </Link>
-                          <Link
-                            to={`#`}
+                          <button
+                            type="button"
+                            onClick={() => markedAsResolved(item?.id)}
                             className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Mark As Resolved
-                          </Link>
+                          </button>
                           {/* <button
                             type="button"
                             onClick={() => {
