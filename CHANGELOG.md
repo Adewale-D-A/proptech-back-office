@@ -1,5 +1,6 @@
 ##### 20.02.2025
 
+> Add-on -> remove empty payload keys and values util function creation
 > bug-fix -> Upload profile_photo and identity document optional requirement addition
 > bug-fix -> Systematic 99Apt team bug list reviews and fixes
 

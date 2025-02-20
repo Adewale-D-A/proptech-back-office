@@ -9,6 +9,7 @@ import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import { replaceApartmentInList } from "../../../stores/apiData/apartment-lists";
 import { requestPayload } from "../../../types/apiData/apartment/request-payload";
 import useAxiosMultipart from "../../../useHooks/useAxiosMultipart";
+import purgeEmptyPayload from "../../../utils/remove-empty-payload";
 
 export default function EditApartmentPolicies() {
   const { id } = useParams();
@@ -73,18 +74,16 @@ export default function EditApartmentPolicies() {
       } as {
         [key: string]: any;
       };
-      const newPayload = Object.fromEntries(
-        Object.entries(populatedPayload).filter(([key]) =>
-          populatedPayload[key] === "" ||
-          populatedPayload[key] === 0 ||
-          populatedPayload[key]?.length === 0
-            ? false
-            : true
-        )
-      );
+
+      const purgePayloadResult = purgeEmptyPayload({
+        payload: populatedPayload,
+      });
       try {
         setIsSubmitting(true);
-        const response = await axios.post(`/admin/shortlet/${id}`, newPayload);
+        const response = await axios.post(
+          `/admin/shortlet/${id}`,
+          purgePayloadResult
+        );
         const { shortlet } = response?.data?.data;
         dispatch(
           openSnackbar({
