@@ -1,3 +1,8 @@
+##### 23.02.2025
+
+> Feature -> Block date feature addition
+> Special prices multiple select option addition
+
 ##### 20.02.2025
 
 > Add-on -> remove empty payload keys and values util function creation

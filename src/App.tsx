@@ -120,6 +120,7 @@ import DailyRoomReport from "./pages/reports/daily-room";
 import OccupancyPerTimeReport from "./pages/reports/occupancy-per-time";
 import EditInvoice from "./pages/invoices/edit-invoice";
 import CustomerDetail from "./pages/customers/customer-detail";
+import BlockedDatesReasonListView from "./pages/apartments/block-dates-reason";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -166,6 +167,10 @@ function App() {
               <Route
                 path="/apartments/location-grouping"
                 element={<LocationGroupView />}
+              />
+              <Route
+                path="/apartments/blocked-dates-reasons"
+                element={<BlockedDatesReasonListView />}
               />
             </Route>
 
