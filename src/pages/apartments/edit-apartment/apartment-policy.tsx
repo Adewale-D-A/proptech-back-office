@@ -2,18 +2,30 @@ import BuildingIcon from "../../../assets/icons/building";
 import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import Timeline from "../../../components/timeline";
 import AddEditApartmentPolicies from "../../../components/add-edit-apartment/apartment-policies";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import { replaceApartmentInList } from "../../../stores/apiData/apartment-lists";
 import { requestPayload } from "../../../types/apiData/apartment/request-payload";
 import useAxiosMultipart from "../../../useHooks/useAxiosMultipart";
+import purgeEmptyPayload from "../../../utils/remove-empty-payload";
 
 export default function EditApartmentPolicies() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const axios = useAxiosMultipart();
+  const [searchParams] = useSearchParams();
+  const axios = useAxiosMultipart({
+    disableSuccMssg: false,
+    disableErrMssg: false,
+  });
+  const { data: room_options_data } = useAppSelector(
+    (state) => state.allRoomOptions.value
+  );
+  const { data: amenitiesOptions } = useAppSelector(
+    (state) => state.allAmenities.value
+  );
+
   const breadCrumb = useMemo(
     () => [
       {
@@ -62,18 +74,16 @@ export default function EditApartmentPolicies() {
       } as {
         [key: string]: any;
       };
-      const newPayload = Object.fromEntries(
-        Object.entries(populatedPayload).filter(([key]) =>
-          populatedPayload[key] === "" ||
-          populatedPayload[key] === 0 ||
-          populatedPayload[key]?.length === 0
-            ? false
-            : true
-        )
-      );
+
+      const purgePayloadResult = purgeEmptyPayload({
+        payload: populatedPayload,
+      });
       try {
         setIsSubmitting(true);
-        const response = await axios.post(`/admin/shortlet/${id}`, newPayload);
+        const response = await axios.post(
+          `/admin/shortlet/${id}`,
+          purgePayloadResult
+        );
         const { shortlet } = response?.data?.data;
         dispatch(
           openSnackbar({
@@ -81,8 +91,23 @@ export default function EditApartmentPolicies() {
             isError: false,
           })
         );
-        navigate(`/apartments/apartment-details/${id}`);
-        dispatch(replaceApartmentInList(shortlet));
+        navigate(
+          searchParams?.get("redirect") || `/apartments/apartment-details/${id}`
+        );
+        dispatch(
+          replaceApartmentInList({
+            ...shortlet,
+            room_option: {
+              name:
+                room_options_data?.find(
+                  (item) => String(item?.id) === String(payload?.room_option)
+                )?.name || "",
+            },
+            amenities: amenitiesOptions?.filter(
+              (item) => !payload?.amenities?.includes(String(item?.id))
+            ) || [{ id: "", name: "" }],
+          })
+        );
       } catch (error) {
       } finally {
         setIsSubmitting(false);

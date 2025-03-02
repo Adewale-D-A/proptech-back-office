@@ -14,7 +14,7 @@ import signOut from "../utils/auth/signOut";
 //full view
 function FullMenuView() {
   const dispatch = useAppDispatch();
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
 
   //get side bar meny status from redux store
   const fullView = useAppSelector(

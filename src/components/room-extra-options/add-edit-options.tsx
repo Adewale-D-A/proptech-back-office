@@ -25,7 +25,7 @@ export default function AddEditOptions({
   setOpenOption: Function;
   componentId?: "extra" | "room";
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { data: roomOptionData } = useGetRoomOption({
     id: componentId === "room" ? id : undefined,
@@ -60,14 +60,14 @@ export default function AddEditOptions({
       setIsAdding(true);
       const payload = {
         name: title,
-        desciption: description,
+        description: description,
       };
       try {
         if (id) {
           //run update endpoint
           const response = await axios.put(
             `/admin/${
-              componentId === "extra" ? "admin/extra-option" : "room-option"
+              componentId === "extra" ? "extra-option" : "room-option"
             }/${id}`,
             payload
           );
@@ -90,7 +90,7 @@ export default function AddEditOptions({
           //run create enpoint
           const response = await axios.post(
             `/admin/${
-              componentId === "extra" ? "admin/extra-option" : "room-option"
+              componentId === "extra" ? "extra-option" : "room-option"
             }`,
             payload
           );

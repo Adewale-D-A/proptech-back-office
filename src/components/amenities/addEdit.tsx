@@ -3,7 +3,6 @@ import LoadingButton from "../button";
 import TextInput from "../inputs/textInput";
 import TextAreaInput from "../inputs/textArea";
 import useGetSafetyAndSecurity from "../../services-hooks/useGetSafetyAndSecurity";
-import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
 import { useAppDispatch } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import {
@@ -15,6 +14,7 @@ import {
   addHouseRule,
   replaceHouseRule,
 } from "../../stores/apiData/house-rules";
+import useAxios from "../../useHooks/useAxios";
 
 export default function AddEdit({
   id,
@@ -25,7 +25,7 @@ export default function AddEdit({
   setOpen: Function;
   componentId?: "safety" | "rule";
 }) {
-  const axios = useAxiosMultipart();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { data: safety } = useGetSafetyAndSecurity({
     id: componentId === "safety" ? id : undefined,
@@ -60,8 +60,7 @@ export default function AddEdit({
       setIsAdding(true);
       const payload = {
         name: title,
-        desciption: description,
-        image: "",
+        description: description,
       };
       try {
         if (id) {

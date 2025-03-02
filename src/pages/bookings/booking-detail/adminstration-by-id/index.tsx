@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../../../stores/hooks";
 import { useLayoutEffect, useState } from "react";
 import { updatePageProperties } from "../../../../stores/appFunctionality/pageProperties";
@@ -15,10 +15,12 @@ import BookingByIdList from "../../../../components/tables/bookingList";
 import useGetBookingById from "../../../../services-hooks/bookings/useGetBookingById";
 import useGetCustomerById from "../../../../services-hooks/useGetCustomerById";
 import CustomTab from "../../../../components/tab";
+import CustomersSingleSearch from "../../../../components/inputs/search/customer-single-search";
+import { customersById } from "../../../../types/apiData/customers";
 
 const breadCrumb = [
   {
-    url: "/bookings",
+    url: "/bookings/overview",
     label: "Bookings",
     icon: <CalendarIcon />,
   },
@@ -30,6 +32,7 @@ const breadCrumb = [
 ];
 export default function BookingAdministrationById() {
   const { id } = useParams();
+  const location = useLocation();
   const dispatch = useAppDispatch();
   // update page props on component mount
   useLayoutEffect(() => {
@@ -45,6 +48,9 @@ export default function BookingAdministrationById() {
       })
     );
   }, []);
+  const [selectedCustomer, setSelectedCustomer] = useState<customersById>(
+    {} as any
+  );
 
   const [payment, setPayment] = useState("");
   const { data, isFailed, setIsFailed, isLoading } = useGetBookingById(id);
@@ -54,7 +60,7 @@ export default function BookingAdministrationById() {
     <section className="w-full flex flex-col items-center my-5">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
         <div className=" p-3 rounded-lg border">
-          <BookingByIdList data={data} />
+          <BookingByIdList data={{ ...data, user }} />
         </div>
         <div className="w-full flex flex-col md:flex-row gap-5 items-start">
           <div className=" w-full flex-1 md:flex-[0.4] flex flex-col gap-3">
@@ -65,14 +71,17 @@ export default function BookingAdministrationById() {
               </h4>
               <div className=" p-3 flex flex-col gap-2">
                 <label htmlFor="search-pin-name">Exisiting Customer</label>
-                <Search
-                  id="search-pin-name"
+
+                <CustomersSingleSearch
                   placeholder="Search by PIN or Name"
+                  selected={selectedCustomer}
+                  setSelected={setSelectedCustomer}
                 />
+
                 <div className=" flex justify-end">
                   <div className=" w-fit">
                     <Link
-                      to={"/add-customer/customer-details"}
+                      to={`/customers/add-customer/customer-details?redirect=${location?.pathname}`}
                       className="w-full flex justify-center p-3 px-6 rounded-full transition-all border hover:border-primary/60 border-primary text-primary"
                     >
                       {" "}
@@ -116,7 +125,7 @@ export default function BookingAdministrationById() {
                 },
                 {
                   id: 2,
-                  data: <GuestMessaging />,
+                  data: <GuestMessaging user={user} />,
                 },
                 {
                   id: 3,

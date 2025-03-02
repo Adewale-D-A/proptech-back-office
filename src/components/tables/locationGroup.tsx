@@ -11,7 +11,7 @@ import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import AddEditLocationGroup from "../apartment/add-edit-location-group";
 
 export default function LocationGroupTable() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -38,7 +38,7 @@ export default function LocationGroupTable() {
     setIsDeleting(true);
     try {
       await axios.delete(`/admin/location-group/${selectedId}`);
-      dispatch(removeLocationGroupingInList({ id: selectedId }));
+      dispatch(removeLocationGroupingInList({ id: Number(selectedId) }));
       dispatch(
         openSnackbar({
           message: "Location group successfully deleted",

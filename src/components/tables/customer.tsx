@@ -76,7 +76,7 @@ export default function CustomersListTable() {
                     <td>{request?.first_name}</td>
                     <td>{request?.last_name}</td>
                     <td>{request?.phone}</td>
-                    <td>***</td>
+                    <td>{request?.total_bookings}</td>
                     <td>
                       <Status
                         status="identity"

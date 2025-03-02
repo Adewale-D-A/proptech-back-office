@@ -3,10 +3,16 @@ export default function generateCalendarData({
   selectedDate,
   highlights,
   notAvailable,
+  booked = [],
+  blocked = [],
+  maintenance = [],
 }: {
   selectedDate: Date;
   highlights?: Date[];
   notAvailable?: Date[];
+  booked?: Date[];
+  blocked?: Date[];
+  maintenance?: Date[];
 }) {
   const generateDays = () => {
     const daysArray = [];
@@ -31,6 +37,13 @@ export default function generateCalendarData({
       let calendarDay = {
         currentMonth: firstDayOfMonth.getMonth() === selectedDate.getMonth(),
         date: new Date(firstDayOfMonth),
+        isoStringDate: new Date(
+          firstDayOfMonth.getFullYear(),
+          firstDayOfMonth.getMonth(),
+          firstDayOfMonth.getDate() + 1
+        )
+          ?.toISOString()
+          ?.slice(0, 10),
         month: firstDayOfMonth.getMonth(),
         day: firstDayOfMonth.getDate(),
         weekday: weekdayMonth?.days[firstDayOfMonth.getDay()],
@@ -45,6 +58,27 @@ export default function generateCalendarData({
           ? true
           : false,
         notAvailable: notAvailable?.find(
+          (item) =>
+            `${item.getFullYear()}-${item?.getMonth()}-${item?.getDate()}` ===
+            `${firstDayOfMonth.getFullYear()}-${firstDayOfMonth?.getMonth()}-${firstDayOfMonth?.getDate()}`
+        )
+          ? true
+          : false,
+        booked: booked?.find(
+          (item) =>
+            `${item.getFullYear()}-${item?.getMonth()}-${item?.getDate()}` ===
+            `${firstDayOfMonth.getFullYear()}-${firstDayOfMonth?.getMonth()}-${firstDayOfMonth?.getDate()}`
+        )
+          ? true
+          : false,
+        blocked: blocked?.find(
+          (item) =>
+            `${item.getFullYear()}-${item?.getMonth()}-${item?.getDate()}` ===
+            `${firstDayOfMonth.getFullYear()}-${firstDayOfMonth?.getMonth()}-${firstDayOfMonth?.getDate()}`
+        )
+          ? true
+          : false,
+        maintenance: maintenance?.find(
           (item) =>
             `${item.getFullYear()}-${item?.getMonth()}-${item?.getDate()}` ===
             `${firstDayOfMonth.getFullYear()}-${firstDayOfMonth?.getMonth()}-${firstDayOfMonth?.getDate()}`

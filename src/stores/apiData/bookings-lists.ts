@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { bookingsById, bookingsists } from "../../types/apiData/bookings";
+import { pagination } from "../../types/pagination";
 
 export const bookingsListsData = createSlice({
   name: "all bookings",
@@ -7,14 +8,7 @@ export const bookingsListsData = createSlice({
     value: {
       status: false,
       pagination: [] as {
-        pagination_data: {
-          current_page: number;
-          last_page: number;
-          per_page: number;
-          total: number;
-          from: number;
-          to: number;
-        };
+        pagination_data: pagination;
         data: bookingsById[];
       }[],
       data: [] as bookingsById[],
@@ -62,7 +56,7 @@ export const bookingsListsData = createSlice({
       const { id } = action?.payload;
       const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
-        (v: { id: number }) => v.id === id
+        (v: { id: number }) => String(v.id) === String(id)
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1);
@@ -85,7 +79,7 @@ export const bookingsListsData = createSlice({
       const { id } = action?.payload;
       const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
-        (v: { id: number }) => v.id === id
+        (v: { id: number }) => String(v.id) === String(id)
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1, action?.payload);

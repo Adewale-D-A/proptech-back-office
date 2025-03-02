@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { additionalService } from "../../types/apiData/additionalServices";
+import { pagination } from "../../types/pagination";
 
 export const additionalServiceListData = createSlice({
   name: "all additional services",
@@ -7,14 +8,7 @@ export const additionalServiceListData = createSlice({
     value: {
       status: false,
       pagination: [] as {
-        pagination_data: {
-          current_page: number;
-          last_page: number;
-          per_page: number;
-          total: number;
-          from: number;
-          to: number;
-        };
+        pagination_data: pagination;
         data: additionalService[];
       }[],
       data: [] as additionalService[],
@@ -72,7 +66,7 @@ export const additionalServiceListData = createSlice({
       const pagination_data = [...state.value.pagination];
       const removed = pagination_data.map((item, index) => {
         const sencondFilter = item.data.filter((data, i) => {
-          return !(Number(data.id) === Number(id));
+          return !(String(data.id) === String(id));
         });
         return {
           pagination_data: { ...item.pagination_data },
@@ -95,7 +89,34 @@ export const additionalServiceListData = createSlice({
       const pagination_data = [...state.value.pagination];
       const replacedItem = pagination_data.map((item, index) => {
         const sencondFilter = item.data.map((data, i) => {
-          if (Number(data.id) === Number(id)) {
+          if (String(data.id) === String(id)) {
+            return { ...action.payload };
+          } else {
+            return data;
+          }
+        });
+        return {
+          pagination_data: { ...item.pagination_data },
+          data: sencondFilter,
+        };
+      });
+      state.value.pagination = replacedItem;
+    },    
+    markAdditionalServiceItemAsResolved: (state, action) => {
+      const { id, status } = action?.payload;
+      const currentArray = state.value.data;
+      const currentIndex = currentArray.findIndex(
+        (v: { id: number }) => String(v.id) === String(id)
+      );
+      if (currentIndex >= 0) {
+        currentArray.splice(currentIndex, 1, {...currentArray[currentIndex], status});
+        state.value.data = currentArray;
+      }
+      //REPLACE pagination data
+      const pagination_data = [...state.value.pagination];
+      const replacedItem = pagination_data.map((item, index) => {
+        const sencondFilter = item.data.map((data, i) => {
+          if (String(data.id) === String(id)) {
             return { ...action.payload };
           } else {
             return data;
@@ -121,6 +142,7 @@ export const {
   addToPaginationHistory,
   removeAdditionalServicesInList,
   replaceAdditionalServicesInList,
+  markAdditionalServiceItemAsResolved,
   clearAdditionalServicesList,
 } = additionalServiceListData.actions;
 

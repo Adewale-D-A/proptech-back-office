@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { taxRates } from "../../types/apiData/taxRates";
+import { pagination } from "../../types/pagination";
 
 export const taxRateListsData = createSlice({
   name: "all tax rates",
@@ -7,14 +8,7 @@ export const taxRateListsData = createSlice({
     value: {
       status: false,
       pagination: [] as {
-        pagination_data: {
-          current_page: number;
-          last_page: number;
-          per_page: number;
-          total: number;
-          from: number;
-          to: number;
-        };
+        pagination_data: pagination;
         data: taxRates[];
       }[],
       data: [] as taxRates[],

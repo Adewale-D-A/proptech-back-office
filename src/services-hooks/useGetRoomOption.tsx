@@ -4,7 +4,7 @@ import { roomOption } from "../types/apiData/roomOption";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetRoomOption({ id }: { id?: string }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [data, setData] = useState<roomOption>({} as any);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);

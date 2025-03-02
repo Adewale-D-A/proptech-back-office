@@ -1,7 +1,5 @@
 import { useCallback, useState } from "react";
-import Pagination from "../pagination";
 import NoResult from "../noResult";
-import Search from "../inputs/search";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import { useAppDispatch } from "../../stores/hooks";
 import useGetAllTaxRateLists from "../../services-hooks/useGetTaxRatesLists";
@@ -9,8 +7,6 @@ import {
   removeTaxRateInList,
   replaceTaxRateInList,
 } from "../../stores/apiData/tax-rate-lists";
-import Filter from "../filterAndSort/filter";
-import Sort from "../filterAndSort/sort";
 import formatDate, { formatTime } from "../../utils/isoDateConverter";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import useAxios from "../../useHooks/useAxios";
@@ -18,7 +14,7 @@ import ModalTemplate from "../modal";
 import AddTax from "../tax/addTax";
 
 export default function TaxRateLists({ header }: { header: string[] }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
@@ -47,7 +43,6 @@ export default function TaxRateLists({ header }: { header: string[] }) {
           rate: Number(item?.amount),
         });
         const result = response?.data?.data;
-        console.log({ result });
         dispatch(
           openSnackbar({
             message: "Tax successfully updated",
@@ -86,13 +81,6 @@ export default function TaxRateLists({ header }: { header: string[] }) {
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 ">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Tax List</h2>
-
-          <Search
-            placeholder="Invoice number, booking Id..."
-            id="tax-rate-search"
-          />
-          <Filter />
-          <Sort id="sort-tax-rate" label="Sort by" />
         </div>
         {data && data.length > 0 ? (
           <table className=" w-full text-xs overflow-x-auto">
@@ -115,7 +103,7 @@ export default function TaxRateLists({ header }: { header: string[] }) {
                       {formatTime(request?.created_at)}
                     </td>
                     <td>***</td>
-                    <td className=" group relative">
+                    {/* <td className=" group relative">
                       <span className=" p-2 text-lg">...</span>
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                         <button
@@ -139,7 +127,7 @@ export default function TaxRateLists({ header }: { header: string[] }) {
                           Delete Tax Rate
                         </button>
                       </span>
-                    </td>
+                    </td> */}
                   </tr>
                 );
               })}
@@ -148,12 +136,6 @@ export default function TaxRateLists({ header }: { header: string[] }) {
         ) : (
           <NoResult />
         )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
-          isLoading={isLoading}
-          label="Tax"
-        />
       </div>
       <DeleteConfirmation
         confirmationHandler={deleteApartment}

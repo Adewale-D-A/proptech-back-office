@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import useAxios from "../useHooks/useAxios";
+import { useSearchParams } from "react-router-dom";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetApartmentCalendar({
@@ -11,11 +12,11 @@ export default function useGetApartmentCalendar({
   start_date?: string;
   end_date?: string;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [data, setData] = useState<{
     booked_dates: Date[];
     blocked_dates: Date[];
-  }>({} as any);
+  }>({ booked_dates: [], blocked_dates: [] } as any);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
@@ -29,12 +30,10 @@ export default function useGetApartmentCalendar({
       );
       const result = response?.data?.data;
       const dateRsult = {
-        booked_dates: result?.booked_dates?.map(
-          (item: string) => new Date(item)
-        ),
-        blocked_dates: result?.blocked_dates?.map(
-          (item: string) => new Date(item)
-        ),
+        booked_dates:
+          result?.booked_dates?.map((item: string) => new Date(item)) || [],
+        blocked_dates:
+          result?.blocked_dates?.map((item: string) => new Date(item)) || [],
       };
       setData(dateRsult);
       setIsLoading(false);

@@ -2,15 +2,19 @@ import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../pagination";
 import NoResult from "../noResult";
-import Search from "../inputs/search";
-import FilterSearch from "../filterAndSort/filter-search";
 import useGetAllAdditionalServiceLists from "../../services-hooks/useGetAllAdditionalServiceLists";
 import Status from "../status";
 import { useAppDispatch } from "../../stores/hooks";
-import { removeAdditionalServicesInList } from "../../stores/apiData/additional-services-lists";
+import {
+  markAdditionalServiceItemAsResolved,
+  removeAdditionalServicesInList,
+} from "../../stores/apiData/additional-services-lists";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import MobileAdditionalServicesTable from "./mobile/additionalServises";
 import formatDate from "../../utils/isoDateConverter";
+import TableSearch from "../inputs/search/table-search";
+import useAxios from "../../useHooks/useAxios";
+import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 
 export default function AdditionalServiceListTable({
   header,
@@ -18,12 +22,15 @@ export default function AdditionalServiceListTable({
   header: string[];
 }) {
   const dispatch = useAppDispatch();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
 
+  const [confirming, setConfirming] = useState(false);
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
   }>();
   const [sort, setSort] = useState("desc");
+  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetAllAdditionalServiceLists({
@@ -31,6 +38,7 @@ export default function AdditionalServiceListTable({
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
       sort: sort,
+      search,
     });
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
@@ -48,6 +56,27 @@ export default function AdditionalServiceListTable({
     }
   }, [deleteId]);
 
+  const markedAsResolved = useCallback(async (id: number) => {
+    setConfirming(true);
+    try {
+      const response = await axios.put(
+        `/admin/additional-service/mark-resolved/${id}`
+      );
+      const result = response?.data?.data;
+      // console.log({ response });
+      dispatch(markAdditionalServiceItemAsResolved(result));
+      dispatch(
+        openSnackbar({
+          message: "Succefully marked as resolved",
+          isError: false,
+        })
+      );
+    } catch (error) {
+    } finally {
+      setConfirming(false);
+    }
+  }, []);
+
   const deleteModal = useCallback((id: number) => {
     setDeleteId(String(id));
     setOpenDeleteConfirmation(true);
@@ -57,11 +86,13 @@ export default function AdditionalServiceListTable({
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
-          <Search
-            placeholder="Apartment name, customer name..."
-            id="apartment-search"
-          />
-          <FilterSearch />
+          <div className=" max-w-md">
+            <TableSearch
+              setValue={setSearch}
+              placeholder="Search service name, apartment name..."
+            />
+          </div>
+          {/* <FilterSearch /> */}
         </div>
         <div className="hidden md:block px-5">
           {data && data.length > 0 ? (
@@ -77,12 +108,22 @@ export default function AdditionalServiceListTable({
                 {data?.map((item) => {
                   return (
                     <tr key={item?.id} className=" border-b">
-                      <td>***</td>
+                      <td>
+                        {" "}
+                        {item?.user?.first_name} {item?.user?.last_name}
+                      </td>
                       <td>{item?.booking?.shortlet?.name}</td>
                       <td>{formatDate(item?.created_at)}</td>
                       <td>{item?.service_type?.name}</td>
                       <td>{item?.description}</td>
-                      <td>***</td>
+                      <td>
+                        <Status
+                          status="additional-service-escalte"
+                          booleanVal={Boolean(item?.is_escalated)}
+                          falsyMessage="Not Escalated"
+                          truthyMessage="Escalated"
+                        />
+                      </td>
                       <td>
                         <Status status={item?.status} />
                       </td>
@@ -95,12 +136,13 @@ export default function AdditionalServiceListTable({
                           >
                             View Details
                           </Link>
-                          <Link
-                            to={`#`}
+                          <button
+                            type="button"
+                            onClick={() => markedAsResolved(item?.id)}
                             className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Mark As Resolved
-                          </Link>
+                          </button>
                           {/* <button
                             type="button"
                             onClick={() => {

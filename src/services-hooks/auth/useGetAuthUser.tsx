@@ -8,7 +8,7 @@ import extractProfile from "../../utils/auth/extractProfile";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetAuthUser() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { user, status } = useAppSelector(
     (state) => state.userAuthentication.value

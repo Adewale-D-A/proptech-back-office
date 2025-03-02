@@ -1,0 +1,32 @@
+export type customerRequestPayload = {
+  type: string,
+  first_name: string;
+  last_name: string;
+  phone: string;
+  email: string;
+  profile_photo: { preview: string; id?: number };
+  dob: string;
+  gender: string;
+  password?: string;
+  country: string;
+  state: string;
+  city: string;
+  address: string;
+  place_of_birth: string;
+  id_type: string;
+  id_number: string;
+  company_name: string;
+  notes: string;
+  vat_id: string;
+  company_email: string;
+  company_id: string;
+  company_country: string;
+  company_state: string;
+  company_city: string;
+  company_address: string;
+  sales_channel_name: string;
+  commission_per_booking: string;
+  calculate_commission_on: string;
+  apply_commission_on: string;
+  identity_document: { preview: string; id?: number };
+};

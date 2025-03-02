@@ -63,7 +63,7 @@ export default function Timeline({
               ></div>
             )}
           </div>
-          <h6 className="  text-sm md:text-md">{item?.label}</h6>
+          <h6 className="  text-xs md:text-md">{item?.label}</h6>
         </div>
       ))}
     </div>

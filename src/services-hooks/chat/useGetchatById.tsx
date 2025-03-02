@@ -4,20 +4,22 @@ import useAxios from "../../useHooks/useAxios";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetChatById({ id }: { id?: string }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: true });
   const [data, setData] = useState<chatHistory[]>([] as any);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const getChatById = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/chat/${id}`);
-      console.log({ response });
-      setData([]);
-      setIsLoading(false);
+      const chatHistory = response?.data?.data;
+      setData(chatHistory);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

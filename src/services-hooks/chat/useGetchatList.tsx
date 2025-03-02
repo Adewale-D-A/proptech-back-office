@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
-import {
-  addToPaginationHistory,
-  updateChatList,
-} from "../../stores/apiData/chat-list";
+import { updateChatList } from "../../stores/apiData/chat-list";
 import useAxios from "../../useHooks/useAxios";
 import { pagination } from "../../types/pagination";
 
@@ -17,7 +14,7 @@ export default function useGetChatList({
   sort?: "desc" | "asc" | string;
   limit?: number;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const {
     status,
@@ -41,37 +38,10 @@ export default function useGetChatList({
         dispatch(updateChatList({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          `/admin/chat?sort=${sort}&limit=20&page=${page}`
+          `/admin/chat?sort=${sort}&limit=100&page=${page}`
         );
-        console.log({ response });
-        const { data } = response?.data?.data;
-        console.log({ data });
-        const {
-          data: chatData,
-          current_page,
-          last_page,
-          per_page,
-          total,
-          from,
-          to,
-        } = data;
-        const paginationDataset = {
-          current_page,
-          last_page,
-          per_page,
-          total,
-          from,
-          to,
-          length: data?.length,
-        };
-        dispatch(updateChatList({ data: chatData }));
-        dispatch(
-          addToPaginationHistory({
-            pagination_data: paginationDataset,
-            data: chatData,
-          })
-        );
-        setPagination(paginationDataset);
+        const chat = response?.data?.data;
+        dispatch(updateChatList({ data: chat }));
       }
       setIsLoading(false);
     } catch (error) {
@@ -80,7 +50,7 @@ export default function useGetChatList({
   }, [page, limit, sort]);
 
   useEffect(() => {
-    // getChatList();
+    getChatList();
   }, [page, limit, sort]);
 
   return {

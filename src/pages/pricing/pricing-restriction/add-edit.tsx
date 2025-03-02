@@ -1,4 +1,5 @@
 import { SyntheticEvent, useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../stores/hooks";
 import Select from "../../../components/inputs/select";
 import TextInput from "../../../components/inputs/textInput";
@@ -18,7 +19,8 @@ import LinkButton from "../../../components/button/linkButton";
 
 export default function AddEditRestriction({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
-  const axios = useAxios();
+  const navigate = useNavigate();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const { data } = useGetRestriction({ id });
 
   const [restrictionName, setRestrictionName] = useState("");
@@ -125,6 +127,7 @@ export default function AddEditRestriction({ id }: { id?: string }) {
             })
           );
         }
+        navigate("/pricing/restrictions");
       } catch (error) {
       } finally {
         setIsSaving(false);
@@ -260,7 +263,7 @@ export default function AddEditRestriction({ id }: { id?: string }) {
                   </p>
                 </div>
                 <Select
-                  isRequired={true}
+                  isRequired={false}
                   value={maxNights}
                   setValue={setMaxNights}
                   id="max-nights"

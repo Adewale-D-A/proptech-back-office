@@ -68,7 +68,7 @@ export default function AddressAutocompleteInput({
           <div className="w-full">
             {label && <label htmlFor="address-searcher">{label}</label>}
             <input
-              required={true}
+              required={false}
               readOnly={readOnly}
               disabled={readOnly}
               id="location-search"

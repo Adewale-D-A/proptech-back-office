@@ -6,12 +6,13 @@ import ImageCarousel from "../../../components/cards/image-carousel";
 import LocationPinIcon from "../../../assets/icons/location";
 import BathIcon from "../../../assets/icons/bath";
 import LoadingButton from "../../../components/button";
-import DateInput from "../../../components/inputs/dateInput";
 import TextInput from "../../../components/inputs/textInput";
 import PriceRateList from "../../../components/tables/pricingRateLists";
 import { apartmentById } from "../../../types/apiData/apartment";
 import Search from "../../../components/inputs/search";
 import useAxios from "../../../useHooks/useAxios";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
 
 const breadCrumb = [
   {
@@ -26,7 +27,7 @@ const breadCrumb = [
   },
 ];
 export default function RateTable() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
 
   // update page props on component mount
@@ -63,6 +64,16 @@ export default function RateTable() {
           price: rate,
           caution_fee: cautionFee,
         });
+        dispatch(
+          openSnackbar({
+            message: "Success",
+            isError: false,
+          })
+        );
+        setFrom("");
+        setTo("");
+        setRate("");
+        setCautionFee("");
       } catch (error) {
       } finally {
         setIsSubmitting(false);
@@ -76,11 +87,10 @@ export default function RateTable() {
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
         <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-5">
           <div className=" w-full rounded-md border p-2 flex flex-col gap-3">
-            <Search
-              id="apartment-search"
-              componentId="apartment"
+            <ApartmentSingleSearch
+              setSelected={setSelectedApt}
+              selected={selectedAprt}
               placeholder="Apartment name..."
-              setValue={setSelectedApt}
             />
             {selectedAprt?.id && (
               <div className=" flex flex-col gap-3">
@@ -111,23 +121,21 @@ export default function RateTable() {
             <div className="pb-3">
               <form onSubmit={submitRate} className="flex flex-col gap-3">
                 <h6 className="text-md font-semibold">Add Rates Per Night</h6>
-                <DateInput
-                  inputType="date"
+                <TextInput
+                  inputType="number"
                   isRequired={true}
                   value={from}
                   setValue={setFrom}
                   id="from-date"
                   placeholder="From"
-                  label="From"
                 />
-                <DateInput
-                  inputType="date"
+                <TextInput
+                  inputType="number"
                   isRequired={true}
                   value={to}
                   setValue={setTo}
                   id="to-date"
                   placeholder="To"
-                  label="To"
                 />
                 <h6 className="text-md font-semibold border-t py-3">
                   Add Rates Per Night

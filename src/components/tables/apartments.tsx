@@ -6,8 +6,6 @@ import Pagination from "../pagination";
 import ModalTemplate from "../modal";
 import QuickReservationFlow from "../quickReservationFlow";
 import CalendarIcon from "../../assets/icons/calendar";
-import Search from "../inputs/search";
-import AssignCustomer from "../quickReservationFlow/assignToCustomer";
 import { useAppSelector } from "../../stores/hooks";
 import formatDate, { formatTime } from "../../utils/isoDateConverter";
 import NoResult from "../noResult";
@@ -69,10 +67,11 @@ export default function ApartmentTable({
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">{title}</h2>
-          <Search
+          {/* <Search
             placeholder="Apartment name, type, location..."
             id="apartment-search"
-          />
+            componentId="apartment"
+          /> */}
           <div className=" flex items-center gap-3 text-sm text-gray-500 flex-col md:flex-row">
             <Filter actionHandler={handleSalesFiltering} />
             <Sort setSort={setSort} id={"sales-analytics"} label={"Sort by:"} />
@@ -193,6 +192,7 @@ export default function ApartmentTable({
             apartment_id={selectedId}
             apartment_name={apartmentName}
             setOpen={setOpenReservation}
+            allowApartmentUpdate={false}
           />
         </div>
       </ModalTemplate>

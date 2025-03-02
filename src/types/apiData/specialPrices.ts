@@ -4,6 +4,7 @@ export type specialPrices = {
   check_in_date: string;
   check_out_date: string;
   price: number;
+  days: string[];
   percentage: number;
   round_to_integer: number;
   weekday: string;

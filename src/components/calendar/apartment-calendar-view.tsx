@@ -14,6 +14,7 @@ import dateRangeIterator from "../../utils/dateRangeIterator";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import { apartmentById } from "../../types/apiData/apartment";
 import { useParams } from "react-router-dom";
+import defaultCheckInDateTime from "../../config/default-check-in-date-time";
 
 // const sampleBookedDates = [
 //   new Date(2024, 8, 27),
@@ -25,11 +26,17 @@ const todayString = new Date()?.toISOString()?.slice(0, 10);
 const nextMonthString = new Date(today?.getFullYear(), today?.getMonth() + 2, 0)
   ?.toISOString()
   ?.slice(0, 10);
+  const defaultDateTime = defaultCheckInDateTime()
 export default function ApartmentCalendarView() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
-
+  const [defaultReservationsDateTime, setDefaultReservtionDateTime] = useState<{
+    checkIn: string;
+    checkOut: string;
+    checkInTime: string;
+    checkOutTime: string;
+  }>();
   // store assigned customer state
   const { open: openAssignToCustomerView } = useAppSelector(
     (state) => state.assignCustomer.value
@@ -47,7 +54,7 @@ export default function ApartmentCalendarView() {
 
   // calendar data fetching based on filtered dates
   const { data } = useGetApartmentCalendar({
-    id: String(selectedAprt?.id || id || ""),
+    id: String(selectedAprt?.id || id  || ""),
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,
   });
@@ -92,6 +99,23 @@ export default function ApartmentCalendarView() {
   }, [data]);
   //spread date range into objects for the calendar view to render
 
+  const handleDateClick = useCallback((date: Date) => {
+    const toDate = new Date(
+      date?.getFullYear(),
+      date?.getMonth(),
+      date?.getDate() + 1
+    )
+      .toISOString()
+      ?.slice(0, 10);
+    setDefaultReservtionDateTime((prev) => {
+      return {
+        checkIn: prev?.checkIn ? prev?.checkIn : toDate,
+        checkOut: prev?.checkIn ? toDate : "",
+        checkInTime: prev?.checkIn ? defaultDateTime?.check_in_time : "",
+        checkOutTime: prev?.checkIn ? defaultDateTime?.check_out_time: "",
+      };
+    });
+  }, []);
   return (
     <>
       <section className="w-full flex flex-col items-center my-5">
@@ -106,6 +130,7 @@ export default function ApartmentCalendarView() {
                   variant={2}
                   apartment_name={selectedAprt?.name || ""}
                   setSelectedApt={setSelectedApt}
+                  defaultDateTime={defaultReservationsDateTime}
                 />
               </div>
             </div>
@@ -129,10 +154,14 @@ export default function ApartmentCalendarView() {
                     <CalendarAvailabilitySymbol />
                     <div className="w-full flex flex-wrap gap-8 gap-y-16 justify-center items-start">
                       {calendarVewData?.map((item, index) => (
-                        <div key={index} className=" border-r px-3">
+                        <div key={item?.toString()} className=" border-r px-3">
                           <CalendarView
                             date={new Date(item)}
-                            highlights={data?.booked_dates}
+                            highlights={[
+                              ...data?.booked_dates,
+                              ...data?.blocked_dates,
+                            ]}
+                            onDateClick={handleDateClick}
                           />
                         </div>
                       ))}

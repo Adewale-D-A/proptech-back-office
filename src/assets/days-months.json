@@ -13,5 +13,14 @@
     "November",
     "December"
   ],
-  "days": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+  "days": ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"],
+  "fulldays": [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ]
 }

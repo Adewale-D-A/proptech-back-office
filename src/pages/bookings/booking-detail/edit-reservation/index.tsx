@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   useCallback,
   useEffect,
@@ -30,19 +30,24 @@ import SplitStay from "../../../../components/booking-detail/split-stay";
 import AddRoom from "../../../../components/booking-detail/add-room";
 import useGetBookingById from "../../../../services-hooks/bookings/useGetBookingById";
 import useGetCustomerById from "../../../../services-hooks/useGetCustomerById";
+import useAxios from "../../../../useHooks/useAxios";
+import { removeBookingsInList } from "../../../../stores/apiData/bookings-lists";
+import { openSnackbar } from "../../../../stores/appFunctionality/snackbar";
 
 export default function EditBookingReservation() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const breadCrumb = useMemo(
     () => [
       {
-        url: "/bookings",
+        url: "/bookings/overview",
         label: "Bookings",
         icon: <CalendarIcon />,
       },
       {
-        url: `/booking-details/${id}`,
+        url: `/bookings/booking-details/${id}`,
         label: "Booking Details",
         icon: "",
       },
@@ -119,6 +124,7 @@ export default function EditBookingReservation() {
         check_out_time,
       } = data || {};
       setGuests(String(number_of_guests));
+      setTravellerNoGuests(String(number_of_guests));
       setCheckInDate(check_in_date);
       setCheckInTime(check_in_time);
       setCheckOutDate(check_out_date);
@@ -130,30 +136,45 @@ export default function EditBookingReservation() {
     if (customer?.first_name) {
       const { first_name, last_name } = customer || {};
       setFirstname(customer?.first_name);
-      setLastname(customer?.first_name);
+      setLastname(customer?.last_name);
     }
   }, [customer]);
 
-  const deleteReservation = useCallback(() => {
-    console.log({ id });
-    setOpenDeleteConfirmation(false);
+  const deleteReservation = useCallback(async () => {
+    setIsDeleting(true);
+    try {
+      await axios.delete(`/admin/booking/${id}`);
+      dispatch(removeBookingsInList({ id: Number(id) }));
+      setOpenDeleteConfirmation(false);
+      navigate("/bookings/view-all");
+    } catch (error) {
+    } finally {
+      setIsDeleting(false);
+    }
   }, [id]);
 
   const saveReservation = useCallback(() => {
-    console.log({ id });
+    // console.log({ id });
+    dispatch(
+      openSnackbar({
+        message: "Reservation successfully saved",
+        isError: false,
+      })
+    );
+    navigate("/bookings/view-all");
   }, [id]);
 
   return (
     <>
       <section className="w-full flex flex-col items-center">
         <div className="w-full max-w-screen-xl flex flex-col gap-10">
-          <BookingByIdList data={data} />
+          <BookingByIdList data={{ ...data, user: customer }} />
           <div className="w-full flex gap-5 flex-col md:flex-row justify-center items-center md:justify-between md:items-end  border-b">
             <h2 className="text-xl font-semibold flex items-center gap-3 border-b-2 border-primary pb-3 text-primary">
               <WriteIcon /> <span>Edit Reservation</span>
             </h2>
             <div className=" flex items-center flex-col md:flex-row gap-3 text-sm pb-2">
-              <LoadingButton
+              {/* <LoadingButton
                 isLoading={isDeleting}
                 clickHandler={() => setOpenDeleteConfirmation(true)}
                 type="button"
@@ -161,15 +182,15 @@ export default function EditBookingReservation() {
                 variant={3}
                 className=" text-red-500"
                 startIcon={<BinIcon className="h-5 w-5" />}
-              />
-              <LoadingButton
+              /> */}
+              {/* <LoadingButton
                 isLoading={false}
                 type="button"
                 clickHandler={() => setOpenSplitStay(true)}
                 label="Split Stay"
                 variant={3}
                 className=" px-3 p-2 text-primary bg-primary/15 hover:bg-primary/30 transition-all"
-              />
+              /> */}
               <LoadingButton
                 isLoading={isSaving}
                 clickHandler={() => saveReservation()}
@@ -242,7 +263,7 @@ export default function EditBookingReservation() {
                   </h4>
                   <div className=" px-3 flex flex-col gap-3">
                     <div className=" p-3 flex items-center gap-3 bg-gray-200 rounded-lg">
-                      <BuildingIcon /> <h6>Garden Roese 99</h6>
+                      <BuildingIcon /> <h6>{data?.shortlet?.name}</h6>
                     </div>
                     <Select
                       isRequired={true}
@@ -321,7 +342,9 @@ export default function EditBookingReservation() {
                         values={[
                           {
                             id: "standard-rate",
-                            title: "N110,000",
+                            title: String(
+                              data?.total_price?.toLocaleString() || ""
+                            ),
                             value: "standard-rate",
                             defaultChecked: true,
                             label: "Standard Rate",
@@ -383,7 +406,7 @@ export default function EditBookingReservation() {
                         values={[
                           {
                             id: "caution-fee",
-                            title: "Caution Fee (N50,000)",
+                            title: `Caution Fee (N${data?.caution_fee_NGN?.toLocaleString()})`,
                             value: "caution-fee",
                             defaultChecked: true,
                           },

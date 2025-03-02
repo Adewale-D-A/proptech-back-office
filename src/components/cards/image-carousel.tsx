@@ -53,7 +53,7 @@ export default function ImageCarousel({
               ? images[currentImgIndex]?.url
               : imageArray[currentImgIndex]
           }
-          alt={"shirt"}
+          alt={"Apartment Image"}
           className="w-full h-full object-cover rounded-md"
         />
         <div className="w-full flex gap-5 justify-center items-center my-2 absolute bottom-3 left-0">

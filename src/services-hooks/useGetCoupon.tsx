@@ -4,7 +4,7 @@ import { coupons } from "../types/apiData/coupons";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetCoupon({ id }: { id?: string }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [data, setData] = useState<coupons>({} as any);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);

@@ -4,7 +4,7 @@ import { restriction } from "../../types/apiData/restrictions";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetRestriction({ id }: { id?: string }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [data, setData] = useState<restriction>({} as any);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);

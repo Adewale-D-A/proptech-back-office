@@ -28,7 +28,7 @@ const Select: React.FC<Props> = ({
       )}
       <label
         htmlFor={id}
-        className="w-full relative p-3 px-6 rounded-md border flex items-center gap-3"
+        className="w-full relative  rounded-md border flex items-center gap-3"
       >
         <select
           id={id}
@@ -38,7 +38,7 @@ const Select: React.FC<Props> = ({
           value={value}
           required={isRequired}
           onChange={(e) => setValue(e.target.value)}
-          className="w-full sm:text-md bg-transparent"
+          className="w-full sm:text-md bg-transparent p-3 px-6 disabled:border-gray-300 disabled:text-gray-300"
         >
           {children}
         </select>

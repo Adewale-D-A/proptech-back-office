@@ -2,8 +2,6 @@ import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import Pagination from "../pagination";
 import NoResult from "../noResult";
-import Search from "../inputs/search";
-import FilterSearch from "../filterAndSort/filter-search";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import Status from "../status";
 import useGetAllBookingsLists from "../../services-hooks/useGetAllBookingsLists";
@@ -13,9 +11,14 @@ import ModalTemplate from "../modal";
 import BookingDetailSummary from "../booking-detail";
 import formatDate from "../../utils/isoDateConverter";
 import MobileBookingsTable from "./mobile/bookings";
+import TableSearch from "../inputs/search/table-search";
+import BookingsFilterSearch from "../filterAndSort/bookings-filter";
+import { BookingFilterPayload } from "../../types/apiData/bookings/booking-filter-options";
 
 export default function AllBookingsListTable({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<BookingFilterPayload>();
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
@@ -28,6 +31,8 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
       sort: sort,
+      search,
+      ...filter,
     });
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
@@ -46,11 +51,10 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
     setOpenDeleteConfirmation(true);
   }, []);
 
-  const deleteApartment = useCallback(() => {
+  const deleteBooking = useCallback(() => {
     setIsDeleting(true);
     try {
       dispatch(removeBookingsInList({ id: selectedId }));
-
       setOpenDeleteConfirmation(false);
     } catch (error) {
     } finally {
@@ -61,11 +65,13 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 ">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
-          <Search
-            placeholder="Apartment name, type, location..."
-            id="apartment-search"
-          />
-          <FilterSearch />
+          <div className=" max-w-md">
+            <TableSearch
+              setValue={setSearch}
+              placeholder="Search name, type, location..."
+            />
+          </div>
+          <BookingsFilterSearch setData={setFilter} />
         </div>
         <div className="hidden md:block">
           {data && data.length > 0 ? (
@@ -82,11 +88,17 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
                   return (
                     <tr key={item?.id} className=" border-b">
                       <td>
-                        <span className=" rounded-full p-2 border border-primary">
+                        {" "}
+                        <Link
+                          to={`/bookings/booking-details/edit-reservation/${item?.id}`}
+                          className=" rounded-full p-2 border border-primary"
+                        >
                           {item?.id}
-                        </span>
+                        </Link>
                       </td>
-                      <td>{item?.account_name}</td>
+                      <td>
+                        {item?.user?.first_name} {item?.user?.last_name}
+                      </td>
                       <td>{item?.shortlet?.name}</td>
                       <td>{formatDate(item?.created_at)}</td>
                       <td>
@@ -113,24 +125,24 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
                             View Booking
                           </button>
                           <Link
-                            to={`/booking-details/edit-reservation/${item?.id}`}
+                            to={`/bookings/booking-details/edit-reservation/${item?.id}`}
                             className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Edit Booking
                           </Link>
-                          <Link
+                          {/* <Link
                             to={`/apartment-caledar/${item?.id}`}
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Generate Invoice
-                          </Link>
-                          <button
+                          </Link> */}
+                          {/* <button
                             type="button"
                             onClick={() => openDelete(item?.id)}
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Delete Booking
-                          </button>
+                          </button> */}
                         </span>
                       </td>
                     </tr>
@@ -157,7 +169,7 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
         />
       </div>
       <DeleteConfirmation
-        confirmationHandler={deleteApartment}
+        confirmationHandler={deleteBooking}
         isLoading={isDeleting}
         btnTitle="Yes, I want to"
         title="Delete Booking"

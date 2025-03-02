@@ -4,7 +4,7 @@ import { extraOption } from "../types/apiData/extraOption";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetExtraOption({ id }: { id?: string }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [data, setData] = useState<extraOption>({} as any);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);

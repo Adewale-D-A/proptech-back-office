@@ -17,7 +17,10 @@ export default function AddEditAmenities({
   id?: string;
   setOpen: Function;
 }) {
-  const axios = useAxiosMultipart();
+  const axios = useAxiosMultipart({
+    disableSuccMssg: false,
+    disableErrMssg: false,
+  });
   const dispatch = useAppDispatch();
   const { data } = useGetAmenity({ id });
   const [title, setTitle] = useState("");
@@ -59,7 +62,7 @@ export default function AddEditAmenities({
       setIsCreating(true);
       const payload = {
         name: title,
-        desciption: description,
+        description: description,
         image: file,
         ordering_position: ordering,
       };

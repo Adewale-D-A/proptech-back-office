@@ -120,6 +120,7 @@ import DailyRoomReport from "./pages/reports/daily-room";
 import OccupancyPerTimeReport from "./pages/reports/occupancy-per-time";
 import EditInvoice from "./pages/invoices/edit-invoice";
 import CustomerDetail from "./pages/customers/customer-detail";
+import BlockedDatesReasonListView from "./pages/apartments/block-dates-reason";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -166,6 +167,10 @@ function App() {
               <Route
                 path="/apartments/location-grouping"
                 element={<LocationGroupView />}
+              />
+              <Route
+                path="/apartments/blocked-dates-reasons"
+                element={<BlockedDatesReasonListView />}
               />
             </Route>
 
@@ -317,8 +322,8 @@ function App() {
             </Route>
             <Route path="/admin/add" element={<AddAdminUser />} />
             <Route path="/admin/edit/:id" element={<EditAdminUser />} />
-            <Route path="admin/admin-roles/add" element={<AddRoles />} />
-            <Route path="admin/admin-roles/edit/:id" element={<EditRoles />} />
+            <Route path="/admin/admin-roles/add" element={<AddRoles />} />
+            <Route path="/admin/admin-roles/edit/:id" element={<EditRoles />} />
 
             {/* pricing flows wrapper */}
             <Route element={<PricingTabWrapper />}>
@@ -350,7 +355,6 @@ function App() {
               path="/pricing/edit-restriction/:id"
               element={<EditRestriction />}
             />
-
             {/* plans and promotions flows wrapper */}
             <Route element={<PlansAndPromotionsTabWrapper />}>
               <Route
@@ -370,7 +374,6 @@ function App() {
                 element={<PackagesAndOffers />}
               />
             </Route>
-
             <Route
               path="/plans-and-promotions/package-and-offer/add-new-package-and-offer"
               element={<AddNewPackageAndOffer />}

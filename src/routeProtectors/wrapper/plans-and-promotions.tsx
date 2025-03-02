@@ -1,6 +1,5 @@
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
-import TagsIcon from "../../assets/icons/tags";
 import BuildingIcon from "../../assets/icons/building";
 import PercentageBadgeIcon from "../../assets/icons/percentage-badge";
 import GiftIcon from "../../assets/icons/gift";
@@ -8,7 +7,10 @@ import LoadingButton from "../../components/button";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-import { addTaxRateToList } from "../../stores/apiData/tax-rate-lists";
+import {
+  addTaxRateToList,
+  replaceTaxRateInList,
+} from "../../stores/apiData/tax-rate-lists";
 import PlusIcon from "../../assets/icons/plus";
 import LinkButton from "../../components/button/linkButton";
 import ModalTemplate from "../../components/modal";
@@ -45,7 +47,7 @@ const tabList = [
 ];
 export default function PlansAndPromotionsTabWrapper() {
   const location = useLocation();
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [trackTab, setTrackTab] = useState(1);
   // tax rates
@@ -71,14 +73,15 @@ export default function PlansAndPromotionsTabWrapper() {
           rate: Number(item?.amount),
         });
         const result = response?.data?.data;
+
         dispatch(
           openSnackbar({
-            message: "New Tax successfully added",
+            message: "Tax successfully updated",
             isError: false,
           })
         );
         dispatch(
-          addTaxRateToList({
+          replaceTaxRateInList({
             id: result?.id,
             name: result?.name,
             rate: result?.rate,
@@ -111,7 +114,7 @@ export default function PlansAndPromotionsTabWrapper() {
                 type="button"
                 isLoading={false}
                 clickHandler={() => setOpenNewTax(true)}
-                label="New Tax Rates"
+                label="Update Tax Rate"
                 startIcon={<PlusIcon />}
               />
             ) : trackTab === 2 ? (

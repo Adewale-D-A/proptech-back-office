@@ -1,3 +1,91 @@
+##### 23.02.2025
+
+> Feature -> Block date feature addition
+> Special prices multiple select option addition
+
+##### 20.02.2025
+
+> Add-on -> remove empty payload keys and values util function creation
+> bug-fix -> Upload profile_photo and identity document optional requirement addition
+> bug-fix -> Systematic 99Apt team bug list reviews and fixes
+
+##### 15.02.2025
+
+> bug-fix -> Apartment list view characteristis/amenities addition and units removal
+> Feature addition -> booking check availability suggestions
+> bug-fix -> Chat module cached sent history repetition fix
+> bug-fix -> Invoice booking detail url updated fix
+
+##### 24.01.2025
+
+> Chat module bug fixed
+> Reporting data retrieval with and without selecting apartments
+
+##### 23.01.2025
+
+> Booking details administrative view chat functional chat component addition
+> Update reservation auto populate fields adjustments
+> Chnaged logic to ditinguish sent and received chat messages from message user id to message admin ID
+
+##### 22.01.2025
+
+> Check availability code commenting to show where to comment out and where to un-comment when apartment suggestions response is being returned from the API
+> Clear message field after sending
+
+##### 21.01.2025
+
+> Axios hook successPrompt and errorPrompt parameters
+> API Integration: Guest chat API and logic integration
+
+##### 20.01.2025
+
+> BUG Fix: Creating user naviagtion URL bug fixed
+> BUG FIX: Additional service missing customer information added
+> BUG FIX: Fixed invoice creation bug
+> BUG FIX: Fixed customer information unavailability on booking-requests table
+> View booking details bug fixes
+> BUG Fixes and inconsistencies adjustments
+
+##### 19.01.2025
+
+> Feature: Bookings overview Maintenance, Booked hue indicator feature developed
+> Feature: Apartments calendar response reformater UTIL function created
+> Feature: Bookings filter API, logic and UI updates
+> Feature: Api query parameter extractor UTIL function creation
+> Feature: Custom API hook for all apartments calendar created (will be used for the calendar view to fix the highlighted design behaviour)
+> Bug fix: Time input hover
+
+##### 18.01.2025
+
+> Bug Fix: Date input logic re-work
+
+##### 17.01.2025
+
+> Apartment, customer, location groupings search and select UI and logic re-work
+> Apartment tab items update and delete bug fixes
+
+##### 14.01.2025
+
+> Bug list resolution
+> Bugs sheet url added to README
+
+##### 10.01.2025
+
+> Fixed customers flow mobile responsiveness
+> Fixed apartment flow mobile responsiveness
+
+##### 06.01.2025
+
+> Tax rates bug fix
+> Price rate table from-to bug fix
+> Reports API completion
+> Reports endpoint integrations
+> Fixed bugs, testing and inconsistencies resolutions
+
+##### 05.01.2025
+
+> Fixed Updating customer information bug
+
 ##### 04.01.2025
 
 > Identity document approval endpoint integration

@@ -4,7 +4,7 @@ import { additionalService } from "../types/apiData/additionalServices";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetAdditionalServiceById(id?: string) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [isLoading, setIsLoading] = useState(true);
   const [isFailed, setIsFailed] = useState(false);
 

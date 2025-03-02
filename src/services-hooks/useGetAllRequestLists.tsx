@@ -5,6 +5,7 @@ import {
   updateRequestsLists,
   addToPaginationHistory,
 } from "../stores/apiData/requests-lists";
+import { pagination } from "../types/pagination";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetAllRequestLists({
@@ -22,7 +23,7 @@ export default function useGetAllRequestLists({
   search?: string;
   limit?: number;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const {
     status,
@@ -32,14 +33,7 @@ export default function useGetAllRequestLists({
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const [pagination, setPagination] = useState<{
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    from: number;
-    to: number;
-  }>({} as any);
+  const [pagination, setPagination] = useState<pagination>({} as any);
   const getAllRequestList = useCallback(async () => {
     setIsLoading(true);
     try {

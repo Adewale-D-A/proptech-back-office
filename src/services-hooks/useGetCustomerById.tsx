@@ -12,7 +12,7 @@ import {
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetCustomerById(id?: string) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -26,6 +26,7 @@ export default function useGetCustomerById(id?: string) {
       const response = await axios.get(`/admin/user/${id}`);
       const { user } = response?.data?.data;
       const {
+        type,
         id: resp_id,
         first_name,
         last_name,
@@ -77,11 +78,12 @@ export default function useGetCustomerById(id?: string) {
       dispatch(updateCustomerInfoId({ id: id }));
       dispatch(
         updateCustomerDetails({
+          type,
           first_name,
           last_name,
           email,
           phone,
-          profile_photo: { name: "", size: 1000, preview: profile_photo },
+          profile_photo: { id: 1000, preview: profile_photo },
           gender: gender || "Male",
           dob: new Date(dob)?.toISOString()?.slice(0, 10),
           country: country,
@@ -95,7 +97,10 @@ export default function useGetCustomerById(id?: string) {
           place_of_birth: place_of_birth,
           id_type: id_type,
           id_number: id_number,
-          identity_document: { name: "", size: 0, preview: "" },
+          identity_document: {
+            id: 1001,
+            preview: identity_verification_document,
+          },
           password: "",
           notes: notes,
         })

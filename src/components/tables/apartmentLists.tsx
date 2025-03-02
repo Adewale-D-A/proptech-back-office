@@ -1,9 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useCallback, useState } from "react";
 import Status from "../status";
 import LocationPinIcon from "../../assets/icons/location";
 import Pagination from "../pagination";
-import { useCallback, useState } from "react";
-import Search from "../inputs/search";
 import Sort from "../filterAndSort/sort";
 import useGetAllApartmentLists from "../../services-hooks/useGetAllApartmentLists";
 import NoResult from "../noResult";
@@ -18,10 +17,12 @@ import CalculateRate from "../check-availability/calculate-rate";
 import useAxios from "../../useHooks/useAxios";
 
 export default function ApartmentListsTable() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
+  const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("desc");
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -30,7 +31,7 @@ export default function ApartmentListsTable() {
   const [selectedId, setSelectedId] = useState("");
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllApartmentLists({ page: currentPage, search });
+    useGetAllApartmentLists({ page: currentPage, search, sort: sort });
 
   const handleOpenCalculateRate = useCallback((id: number) => {
     setSelectedId(String(id || ""));
@@ -60,7 +61,7 @@ export default function ApartmentListsTable() {
               placeholder="Apartment name, type, location..."
             />
           </div>
-          <Sort id="apartment-lists" label="Sort Category" />{" "}
+          <Sort setSort={setSort} id="sort-by" label="Sort by" />
         </div>
         <div className="hidden md:block px-5">
           {data && data.length > 0 ? (
@@ -72,7 +73,7 @@ export default function ApartmentListsTable() {
                     "No of Guests",
                     "Category",
                     "Characteristics",
-                    "Units",
+                    // "Units",
                     "Status",
                     "Action",
                   ].map((head) => (
@@ -101,9 +102,15 @@ export default function ApartmentListsTable() {
                       <td className=" text-lg  min-w-36">
                         {request?.max_guests} Guests
                       </td>
-                      <td>**</td>
-                      <td>**</td>
-                      <td>**</td>
+                      <td>{request?.room_option?.name}</td>
+                      <td>
+                        <div className=" flex items-center gap-2">
+                          {request?.amenities?.map((item) => (
+                            <span key={item?.id}>{item?.name},</span>
+                          ))}
+                        </div>
+                      </td>
+                      {/* <td>**</td> */}
                       <td>
                         <Status status={request?.availability_status} />
                       </td>
@@ -117,7 +124,7 @@ export default function ApartmentListsTable() {
                             View Apartment
                           </Link>
                           <Link
-                            to={`/apartments/edit-apartment/apartment-details/${request?.id}`}
+                            to={`/apartments/edit-apartment/apartment-details/${request?.id}?redirect=${location?.pathname}`}
                             className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Edit Apartment
@@ -157,7 +164,10 @@ export default function ApartmentListsTable() {
           )}
         </div>
         <div className="w-full block md:hidden">
-          <MobileApartmentTable data={data} />
+          <MobileApartmentTable
+            data={data}
+            handleOpenCalculateRate={handleOpenCalculateRate}
+          />
         </div>
         <Pagination
           pagination={pagination}

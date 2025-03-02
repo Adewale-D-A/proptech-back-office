@@ -17,7 +17,7 @@ const breadCrumb = [
 ];
 
 function Profile() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.userAuthentication.value);
 

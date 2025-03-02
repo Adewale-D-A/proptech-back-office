@@ -84,9 +84,17 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
         dispatch(updateApartmentDetails(payload));
         dispatch(updateApartmentInfoId({ id: "updated" }));
         if (id) {
-          navigate(`/apartments/edit-apartment/apartment-features/${id}`);
+          navigate(
+            `/apartments/edit-apartment/apartment-features/${id}?redirect=${
+              searchParams?.get("redirect") || ""
+            }`
+          );
         } else {
-          navigate(`/apartments/add-apartment/apartment-features`);
+          navigate(
+            `/apartments/add-apartment/apartment-features?redirect=${
+              searchParams?.get("redirect") || ""
+            }`
+          );
         }
       } else {
         dispatch(

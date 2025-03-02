@@ -8,24 +8,23 @@ import CalendarView from "../../../components/calendar";
 import CalendarAvailabilitySymbol from "../../../components/calender-availability-symbol";
 import CheckAvailability from "../../../components/check-availability";
 import Filter from "../../../components/filterAndSort/filter";
-import Search from "../../../components/inputs/search";
 import BookingsListTable from "../../../components/tables/bookingsLists";
 import BarChart from "../../../components/charts/bar-chart";
 import RoomOccupancyListTable from "../../../components/tables/roomOccupancy";
 import ForecastDash from "../../../components/forecasting-dash";
-import CalculatedAvailabilityOptions from "../../../components/check-availability/calculated-option";
-import { availabilityOptions } from "../../../types/apiData/availabilityOptions";
+// import CalculatedAvailabilityOptions from "../../../components/check-availability/calculated-option";
+// import { availabilityOptions } from "../../../types/apiData/availabilityOptions";
 import { apartmentById } from "../../../types/apiData/apartment";
 import useGetApartmentCalendar from "../../../services-hooks/apartmentCalendar";
 import useGetVisitorCount from "../../../services-hooks/bookings/useGetVisitorCOunter";
 import useGetWeeklyBookingCount from "../../../services-hooks/bookings/useGetWeeklyBookingCount";
 import formatDate from "../../../utils/isoDateConverter";
+import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
 
 export default function BookingsOverview() {
   const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
-  const [searchedAptd, setSearchedApt] = useState<apartmentById>({} as any);
-  const [availabilityResponse, setAvailabilityResponse] =
-    useState<availabilityOptions>();
+  // const [availabilityResponse, setAvailabilityResponse] =
+  //   useState<availabilityOptions>();
 
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
@@ -48,6 +47,7 @@ export default function BookingsOverview() {
     id: String(selectedAprt?.id || ""),
   });
   const { data: visitorCount } = useGetVisitorCount();
+  const handleDateClick = useCallback((date: Date) => {}, []);
 
   return (
     <div className=" w-full flex flex-col gap-5 my-5">
@@ -100,19 +100,12 @@ export default function BookingsOverview() {
               <CalendarIcon /> <span>Check Availability</span>{" "}
             </h4>
             <div className=" p-3 flex flex-col gap-4">
-              <Search
-                setValue={setSearchedApt}
-                id="apartment-search"
-                componentId="apartment"
-                placeholder="Search apartment..."
-              />
-              <CheckAvailability
-                apartmentId={String(searchedAptd?.id || "")}
-                setAvailabilityResponse={setAvailabilityResponse}
-              />
+              <CheckAvailability />
             </div>
           </div>
-          {availabilityResponse?.options && <CalculatedAvailabilityOptions />}
+          {/* TODO: Uncomment out when the suggested apartments response is available of "Check Availability" endpoint */}
+          {/* Available apartmnets suggestions and split stays suggestions */}
+          {/* {<CalculatedAvailabilityOptions />} */}
         </div>
         <div className=" w-full flex flex-col gap-4 border rounded-md">
           {/* Bookings Calendar */}
@@ -130,18 +123,18 @@ export default function BookingsOverview() {
           </div>
           <div className=" px-3 flex flex-col gap-3 justify-center items-center">
             <div className="w-full flex flex-col gap-3">
-              <Search
-                id="apartment-search"
-                componentId="apartment"
+              <ApartmentSingleSearch
                 placeholder="Apartment name..."
-                setValue={setSelectedApt}
+                selected={selectedAprt}
+                setSelected={setSelectedApt}
               />
             </div>
             <CalendarAvailabilitySymbol />
             {data.blocked_dates && (
               <CalendarView
-                // date={new Date(item)}
-                highlights={data?.booked_dates}
+                date={new Date()}
+                highlights={[...data?.booked_dates, ...data?.blocked_dates]}
+                onDateClick={handleDateClick}
               />
             )}
           </div>

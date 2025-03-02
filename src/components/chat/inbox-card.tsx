@@ -1,5 +1,5 @@
 import DoubleCheckIcon from "../../assets/icons/double-check";
-import { chatHistory } from "../../types/apiData/chat";
+import { chatList } from "../../types/apiData/chat";
 import { formatTime } from "../../utils/isoDateConverter";
 import NotifierNumber from "../status/notifierNumber";
 
@@ -13,35 +13,37 @@ export default function InboxCard({
   isActive: boolean;
   variant?: "group-chat" | "dm";
   groupName?: string;
-  conversation: chatHistory;
-  setChatId: Function;
+  conversation: chatList;
+  setChatId: (chatItem: any) => void;
 }) {
   return (
     <div className=" border-b py-1">
       <button
-        onClick={() => setChatId(conversation?.id)}
+        onClick={() => setChatId(conversation)}
         className={`w-full flex  gap-2 justify-between rounded-lg p-2 ${
           isActive ? "bg-primary/5" : ""
         } `}
       >
         <div className=" flex items-center gap-2">
           <img
-            src={"/logo_blue.png"}
+            src={conversation?.user?.profile_photo || "/logo_blue.png"}
             alt="avatar"
             className=" object-cover rounded-full size-10 aspect-square"
           />
           <div className=" w-full">
-            <h6 className=" font-semibold">
-              {variant === "dm" ? conversation?.sender : groupName}
+            <h6 className=" font-semibold text-left">
+              {variant === "dm"
+                ? `${conversation?.user?.first_name} ${conversation?.user?.last_name}`
+                : groupName}
             </h6>
             <div className=" flex items-center gap-1">
               {false && (
                 <DoubleCheckIcon className=" min-w-5 size-5 text-blue-500" />
               )}
-              <span className=" overflow-ellipsis line-clamp-1 text-gray-500 text-sm">
+              <span className=" text-left overflow-ellipsis line-clamp-1 text-gray-500 text-sm">
                 {variant === "dm"
-                  ? conversation?.message
-                  : `${conversation?.sender}: ${conversation?.message}`}
+                  ? conversation?.last_message?.message
+                  : `${conversation?.last_message?.sender}: ${conversation?.last_message?.message}`}
               </span>
             </div>
           </div>

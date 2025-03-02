@@ -17,7 +17,7 @@ import RequestStatusUpdate from "../booking-detail/request-status-update";
 import { requests } from "../../types/apiData/requests";
 
 export default function RequestsListTable({ header }: { header: string[] }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -73,7 +73,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
 
   return (
     <>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+      <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <div>
             <TableSearch
@@ -81,7 +81,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
               placeholder="Apartment name, type, location..."
             />
           </div>
-          <div className=" flex items-center gap-2">
+          <div className=" flex items-center gap-2 flex-col md:flex-row">
             <Filter actionHandler={handleCustomersFiltering} />
             <Sort setSort={setSort} id="sort-by" label="Sort by" />
           </div>
@@ -99,7 +99,9 @@ export default function RequestsListTable({ header }: { header: string[] }) {
               {data.map((request, index) => {
                 return (
                   <tr key={request?.id} className=" border-b">
-                    <td>{request?.user_id}</td>
+                    <td>
+                      {request?.user?.first_name} {request?.user?.last_name}
+                    </td>
                     <td>{request?.shortlet?.name}</td>
                     <td>
                       {formatDate(request?.created_at)}{" "}
@@ -107,7 +109,14 @@ export default function RequestsListTable({ header }: { header: string[] }) {
                     </td>
                     <td>{request?.subject}</td>
                     <td>{request?.description}</td>
-                    <td>{request?.is_escalated > 0 ? "Yes" : "No"}</td>
+                    <td>
+                      <Status
+                        status="additional-service-escalte"
+                        booleanVal={Boolean(request?.is_escalated)}
+                        falsyMessage="Not Escalated"
+                        truthyMessage="Escalated"
+                      />
+                    </td>
                     <td>
                       <Status status={request?.status} />
                     </td>
@@ -115,7 +124,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
                       <span className=" p-2 text-lg">...</span>
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                         <Link
-                          to={`/request-details/${request?.id}`}
+                          to={`/bookings/request-details/${request?.id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           View Details

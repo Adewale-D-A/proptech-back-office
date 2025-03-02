@@ -22,7 +22,7 @@ const breadCrumb = [
   },
 ];
 export default function AddAdminUser() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -70,7 +70,7 @@ export default function AddAdminUser() {
           isError: false,
         })
       );
-      navigate("/admin-users-management?redirect=admins");
+      navigate("/admin/admin-users");
     },
     []
   );

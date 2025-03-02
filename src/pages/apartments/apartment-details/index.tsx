@@ -3,13 +3,10 @@ import { useCallback, useLayoutEffect, useState } from "react";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import BuildingIcon from "../../../assets/icons/building";
-import LoadingButton from "../../../components/button";
-import BinIcon from "../../../assets/icons/bin-icon";
 import PlusIcon from "../../../assets/icons/plus";
 import WriteIcon from "../../../assets/icons/write";
 import ImageCarousel from "../../../components/cards/image-carousel";
 import LocationPinIcon from "../../../assets/icons/location";
-import Map from "../../../components/maps/map-base";
 import CautionIcon from "../../../assets/icons/caution";
 import VehicleIcon from "../../../assets/icons/vehicle";
 import LinkButton from "../../../components/button/linkButton";
@@ -81,7 +78,7 @@ export default function ApartmentDetail() {
                 endIcon={<WriteIcon className="h-5 w-5" />}
               />
               <LinkButton
-                url={`/apartments/add-apartment/apartment-details?redirect=${location?.pathname}`}
+                url={`/apartments/add-apartment/apartment-details`}
                 label="New Apartment"
                 endIcon={<PlusIcon className="h-5 w-5" />}
               />

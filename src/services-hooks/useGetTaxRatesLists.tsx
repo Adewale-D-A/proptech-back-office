@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import useAxios from "../useHooks/useAxios";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
-import {
-  updateTaxRateList,
-  addToPaginationHistory,
-} from "../stores/apiData/tax-rate-lists";
+import { updateTaxRateList } from "../stores/apiData/tax-rate-lists";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetAllTaxRateLists({
@@ -14,7 +11,7 @@ export default function useGetAllTaxRateLists({
   page?: number;
   limit?: number;
 }) {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const {
     status,
@@ -35,50 +32,25 @@ export default function useGetAllTaxRateLists({
 
   const getAllTaxRates = useCallback(async () => {
     setIsLoading(true);
+    setIsFailed(true);
     try {
-      //check store if this requested data has been saved previously and retirve it
-      //if not, make a new request and save into store
-      const foundPage = store_pagination.find(
-        (item) => item?.pagination_data?.current_page === page
+      const response = await axios.get(
+        `/admin/tax?limit=${limit}&page=${page}`
       );
-      if (foundPage) {
-        setPagination(foundPage?.pagination_data);
-        dispatch(updateTaxRateList({ data: foundPage?.data }));
-      } else {
-        const response = await axios.get(
-          `/admin/tax?limit=${limit}&page=${page}`
-        );
-        const result = response?.data?.data;
-        // console.log({ result });
-        const { data, current_page, last_page, per_page, total, from, to } =
-          result;
-        const paginationDataset = {
-          current_page: 1,
-          last_page: 1,
-          per_page: 20,
-          total: 4,
-          from: 1,
-          to: 1,
-        };
-        dispatch(updateTaxRateList({ data: result }));
-
-        dispatch(
-          addToPaginationHistory({
-            pagination_data: paginationDataset,
-            data: result,
-          })
-        );
-        setPagination(paginationDataset);
-      }
-      setIsLoading(false);
+      const result = response?.data?.data;
+      dispatch(updateTaxRateList({ data: result }));
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [page, limit]);
 
   useEffect(() => {
-    getAllTaxRates();
-  }, [page, limit]);
+    if (!status) {
+      getAllTaxRates();
+    }
+  }, [page, limit, status]);
 
   return {
     data,

@@ -4,21 +4,26 @@ import TextInput from "../inputs/textInput";
 import LoadingButton from "../button";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import LinkButton from "../button/linkButton";
-import {
-  clearAllCustomerInfo,
-  updateCustomerSalesChannel,
-} from "../../stores/inAppDataInterations/addEditCustomerInfo";
+import { updateCustomerSalesChannel } from "../../stores/inAppDataInterations/addEditCustomerInfo";
 import Switch from "../switch";
 import Select from "../inputs/select";
-import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-import {
-  addCustomersToList,
-  replaceCustomersInList,
-} from "../../stores/apiData/customers-lists";
 import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
+import { customerRequestPayload } from "../../types/apiData/customers/request-payload";
+import purgeEmptyPayload from "../../utils/remove-empty-payload";
 
-export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
-  const axios = useAxiosMultipart();
+export default function AddEditCustomerSalesChannel({
+  id,
+  handleSubmit,
+  isSubmitting,
+}: {
+  id?: string;
+  handleSubmit: (payload: customerRequestPayload) => void;
+  isSubmitting: boolean;
+}) {
+  const axios = useAxiosMultipart({
+    disableSuccMssg: false,
+    disableErrMssg: false,
+  });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const storeCustomerDatast = useAppSelector(
@@ -31,7 +36,6 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
   const [calculateCommission, setCalculateCommission] = useState("");
   const [applyCommission, setApplyCommission] = useState("");
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
   // populate apartment details interface
   useEffect(() => {
     const {
@@ -53,7 +57,6 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
     async (e: SyntheticEvent) => {
       // console.log("triggered");
       e.preventDefault();
-      setIsSubmitting(true);
       const { customerDetails, customerVerification, customerCompany } =
         storeCustomerDatast;
       const payload = {
@@ -65,6 +68,8 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
         commission_per_booking: commision,
         calculate_commission_on: calculateCommission,
         apply_commission_on: applyCommission,
+      } as {
+        [key: string]: any;
       };
       dispatch(
         updateCustomerSalesChannel({
@@ -76,33 +81,9 @@ export default function AddEditCustomerSalesChannel({ id }: { id?: string }) {
         })
       );
       try {
-        if (id) {
-          const response = await axios.post(`/admin/user/${id}`, payload);
-          const data = response?.data?.data;
-          dispatch(
-            openSnackbar({
-              message: "Customer's information successfully updated",
-              isError: false,
-            })
-          );
-          dispatch(replaceCustomersInList(data));
-        } else {
-          const response = await axios.post(`/admin/user`, payload);
-          const data = response?.data?.data;
-          dispatch(
-            openSnackbar({
-              message: "Customer information successfully created",
-              isError: false,
-            })
-          );
-          dispatch(addCustomersToList(data));
-        }
-        dispatch(clearAllCustomerInfo());
-        navigate(`/customers`);
-      } catch (error) {
-      } finally {
-        setIsSubmitting(false);
-      }
+        const purgePayloadResult = purgeEmptyPayload({ payload });
+        handleSubmit(purgePayloadResult);
+      } catch (error) {}
     },
     [
       storeCustomerDatast,

@@ -5,16 +5,13 @@ import NoResult from "../noResult";
 import useAxios from "../../useHooks/useAxios";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import Pagination from "../pagination";
-import TableSearch from "../inputs/search/table-search";
-import Filter from "../filterAndSort/filter";
-import Sort from "../filterAndSort/sort";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import useGetRoles from "../../services-hooks/useGetRoles";
 import { removeRolesInList } from "../../stores/apiData/roles-lists";
 import MobileRolesTable from "./mobile/roles";
 
 export default function ManageRoleTableData() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useDispatch();
 
   const [openDelete, setOpenDelete] = useState(false);
@@ -106,7 +103,7 @@ export default function ManageRoleTableData() {
                         <span className=" p-2 text-lg">...</span>
                         <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                           <Link
-                            to={`/admin-roles/edit/${request?.id}`}
+                            to={`/admin/admin-roles/edit/${request?.id}`}
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Edit role

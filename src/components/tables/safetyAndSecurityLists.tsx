@@ -6,8 +6,13 @@ import ModalTemplate from "../modal";
 import AddEdit from "../amenities/addEdit";
 import useGetSafetyAndSecurity from "../../services-hooks/useGetSafetyAndSecurities";
 import NoResult from "../noResult";
+import useAxios from "../../useHooks/useAxios";
+import { useAppDispatch } from "../../stores/hooks";
+import { removeSafetyAndSecurity } from "../../stores/apiData/safety-and-security";
 
 export default function SafetyAndSecurityList() {
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
+  const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
@@ -21,12 +26,14 @@ export default function SafetyAndSecurityList() {
   const handleDelete = useCallback(async () => {
     setIsDeleting(true);
     try {
+      await axios.delete(`/admin/safety/${selectedId}`);
       setOpenDelete(false);
+      dispatch(removeSafetyAndSecurity({ id: Number(selectedId) }));
     } catch (error) {
     } finally {
       setIsDeleting(false);
     }
-  }, []);
+  }, [selectedId]);
 
   return (
     <>
@@ -65,7 +72,10 @@ export default function SafetyAndSecurityList() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => setOpenDelete(true)}
+                          onClick={() => {
+                            setSelectedId(String(request?.id));
+                            setOpenDelete(true);
+                          }}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Delete

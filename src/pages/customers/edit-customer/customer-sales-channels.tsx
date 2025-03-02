@@ -1,10 +1,14 @@
-import { useLayoutEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useCallback, useLayoutEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import Timeline from "../../../components/timeline";
 import UsersIcon from "../../../assets/icons/users";
 import EditCustomerSalesChannel from "../../../components/add-edit-customer/customer-sales-channel";
+import { replaceCustomersInList } from "../../../stores/apiData/customers-lists";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import { customerRequestPayload } from "../../../types/apiData/customers/request-payload";
+import useAxiosMultipart from "../../../useHooks/useAxiosMultipart";
 const breadCrumb = [
   {
     url: "/customers",
@@ -20,6 +24,11 @@ const breadCrumb = [
 
 export default function EditCustomerSalesChannelPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const axios = useAxiosMultipart({
+    disableSuccMssg: false,
+    disableErrMssg: false,
+  });
   const dispatch = useAppDispatch();
 
   // update page props on component mount
@@ -37,6 +46,45 @@ export default function EditCustomerSalesChannelPage() {
     );
   }, []);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const handleSubmit = useCallback(
+    async (payload: customerRequestPayload) => {
+      const populatedPayload = {
+        ...payload,
+        profile_photo: payload?.profile_photo?.id ? "" : payload?.profile_photo,
+        identity_document: payload?.identity_document?.id
+          ? ""
+          : payload?.identity_document,
+      } as {
+        [key: string]: any;
+      };
+      const newPayload = Object.fromEntries(
+        Object.entries(populatedPayload).filter(([key]) =>
+          populatedPayload[key] === "" || populatedPayload[key] === null
+            ? false
+            : true
+        )
+      );
+      try {
+        setIsSubmitting(true);
+        const response = await axios.post(`/admin/user/${id}`, newPayload);
+        const data = response?.data?.data;
+        dispatch(
+          openSnackbar({
+            message: "Customer's information successfully updated",
+            isError: false,
+          })
+        );
+        dispatch(replaceCustomersInList(data));
+        navigate("/customers");
+      } catch (error) {
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [id]
+  );
+
   return (
     <section className="w-full flex flex-col items-center">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
@@ -45,7 +93,11 @@ export default function EditCustomerSalesChannelPage() {
             <Timeline currentStep={4} id="customer" />
           </div>
           <div className="w-full border-t py-10 px-5">
-            <EditCustomerSalesChannel id={id} />
+            <EditCustomerSalesChannel
+              id={id}
+              handleSubmit={handleSubmit}
+              isSubmitting={isSubmitting}
+            />
           </div>
         </div>
       </div>

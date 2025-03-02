@@ -9,7 +9,7 @@ import Password from "../../../components/inputs/password";
 import useAxios from "../../../useHooks/useAxios";
 
 export default function ChangePassword() {
-  const axios = useAxios();
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { email, otp } = useParams();
   const [newPassword, setNewPassword] = useState("");

@@ -6,8 +6,13 @@ import ModalTemplate from "../modal";
 import AddEdit from "../amenities/addEdit";
 import useGetHouseRules from "../../services-hooks/useGetAllRules";
 import NoResult from "../noResult";
+import useAxios from "../../useHooks/useAxios";
+import { useAppDispatch } from "../../stores/hooks";
+import { removeHouseRule } from "../../stores/apiData/house-rules";
 
 export default function RulesLists() {
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
+  const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
@@ -21,12 +26,14 @@ export default function RulesLists() {
   const handleDelete = useCallback(async () => {
     setIsDeleting(true);
     try {
+      await axios.delete(`/admin/rule/${selectedId}`);
+      dispatch(removeHouseRule({ id: Number(selectedId) }));
       setOpenDelete(false);
     } catch (error) {
     } finally {
       setIsDeleting(false);
     }
-  }, []);
+  }, [selectedId]);
 
   return (
     <>
@@ -49,7 +56,7 @@ export default function RulesLists() {
                 return (
                   <tr key={request?.id} className=" border-b">
                     <td>{request?.name}</td>
-                    <td>***</td>
+                    <td>{request?.description}</td>
                     <td className=" group relative">
                       <span className=" p-2 text-lg">...</span>
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
@@ -65,7 +72,10 @@ export default function RulesLists() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => setOpenDelete(true)}
+                          onClick={() => {
+                            setSelectedId(String(request?.id));
+                            setOpenDelete(true);
+                          }}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Delete

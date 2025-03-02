@@ -1,35 +1,77 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import LoadingButton from "../../button";
 import Filter from "../../filterAndSort/filter";
 import Search from "../../inputs/search";
 import ExportSelect from "../../inputs/select/exportSelect";
 import TimeRangeSelector from "../../inputs/select/timeRange";
 import { apartmentById } from "../../../types/apiData/apartment";
-import { revenueReportList } from "../../../types/apiData/reports";
 import NoResult from "../../noResult";
 import Pagination from "../../pagination";
-import useGetAllReportsLists from "../../../services-hooks/useGetReportList";
+import formatDate from "../../../utils/isoDateConverter";
+import useGetOccupancyPerTimeReport from "../../../services-hooks/reports/occupancy-per-time";
+import useGetReportSummary from "../../../services-hooks/reports/report-summary";
+import Status from "../../status";
+import { useAppDispatch } from "../../../stores/hooks";
+import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
 
 export default function OccupancyPerTimeReportTable() {
+  const dispatch = useAppDispatch();
+  const [filterDates, setFilterDates] = useState<{
+    start_date: string;
+    end_date: string;
+  }>();
   const [apartment, setApartment] = useState<apartmentById>({} as any);
-
   const [currentPage, setCurrentPage] = useState(1);
+
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllReportsLists({ page: currentPage, type: "occupancy-per-time" });
+    useGetOccupancyPerTimeReport({
+      page: currentPage,
+      apartmentId: String(apartment?.id || ""),
+      start_date: filterDates?.start_date,
+      end_date: filterDates?.end_date,
+    });
+
+  const handleLoadData = useCallback(() => {
+    if (apartment?.id) {
+      retryFunction();
+    } else {
+      dispatch(
+        openSnackbar({
+          message: "Please select an apartment to view its reports",
+          isError: true,
+        })
+      );
+    }
+  }, [apartment?.id]);
+
+  const handleCustomersFiltering = useCallback(
+    (start_date: string, end_date: string) => {
+      setFilterDates({ start_date, end_date });
+    },
+    []
+  );
+
+  const { data: reportSummary } = useGetReportSummary({
+    apartmentId: String(apartment?.id || ""),
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+  });
+
   return (
     <div className="w-full flex flex-col gap-5">
       <div className="flex items-center justify-between flex-col md:flex-row gap-4 p-4 rounded-md border flex-wrap lg:flex-nowrap">
         <div>
-          <Filter />
+          <Filter actionHandler={handleCustomersFiltering} />
         </div>
         <div>
           <TimeRangeSelector />
         </div>
-        <Search
-          id="apartment-search"
-          componentId="apartment"
+
+        <ApartmentSingleSearch
           placeholder="Apartment name..."
-          setValue={setApartment}
+          selected={apartment}
+          setSelected={setApartment}
         />
         <div className=" flex items-center gap-4">
           <LoadingButton
@@ -37,6 +79,7 @@ export default function OccupancyPerTimeReportTable() {
             variant={2}
             isLoading={false}
             type="button"
+            clickHandler={() => handleLoadData()}
           />
           <ExportSelect id="report" />
         </div>
@@ -50,80 +93,63 @@ export default function OccupancyPerTimeReportTable() {
                 <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
                   {[
                     "Date",
-                    "Rooms Sold",
-                    "Nights Books",
-                    "Total Bookings",
-                    "%Occupancy",
-                    "IBE Revenue",
-                    "OTA Revenue",
-                    "ADR",
-                    "REVPAR",
-                    "Taxes/Fees",
+                    "Apartment",
+                    "Occupancy Status",
+                    "Occupant Name",
+                    "Number of Guests",
+                    "Check-in Date",
+                    "Check-out Date",
                   ].map((head) => (
                     <th key={head}>{head}</th>
                   ))}
                 </tr>
               </thead>
               <tbody className="">
-                {data.map((request: revenueReportList) => {
+                {data.map((request, index) => {
                   return (
-                    <tr key={request?.id} className=" border-b">
-                      <td>{request?.date}</td>
-                      <td>{request?.roomSold}</td>
-                      <td>{request?.nightBook}</td>
-                      <td>{request?.totalBooking}</td>
-                      <td>{request?.occupancy}</td>
-                      <td>{request?.ibeRevenue}</td>
-                      <td>{request?.otaRevenue}</td>
-                      <td>{request?.refunds}</td>
-                      <td>{request?.adr}</td>
-                      <td>{request?.revipar}</td>
-                      <td>{request?.taxes}</td>
+                    <tr key={index} className=" border-b">
+                      <td>{formatDate(request?.date)}</td>
+                      <td>{request?.shortlet_name}</td>
+                      <td>
+                        <Status status={request?.occupancy_status} />
+                      </td>
+                      <td>{request?.occupant_name}</td>
+                      <td>{request?.number_of_guests}</td>
+                      <td>{formatDate(request?.check_in_date)}</td>
+                      <td>{formatDate(request?.check_out_date)}</td>
                     </tr>
                   );
                 })}
-                <tr className=" border-b font-semibold">
-                  <td>Total</td>
-                  <td>6127</td>
-                  <td>6127</td>
-                  <td>6048</td>
-                  <td></td>
-                  <td>N500,117,189.72</td>
-                  <td>0</td>
-                  <td></td>
-                  <td></td>
-                  <td>N90117,189.72</td>
-                </tr>
               </tbody>
             </table>
-            <div className=" flex items-center gap-4 font-semibold flex-wrap">
+            {/* <div className=" flex items-center gap-4 font-semibold flex-wrap">
               {[
                 {
                   id: 1,
                   label: "Occupied",
-                  value: 33,
+                  value: 0,
                 },
                 {
                   id: 2,
                   label: "Vacant",
-                  value: 6,
+                  value: 0,
                 },
                 {
                   id: 3,
                   label: "No of Guests",
-                  value: 131,
+                  value: 0,
                 },
                 {
                   id: 4,
                   label: "No of Nights",
-                  value: 500,
+                  value: 0,
                 },
               ].map((item) => (
                 <h6 key={item?.id}>
                   {item?.label} {item?.value}
                 </h6>
               ))}
-            </div>
+            </div> */}
           </>
         ) : (
           <NoResult />
@@ -132,7 +158,7 @@ export default function OccupancyPerTimeReportTable() {
           pagination={pagination}
           setCurrentPage={setCurrentPage}
           isLoading={isLoading}
-          label="Entries"
+          label="Occupancy per time report"
         />
       </div>
     </div>

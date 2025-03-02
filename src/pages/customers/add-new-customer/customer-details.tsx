@@ -9,9 +9,6 @@ import Timeline from "../../../components/timeline";
 export default function AddNewCustomerDetails() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const storeCustomerDetails = useAppSelector(
-    (state) => state.addEditCustomerInfo.value.data
-  );
   const breadCrumb = useMemo(
     () => [
       {

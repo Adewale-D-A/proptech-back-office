@@ -6,7 +6,6 @@ import CalendarIcon from "../../../../assets/icons/calendar";
 import CustomerInfoCard from "../../../../components/booking-detail/customer-info-card";
 import ImageCarousel from "../../../../components/cards/image-carousel";
 import UserPlusIcon from "../../../../assets/icons/user-plus";
-import PhoneInput from "../../../../components/inputs/phoneInput";
 import BookingByIdList from "../../../../components/tables/bookingList";
 import useGetBookingById from "../../../../services-hooks/bookings/useGetBookingById";
 import useGetCustomerById from "../../../../services-hooks/useGetCustomerById";
@@ -14,7 +13,7 @@ import useGetApartmentById from "../../../../services-hooks/useGetApartmentById"
 
 const breadCrumb = [
   {
-    url: "/bookings",
+    url: "/bookings/overview",
     label: "Bookings",
     icon: <CalendarIcon />,
   },
@@ -48,14 +47,10 @@ export default function BookingDetailsById() {
     String(data?.shortlet_id || "")
   );
 
-  const [selectedCountryCode, setSelectedCountryCode] =
-    useState("+234+Nigeria");
-  const [phoneNumber, setPhoneNumber] = useState("8103760742");
-
   return (
     <section className="w-full flex flex-col items-center my-5">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
-        <BookingByIdList data={data} />
+        <BookingByIdList data={{ ...data, user: customer }} />
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className=" w-full flex flex-col gap-4 border rounded-md">
             {/* Customer Details */}
