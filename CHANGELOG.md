@@ -1,12 +1,3 @@
-##### 19.02.2025
-
-> Maintenance reuest category options assets setup
-> maintenace report, bookings report, and generator runtime fix
-
-##### 18.02.2025
-
-> Feature -> Operations module reporting section UI development
-
 ##### 23.02.2025
 
 > Feature -> Block date feature addition
@@ -17,6 +8,15 @@
 > Add-on -> remove empty payload keys and values util function creation
 > bug-fix -> Upload profile_photo and identity document optional requirement addition
 > bug-fix -> Systematic 99Apt team bug list reviews and fixes
+
+##### 19.02.2025
+
+> Maintenance reuest category options assets setup
+> maintenace report, bookings report, and generator runtime fix
+
+##### 18.02.2025
+
+> Feature -> Operations module reporting section UI development
 
 ##### 15.02.2025
 
