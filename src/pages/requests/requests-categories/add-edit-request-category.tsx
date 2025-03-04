@@ -5,15 +5,14 @@ import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import TextInput from "../../../components/inputs/textInput";
 import LoadingButton from "../../../components/button";
-import TextAreaInput from "../../../components/inputs/textArea";
 import purgeEmptyPayload from "../../../utils/remove-empty-payload";
-import useGetBlockedReason from "../../../services-hooks/useGetBlockedReason";
+import useGetRequestCategory from "../../../services-hooks/useGetRequestCategory";
 import {
-  addBlockedDatesReason,
-  replaceBlockedDatesReason,
-} from "../../../stores/apiData/blocked-dates-reason";
+  addRequestCategory,
+  replaceRequestCategory,
+} from "../../../stores/apiData/requests-categories";
 
-export default function AddEditBlockedDatesReason({
+export default function AddEditRequestsCategories({
   id,
   setOpen,
 }: {
@@ -24,20 +23,18 @@ export default function AddEditBlockedDatesReason({
   const dispatch = useAppDispatch();
 
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [hexCode, setHexCode] = useState("");
+  // const [description, setDescription] = useState("");
+  // const [hexCode, setHexCode] = useState("");
 
   const [isSubmitting, setIsSubmiting] = useState(false);
 
-  const { data } = useGetBlockedReason({ id });
+  const { data } = useGetRequestCategory({ id });
 
   // populate data with existing data if id is provided
   useEffect(() => {
     if (id && data?.name) {
-      const { name, description, hex_code } = data || {};
+      const { name } = data || {};
       setName(name || "");
-      setDescription(description || "");
-      setHexCode(hex_code || "");
     }
   }, [data]);
 
@@ -51,35 +48,33 @@ export default function AddEditBlockedDatesReason({
       setIsSubmiting(true);
       const payload = {
         name: name,
-        description: description,
-        hex_code: hexCode,
       };
       const newPayload = purgeEmptyPayload({ payload });
       try {
         if (id) {
           const response = await axios.put(
-            `/admin/block-date-reason/${id}`,
+            `/admin/maintenance-category/${id}`,
             newPayload
           );
           const { data, message } = response?.data;
 
-          dispatch(replaceBlockedDatesReason(data?.reason));
+          dispatch(replaceRequestCategory(data?.maintenance_category));
           dispatch(
             openSnackbar({
-              message: message || "Blocked dates reason successfully updated",
+              message: message || "Maintenance category successfully updated",
               isError: false,
             })
           );
         } else {
           const response = await axios.post(
-            "/admin/block-date-reason",
+            "/admin/maintenance-category",
             newPayload
           );
           const { data, message } = response?.data;
-          dispatch(addBlockedDatesReason(data?.reason));
+          dispatch(addRequestCategory(data?.maintenance_category));
           dispatch(
             openSnackbar({
-              message: message || "Blocked dates reason successfully created",
+              message: message || "Maintenance category successfully created",
               isError: false,
             })
           );
@@ -90,7 +85,7 @@ export default function AddEditBlockedDatesReason({
         setIsSubmiting(false);
       }
     },
-    [name, id, description, hexCode]
+    [name, id]
   );
 
   return (
@@ -105,7 +100,7 @@ export default function AddEditBlockedDatesReason({
             id="blocked-dates-name"
             placeholder="Enter name"
           />
-          <TextAreaInput
+          {/* <TextAreaInput
             isRequired={false}
             value={description}
             setValue={setDescription}
@@ -119,7 +114,7 @@ export default function AddEditBlockedDatesReason({
             setValue={setHexCode}
             id="blocked-dates-name"
             placeholder="Enter hexcode"
-          />
+          /> */}
         </div>
         <div className=" flex items-center gap-5">
           <LoadingButton

@@ -8,7 +8,13 @@ import BinIcon from "../../../assets/icons/bin-icon";
 import { addRemovableImages } from "../../../stores/inAppDataInterations/addEditApartmentInfo";
 
 interface Props {
-  value: { name: string; size: number; preview: string; id?: number }[];
+  value: {
+    name: string;
+    size: number;
+    preview: string;
+    id?: number;
+    is_local?: boolean;
+  }[];
   setValue: Function;
   label?: string;
   isRequired?: boolean;
@@ -38,7 +44,7 @@ export default function MultipleFileInput({
         Object.assign(file, {
           preview: URL.createObjectURL(file),
         });
-        imageArray.push(file);
+        imageArray.push({ ...file, is_local: true });
       } else {
         dispatch(
           openSnackbar({ message: "unsupported file type", isError: true })

@@ -137,6 +137,7 @@ import GeneratorRuntime from "./pages/reports/generator-runtime";
 import BookingsReport from "./pages/reports/bookings";
 import MaintenanceExpenses from "./pages/reports/maintenance-expenses";
 import BlockedDatesReasonListView from "./pages/apartments/block-dates-reason";
+import RequestsCategoriesListView from "./pages/requests/requests-categories";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -427,6 +428,11 @@ function App() {
               <Route
                 path="/requests/requisition-requests"
                 element={<RequisitionRequests />}
+              />
+
+              <Route
+                path="/requests/categories"
+                element={<RequestsCategoriesListView />}
               />
             </Route>
             <Route

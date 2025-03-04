@@ -15,7 +15,13 @@ const tabList = [
     id: 2,
     icon: <BanknoteIcon />,
     label: "Requisition requests",
-    url: "/requests/requisition-requests",
+    url: "/requests/requisition-requests", ///requests/categories
+  },
+  {
+    id: 3,
+    icon: <BookMarkIcon />,
+    label: "Requests Categories",
+    url: "/requests/categories", ///requests/categories
   },
 ];
 export default function RequestsTabWrapper() {

@@ -56,13 +56,21 @@ export default function useGetRequisitionRequests({
         setPagination(foundPage?.pagination_data);
         dispatch(updateRequisitionRequestList({ data: foundPage?.data }));
       } else {
-        // const response = await axios.get(`/admin/booking?${queryString}`);
-        // const { users } = response?.data?.data;
-        // const { data, current_page, last_page, per_page, total, from, to } =
-        //   users;
-        // TODO: Replace dummy response with authentic API response
-        const data = sampleRequesitionsData?.data;
-        const paginationDataset = sampleRequesitionsData?.pagination;
+        const response = await axios.get(
+          `/admin/requisition-request?${queryString}`
+        );
+        const { requisition_request } = response?.data?.data;
+        const { data, current_page, last_page, per_page, total, from, to } =
+          requisition_request;
+        const paginationDataset = {
+          current_page,
+          last_page,
+          per_page,
+          total,
+          from,
+          to,
+          length: data?.length,
+        };
         dispatch(updateRequisitionRequestList({ data }));
         if (!search) {
           dispatch(

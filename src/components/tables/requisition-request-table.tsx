@@ -10,19 +10,19 @@ import useGetRequisitionRequests from "../../services-hooks/useGetRequisitionReq
 import Status from "../status";
 import DoubleCheckIcon from "../../assets/icons/double-check";
 import PenIcon from "../../assets/icons/pen";
-import BinIcon from "../../assets/icons/bin-icon";
 import LoadingButton from "../button";
 import PlusIcon from "../../assets/icons/plus";
 import ModalTemplate from "../modal";
-import AddEditRequisitionRequest from "../requisition-requests/add-edit";
-import DeleteConfirmation from "../infoModal/delete-confirmation";
+import AddEditRequisitionRequest from "../../pages/requests/requisition-requests/add-edit-requisition-requests";
+// import BinIcon from "../../assets/icons/bin-icon";
+// import DeleteConfirmation from "../infoModal/delete-confirmation";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { removeRequisitionRequestInList } from "../../stores/apiData/requisition-requests";
 
 export default function RequisitionRequestTable() {
-  const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
-  const dispatch = useAppDispatch();
+  // const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
+  // const dispatch = useAppDispatch();
 
   const [filterOption, setFilterOption] = useState("");
   const [search, setSearch] = useState("");
@@ -33,8 +33,8 @@ export default function RequisitionRequestTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedId, setSelectedId] = useState("");
   const [openRequest, setOpenRequest] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  // const [openDelete, setOpenDelete] = useState(false);
+  // const [isDeleting, setIsDeleting] = useState(false);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetRequisitionRequests({
@@ -59,22 +59,22 @@ export default function RequisitionRequestTable() {
     setOpenRequest(true);
   }, []);
 
-  const handleOpenDelete = useCallback((id: number) => {
-    setSelectedId(String(id) || "");
-    setOpenDelete(true);
-  }, []);
+  // const handleOpenDelete = useCallback((id: number) => {
+  //   setSelectedId(String(id) || "");
+  //   setOpenDelete(true);
+  // }, []);
 
-  const handleDelete = useCallback(async () => {
-    setIsDeleting(true);
-    try {
-      // await axios.delete(`/admin/extra-option/${selectedId}`);
-      dispatch(removeRequisitionRequestInList({ id: Number(selectedId) }));
-      setOpenDelete(false);
-    } catch (error) {
-    } finally {
-      setIsDeleting(false);
-    }
-  }, [selectedId]);
+  // const handleDelete = useCallback(async () => {
+  //   setIsDeleting(true);
+  //   try {
+  //     // await axios.delete(`/admin/extra-option/${selectedId}`);
+  //     dispatch(removeRequisitionRequestInList({ id: Number(selectedId) }));
+  //     setOpenDelete(false);
+  //   } catch (error) {
+  //   } finally {
+  //     setIsDeleting(false);
+  //   }
+  // }, [selectedId]);
 
   return (
     <>
@@ -136,14 +136,14 @@ export default function RequisitionRequestTable() {
                       <tr key={item?.id} className=" border-b">
                         <td className=" flex gap-2 items-center min-w-36">
                           <img
-                            src={item?.user?.profile_photo || "/logo_blue.png"}
-                            alt={item?.user?.first_name}
+                            src={"/logo_blue.png"}
+                            alt={item?.admin?.first_name}
                             className=" h-10 w-10 rounded aspect-square"
                           />
                           <span className=" flex flex-col gap-1">
-                            <span>{item?.user?.first_name}</span>
+                            <span>{item?.admin?.first_name}</span>
                             <span className=" text-xs text-gray-500 flex items-center gap-1">
-                              ***
+                              {item?.admin?.last_name}
                             </span>
                           </span>
                         </td>
@@ -167,12 +167,12 @@ export default function RequisitionRequestTable() {
                             >
                               <PenIcon />
                             </button>
-                            <button
+                            {/* <button
                               title="delete"
                               onClick={() => handleOpenDelete(item?.id)}
                             >
                               <BinIcon className=" size-6 text-red-500" />
-                            </button>
+                            </button> */}
                           </div>
                         </td>
                       </tr>
@@ -193,7 +193,7 @@ export default function RequisitionRequestTable() {
         </div>
       </div>
 
-      <DeleteConfirmation
+      {/* <DeleteConfirmation
         open={openDelete}
         setOpen={setOpenDelete}
         isLoading={isDeleting}
@@ -201,7 +201,7 @@ export default function RequisitionRequestTable() {
         title="Delete Requisition Request"
         description="Are you sure you want to delete this requisition request?"
         btnTitle="Yes, I want to"
-      />
+      /> */}
       <ModalTemplate
         open={openRequest}
         setOpen={setOpenRequest}

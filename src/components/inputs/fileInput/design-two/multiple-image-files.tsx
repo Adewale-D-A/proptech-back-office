@@ -8,7 +8,13 @@ import BinIcon from "../../../../assets/icons/bin-icon";
 import CameraSolidIcon from "../../../../assets/icons/camera";
 
 interface Props {
-  value: { name: string; size: number; preview: string; id?: number }[];
+  value: {
+    name: string;
+    size: number;
+    preview: string;
+    id?: number;
+    is_local?: boolean;
+  }[];
   setValue: (payload: any) => void;
   label?: string;
   isRequired?: boolean;
@@ -38,7 +44,7 @@ export default function MultipleFileInputDesignTwo({
         Object.assign(file, {
           preview: URL.createObjectURL(file),
         });
-        imageArray.push(file);
+        imageArray.push({ ...file, is_local: true });
       } else {
         dispatch(
           openSnackbar({ message: "unsupported file type", isError: true })

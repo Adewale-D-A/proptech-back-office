@@ -1,35 +1,27 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import CaretDownIcon from "../../../assets/icons/caret-down";
-import useGetAllApartmentLists from "../../../services-hooks/useGetAllApartmentLists";
-import { apartmentById } from "../../../types/apiData/apartment";
 import LoaderIcon from "../../../assets/icons/loader";
 import SearchIcon from "../../../assets/icons/search";
-import useGetApartmentById from "../../../services-hooks/useGetApartmentById";
-import { useSearchParams } from "react-router-dom";
+import { admin } from "../../../types/apiData/admins";
+import useGetAllAdmins from "../../../services-hooks/useGetAllAdmins";
+import useGetAdmin from "../../../services-hooks/useGetAdmin";
 
-export default function ApartmentSingleSearch({
+export default function AdminSingleSearch({
   placeholder,
   selected,
   setSelected,
-  defaultId,
-  readOnly,
   label,
+  defaultId,
 }: {
   placeholder: string;
-  selected: apartmentById;
-  readOnly?: boolean;
-  setSelected: (item: apartmentById) => void;
+  selected: admin;
+  setSelected: (item: admin) => void;
   label?: string;
   defaultId?: string;
 }) {
   const wrapperRef = useRef(null) as any;
   const [isMenuDocked, setIsMenuDocked] = useState(true);
   const [keywords, setKeywords] = useState("");
-  const [searchParams] = useSearchParams();
-
-  const { data: apartment_info } = useGetApartmentById(
-    searchParams?.get("apt_id") || defaultId || undefined
-  );
 
   // logic to close referenced container when clicked outsite the element
   useEffect(() => {
@@ -46,19 +38,21 @@ export default function ApartmentSingleSearch({
   };
   // logic to close referenced container when clicked outsite the element
 
+  const { data: admin_info } = useGetAdmin({ id: defaultId || undefined });
+
   const {
-    data: apartments,
-    isLoading: apt_loading,
-    isFailed: apt_failed,
-    setIsFailed: apt_setFailed,
-    retryFunction: apt_retry,
-    pagination: apt_pagination,
-  } = useGetAllApartmentLists({
+    data: users_data,
+    isLoading: users_loading,
+    isFailed: users_failed,
+    setIsFailed: users_setFailed,
+    retryFunction: users_retry,
+    pagination: users_pagination,
+  } = useGetAllAdmins({
     page: 1,
     search: keywords,
   });
 
-  const handleSelection = useCallback((selected: apartmentById) => {
+  const handleSelection = useCallback((selected: admin) => {
     setSelected(selected);
     setIsMenuDocked(true);
   }, []);
@@ -66,11 +60,10 @@ export default function ApartmentSingleSearch({
   const toggleMenuDock = useCallback(() => {
     setIsMenuDocked((prev) => !prev);
   }, []);
-
   // auto select apartment based on query params
   useEffect(() => {
-    setSelected(apartment_info);
-  }, [apartment_info]);
+    setSelected(admin_info);
+  }, [admin_info]);
 
   return (
     <div className=" w-full flex flex-col gap-2">
@@ -84,15 +77,19 @@ export default function ApartmentSingleSearch({
       )}
       <div className=" relative" ref={wrapperRef}>
         <button
+          // title="single-customer-search"
+          // id="single-customer-search"
           type="button"
           onClick={() => toggleMenuDock()}
           className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between"
         >
-          {selected?.name ? (
-            <span className="">{selected?.name}</span>
+          {selected?.first_name ? (
+            <span className="">
+              {selected?.first_name} {selected?.last_name}
+            </span>
           ) : (
             <div className=" flex items-center text-gray-400 gap-3">
-              {apt_loading ? (
+              {users_loading ? (
                 <LoaderIcon className=" animate-spin size-6" />
               ) : (
                 <SearchIcon />
@@ -109,20 +106,20 @@ export default function ApartmentSingleSearch({
         {!isMenuDocked && (
           <div className="w-full p-2 border z-10 absolute top-14 left-0 bg-gray-50">
             <input
-              id="search-feature"
+              id="customer-search-feature"
               placeholder={placeholder}
               value={keywords}
               onChange={(e) => setKeywords(e.target.value)}
               className=" border rounded-md p-3 w-full bg-gray-100"
             />
             <div className=" flex flex-col gap-1 max-h-64 overflow-auto">
-              {apartments.map((apartment) => (
+              {users_data.map((user) => (
                 <button
-                  key={apartment?.id}
-                  onClick={() => handleSelection(apartment)}
+                  key={user?.id}
+                  onClick={() => handleSelection(user)}
                   className=" p-2 hover:border-primary hover:border transition-all text-left"
                 >
-                  {apartment?.name}
+                  {user?.first_name} {user?.last_name}
                 </button>
               ))}
             </div>

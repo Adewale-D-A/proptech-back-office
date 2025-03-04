@@ -5,7 +5,7 @@ import { openSnackbar } from "../../../../stores/appFunctionality/snackbar";
 import DocumentIcon from "../../../../assets/icons/document";
 
 interface Props {
-  value: { name: string; size: number; preview: string };
+  value: { name: string; size: number; preview: string; is_local?: boolean };
   setValue: Function;
   label?: string;
   isRequired?: boolean;
@@ -27,26 +27,26 @@ export default function FileInputDesignTwo({
       Object.assign(singleImage, {
         preview: URL.createObjectURL(singleImage),
       });
-      setValue(singleImage);
+      setValue({ ...singleImage, is_local: true });
     } else {
       dispatch(
         openSnackbar({ message: "unsupported file type", isError: true })
       );
     }
   }, []);
-
   return (
     <div className="w-full">
-      {value?.name ? (
+      {value?.preview ? (
         <div className="w-full border rounded-md flex gap-2 p-2 items-center justify-between">
-          <span>{value?.name}</span>
-
-          <label
-            htmlFor={id}
-            className="bg-primary p-2 rounded-md text-white px-3 hover:cursor-pointer"
+          <div className=" p-3 text-primary bg-primary/15 rounded-full">
+            <DocumentIcon className=" h-12 w-12" />
+          </div>
+          <button
+            onClick={() => setValue({})}
+            className=" p-2 rounded-full bg-red-500/15 hover:scale-125 transition-all"
           >
-            Choose file
-          </label>
+            <CancelIcon className=" text-red-500 h-6 w-6" />
+          </button>
         </div>
       ) : (
         <div className=" flex flex-col gap-2">

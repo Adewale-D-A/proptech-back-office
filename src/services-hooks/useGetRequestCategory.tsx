@@ -1,21 +1,21 @@
 import { useCallback, useEffect, useState } from "react";
 import useAxios from "../useHooks/useAxios";
-import { maintenanceRequestsById } from "../types/apiData/maintenance-request";
+import { blockedReason } from "../types/apiData/blocked-reason";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetMaintenanceRequestById({ id }: { id?: string }) {
+export default function useGetRequestCategory({ id }: { id?: string }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
-  const [data, setData] = useState<maintenanceRequestsById>({} as any);
+  const [data, setData] = useState<blockedReason>({} as any);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const getMaintenanceRequestById = useCallback(async () => {
+  const requestCategory = useCallback(async () => {
     setIsLoading(true);
     setIsFailed(false);
     try {
-      const response = await axios.get(`/admin/maintenance-request/${id}`);
-      const { maintenance_request } = response?.data?.data;
-      setData(maintenance_request);
+      const response = await axios.get(`/admin/maintenance-category/${id}`);
+      const { maintenance_category } = response?.data?.data;
+      setData(maintenance_category);
     } catch (error) {
       setIsFailed(true);
     } finally {
@@ -25,7 +25,7 @@ export default function useGetMaintenanceRequestById({ id }: { id?: string }) {
 
   useEffect(() => {
     if (id) {
-      getMaintenanceRequestById();
+      requestCategory();
     }
   }, [id]);
 
@@ -34,6 +34,6 @@ export default function useGetMaintenanceRequestById({ id }: { id?: string }) {
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getMaintenanceRequestById,
+    retryFunction: requestCategory,
   };
 }

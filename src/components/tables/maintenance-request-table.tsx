@@ -10,25 +10,24 @@ import Select from "../inputs/select";
 // import DoubleCheckIcon from "../../assets/icons/double-check";
 import Status from "../status";
 import PenIcon from "../../assets/icons/pen";
-import BinIcon from "../../assets/icons/bin-icon";
+// import BinIcon from "../../assets/icons/bin-icon";
 import LoadingButton from "../button";
 import PlusIcon from "../../assets/icons/plus";
 import ModalTemplate from "../modal";
-import DeleteConfirmation from "../infoModal/delete-confirmation";
-import useAxios from "../../useHooks/useAxios";
-import { useAppDispatch } from "../../stores/hooks";
 import EyeIcon from "../../assets/icons/eye";
 // import EditEmployee from "../employees/edit-employee";
 // import AddEmployee from "../employees/add-employee";
 import { Link } from "react-router-dom";
 import NewRequest from "../maintenance-requests/newRequest";
-import EditMaintenanceRequest from "../maintenance-requests/EditMaintenanceRequest";
 import useGetMaintenanceRequests from "../../services-hooks/useGetMaintenanceRequests";
-import { removeMaintenanceRequestInList } from "../../stores/apiData/maintenance-requests";
+// import DeleteConfirmation from "../infoModal/delete-confirmation";
+// import useAxios from "../../useHooks/useAxios";
+// import { useAppDispatch } from "../../stores/hooks";
+// import { removeMaintenanceRequestInList } from "../../stores/apiData/maintenance-requests";
 
 export default function MaintenanceRequestTable() {
-  const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
-  const dispatch = useAppDispatch();
+  // const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
+  // const dispatch = useAppDispatch();
 
   const [filterOption, setFilterOption] = useState("");
   const [search, setSearch] = useState("");
@@ -40,8 +39,8 @@ export default function MaintenanceRequestTable() {
   const [selectedId, setSelectedId] = useState("");
   const [openMaintenanceRequestEdit, setOpenMaintenanceRequestEdit] =
     useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  // const [openDelete, setOpenDelete] = useState(false);
+  // const [isDeleting, setIsDeleting] = useState(false);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetMaintenanceRequests({
@@ -66,22 +65,22 @@ export default function MaintenanceRequestTable() {
     setOpenMaintenanceRequestEdit(true);
   }, []);
 
-  const handleOpenDelete = useCallback((id: number) => {
-    setSelectedId(String(id) || "");
-    setOpenDelete(true);
-  }, []);
+  // const handleOpenDelete = useCallback((id: number) => {
+  //   setSelectedId(String(id) || "");
+  //   setOpenDelete(true);
+  // }, []);
 
-  const handleDelete = useCallback(async () => {
-    setIsDeleting(true);
-    try {
-      // await axios.delete(`/admin/extra-option/${selectedId}`);
-      dispatch(removeMaintenanceRequestInList({ id: Number(selectedId) }));
-      setOpenDelete(false);
-    } catch (error) {
-    } finally {
-      setIsDeleting(false);
-    }
-  }, [selectedId]);
+  // const handleDelete = useCallback(async () => {
+  //   setIsDeleting(true);
+  //   try {
+  //     await axios.delete(`/admin/extra-option/${selectedId}`);
+  //     dispatch(removeMaintenanceRequestInList({ id: Number(selectedId) }));
+  //     setOpenDelete(false);
+  //   } catch (error) {
+  //   } finally {
+  //     setIsDeleting(false);
+  //   }
+  // }, [selectedId]);
 
   return (
     <>
@@ -109,7 +108,7 @@ export default function MaintenanceRequestTable() {
             <h2 className="text-xl font-semibold flex items-center gap-2">
               Maintenance Requests{" "}
               <span className=" bg-[#F9F5FF] rounded-full text-xs text-[#2A3F8F] px-2.5 py-1">
-                12 new requests
+                {pagination?.total} new requests
               </span>
             </h2>{" "}
             <div className=" w-fit flex items-center gap-3">
@@ -189,12 +188,12 @@ export default function MaintenanceRequestTable() {
                             >
                               <PenIcon />
                             </button>
-                            <button
+                            {/* <button
                               title="delete"
                               onClick={() => handleOpenDelete(item?.id)}
                             >
                               <BinIcon className=" size-6 text-red-500" />
-                            </button>
+                            </button> */}
                           </div>
                         </td>
                       </tr>
@@ -215,7 +214,7 @@ export default function MaintenanceRequestTable() {
         </div>
       </div>
 
-      <DeleteConfirmation
+      {/* <DeleteConfirmation
         open={openDelete}
         setOpen={setOpenDelete}
         isLoading={isDeleting}
@@ -223,7 +222,7 @@ export default function MaintenanceRequestTable() {
         title="Delete request"
         description="This request will be permanently deleted"
         btnTitle="Yes, confirm"
-      />
+      /> */}
       <ModalTemplate
         open={openMaintenanceRequestEdit}
         setOpen={setOpenMaintenanceRequestEdit}

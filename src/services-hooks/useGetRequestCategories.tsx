@@ -1,25 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
-import {
-  addToPaginationHistory,
-  updateRequisitionRequestList,
-} from "../stores/apiData/requisition-requests";
 import useAxios from "../useHooks/useAxios";
 import { pagination } from "../types/pagination";
+import {
+  updateRequestCategory,
+  addToPaginationHistory,
+} from "../stores/apiData/requests-categories";
 import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
-import sampleRequesitionsData from "../assets/temp-api-mockup-data/requisition-request.json";
-import { updateMaintenanceRequestList } from "../stores/apiData/maintenance-requests";
+
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetMaintenanceRequests({
+export default function useGetRequestCategories({
   page = 1,
-  start_date,
-  end_date,
+  limit = 20,
   sort = "desc",
   search = "",
 }: {
   page?: number;
-  start_date?: string;
-  end_date?: string;
+  limit?: number;
   sort?: "desc" | "asc" | string;
   search?: string;
 }) {
@@ -29,23 +26,22 @@ export default function useGetMaintenanceRequests({
     status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.maintenanceRequestsList?.value);
+  } = useAppSelector((state) => state.requesCategories.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const [pagination, setPagination] = useState<pagination>({} as any);
 
-  const getAllMaintenanceRequests = useCallback(async () => {
-    setIsLoading(true);
-    setIsFailed(false);
+  const getRequestCategories = useCallback(async () => {
     try {
+      setIsLoading(true);
+
       const { queryString, remakeRequest } = ApiQueryParamsExtractor({
         dataset: {
           page: search ? 1 : page,
-          start_date: start_date,
-          end_date: end_date,
-          sort: sort,
-          search: search,
+          sort,
+          search,
+          limit,
         },
       });
       //check store if this requested data has been saved previously and retirve it
@@ -53,16 +49,16 @@ export default function useGetMaintenanceRequests({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage && !remakeRequest && !(sort === "asc")) {
+      if (foundPage && !remakeRequest && !(sort === "asc") && limit === 20) {
         setPagination(foundPage?.pagination_data);
-        dispatch(updateRequisitionRequestList({ data: foundPage?.data }));
+        dispatch(updateRequestCategory({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          `/admin/maintenance-request?${queryString}`
+          `/admin/maintenance-category?${queryString}`
         );
-        const { maintenance_requests } = response?.data?.data;
+        const { maintenance_category } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
-          maintenance_requests;
+          maintenance_category;
         const paginationDataset = {
           current_page,
           last_page,
@@ -72,8 +68,8 @@ export default function useGetMaintenanceRequests({
           to,
           length: data?.length,
         };
-        dispatch(updateMaintenanceRequestList({ data }));
-        if (!search) {
+        dispatch(updateRequestCategory({ data }));
+        if (!search && limit === 20) {
           dispatch(
             addToPaginationHistory({
               pagination_data: paginationDataset,
@@ -83,23 +79,22 @@ export default function useGetMaintenanceRequests({
         }
         setPagination(paginationDataset);
       }
+      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
-    } finally {
-      setIsLoading(false);
     }
-  }, [page, start_date, end_date, sort, search]);
+  }, [page, limit, sort, search]);
 
   useEffect(() => {
-    getAllMaintenanceRequests();
-  }, [page, start_date, end_date, sort, search]);
+    getRequestCategories();
+  }, [page, limit, sort, search]);
 
   return {
     data,
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getAllMaintenanceRequests,
+    retryFunction: getRequestCategories,
     pagination,
   };
 }

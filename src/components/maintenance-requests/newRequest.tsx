@@ -1,6 +1,10 @@
-import { SyntheticEvent, useCallback, useEffect, useState } from "react";
-import CustomersSingleSearch from "../inputs/search/customer-single-search";
-import { customersById } from "../../types/apiData/customers";
+import {
+  ReactNode,
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { apartmentById } from "../../types/apiData/apartment";
 import TextInput from "../inputs/textInput";
 import ApartmentSingleSearch from "../inputs/search/apartment-single-search";
@@ -18,55 +22,93 @@ import {
 } from "../../stores/apiData/maintenance-requests";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import CancelIcon from "../../assets/icons/cancel";
-// import useGetRequisitionRequest from "../../services-hooks/userGetRequisitionRequest";
-// import Switch from "../switch";
 import useGetMaintenanceRequestById from "../../services-hooks/useGetMaintenanceRequestById";
-import categoryOptions from "../../assets/maintenance-request-category-options.json";
-export default function NewRequest({
+import AdminSingleSearch from "../inputs/search/admins-single-search";
+import { admin } from "../../types/apiData/admins";
+import useGetRequestCategories from "../../services-hooks/useGetRequestCategories";
+import purgeEmptyPayload from "../../utils/remove-empty-payload";
+import useAxios from "../../useHooks/useAxios";
+
+export default function AddEditMaintenanceRequest({
   id,
   setOpen,
+  type = "maintenance",
+  handleExternalSubmit,
+  children,
+  submitting,
 }: {
   id?: string;
   setOpen: (open: boolean) => void;
+  type?: "maintenance" | "requisition" | "convert";
+  handleExternalSubmit?: (payload: any) => void;
+  children?: ReactNode;
+  submitting?: boolean;
 }) {
   const axios = useAxiosMultipart({});
+  const axiosVanilla = useAxios({});
   const dispatch = useAppDispatch();
-  const [markAsPaid, setMarkAsPaid] = useState(false);
-  const [employee, setEmployee] = useState<customersById>({} as any);
+
+  const [employee, setEmployee] = useState<admin>({} as any);
   const [email, setEmail] = useState("");
-  const [selectedApt, setSelectedApt] = useState<apartmentById>({} as any);
   const [apartment, setApartment] = useState<apartmentById>({} as any);
-  const [requestDate, setRequestDate] = useState("");
-  const [vendorName, setVendorName] = useState("");
-  const [vendorAccountName, setVendorAccountName] = useState("");
-  const [vendorBank, setVendorBank] = useState("");
-  const [vendorAccountNumber, setVendorAccountNumber] = useState("");
-  const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
+  const [requestDate, setRequestDate] = useState("");
+  const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("");
+  const [item, setItem] = useState("");
+  const [frequency, setFrequency] = useState("");
   const [additionalNotes, setAdditionalNotes] = useState("");
-  const [invoice, setInvoice] = useState<{
-    name: string;
-    size: number;
-    preview: string;
-    id?: number;
-  }>({} as any);
   const [attachedImages, setAttachedImaged] = useState<
-    { name: string; size: number; preview: string; id?: number }[]
+    {
+      name: string;
+      size: number;
+      preview: string;
+      id?: number;
+      is_local?: boolean;
+    }[]
   >([]);
 
   const [loading, setLoading] = useState(false);
+  const [isDenying, setIsDenying] = useState(false);
 
   const { data } = useGetMaintenanceRequestById({ id });
+  const { data: requestCategories } = useGetRequestCategories({
+    page: 1,
+    limit: 1000,
+  });
 
   //   populate field provided id is available denoting update functionality
   useEffect(() => {
     if (id && data?.id) {
+      const {
+        images,
+        category_id,
+        item,
+        frequency,
+        note,
+        admin,
+        amount,
+        currency,
+      } = data;
       const toDate = new Date(data?.request_date)?.toISOString()?.slice(0, 10);
-      setEmail(data?.admin?.email || "");
-      setAmount(String(data?.amount || ""));
-      setCurrency(data?.currency || "");
+      // setEmployee("")
+      // setApartment("")
+      setCategory(String(category_id || ""));
+      setItem(item || "");
+      setFrequency(frequency || "");
+      setAdditionalNotes(note || "");
+      setEmail(admin?.email || "");
+      setAmount(String(amount || ""));
+      setCurrency(currency || "");
       setRequestDate(toDate || "");
+      setAttachedImaged(
+        images?.map((item) => ({
+          name: String(item?.id),
+          size: 0,
+          preview: item?.image,
+          id: item?.id,
+        })) || []
+      );
     }
   }, [id, data]);
 
@@ -75,57 +117,92 @@ export default function NewRequest({
       e.preventDefault();
       setLoading(true);
       const payload = {
-        employee: employee.id,
-        email,
-        shortlet: apartment.id,
+        admin_id: employee?.id,
+        shortlet_id: apartment?.id,
+        // email,
+        category_id: category,
         request_date: requestDate,
-        vendor_name: vendorName,
-        vendor_account_name: vendorAccountName,
-        vendor_bank: vendorBank,
-        vendor_account_number: vendorAccountNumber,
         amount,
         currency,
-        additional_note: additionalNotes,
-        invoice: invoice,
-        attachedImages: attachedImages,
-        mark_as_paid: markAsPaid,
+        item,
+        frequency,
+        note: additionalNotes,
+        images: attachedImages,
+        // vendor_name: vendorName,
+        // vendor_account_name: vendorAccountName,
+        // vendor_bank: vendorBank,
+        // vendor_account_number: vendorAccountNumber,
+        // additional_note: additionalNotes,
+        // invoice: invoice,
+        // mark_as_paid: markAsPaid,
       };
-      const dummytResponse = {
-        id: 14,
-        employee: { id: 1, first_name: "John", last_name: "Doe" },
-        email: "john.doe@example.com",
-        shortlet: {
-          id: 32,
-          name: "Apartment 32",
-        },
-        category,
-        amount: amount,
-        currency: currency,
-        status: "pending",
-        request_date: new Date(),
-        created_at: new Date(),
-      };
+      const newPayload = purgeEmptyPayload({ payload });
+      // const dummytResponse = {
+      //   id: 14,
+      //   employee: { id: 1, first_name: "John", last_name: "Doe" },
+      //   email: "john.doe@example.com",
+      //   shortlet: {
+      //     id: 32,
+      //     name: "Apartment 32",
+      //   },
+      //   category,
+      //   amount: amount,
+      //   currency: currency,
+      //   status: "pending",
+      //   request_date: new Date(),
+      //   created_at: new Date(),
+      // };
       try {
-        if (id) {
-          //   const response = await axios.put(`/admin/requisition-request/${id}`,payload)
-          //   const data = response?.data;
-          dispatch(replaceMaintenanceRequestInList(dummytResponse));
-          dispatch(
-            openSnackbar({
-              message: "Maintenance request successfully updated",
-              isError: false,
-            })
-          );
-        } else {
-          //   const response = axios.post("/admin/requisition-request",payload)
-          //   const data = response?.data;
-          dispatch(addMaintenanceRequestToList(dummytResponse));
-          dispatch(
-            openSnackbar({
-              message: "Maintenance request successfully added",
-              isError: false,
-            })
-          );
+        if (type === "maintenance") {
+          if (id) {
+            const response = await axios.put(
+              `/admin/maintenance-request/${id}`,
+              newPayload
+            );
+            const { maintenance_request } = response?.data?.data;
+            dispatch(
+              replaceMaintenanceRequestInList({
+                ...maintenance_request,
+                admin: employee,
+                shortlet: apartment,
+                category: requestCategories?.find(
+                  (item) => String(item?.id) === String(category)
+                ),
+                status: data?.status || "",
+              })
+            );
+            dispatch(
+              openSnackbar({
+                message: "Maintenance request successfully updated",
+                isError: false,
+              })
+            );
+          } else {
+            const response = await axios.post(
+              "/admin/maintenance-request",
+              newPayload
+            );
+            const { maintenance_request } = response?.data?.data;
+            dispatch(
+              addMaintenanceRequestToList({
+                ...maintenance_request,
+                admin: employee,
+                shortlet: apartment,
+                category: requestCategories?.find(
+                  (item) => String(item?.id) === String(category)
+                ),
+                status: "pending",
+              })
+            );
+            dispatch(
+              openSnackbar({
+                message: "Maintenance request successfully added",
+                isError: false,
+              })
+            );
+          }
+        } else if (handleExternalSubmit) {
+          handleExternalSubmit(newPayload);
         }
         setOpen(false);
       } catch (error) {
@@ -135,32 +212,45 @@ export default function NewRequest({
     },
     [
       id,
-      markAsPaid,
       employee,
       email,
-      category,
       apartment,
+      category,
       requestDate,
-      vendorName,
-      vendorAccountName,
-      vendorBank,
-      vendorAccountNumber,
       amount,
       currency,
+      item,
+      frequency,
       additionalNotes,
-      invoice,
       attachedImages,
+      requestCategories,
+      data,
+      handleExternalSubmit,
     ]
   );
 
   const denyRequest = useCallback(async () => {
     try {
-      const response = await axios.put(`/admin/maintenance-request/${id}`, {
-        status: "deny",
-      });
-
+      setIsDenying(true);
+      const response = await axiosVanilla.put(
+        `/admin/maintenance-request/update-status/${id}`,
+        {
+          status: "closed",
+          close_reason: "Denied",
+        }
+      );
+      const { maintenance_request } = response?.data?.data;
       // const data = {};
-      // dispatch(replaceMaintenanceRequestInList(data));
+      dispatch(
+        replaceMaintenanceRequestInList({
+          ...maintenance_request,
+          admin: employee,
+          shortlet: apartment,
+          category: requestCategories?.find(
+            (item) => String(item?.id) === String(category)
+          ),
+        })
+      );
       dispatch(
         openSnackbar({
           message: "Maintenance request successfully denied",
@@ -168,23 +258,28 @@ export default function NewRequest({
         })
       );
       setOpen(false);
-    } catch (error) {}
-  }, []);
+    } catch (error) {
+    } finally {
+      setIsDenying(false);
+    }
+  }, [employee, apartment, requestCategories, data]);
 
   return (
     <form onSubmit={handleSubmit} className="w-full grid grid-cols-1 gap-3">
       <div className="space-y-4">
         <ApartmentSingleSearch
           placeholder="Search apartment..."
-          selected={selectedApt}
-          setSelected={setSelectedApt}
+          selected={apartment}
+          setSelected={setApartment}
           label="Apartment"
+          defaultId={String(data?.shortlet_id || "")}
         />
-        <CustomersSingleSearch
+        <AdminSingleSearch
           placeholder="Choose employee"
           selected={employee}
           setSelected={setEmployee}
           label="Requesting employee"
+          defaultId={String(data?.admin_id || "")}
         />
       </div>
       <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -200,15 +295,15 @@ export default function NewRequest({
         />
         <Select
           isRequired={true}
-          value={vendorBank}
-          setValue={setVendorBank}
+          value={frequency}
+          setValue={setFrequency}
           id="frequency"
           label="Frequency"
         >
           <option value="" disabled>
             Select frequency
           </option>
-          <option value="on - off">on - off</option>
+          <option value="One-off">on - off</option>
         </Select>
         <Select
           isRequired={true}
@@ -247,21 +342,21 @@ export default function NewRequest({
           value={category}
           setValue={setCategory}
           id="category"
-          label="Ctegory"
+          label="Category"
         >
           <option value="" disabled>
             Select category
           </option>
-          {categoryOptions?.map((item) => (
-            <option key={item?.id} value={item?.value}>
-              {item?.label}
+          {requestCategories?.map((item) => (
+            <option key={item?.id} value={item?.id}>
+              {item?.name}
             </option>
           ))}
         </Select>
-        <Select
+        {/* <Select
           isRequired={true}
-          value={vendorBank}
-          setValue={setVendorBank}
+          value={item}
+          setValue={setItem}
           id="item"
           label="Item"
         >
@@ -269,8 +364,19 @@ export default function NewRequest({
             Something
           </option>
           <option value="on - off">something</option>
-        </Select>
+        </Select> */}
+
+        <TextInput
+          id="item"
+          placeholder="Item"
+          isRequired={true}
+          value={item}
+          setValue={setItem}
+          inputType="string"
+          label="Item"
+        />
       </div>
+      {children}
       <div className="w-full flex flex-col gap-2">
         <MultipleFileInputDesignTwo
           value={attachedImages}
@@ -292,35 +398,47 @@ export default function NewRequest({
           Specify all apartments if it is a joint invoice. Also a description
           should be added if its just one payment.
         </p>
-        <div className=" flex items-center gap-5 mt-10">
-          <LoadingButton
-            type="button"
-            label="Cancel"
-            variant={2}
-            disabled={false}
-            isLoading={false}
-            clickHandler={() => setOpen(false)}
-          />
-
-          {id && (
+        {data?.status === "closed" ? (
+          <div className=" w-full p-3 bg-red-100">
+            <h4 className=" font-semibold text-lg text-red-500">Closed</h4>
+            <p className=" text-sm text-gray-500">
+              This maintenance request has been closed due to:{" "}
+              <span className=" p-2 rounded-md bg-red-300 text-white font-semibold">
+                {data?.close_reason}
+              </span>
+            </p>
+          </div>
+        ) : (
+          <div className=" flex items-center gap-5 mt-10">
             <LoadingButton
               type="button"
-              label="Deny request"
-              variant={3}
+              label="Cancel"
+              variant={2}
               disabled={false}
               isLoading={false}
-              clickHandler={() => denyRequest()}
-              className=" bg-red-500/10 text-red-500"
-              startIcon={<CancelIcon />}
+              clickHandler={() => setOpen(false)}
             />
-          )}
-          <LoadingButton
-            type="submit"
-            label={id ? "Update" : "Create"}
-            disabled={false}
-            isLoading={loading}
-          />
-        </div>
+
+            {id && type === "maintenance" && (
+              <LoadingButton
+                type="button"
+                label="Deny request"
+                variant={3}
+                disabled={false}
+                isLoading={isDenying}
+                clickHandler={() => denyRequest()}
+                className=" bg-red-500/10 text-red-500"
+                startIcon={<CancelIcon />}
+              />
+            )}
+            <LoadingButton
+              type="submit"
+              label={type === "convert" ? "Convert" : id ? "Update" : "Create"}
+              disabled={false}
+              isLoading={loading || submitting || false}
+            />
+          </div>
+        )}
       </div>
     </form>
   );

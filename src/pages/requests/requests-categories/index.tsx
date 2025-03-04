@@ -1,9 +1,10 @@
 import { useLayoutEffect } from "react";
-import HeadsetIcon from "../../../assets/icons/headset";
-import Starcon from "../../../assets/icons/star";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import RequisitionRequestTable from "../../../components/tables/requisition-request-table";
+import BlockedDatesReasonsIcon from "../../../assets/icons/blocked-dates-reasons";
+import BlockedDatesReasonsListsTable from "../../../components/tables/block-dates-reasons";
+import HeadsetIcon from "../../../assets/icons/headset";
+import RequestCategoriesistsTable from "../../../components/tables/requests-categories";
 
 const breadCrumb = [
   {
@@ -13,19 +14,19 @@ const breadCrumb = [
   },
   {
     url: "#",
-    label: "Requisition requests",
-    icon: <Starcon />,
+    label: "Requests categories",
+    icon: <BlockedDatesReasonsIcon />,
   },
 ];
-export default function RequisitionRequests() {
+export default function RequestsCategoriesListView() {
   const dispatch = useAppDispatch();
   // update page props on component mount
   useLayoutEffect(() => {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "Requisition requests",
-        pageDescription: "Requisition requests",
+        pageTitle: "Requests Categories",
+        pageDescription: "Categories of requests",
         isLoading: false,
         failedToLoad: false,
         setFailedToLoad: false,
@@ -33,9 +34,10 @@ export default function RequisitionRequests() {
       })
     );
   }, []);
+
   return (
-    <div className=" w-full">
-      <RequisitionRequestTable />
+    <div className="w-full">
+      <RequestCategoriesistsTable />
     </div>
   );
 }

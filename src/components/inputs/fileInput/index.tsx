@@ -6,7 +6,7 @@ import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 
 interface Props {
-  value: { name: string; size: number; preview: string };
+  value: { name: string; size: number; preview: string; is_local?: boolean };
   setValue: Function;
   label?: string;
   isRequired?: boolean;
@@ -33,7 +33,7 @@ export default function FileInput({
       Object.assign(singleImage, {
         preview: URL.createObjectURL(singleImage),
       });
-      setValue(singleImage);
+      setValue({ ...singleImage, is_local: true });
     } else {
       dispatch(
         openSnackbar({ message: "unsupported file type", isError: true })

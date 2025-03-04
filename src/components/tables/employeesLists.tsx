@@ -144,8 +144,8 @@ export default function EmployeesLists() {
                       <tr key={item?.id} className=" border-b">
                         <td className=" flex gap-2 items-center min-w-36">
                           <img
-                            src={item?.user?.profile_photo || "/logo_blue.png"}
-                            alt={item?.user?.first_name}
+                            src={"/logo_blue.png"}
+                            alt={item?.admin?.first_name}
                             className=" h-10 w-10 rounded aspect-square"
                           />
                           <span className=" flex flex-col gap-1">
