@@ -1,27 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { bookingsById } from "../../types/apiData/bookings";
 import { pagination } from "../../types/pagination";
-import { pagination } from "../../types/pagination";
+import { blockedReason } from "../../types/apiData/blocked-reason";
 
-export const bookingsListsData = createSlice({
-  name: "all bookings",
+export const blockedDateReasonData = createSlice({
+  name: "all_blocked_dates_reasons",
   initialState: {
     value: {
       status: false,
       pagination: [] as {
         pagination_data: pagination;
-        pagination_data: pagination;
-        data: bookingsById[];
+        data: blockedReason[];
       }[],
-      data: [] as bookingsById[],
+      data: [] as blockedReason[],
     },
   },
   reducers: {
-    updateBookingsList: (state, action) => {
+    updateBlockedDatesReason: (state, action) => {
       state.value.status = true;
       state.value.data = action?.payload?.data;
     },
-    addBookingsToList: (state, action) => {
+    addBlockedDatesReason: (state, action) => {
       state.value.data = [...state.value.data, action?.payload];
       //include in pagination data
       const pagination_data = [...state.value.pagination];
@@ -54,11 +52,11 @@ export const bookingsListsData = createSlice({
         ];
       }
     },
-    removeBookingsInList: (state, action) => {
+    removeBlockedDatesReason: (state, action) => {
       const { id } = action?.payload;
       const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
-        (v: { id: number }) => String(v.id) === String(id)
+        (v: { id: number }) => v.id === id
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1);
@@ -77,11 +75,11 @@ export const bookingsListsData = createSlice({
       });
       state.value.pagination = removed;
     },
-    replaceBookingsInList: (state, action) => {
+    replaceBlockedDatesReason: (state, action) => {
       const { id } = action?.payload;
       const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
-        (v: { id: number }) => String(v.id) === String(id)
+        (v: { id: number }) => v.id === id
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1, action?.payload);
@@ -104,7 +102,7 @@ export const bookingsListsData = createSlice({
       });
       state.value.pagination = replacedItem;
     },
-    clearBookingsList: (state) => {
+    clearBlockedDatesReason: (state) => {
       state.value.status = false;
       state.value.data = [];
     },
@@ -112,12 +110,12 @@ export const bookingsListsData = createSlice({
 });
 
 export const {
-  updateBookingsList,
-  addBookingsToList,
+  updateBlockedDatesReason,
+  addBlockedDatesReason,
   addToPaginationHistory,
-  removeBookingsInList,
-  replaceBookingsInList,
-  clearBookingsList,
-} = bookingsListsData.actions;
+  removeBlockedDatesReason,
+  replaceBlockedDatesReason,
+  clearBlockedDatesReason,
+} = blockedDateReasonData.actions;
 
-export default bookingsListsData.reducer;
+export default blockedDateReasonData.reducer;

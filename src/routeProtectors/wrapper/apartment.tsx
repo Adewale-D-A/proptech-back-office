@@ -16,6 +16,8 @@ import AddEdit from "../../components/amenities/addEdit";
 import NavTab from "../../components/tab/nav-tab";
 import LocationPinIcon from "../../assets/icons/location";
 import AddEditLocationGroup from "../../components/apartment/add-edit-location-group";
+import BlockedDatesReasonsIcon from "../../assets/icons/blocked-dates-reasons";
+import AddEditBlockedDatesReason from "../../pages/apartments/block-dates-reason/add-edit-blocked-dates";
 
 const tabList = [
   {
@@ -60,6 +62,12 @@ const tabList = [
     label: "Location Grouping",
     url: "/apartments/location-grouping",
   },
+  {
+    id: 8,
+    icon: <BlockedDatesReasonsIcon />,
+    label: "Blocked Dates Reasons",
+    url: "/apartments/blocked-dates-reasons",
+  },
 ];
 export default function ApartmentTabWrapper() {
   const location = useLocation();
@@ -68,6 +76,7 @@ export default function ApartmentTabWrapper() {
   const [openAddAmenity, setOpenAddAmenity] = useState(false);
   const [openAddEdit, setOpenAddEdit] = useState(false);
   const [openAddLocationGroup, setOpenAddLocationGroup] = useState(false);
+  const [openBlockedReason, setOpenBlockedReason] = useState(false);
 
   //   update current tab value based on the current URL
   useEffect(() => {
@@ -136,6 +145,14 @@ export default function ApartmentTabWrapper() {
                 clickHandler={() => setOpenAddLocationGroup(true)}
                 startIcon={<PlusIcon />}
               />
+            ) : trackTab === 8 ? (
+              <LoadingButton
+                label="Add Blocked Reason"
+                isLoading={false}
+                type="button"
+                clickHandler={() => setOpenBlockedReason(true)}
+                startIcon={<PlusIcon />}
+              />
             ) : (
               <></>
             )}
@@ -191,6 +208,15 @@ export default function ApartmentTabWrapper() {
         className=" max-w-md"
       >
         <AddEditLocationGroup setOpen={setOpenAddLocationGroup} />
+      </ModalTemplate>
+      <ModalTemplate
+        open={openBlockedReason}
+        setOpen={setOpenBlockedReason}
+        showXicon={true}
+        title="Blocked Dates Reason"
+        className=" max-w-md"
+      >
+        <AddEditBlockedDatesReason setOpen={setOpenBlockedReason} />
       </ModalTemplate>
     </>
   );

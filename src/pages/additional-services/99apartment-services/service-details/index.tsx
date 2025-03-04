@@ -13,7 +13,7 @@ import formatDate from "../../../../utils/isoDateConverter";
 
 const breadCrumb = [
   {
-    url: "/additional-services",
+    url: "/additional-services/99apartment-services",
     label: "Additional Services",
     icon: <AdditionIcon />,
   },

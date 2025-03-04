@@ -9,6 +9,7 @@ import Switch from "../switch";
 import Select from "../inputs/select";
 import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
 import { customerRequestPayload } from "../../types/apiData/customers/request-payload";
+import purgeEmptyPayload from "../../utils/remove-empty-payload";
 
 export default function AddEditCustomerSalesChannel({
   id,
@@ -67,6 +68,8 @@ export default function AddEditCustomerSalesChannel({
         commission_per_booking: commision,
         calculate_commission_on: calculateCommission,
         apply_commission_on: applyCommission,
+      } as {
+        [key: string]: any;
       };
       dispatch(
         updateCustomerSalesChannel({
@@ -78,7 +81,8 @@ export default function AddEditCustomerSalesChannel({
         })
       );
       try {
-        handleSubmit(payload);
+        const purgePayloadResult = purgeEmptyPayload({ payload });
+        handleSubmit(purgePayloadResult);
       } catch (error) {}
     },
     [

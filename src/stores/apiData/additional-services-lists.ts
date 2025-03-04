@@ -101,6 +101,33 @@ export const additionalServiceListData = createSlice({
         };
       });
       state.value.pagination = replacedItem;
+    },    
+    markAdditionalServiceItemAsResolved: (state, action) => {
+      const { id, status } = action?.payload;
+      const currentArray = state.value.data;
+      const currentIndex = currentArray.findIndex(
+        (v: { id: number }) => String(v.id) === String(id)
+      );
+      if (currentIndex >= 0) {
+        currentArray.splice(currentIndex, 1, {...currentArray[currentIndex], status});
+        state.value.data = currentArray;
+      }
+      //REPLACE pagination data
+      const pagination_data = [...state.value.pagination];
+      const replacedItem = pagination_data.map((item, index) => {
+        const sencondFilter = item.data.map((data, i) => {
+          if (String(data.id) === String(id)) {
+            return { ...action.payload };
+          } else {
+            return data;
+          }
+        });
+        return {
+          pagination_data: { ...item.pagination_data },
+          data: sencondFilter,
+        };
+      });
+      state.value.pagination = replacedItem;
     },
     clearAdditionalServicesList: (state) => {
       state.value.status = false;
@@ -115,6 +142,7 @@ export const {
   addToPaginationHistory,
   removeAdditionalServicesInList,
   replaceAdditionalServicesInList,
+  markAdditionalServiceItemAsResolved,
   clearAdditionalServicesList,
 } = additionalServiceListData.actions;
 

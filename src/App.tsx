@@ -136,6 +136,7 @@ import ViewMaintenanceRequest from "./pages/requests/maintenance-requests/view-m
 import GeneratorRuntime from "./pages/reports/generator-runtime";
 import BookingsReport from "./pages/reports/bookings";
 import MaintenanceExpenses from "./pages/reports/maintenance-expenses";
+import BlockedDatesReasonListView from "./pages/apartments/block-dates-reason";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -182,6 +183,10 @@ function App() {
               <Route
                 path="/apartments/location-grouping"
                 element={<LocationGroupView />}
+              />
+              <Route
+                path="/apartments/blocked-dates-reasons"
+                element={<BlockedDatesReasonListView />}
               />
             </Route>
 

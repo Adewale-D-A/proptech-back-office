@@ -26,7 +26,8 @@ import Search from "../../../components/inputs/search";
 import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
 import DateInput from "../../../components/inputs/dateInput";
 import reservationValidator from "../../../utils/reservation-validator";
-
+import MultipleSelect from "../../../components/inputs/select/multipleSelect";
+import monthsDays from "../../../assets/days-months.json";
 const breadCrumb = [
   {
     url: "/pricing/special-prices",
@@ -63,6 +64,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [weekdays, setWeekdays] = useState("");
+  const [days, setDays] = useState<string[]>([]);
   const [isYearly, setIsYearly] = useState(false);
   const [seasonCheckin, setSeasonalCheckin] = useState(false);
   const [promotion, setPromotion] = useState(false);
@@ -87,6 +89,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
         check_in_date,
         check_out_date,
         weekday,
+        days,
         tied_to_year,
         at_season_beginning,
         promotion,
@@ -107,6 +110,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
       setCheckIn(new_check_in_date || "");
       setCheckOut(new_check_out_date || "");
       setWeekdays(weekday || "");
+      setDays(days || []);
       setIsYearly(Boolean(tied_to_year || 0));
       setSeasonalCheckin(Boolean(at_season_beginning || 0));
       setPromotion(Boolean(promotion || 0));
@@ -142,7 +146,8 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
           name: name,
           check_in_date: checkIn,
           check_out_date: checkOut,
-          weekday: weekdays,
+          days: days,
+          // weekday: weekdays,
           tied_to_year: isYearly,
           at_season_beginning: seasonCheckin,
           promotion: promotion,
@@ -203,6 +208,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
       checkIn,
       checkOut,
       weekdays,
+      days,
       isYearly,
       seasonCheckin,
       promotion,
@@ -273,12 +279,21 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                     Quae labore.
                   </p>
                 </div>
-                <WeekdaysSelect
+                <MultipleSelect
+                  value={days}
+                  setValue={setDays}
+                  label="weekdays"
+                  options={monthsDays?.fulldays?.map((item) => ({
+                    id: item?.toLowerCase(),
+                    label: item,
+                  }))}
+                />
+                {/* <WeekdaysSelect
                   isRequired={true}
                   value={weekdays}
                   setValue={setWeekdays}
                   id="weekdays"
-                />
+                /> */}
               </div>
               <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
                 <div className=" max-w-md">

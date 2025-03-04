@@ -1,5 +1,5 @@
 import { useCallback, useLayoutEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import Timeline from "../../../components/timeline";
@@ -24,6 +24,7 @@ const breadCrumb = [
 
 export default function EditCustomerSalesChannelPage() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const axios = useAxiosMultipart({
     disableSuccMssg: false,
     disableErrMssg: false,
@@ -75,6 +76,7 @@ export default function EditCustomerSalesChannelPage() {
           })
         );
         dispatch(replaceCustomersInList(data));
+        navigate("/customers");
       } catch (error) {
       } finally {
         setIsSubmitting(false);

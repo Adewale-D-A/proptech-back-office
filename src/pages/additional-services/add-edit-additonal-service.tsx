@@ -4,7 +4,6 @@ import { customersById } from "../../types/apiData/customers";
 import useAxios from "../../useHooks/useAxios";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import useGetBookingsByUserId from "../../services-hooks/bookings/bookingsByUserId";
-import Search from "../../components/inputs/search";
 import Select from "../../components/inputs/select";
 import LoadingButton from "../../components/button";
 import TextAreaInput from "../../components/inputs/textArea";
@@ -61,7 +60,29 @@ export default function AddEditAdditionalService({
             payload
           );
           const { additional_service } = response?.data?.data || {};
-          dispatch(addAdditionalServicesToList(additional_service));
+          dispatch(
+            addAdditionalServicesToList({
+              ...additional_service,
+              user: {
+                first_name: seletedCustomer?.first_name,
+                last_name: seletedCustomer?.last_name,
+              },
+              booking: {
+                shortlet: {
+                  name:
+                    user_bookings?.find(
+                      (item) => String(item?.id) === bookingId
+                    )?.shortlet?.name || "",
+                },
+              },
+              service_type: {
+                name:
+                  service_types?.find(
+                    (item) => String(item?.id) === serviceTypeId
+                  )?.name || "",
+              },
+            })
+          );
           dispatch(
             openSnackbar({
               message: "Additional service successfully created",

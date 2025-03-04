@@ -54,6 +54,10 @@ run **npm start** (start application on port:3000)
 
 [MIME TYPES](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types)
 
+[LIVE WEB](https://web-app-web-back-office.vercel.app/)
+
+[backend main api doc](https://documenter.getpostman.com/view/36930652/2sAXjNXAMk)
+
 [FIGMA File](https://www.figma.com/design/foJk9S0rCJImkVXY0EgxId/proptech?node-id=4400-64&node-type=&t=ZI2UUvFyHO0J3pWZ-0)
 
 [Super App + Additions](https://www.figma.com/design/sJXTHB9vabVu6hd3TXH9uk/99-APPs?node-id=396-44772&p=f&t=96dXJsuOSOwwVNLx-0)
@@ -62,12 +66,12 @@ run **npm start** (start application on port:3000)
 
 [MISSING SCREEN UI](https://www.figma.com/design/sJXTHB9vabVu6hd3TXH9uk/99-APPs?node-id=100-24433&node-type=canvas&t=jbtAxyNdljLvbX97-0)
 
-[backend main api doc](https://documenter.getpostman.com/view/36930652/2sAXjNXAMk)
-
 [Bug list - 99Apt Agents](https://writer.zoho.com/writer/open/lljmv08c7bcf6fbc54a4ba3bd075ae69fe72a)
 
 [Bug list - Reformed and re-translated](https://docs.google.com/spreadsheets/d/1hg1SBdeoIuYGga-goTEt5K5MztbEye2Wfkg9Jaw6kI8/edit?usp=sharing)
 
 [API related fixes](https://docs.google.com/spreadsheets/d/1fBadTMVut5kAojuyC-sp2ppwcEkfPS-DKRYx0w8aqGA/edit?usp=sharing)
 
-[Separated Bug list](https://docs.google.com/document/d/1q-R5v0Dpy35JacPXKkUO8zmUBfCM_-EOvgCjnB5Of70/edit?tab=t.qtkfq9txycrb#heading=h.w5cgoius9ocr)
+[99Apt Team Separated Bug list](https://docs.google.com/document/d/1q-R5v0Dpy35JacPXKkUO8zmUBfCM_-EOvgCjnB5Of70/edit?tab=t.qtkfq9txycrb#heading=h.w5cgoius9ocr)
+
+[Latest Bug list - reformed] (https://docs.google.com/spreadsheets/d/12QXRN-WsRTg9cJaM-uXQkTDKm8G3WPjsoE4HDz6-JzA/edit?usp=sharing)

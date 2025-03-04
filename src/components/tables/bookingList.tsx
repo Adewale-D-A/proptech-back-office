@@ -1,9 +1,8 @@
 import { Link, useParams } from "react-router-dom";
+import { useCallback, useState } from "react";
 import Status from "../status";
-import { apartmentById } from "../../types/apiData/apartment";
 import { bookingsById } from "../../types/apiData/bookings";
 import formatDate from "../../utils/isoDateConverter";
-import { useCallback, useState } from "react";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
@@ -107,12 +106,12 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
                   >
                     Edit Reservation
                   </Link>
-                  <Link
+                  {/* <Link
                     to={`#`}
                     className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                   >
                     View In Front Site
-                  </Link>
+                  </Link> */}
                   {/* <button
                     type="button"
                     className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"

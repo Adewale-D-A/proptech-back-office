@@ -7,8 +7,20 @@
 
 > Feature -> Operations module reporting section UI development
 
+##### 23.02.2025
+
+> Feature -> Block date feature addition
+> Special prices multiple select option addition
+
+##### 20.02.2025
+
+> Add-on -> remove empty payload keys and values util function creation
+> bug-fix -> Upload profile_photo and identity document optional requirement addition
+> bug-fix -> Systematic 99Apt team bug list reviews and fixes
+
 ##### 15.02.2025
 
+> bug-fix -> Apartment list view characteristis/amenities addition and units removal
 > Feature addition -> booking check availability suggestions
 > bug-fix -> Chat module cached sent history repetition fix
 > bug-fix -> Invoice booking detail url updated fix
