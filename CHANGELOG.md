@@ -1,3 +1,8 @@
+##### 05.04.2025
+
+> Integrations -> Requisition and Maintenance requests CRU operations completions
+> Integrations -> Maintenance requests conversions to requisition requests
+
 ##### 04.04.2025
 
 > Feature => Maintenance request, converstion of maintenance request to requisition request and requisition requests API integrations

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Switch from "../../../components/switch";
 import AddEditMaintenanceRequest from "../../../components/maintenance-requests/newRequest";
 import TextInput from "../../../components/inputs/textInput";
@@ -9,9 +9,11 @@ import {
   requisitionRequestFormSecondary,
 } from "../../../types/apiData/requisition-request";
 import purgeEmptyPayload from "../../../utils/remove-empty-payload";
+import useGetRequisitionRequest from "../../../services-hooks/userGetRequisitionRequest";
 
 export default function RequisitionRequestForm({
-  id,
+  id, //maintenance_request_id
+  requisition_id, //requisition request id
   setOpen,
   type = "requisition",
   handleFormSubmission,
@@ -22,8 +24,9 @@ export default function RequisitionRequestForm({
   type?: "convert" | "requisition";
   handleFormSubmission: (
     payload: requisitionRequestFormMain & requisitionRequestFormSecondary
-  ) => void;
+  ) => Promise<any>;
   submitting?: boolean;
+  requisition_id?: string;
 }) {
   const [markAsPaid, setMarkAsPaid] = useState(false);
   const [vendorName, setVendorName] = useState("");
@@ -38,32 +41,58 @@ export default function RequisitionRequestForm({
     is_local: boolean;
   }>({} as any);
 
+  const { data } = useGetRequisitionRequest({ id: requisition_id });
+  //   populate field provided id is available denoting update functionality
+  useEffect(() => {
+    if (requisition_id && data?.id) {
+      const {
+        id,
+        is_paid,
+        vendor_name,
+        vendor_bank,
+        account_name,
+        account_number,
+        invoice_file_path,
+      } = data;
+      setMarkAsPaid(Boolean(is_paid));
+      setVendorName(vendor_name || "");
+      setVendorBank(vendor_bank || "");
+      setVendorAccountName(account_name || "");
+      setVendorAccountNumber(account_number || "");
+      setInvoice({
+        name: "",
+        size: 0,
+        preview: invoice_file_path,
+        id: id,
+        is_local: false,
+      });
+    }
+  }, [requisition_id, data]);
+
   const handleSubmit = useCallback(
     async (payload: requisitionRequestFormMain) => {
       try {
         const newPayload = {
           ...payload,
-          images: payload?.images?.filter((item) => item?.is_local),
           vendor_name: vendorName,
           vendor_bank: vendorBank,
           account_name: vendorAccountName,
           account_number: vendorAccountNumber,
-          invoice_file: invoice?.is_local ? invoice : "",
-          is_paid: markAsPaid,
+          invoice_file: invoice?.id ? "" : invoice,
+          is_paid: markAsPaid ? "yes" : "no",
         };
         const updatedPayload = purgeEmptyPayload({ payload: newPayload });
-        handleFormSubmission(updatedPayload);
-        setOpen(false);
+        await handleFormSubmission(updatedPayload);
       } catch (error) {}
     },
     [
-      id,
       vendorName,
       vendorAccountName,
       vendorBank,
       vendorAccountNumber,
       invoice,
       markAsPaid,
+      handleFormSubmission,
     ]
   );
 
@@ -80,11 +109,12 @@ export default function RequisitionRequestForm({
         </div>
       )}
       <AddEditMaintenanceRequest
-        id={id}
+        id={String(id || data?.maintenance_request_id || "")}
         setOpen={setOpen}
         handleExternalSubmit={handleSubmit}
         type={type}
         submitting={submitting}
+        existing_fields_dataset={data}
       >
         <div className=" flex flex-col gap-3">
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">

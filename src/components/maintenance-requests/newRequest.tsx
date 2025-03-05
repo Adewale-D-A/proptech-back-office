@@ -15,7 +15,7 @@ import TextAreaInput from "../inputs/textArea";
 // import FileInputDesignTwo from "../inputs/fileInput/design-two/file-upload";
 import MultipleFileInputDesignTwo from "../inputs/fileInput/design-two/multiple-image-files";
 import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
-import { useAppDispatch } from "../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import {
   addMaintenanceRequestToList,
   replaceMaintenanceRequestInList,
@@ -28,6 +28,7 @@ import { admin } from "../../types/apiData/admins";
 import useGetRequestCategories from "../../services-hooks/useGetRequestCategories";
 import purgeEmptyPayload from "../../utils/remove-empty-payload";
 import useAxios from "../../useHooks/useAxios";
+import { requisitionRequest } from "../../types/apiData/requisition-request";
 
 export default function AddEditMaintenanceRequest({
   id,
@@ -36,18 +37,26 @@ export default function AddEditMaintenanceRequest({
   handleExternalSubmit,
   children,
   submitting,
-}: {
+  existing_fields_dataset, //Since the component is being shared with requisition requests,
+}: // sometimes, requisition request may not be link with maintenance request,
+// making the id parameter null or undefined, in that case, the fields like employee,
+// shortlet, request date ... will be needed to prepopulate the fields, hence the need for this prop
+{
   id?: string;
   setOpen: (open: boolean) => void;
   type?: "maintenance" | "requisition" | "convert";
-  handleExternalSubmit?: (payload: any) => void;
+  handleExternalSubmit?: (payload: any) => Promise<any>;
   children?: ReactNode;
   submitting?: boolean;
+  existing_fields_dataset?: requisitionRequest;
 }) {
   const axios = useAxiosMultipart({});
   const axiosVanilla = useAxios({});
   const dispatch = useAppDispatch();
 
+  const removedImageIdSet = useAppSelector(
+    (state) => state.addEditApartmentInfo.value.data?.removeImages
+  );
   const [employee, setEmployee] = useState<admin>({} as any);
   const [email, setEmail] = useState("");
   const [apartment, setApartment] = useState<apartmentById>({} as any);
@@ -79,7 +88,7 @@ export default function AddEditMaintenanceRequest({
 
   //   populate field provided id is available denoting update functionality
   useEffect(() => {
-    if (id && data?.id) {
+    if ((id && data?.id) || existing_fields_dataset?.shortlet_id) {
       const {
         images,
         category_id,
@@ -89,17 +98,25 @@ export default function AddEditMaintenanceRequest({
         admin,
         amount,
         currency,
+        request_date,
       } = data;
-      const toDate = new Date(data?.request_date)?.toISOString()?.slice(0, 10);
+      const toDate = new Date(
+        request_date
+          ? request_date
+          : existing_fields_dataset?.request_date || ""
+      )
+        ?.toISOString()
+        ?.slice(0, 10);
       // setEmployee("")
       // setApartment("")
-      setCategory(String(category_id || ""));
-      setItem(item || "");
-      setFrequency(frequency || "");
-      setAdditionalNotes(note || "");
-      setEmail(admin?.email || "");
-      setAmount(String(amount || ""));
-      setCurrency(currency || "");
+      setCategory(
+        String(category_id || existing_fields_dataset?.category_id || "")
+      );
+      setItem(item || existing_fields_dataset?.item || "");
+      setFrequency(frequency || existing_fields_dataset?.frequency || "");
+      setAdditionalNotes(note || existing_fields_dataset?.note || "");
+      setAmount(String(amount || existing_fields_dataset?.amount || ""));
+      setCurrency(currency || existing_fields_dataset?.currency || "");
       setRequestDate(toDate || "");
       setAttachedImaged(
         images?.map((item) => ({
@@ -107,10 +124,17 @@ export default function AddEditMaintenanceRequest({
           size: 0,
           preview: item?.image,
           id: item?.id,
-        })) || []
+        })) ||
+          existing_fields_dataset?.images?.map((item) => ({
+            name: String(item?.id),
+            size: 0,
+            preview: item?.image,
+            id: item?.id,
+          })) ||
+          []
       );
     }
-  }, [id, data]);
+  }, [id, data, existing_fields_dataset]);
 
   const handleSubmit = useCallback(
     async (e: SyntheticEvent) => {
@@ -127,7 +151,8 @@ export default function AddEditMaintenanceRequest({
         item,
         frequency,
         note: additionalNotes,
-        images: attachedImages,
+        images: attachedImages?.filter((item) => !Boolean(item?.id)) || [],
+        remove_images: removedImageIdSet,
         // vendor_name: vendorName,
         // vendor_account_name: vendorAccountName,
         // vendor_bank: vendorBank,
@@ -155,8 +180,8 @@ export default function AddEditMaintenanceRequest({
       try {
         if (type === "maintenance") {
           if (id) {
-            const response = await axios.put(
-              `/admin/maintenance-request/${id}`,
+            const response = await axios.post(
+              `/admin/maintenance-request/update/${id}`,
               newPayload
             );
             const { maintenance_request } = response?.data?.data;
@@ -168,7 +193,7 @@ export default function AddEditMaintenanceRequest({
                 category: requestCategories?.find(
                   (item) => String(item?.id) === String(category)
                 ),
-                status: data?.status || "",
+                status: data?.status || existing_fields_dataset?.status || "",
               })
             );
             dispatch(
@@ -202,7 +227,7 @@ export default function AddEditMaintenanceRequest({
             );
           }
         } else if (handleExternalSubmit) {
-          handleExternalSubmit(newPayload);
+          await handleExternalSubmit(newPayload);
         }
         setOpen(false);
       } catch (error) {
@@ -225,6 +250,7 @@ export default function AddEditMaintenanceRequest({
       attachedImages,
       requestCategories,
       data,
+      existing_fields_dataset,
       handleExternalSubmit,
     ]
   );
@@ -262,7 +288,7 @@ export default function AddEditMaintenanceRequest({
     } finally {
       setIsDenying(false);
     }
-  }, [employee, apartment, requestCategories, data]);
+  }, [employee, apartment, requestCategories]);
 
   return (
     <form onSubmit={handleSubmit} className="w-full grid grid-cols-1 gap-3">
@@ -272,14 +298,18 @@ export default function AddEditMaintenanceRequest({
           selected={apartment}
           setSelected={setApartment}
           label="Apartment"
-          defaultId={String(data?.shortlet_id || "")}
+          defaultId={String(
+            data?.shortlet_id || existing_fields_dataset?.shortlet_id || ""
+          )}
         />
         <AdminSingleSearch
           placeholder="Choose employee"
           selected={employee}
           setSelected={setEmployee}
           label="Requesting employee"
-          defaultId={String(data?.admin_id || "")}
+          defaultId={String(
+            data?.admin_id || existing_fields_dataset?.admin_id || ""
+          )}
         />
       </div>
       <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -398,13 +428,14 @@ export default function AddEditMaintenanceRequest({
           Specify all apartments if it is a joint invoice. Also a description
           should be added if its just one payment.
         </p>
-        {data?.status === "closed" ? (
+        {data?.status === "closed" ||
+        existing_fields_dataset?.status === "closed" ? (
           <div className=" w-full p-3 bg-red-100">
             <h4 className=" font-semibold text-lg text-red-500">Closed</h4>
             <p className=" text-sm text-gray-500">
               This maintenance request has been closed due to:{" "}
               <span className=" p-2 rounded-md bg-red-300 text-white font-semibold">
-                {data?.close_reason}
+                {data?.close_reason || existing_fields_dataset?.status}
               </span>
             </p>
           </div>
@@ -433,7 +464,13 @@ export default function AddEditMaintenanceRequest({
             )}
             <LoadingButton
               type="submit"
-              label={type === "convert" ? "Convert" : id ? "Update" : "Create"}
+              label={
+                type === "convert"
+                  ? "Convert"
+                  : id || existing_fields_dataset?.id
+                  ? "Update"
+                  : "Create"
+              }
               disabled={false}
               isLoading={loading || submitting || false}
             />

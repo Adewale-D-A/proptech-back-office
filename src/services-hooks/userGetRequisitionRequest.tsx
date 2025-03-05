@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import useAxios from "../useHooks/useAxios";
 import { requisitionRequest } from "../types/apiData/requisition-request";
-import sampleRequesitionsData from "../assets/temp-api-mockup-data/requisition-request.json";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetRequisitionRequest({ id }: { id?: string }) {
@@ -14,15 +13,9 @@ export default function useGetRequisitionRequest({ id }: { id?: string }) {
     setIsLoading(true);
     setIsFailed(false);
     try {
-      //   const response = await axios.get(`/admin/requistion-request/${id}`);
-      //   const data = response?.data?.data;
-      // TODO: Use response from API and remove dummy data response mockup
-      const dummyData = sampleRequesitionsData?.data.find(
-        (item) => String(item?.id) === String(id)
-      ) as any;
-      if (dummyData?.id) {
-        setData(dummyData);
-      }
+      const response = await axios.get(`/admin/requisition-request/${id}`);
+      const { requisition_request } = response?.data?.data;
+      setData(requisition_request);
     } catch (error) {
       setIsFailed(true);
     } finally {

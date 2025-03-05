@@ -8,7 +8,10 @@ import {
   requisitionRequestFormMain,
   requisitionRequestFormSecondary,
 } from "../../types/apiData/requisition-request";
-import { replaceMaintenanceRequestInList } from "../../stores/apiData/maintenance-requests";
+import {
+  replaceMaintenanceRequestInList,
+  updateMaintenanceRequestStatusInList,
+} from "../../stores/apiData/maintenance-requests";
 import { useNavigate } from "react-router-dom";
 
 export default function ConvertToRequisition({
@@ -22,17 +25,14 @@ export default function ConvertToRequisition({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
-
   const handleSubmit = useCallback(
     async (
       payload: requisitionRequestFormMain & requisitionRequestFormSecondary
     ) => {
-      setLoading(true);
       try {
         const newPayload = Object.fromEntries(
           Object.entries(payload).filter(([key]) =>
-            key === "is_paid" ? false : true
+            key === "is_paid" || key === "remove_images" ? false : true
           )
         );
         const response = await axios.post(
@@ -40,9 +40,10 @@ export default function ConvertToRequisition({
           newPayload
         );
         const { requisition_request } = response?.data?.data;
-        console.log({ requisition_request });
         dispatch(addRequisitionRequestToList(requisition_request));
-        // dispatch(replaceMaintenanceRequestInList(requisition_request));
+        dispatch(
+          updateMaintenanceRequestStatusInList({ id, status: "approved" })
+        );
         dispatch(
           openSnackbar({
             message:
@@ -52,10 +53,7 @@ export default function ConvertToRequisition({
         );
         setOpen(false);
         navigate("/requests/maintenance-requests");
-      } catch (error) {
-      } finally {
-        setLoading(false);
-      }
+      } catch (error) {}
     },
     [id]
   );

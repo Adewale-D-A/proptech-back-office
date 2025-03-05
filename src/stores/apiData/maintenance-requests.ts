@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { pagination } from "../../types/pagination";
-import { maintenanceRequest, maintenanceRequestsById } from "../../types/apiData/maintenance-request";
+import { maintenanceRequestsById } from "../../types/apiData/maintenance-request";
 
 export const maintenanceRequestsListData = createSlice({
   name: "maintenance-requests",
@@ -102,6 +102,34 @@ export const maintenanceRequestsListData = createSlice({
       });
       state.value.pagination = replacedItem;
     },
+    updateMaintenanceRequestStatusInList: (state, action) => {
+      const { id, status } = action?.payload;
+      const currentArray = state.value.data;
+      const currentIndex = currentArray.findIndex(
+        (v: { id: number }) => String(v.id) === String(id)
+      );
+      const currentDataset = currentArray[currentIndex];
+      if (currentIndex >= 0) {
+        currentArray.splice(currentIndex, 1, { ...currentDataset, status });
+        state.value.data = currentArray;
+      }
+      //REPLACE pagination data
+      const pagination_data = [...state.value.pagination];
+      const replacedItem = pagination_data.map((item, index) => {
+        const sencondFilter = item.data.map((data, i) => {
+          if (String(data.id) === String(id)) {
+            return { ...currentDataset, status };
+          } else {
+            return data;
+          }
+        });
+        return {
+          pagination_data: { ...item.pagination_data },
+          data: sencondFilter,
+        };
+      });
+      state.value.pagination = replacedItem;
+    },
     clearMaintenanceRequestList: (state) => {
       state.value.status = false;
       state.value.data = [];
@@ -111,6 +139,7 @@ export const maintenanceRequestsListData = createSlice({
 
 export const {
   updateMaintenanceRequestList,
+  updateMaintenanceRequestStatusInList,
   addMaintenanceRequestToList,
   addToPaginationHistory,
   removeMaintenanceRequestInList,

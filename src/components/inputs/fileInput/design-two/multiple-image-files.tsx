@@ -44,7 +44,7 @@ export default function MultipleFileInputDesignTwo({
         Object.assign(file, {
           preview: URL.createObjectURL(file),
         });
-        imageArray.push({ ...file, is_local: true });
+        imageArray.push(file);
       } else {
         dispatch(
           openSnackbar({ message: "unsupported file type", isError: true })

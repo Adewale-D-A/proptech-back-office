@@ -1,6 +1,5 @@
 import { ChangeEvent, useCallback } from "react";
 import CautionIcon from "../../../assets/icons/caution";
-import PhotoIcon from "../../../assets/icons/photo";
 import CancelIcon from "../../../assets/icons/cancel";
 import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
@@ -33,7 +32,7 @@ export default function FileInput({
       Object.assign(singleImage, {
         preview: URL.createObjectURL(singleImage),
       });
-      setValue({ ...singleImage, is_local: true });
+      setValue(singleImage);
     } else {
       dispatch(
         openSnackbar({ message: "unsupported file type", isError: true })

@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import {
+  requisitionRequest,
   requisitionRequestFormMain,
   requisitionRequestFormSecondary,
 } from "../../../../types/apiData/requisition-request";
@@ -15,9 +16,11 @@ import RequisitionRequestForm from "../requisition-request-form";
 export default function AddEditRequisitionRequest({
   id,
   setOpen,
+  requisitionItem,
 }: {
   id?: string;
   setOpen: (open: boolean) => void;
+  requisitionItem: requisitionRequest;
 }) {
   const axiosMultipart = useAxiosMultipart({});
   const dispatch = useAppDispatch();
@@ -28,14 +31,26 @@ export default function AddEditRequisitionRequest({
     ) => {
       try {
         setIsSubmitting(true);
-        console.log({ payload });
         if (id) {
           const response = await axiosMultipart.post(
             `/admin/requisition-request/update/${id}`,
             payload
           );
           const { requisition_request } = response?.data?.data;
-          dispatch(replaceRequisitionRequestInList(requisition_request));
+          dispatch(
+            replaceRequisitionRequestInList({
+              ...requisition_request,
+              admin: {
+                id: requisition_request?.admin_id,
+                first_name: requisitionItem?.admin?.first_name,
+                last_name: requisitionItem?.admin?.last_name,
+              },
+              shortlet: {
+                id: requisition_request?.shortlet_id,
+                name: requisitionItem?.shortlet?.name,
+              },
+            })
+          );
           dispatch(
             openSnackbar({
               message: "Requisition request successfully updated",
@@ -48,8 +63,21 @@ export default function AddEditRequisitionRequest({
             payload
           );
           const { requisition_request } = response?.data?.data;
-          console.log({ requisition_request });
-          dispatch(addRequisitionRequestToList(requisition_request));
+          dispatch(
+            addRequisitionRequestToList({
+              ...requisition_request,
+              admin: {
+                id: requisition_request?.admin_id,
+                first_name: "",
+                last_name: "",
+              },
+              shortlet: {
+                id: requisition_request?.shortlet_id,
+                name: "",
+              },
+              status: "pending",
+            })
+          );
           dispatch(
             openSnackbar({
               message: "Requisition request successfully created",
@@ -63,13 +91,13 @@ export default function AddEditRequisitionRequest({
         setIsSubmitting(false);
       }
     },
-    [id]
+    [id, requisitionItem]
   );
 
   return (
     <div className=" w-full">
       <RequisitionRequestForm
-        id={id}
+        requisition_id={id}
         setOpen={setOpen}
         handleFormSubmission={handleSubmit}
         submitting={isSubmitting}

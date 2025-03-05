@@ -27,7 +27,7 @@ export default function FileInputDesignTwo({
       Object.assign(singleImage, {
         preview: URL.createObjectURL(singleImage),
       });
-      setValue({ ...singleImage, is_local: true });
+      setValue(singleImage);
     } else {
       dispatch(
         openSnackbar({ message: "unsupported file type", isError: true })
