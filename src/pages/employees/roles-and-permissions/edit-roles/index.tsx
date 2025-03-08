@@ -12,8 +12,8 @@ import { replaceRolesInList } from "../../../../stores/apiData/roles-lists";
 
 const breadCrumb = [
   {
-    url: "/admin-users-management",
-    label: "Admin",
+    url: "/employees/roles",
+    label: "Employee roles",
     icon: <MenuIcon />,
   },
 ];
@@ -33,8 +33,8 @@ export default function EditRoles() {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "Edit Roles",
-        pageDescription: "Edit user roles",
+        pageTitle: "Edit role",
+        pageDescription: "Edit role",
         isLoading: isLoading,
         failedToLoad: isFailed,
         setFailedToLoad: setIsFailed,
@@ -58,7 +58,7 @@ export default function EditRoles() {
             isError: false,
           })
         );
-        navigate("/admin/users-roles");
+        navigate("/employees/roles");
       } catch (error: any) {}
     },
     []

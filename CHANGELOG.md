@@ -1,3 +1,7 @@
+##### 08.04.2025
+
+> Employees logic and UI placement redefinition
+
 ##### 05.04.2025
 
 > Integrations -> Requisition and Maintenance requests CRU operations completions

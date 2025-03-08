@@ -11,13 +11,13 @@ import UserPlusIcon from "../../../../assets/icons/user-plus";
 
 const breadCrumb = [
   {
-    url: "/admin/users-roles",
-    label: "Admin Roles",
+    url: "/employees/roles",
+    label: "Employee Roles",
     icon: <MenuIcon />,
   },
   {
     url: "#",
-    label: "New Admin Role",
+    label: "New Employee Role",
     icon: <UserPlusIcon />,
   },
 ];
@@ -32,8 +32,8 @@ export default function AddRoles() {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "Add Roles",
-        pageDescription: "Add user roles",
+        pageTitle: "Add role",
+        pageDescription: "Add role",
         isLoading: false,
         failedToLoad: false,
         setFailedToLoad: false,
@@ -57,7 +57,7 @@ export default function AddRoles() {
             isError: false,
           })
         );
-        navigate("/admin/users-roles");
+        navigate("/employees/roles");
       } catch (error: any) {
       } finally {
       }

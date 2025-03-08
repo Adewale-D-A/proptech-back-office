@@ -45,9 +45,7 @@ export default function Employees() {
   return (
     <section className="w-full flex flex-col items-center my-5">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
-        <div>
-          <EmployeesListTable />
-        </div>
+        <EmployeesListTable />
       </div>
     </section>
   );

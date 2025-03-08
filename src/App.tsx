@@ -37,10 +37,8 @@ import AddNewPackageAndOffer from "./pages/plans-and-promotions/package-and-offe
 import AdditionalServiceDetailsById from "./pages/additional-services/99apartment-services/service-details";
 import VendorServiceDetailsById from "./pages/additional-services/vendor-services/vendor-details";
 import NewBookings from "./pages/bookings/new-booking";
-import EditAdminUser from "./pages/manage-admins/users/edit-user";
-import AddAdminUser from "./pages/manage-admins/users/add-user";
-import EditRoles from "./pages/manage-admins/roles-and-permissions/edit-roles";
-import AddRoles from "./pages/manage-admins/roles-and-permissions/add-roles";
+import EditRoles from "./pages/employees/roles-and-permissions/edit-roles";
+import AddRoles from "./pages/employees/roles-and-permissions/add-roles";
 import Profile from "./pages/profile";
 import Employees from "./pages/employees";
 // APARTMENTS
@@ -72,11 +70,7 @@ import AdditionalServicesTabWrapper from "./routeProtectors/wrapper/additiona-se
 import AptAdditionalServicesList from "./pages/additional-services/99apartment-services";
 import VendorServicesList from "./pages/additional-services/vendor-services";
 
-// ADMINS MANAGEMENT
-import AdminUsersTabWrapper from "./routeProtectors/wrapper/admin-users";
-
-import AdminManagementViewAll from "./pages/manage-admins/view-all-users";
-import AdminManagementViewAllRoles from "./pages/manage-admins/view-all-roles";
+import AdminManagementViewAllRoles from "./pages/employees/view-all-roles";
 
 // PRICING
 import PricingTabWrapper from "./routeProtectors/wrapper/pricing";
@@ -131,13 +125,14 @@ import Referrals from "./pages/customer-engagements/referrals";
 import RequisitionRequests from "./pages/requests/requisition-requests";
 import RequestsTabWrapper from "./routeProtectors/wrapper/requests";
 import MaintenanceRequests from "./pages/requests/maintenance-requests";
-import ViewEmployee from "./pages/employees/view employee";
+import ViewEmployee from "./pages/employees/view-employee";
 import ViewMaintenanceRequest from "./pages/requests/maintenance-requests/view-maintenance/view-maintenance";
 import GeneratorRuntime from "./pages/reports/generator-runtime";
 import BookingsReport from "./pages/reports/bookings";
 import MaintenanceExpenses from "./pages/reports/maintenance-expenses";
 import BlockedDatesReasonListView from "./pages/apartments/block-dates-reason";
 import RequestsCategoriesListView from "./pages/requests/requests-categories";
+import EmployeesTabWrapper from "./routeProtectors/wrapper/admin-users";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -289,11 +284,19 @@ function App() {
             <Route path="/customers" element={<Customers />} />
 
             {/* employees flows  */}
-            <Route path="/employees" element={<Employees />} />
+            <Route element={<EmployeesTabWrapper />}>
+              <Route path="/employees/employee-list" element={<Employees />} />
+              <Route
+                path="/employees/roles"
+                element={<AdminManagementViewAllRoles />}
+              />
+            </Route>
             <Route
               path="/employees/view-employee/:id"
               element={<ViewEmployee />}
             />
+            <Route path="/employees/roles/add" element={<AddRoles />} />
+            <Route path="/employees/roles/edit/:id" element={<EditRoles />} />
 
             <Route
               path="/customers/customer-details/:id"
@@ -343,23 +346,6 @@ function App() {
                 element={<Referrals />}
               />
             </Route>
-
-            {/* Admin management */}
-            {/* admin users flows wrapper */}
-            <Route element={<AdminUsersTabWrapper />}>
-              <Route
-                path="/admin/admin-users"
-                element={<AdminManagementViewAll />}
-              />
-              <Route
-                path="/admin/users-roles"
-                element={<AdminManagementViewAllRoles />}
-              />
-            </Route>
-            <Route path="/admin/add" element={<AddAdminUser />} />
-            <Route path="/admin/edit/:id" element={<EditAdminUser />} />
-            <Route path="/admin/admin-roles/add" element={<AddRoles />} />
-            <Route path="/admin/admin-roles/edit/:id" element={<EditRoles />} />
 
             {/* pricing flows wrapper */}
             <Route element={<PricingTabWrapper />}>

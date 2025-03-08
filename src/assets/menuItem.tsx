@@ -150,25 +150,6 @@ export default function NavigationMenuItems() {
           ],
         },
         {
-          id: 12,
-          url: "/admin/admin-users",
-          label: "Admin Users",
-          value: "admin",
-          show: true,
-          icon: <UsersIcon />,
-          hasSubMenu: false,
-          subMenu: [
-            {
-              url: "#",
-              label: "",
-              value: "",
-              show: true,
-              icon: "",
-              id: 1.1,
-            },
-          ],
-        },
-        {
           id: 6,
           url: "/pricing/overview",
           label: "Pricing",
@@ -322,7 +303,7 @@ export default function NavigationMenuItems() {
         },
         {
           id: 16,
-          url: "/employees",
+          url: "/employees/employee-list",
           label: "Employees",
           value: "employees",
           show: true,

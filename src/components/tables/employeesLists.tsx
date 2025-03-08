@@ -3,12 +3,8 @@ import TableSearch from "../inputs/search/table-search";
 import Filter from "../filterAndSort/filter";
 import NoResult from "../noResult";
 import Pagination from "../pagination";
-import formatDate from "../../utils/isoDateConverter";
 import ExportSelect from "../inputs/select/exportSelect";
 import Select from "../inputs/select";
-import useGetRequisitionRequests from "../../services-hooks/useGetRequisitionRequests";
-import Status from "../status";
-import DoubleCheckIcon from "../../assets/icons/double-check";
 import PenIcon from "../../assets/icons/pen";
 import BinIcon from "../../assets/icons/bin-icon";
 import LoadingButton from "../button";
@@ -17,36 +13,40 @@ import ModalTemplate from "../modal";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
-import { removeRequisitionRequestInList } from "../../stores/apiData/requisition-requests";
 import EyeIcon from "../../assets/icons/eye";
-import EditEmployee from "../employees/edit-employee";
-import AddEmployee from "../employees/add-employee";
 import { Link } from "react-router-dom";
+import AddEditEmployee from "../../pages/employees/add-edit-employee";
+import useGetAllAdmins from "../../services-hooks/useGetAllAdmins";
+import { removeAdminsInList } from "../../stores/apiData/admins-list";
+import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 
 export default function EmployeesLists() {
-  const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
+  const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
+  const [category, setCategory] = useState("");
 
-  const [filterOption, setFilterOption] = useState("");
-  const [search, setSearch] = useState("");
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openEmployeeModal, setOpenEmployeeModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const [selectedId, setSelectedId] = useState("");
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
   }>();
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedId, setSelectedId] = useState("");
-  const [openEmployeeEdit, setOpenEmployeeEdit] = useState(false);
-  const [openEmployeeAdd, setOpenEmployeeAdd] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetRequisitionRequests({
+    useGetAllAdmins({
       page: currentPage,
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
+      sort: sort,
       search,
     });
+
   const handleFiltering = useCallback(
     (start_date: string, end_date: string) => {
       setFilterDates({ start_date, end_date });
@@ -55,12 +55,12 @@ export default function EmployeesLists() {
   );
   const openForNewEmployee = useCallback(() => {
     setSelectedId("");
-    setOpenEmployeeAdd(true);
+    setOpenEmployeeModal(true);
   }, []);
 
   const openForEdit = useCallback((id: number) => {
     setSelectedId(String(id || ""));
-    setOpenEmployeeEdit(true);
+    setOpenEmployeeModal(true);
   }, []);
 
   const handleOpenDelete = useCallback((id: number) => {
@@ -68,11 +68,18 @@ export default function EmployeesLists() {
     setOpenDelete(true);
   }, []);
 
+  // handle remove user from list
   const handleDelete = useCallback(async () => {
-    setIsDeleting(true);
     try {
-      // await axios.delete(`/admin/extra-option/${selectedId}`);
-      dispatch(removeRequisitionRequestInList({ id: Number(selectedId) }));
+      setIsDeleting(true);
+      await axios.delete(`/admin/admins/${selectedId}`);
+      dispatch(removeAdminsInList({ id: selectedId }));
+      dispatch(
+        openSnackbar({
+          message: "Employee successfully deleted",
+          isError: false,
+        })
+      );
       setOpenDelete(false);
     } catch (error) {
     } finally {
@@ -90,8 +97,8 @@ export default function EmployeesLists() {
           <div className=" flex items-center gap-3 flex-col md:flex-row">
             <Select
               isRequired={true}
-              value={filterOption}
-              setValue={setFilterOption}
+              value={category}
+              setValue={setCategory}
               id="categories-filtering"
             >
               <option value="" disabled>
@@ -106,7 +113,7 @@ export default function EmployeesLists() {
             <h2 className="text-xl font-semibold flex items-center gap-2">
               Employees list{" "}
               <span className=" bg-[#F9F5FF] rounded-full text-xs text-[#2A3F8F] px-2.5 py-1">
-                18 total{" "}
+                {pagination?.total} total{" "}
               </span>
             </h2>{" "}
             <div className=" w-fit flex items-center gap-3">
@@ -126,14 +133,7 @@ export default function EmployeesLists() {
               <table className=" w-full overflow-x-auto">
                 <thead className="">
                   <tr className=" text-left text-xs font-medium bg-[#F9FAFB] text-[#475467] rounded-lg">
-                    {[
-                      "Employee",
-                      "Department",
-                      "Role",
-                      "Shift",
-                      "Status",
-                      "Action",
-                    ].map((head) => (
+                    {["Employee", "Role", "Action"].map((head) => (
                       <th key={head}>{head}</th>
                     ))}
                   </tr>
@@ -144,47 +144,26 @@ export default function EmployeesLists() {
                       <tr key={item?.id} className=" border-b">
                         <td className=" flex gap-2 items-center min-w-36">
                           <img
-                            src={"/logo_blue.png"}
-                            alt={item?.admin?.first_name}
+                            src={item?.profile_photo || "/logo_blue.png"}
+                            alt={item?.first_name}
                             className=" h-10 w-10 rounded aspect-square"
                           />
                           <span className=" flex flex-col gap-1">
                             <span className=" text-xs font-medium text-[#101828]">
-                              Chukuemeka
+                              {item?.first_name} {item?.last_name}
                             </span>
                             <span className=" text-xs text-[#475467] font-medium">
-                              Chukwuemeka@gmail.com
+                              {item?.email}
                             </span>
                           </span>
                         </td>
                         <td className=" text-xs font-medium text-[#475467]  min-w-36">
-                          Marketing
-                        </td>
-                        <td className="text-xs font-medium text-[#475467] ">
-                          Digital Marketer
-                        </td>
-                        <td>
-                          {" "}
-                          <span className=" flex flex-col gap-1">
-                            <span className="text-xs font-medium text-[#101828]">
-                              Mon - Fri
-                            </span>
-                            <span className=" text-xs text-[#475467] font-medium">
-                              9:00AM - 5:00PM
-                            </span>
-                          </span>
-                        </td>
-
-                        <td className="">
-                          <Status status={item?.status} />
+                          {item?.role_id}
                         </td>
                         <td>
                           <div className=" flex items-center gap-4">
                             <Link to={`/employees/view-employee/${item?.id}`}>
-                              {" "}
-                              <button title="view employee">
-                                <EyeIcon />
-                              </button>
+                              <EyeIcon />
                             </Link>
 
                             <button
@@ -229,22 +208,13 @@ export default function EmployeesLists() {
         btnTitle="Yes, confirm"
       />
       <ModalTemplate
-        open={openEmployeeAdd}
-        setOpen={setOpenEmployeeAdd}
+        open={openEmployeeModal}
+        setOpen={setOpenEmployeeModal}
         showXicon={true}
-        title="Chukwuemeka Bellion"
+        title={selectedId ? "Edit" : "Add new employee"}
         className=" max-w-[800px] lg:ml-20"
       >
-        <AddEmployee id={selectedId} setOpen={setOpenEmployeeAdd} />
-      </ModalTemplate>
-      <ModalTemplate
-        open={openEmployeeEdit}
-        setOpen={setOpenEmployeeEdit}
-        showXicon={true}
-        title="Chukwuemeka Bellion"
-        className=" max-w-[800px] lg:ml-40"
-      >
-        <EditEmployee id={selectedId} setOpen={setOpenEmployeeEdit} />
+        <AddEditEmployee id={selectedId} setOpen={setOpenEmployeeModal} />
       </ModalTemplate>
     </>
   );
