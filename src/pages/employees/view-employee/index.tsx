@@ -18,7 +18,7 @@ import DeleteConfirmation from "../../../components/infoModal/delete-confirmatio
 
 const breadCrumb = [
   {
-    url: "/employees",
+    url: "/employees/employee-list",
     label: "Employees",
     icon: <UserGroupIcon />,
   },
@@ -66,7 +66,7 @@ export default function ViewEmployee() {
           isError: false,
         })
       );
-      navigate("/employees");
+      navigate("/employees/employee-list");
     } catch (error) {
     } finally {
       setIsDeleting(false);

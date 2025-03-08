@@ -131,8 +131,8 @@ export default function AddEditEmployee({
           );
         } else {
           const response = await axios.post("/admin/create", newPayload);
-          const { admin } = response?.data?.data;
-          dispatch(addAdminsToList(admin));
+          // const { admin } = response?.data?.data;
+          dispatch(addAdminsToList({ id: 1092, ...newPayload }));
           dispatch(
             openSnackbar({
               message: "Employee successfully added",
