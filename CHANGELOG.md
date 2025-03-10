@@ -1,3 +1,8 @@
+##### 10.04.2025
+
+> Maintenance expenses reports and generator runtime reports redux same name bug fix
+> Referrals static dataset pagination count updates
+
 ##### 08.04.2025
 
 > Employees logic and UI placement redefinition

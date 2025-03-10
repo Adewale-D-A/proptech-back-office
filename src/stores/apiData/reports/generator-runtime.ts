@@ -3,7 +3,7 @@ import { pagination } from "../../../types/pagination";
 import { generatorRuntimeReport } from "../../../types/apiData/reports";
 
 export const generatorRuntimeReporteports = createSlice({
-  name: "maintenance-expenses-reports",
+  name: "generator-runtime-reports",
   initialState: {
     value: {
       status: false,
@@ -110,11 +110,12 @@ export const generatorRuntimeReporteports = createSlice({
 });
 
 export const {
-  updateGeneratorRuntimeReport,addGeneratorRuntimeToList,
+  updateGeneratorRuntimeReport,
+  addGeneratorRuntimeToList,
   addToPaginationHistory,
   clearGeneratorRuntimeReport,
-  removeGeneratorRuntimeInList, 
-  replaceGeneratorRuntimeInList
+  removeGeneratorRuntimeInList,
+  replaceGeneratorRuntimeInList,
 } = generatorRuntimeReporteports.actions;
 
 export default generatorRuntimeReporteports.reducer;
