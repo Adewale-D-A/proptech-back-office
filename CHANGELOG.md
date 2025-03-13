@@ -1,3 +1,7 @@
+##### 13.03.2025
+
+> Feature => Owner's report module UI development
+
 ##### 10.04.2025
 
 > Maintenance expenses reports and generator runtime reports redux same name bug fix

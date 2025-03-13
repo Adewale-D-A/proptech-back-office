@@ -1,3 +1,7 @@
+import { apartment } from "./apartment";
+import { locationGrouping } from "./apartment/locationGroupings";
+import { requestCategories } from "./request-categories";
+
 export type revenueReportList = {
   date: string;
   rooms_sold: number;
@@ -35,7 +39,6 @@ export type occupancyTimeReportList = {
   check_out_date: string;
 };
 
-
 export type maintenanceExpensesReport = {
   id: number;
   payment_date: string;
@@ -48,7 +51,7 @@ export type maintenanceExpensesReport = {
   status: string;
 };
 
-export type  bookingsReport= {
+export type bookingsReport = {
   id: number;
   customer_name: string;
   shortlet_name: string;
@@ -58,8 +61,7 @@ export type  bookingsReport= {
   check_out_date: string;
 };
 
-
-export type  generatorRuntimeReport= {
+export type generatorRuntimeReport = {
   id: number;
   date: string;
   shortlet_name: string;
@@ -67,3 +69,30 @@ export type  generatorRuntimeReport= {
   time_off: string;
   run_time: string;
 };
+
+export interface ownersReport {
+  id: number;
+  building_id: number;
+  building: locationGrouping;
+  shortlet_id: number;
+  shortlet: apartment;
+  expense_id: number;
+  expense: requestCategories;
+  amount: number;
+  date: string;
+  additional_note: string;
+  monthly_amount: {
+    jan: number;
+    feb: number;
+    mar: number;
+    apr: number;
+    may: number;
+    jun: number;
+    jul: number;
+    aug: number;
+    sep: number;
+    oct: number;
+    nov: number;
+    dec: number;
+  };
+}

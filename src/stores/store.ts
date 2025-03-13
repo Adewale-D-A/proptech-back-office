@@ -65,6 +65,7 @@ import revenueReports from "./apiData/reports/revenue";
 import maintenanceExpensesReports from "./apiData/reports/maintenenace-expenses";
 import bookingsReportReports from "./apiData/reports/bookings-report";
 import generatorRuntimeReporteports from "./apiData/reports/generator-runtime";
+import ownersReportsData from "./apiData/reports/owners-report";
 
 // admins
 import adminsListData from "./apiData/admins-list";
@@ -151,6 +152,7 @@ export const adminStore = () => {
       maintenanceExpensesReports: maintenanceExpensesReports,
       bookingsReportReports: bookingsReportReports,
       generatorRuntimeReporteports: generatorRuntimeReporteports,
+      ownersReport: ownersReportsData,
       // admins
       allAdminsLists: adminsListData,
       allRolesLists: rolesListData,

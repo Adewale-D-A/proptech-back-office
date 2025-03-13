@@ -4,6 +4,7 @@ import ClipBoardIcon from "../../assets/icons/clipboard";
 import PowerIcon from "../../assets/icons/power";
 import BookMarkIcon from "../../assets/icons/book-mark";
 import DollarIcon from "../../assets/icons/dollar";
+import BillIcon from "../../assets/icons/bill";
 
 const tabList = [
   {
@@ -43,11 +44,17 @@ const tabList = [
     url: "/reports/bookings",
   },
   {
-    id: 7,
-    icon: <PowerIcon />,
-    label: "Generator Runtime",
-    url: "/reports/generator-runtime",
+    id: 8,
+    icon: <BillIcon />,
+    label: "Owners Report",
+    url: "/reports/owners-report/summary",
   },
+  // {
+  //   id: 7,
+  //   icon: <PowerIcon />,
+  //   label: "Generator Runtime",
+  //   url: "/reports/generator-runtime",
+  // },
 ];
 export default function ReportsTabWrapper() {
   return (

@@ -133,6 +133,8 @@ import MaintenanceExpenses from "./pages/reports/maintenance-expenses";
 import BlockedDatesReasonListView from "./pages/apartments/block-dates-reason";
 import RequestsCategoriesListView from "./pages/requests/requests-categories";
 import EmployeesTabWrapper from "./routeProtectors/wrapper/admin-users";
+import OwnersReportSummary from "./pages/reports/owners/summary";
+import OwnersReportSpreadsheet from "./pages/reports/owners/spreadsheet";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -490,6 +492,14 @@ function App() {
               <Route
                 path="/reports/occupancy-per-time"
                 element={<OccupancyPerTimeReport />}
+              />
+              <Route
+                path="/reports/owners-report/summary"
+                element={<OwnersReportSummary />}
+              />
+              <Route
+                path="/reports/owners-report/spreadsheet"
+                element={<OwnersReportSpreadsheet />}
               />
             </Route>
             <Route path="/notification" element={<Notification />} />
