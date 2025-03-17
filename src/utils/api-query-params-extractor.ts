@@ -26,7 +26,12 @@ export default function ApiQueryParamsExtractor({
         keyArray.includes("currency") ||
         keyArray.includes("room_option") ||
         keyArray.includes("payment_method") ||
-        keyArray.includes("status")
+        keyArray.includes("status") ||
+        String(dataset["sort"] || "") === "asc"
+        ? true
+        : false || Number(dataset["limit"] || 20) > 20
+        ? true
+        : false
     );
     return {
       queryString: concateString,

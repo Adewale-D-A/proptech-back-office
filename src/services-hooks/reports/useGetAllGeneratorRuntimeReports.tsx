@@ -51,7 +51,7 @@ export default function useGetALlGeneratorRuntimeReports({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage && !remakeRequest && !(sort === "asc")) {
+      if (foundPage && !remakeRequest) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateGeneratorRuntimeReport({ data: foundPage?.data }));
       } else {
@@ -71,7 +71,7 @@ export default function useGetALlGeneratorRuntimeReports({
         const data = sampleRReferralData?.data;
         const paginationDataset = sampleRReferralData?.pagination;
         dispatch(updateGeneratorRuntimeReport({ data }));
-        if (!search) {
+        if (!remakeRequest) {
           dispatch(
             addToPaginationHistory({
               pagination_data: paginationDataset,

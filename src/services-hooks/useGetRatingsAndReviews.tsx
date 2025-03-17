@@ -52,7 +52,7 @@ export default function useGetRatingsAndReviews({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage && !remakeRequest && !(sort === "asc")) {
+      if (foundPage && !remakeRequest) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateRatingsAndReviewsList({ data: foundPage?.data }));
       } else {
@@ -63,7 +63,7 @@ export default function useGetRatingsAndReviews({
         const data = sampleRtaingReviewsData?.data;
         const paginationDataset = sampleRtaingReviewsData?.pagination;
         dispatch(updateRatingsAndReviewsList({ data }));
-        if (!search) {
+        if (!remakeRequest) {
           dispatch(
             addToPaginationHistory({
               pagination_data: paginationDataset,

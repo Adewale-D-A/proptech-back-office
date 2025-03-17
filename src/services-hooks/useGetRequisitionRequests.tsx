@@ -7,7 +7,7 @@ import {
 import useAxios from "../useHooks/useAxios";
 import { pagination } from "../types/pagination";
 import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
-import sampleRequesitionsData from "../assets/temp-api-mockup-data/requisition-request.json";
+// import sampleRequesitionsData from "../assets/temp-api-mockup-data/requisition-request.json";
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetRequisitionRequests({
   page = 1,
@@ -52,7 +52,7 @@ export default function useGetRequisitionRequests({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage && !remakeRequest && !(sort === "asc")) {
+      if (foundPage && !remakeRequest) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateRequisitionRequestList({ data: foundPage?.data }));
       } else {
@@ -72,7 +72,7 @@ export default function useGetRequisitionRequests({
           length: data?.length,
         };
         dispatch(updateRequisitionRequestList({ data }));
-        if (!search) {
+        if (!remakeRequest) {
           dispatch(
             addToPaginationHistory({
               pagination_data: paginationDataset,

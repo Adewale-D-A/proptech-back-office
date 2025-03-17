@@ -6,7 +6,7 @@ import { rateList } from "../../types/apiData/rateList";
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetRateListByApartmentId({
   page = 1,
-  limit = 10,
+  limit = 20,
   apartmentId,
 }: {
   page?: number;

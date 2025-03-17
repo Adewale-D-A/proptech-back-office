@@ -52,7 +52,7 @@ export default function useGetAllAdditionalServiceLists({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage && !remakeRequest && !(sort === "asc")) {
+      if (foundPage && !remakeRequest) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateAdditionalServicesList({ data: foundPage?.data }));
       } else {
@@ -72,7 +72,7 @@ export default function useGetAllAdditionalServiceLists({
           length: data?.length,
         };
         dispatch(updateAdditionalServicesList({ data }));
-        if (!search) {
+        if (!remakeRequest) {
           dispatch(
             addToPaginationHistory({
               pagination_data: paginationDataset,

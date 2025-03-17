@@ -6,6 +6,7 @@ import {
   updateTopApartmentList,
   addToPaginationHistory,
 } from "../../stores/apiData/top-apartment-list";
+import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetTopApartmentLists({
@@ -35,19 +36,25 @@ export default function useGetTopApartmentLists({
     setIsFailed(false);
     setIsLoading(true);
     try {
+      const { queryString, remakeRequest } = ApiQueryParamsExtractor({
+        dataset: {
+          page,
+          start_date: start_date,
+          end_date: end_date,
+          sort: sort,
+        },
+      });
       //check store if this requested data has been saved previously and retirve it
       //if not, make a new request and save into store
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage && !(start_date && end_date) && !(sort === "asc")) {
+      if (foundPage && !remakeRequest) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateTopApartmentList({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          start_date && end_date
-            ? `/admin/dashboard/top-shortlets?sort=${sort}&limit=20&page=${page}&start_date=${start_date}&end_date=${end_date}`
-            : `/admin/dashboard/top-shortlets?sort=${sort}&limit=20&page=${page}`
+          `/admin/dashboard/top-shortlets?${queryString}`
         );
         const responseData = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
@@ -62,12 +69,14 @@ export default function useGetTopApartmentLists({
           length: data?.length,
         };
         dispatch(updateTopApartmentList({ data }));
-        dispatch(
-          addToPaginationHistory({
-            pagination_data: paginationDataset,
-            data: data,
-          })
-        );
+        if (!remakeRequest) {
+          dispatch(
+            addToPaginationHistory({
+              pagination_data: paginationDataset,
+              data: data,
+            })
+          );
+        }
         setPagination(paginationDataset);
       }
     } catch (error) {

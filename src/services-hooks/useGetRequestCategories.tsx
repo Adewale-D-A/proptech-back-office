@@ -49,7 +49,7 @@ export default function useGetRequestCategories({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage && !remakeRequest && !(sort === "asc") && limit === 20) {
+      if (foundPage && !remakeRequest) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateRequestCategory({ data: foundPage?.data }));
       } else {
@@ -69,7 +69,7 @@ export default function useGetRequestCategories({
           length: data?.length,
         };
         dispatch(updateRequestCategory({ data }));
-        if (!search && limit === 20) {
+        if (!remakeRequest) {
           dispatch(
             addToPaginationHistory({
               pagination_data: paginationDataset,
