@@ -1,5 +1,6 @@
 ##### 17.03.2025
 
+> Feature -> Export table data to CSV (apartment list and bookings list completed)
 > Calendar module Api integration
 > Api query params sort and limit logic update
 

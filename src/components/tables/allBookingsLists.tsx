@@ -14,6 +14,8 @@ import MobileBookingsTable from "./mobile/bookings";
 import TableSearch from "../inputs/search/table-search";
 import BookingsFilterSearch from "../filterAndSort/bookings-filter";
 import { BookingFilterPayload } from "../../types/apiData/bookings/booking-filter-options";
+import ExportToCSV from "../export-to-csv";
+import { bookingsExportFormater } from "../../utils/export-formerter-functions";
 
 export default function AllBookingsListTable({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
@@ -72,6 +74,11 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
             />
           </div>
           <BookingsFilterSearch setData={setFilter} />
+          <ExportToCSV
+            dataset={data}
+            jsonToCSVReformerter={bookingsExportFormater}
+            fileName="bookings-list"
+          />
         </div>
         <div className="hidden md:block">
           {data && data.length > 0 ? (

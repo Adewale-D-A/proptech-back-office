@@ -15,6 +15,8 @@ import ReceiptIcon from "../../assets/icons/receipt";
 import ModalTemplate from "../modal";
 import CalculateRate from "../check-availability/calculate-rate";
 import useAxios from "../../useHooks/useAxios";
+import ExportToCSV from "../export-to-csv";
+import { apartmentExportFormater } from "../../utils/export-formerter-functions";
 
 export default function ApartmentListsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -62,6 +64,11 @@ export default function ApartmentListsTable() {
             />
           </div>
           <Sort setSort={setSort} id="sort-by" label="Sort by" />
+          <ExportToCSV
+            dataset={data}
+            jsonToCSVReformerter={apartmentExportFormater}
+            fileName="apartment-list"
+          />
         </div>
         <div className="hidden md:block px-5">
           {data && data.length > 0 ? (
