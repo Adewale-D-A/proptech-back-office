@@ -13,7 +13,7 @@ import useGetCustomerById from "../../../../services-hooks/useGetCustomerById";
 
 const breadCrumb = [
   {
-    url: "/bookings/overview",
+    url: "/bookings/requests",
     label: "Bookings",
     icon: <CalendarIcon />,
   },

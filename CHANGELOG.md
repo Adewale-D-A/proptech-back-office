@@ -1,3 +1,7 @@
+##### 18.03.2025
+
+> Export tables functions to a new file
+
 ##### 17.03.2025
 
 > Feature -> Export table data to CSV (apartment list and bookings list completed)

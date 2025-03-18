@@ -9,6 +9,8 @@ import { BookingFilterPayload } from "../../../types/apiData/bookings/booking-fi
 import formatDate from "../../../utils/isoDateConverter";
 import { Link } from "react-router-dom";
 import BookingsFilterSearch from "../../filterAndSort/bookings-filter";
+import ExportToCSV from "../../export-to-csv";
+import { bookingsExportFormater } from "../../../utils/export-formerter-functions";
 
 export default function BookingsReportListTable() {
   const [filterDates, setFilterDates] = useState<{
@@ -45,7 +47,11 @@ export default function BookingsReportListTable() {
             </span>
           </div>
           <div>
-            <ExportSelect id="report" />
+            <ExportToCSV
+              dataset={data}
+              jsonToCSVReformerter={bookingsExportFormater}
+              fileName="bookings-eport-list"
+            />
           </div>
         </div>
         <div className="block px-5">

@@ -15,6 +15,8 @@ import Sort from "../filterAndSort/sort";
 import useAxios from "../../useHooks/useAxios";
 import RequestStatusUpdate from "../booking-detail/request-status-update";
 import { requests } from "../../types/apiData/requests";
+import ExportToCSV from "../export-to-csv";
+import { requestsExportFormater } from "../../utils/export-formerter-functions";
 
 export default function RequestsListTable({ header }: { header: string[] }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -84,6 +86,11 @@ export default function RequestsListTable({ header }: { header: string[] }) {
           <div className=" flex items-center gap-2 flex-col md:flex-row">
             <Filter actionHandler={handleCustomersFiltering} />
             <Sort setSort={setSort} id="sort-by" label="Sort by" />
+            <ExportToCSV
+              dataset={data}
+              jsonToCSVReformerter={requestsExportFormater}
+              fileName="requests-list"
+            />
           </div>
         </div>
         {data && data.length > 0 ? (
@@ -96,35 +103,35 @@ export default function RequestsListTable({ header }: { header: string[] }) {
               </tr>
             </thead>
             <tbody className="">
-              {data.map((request, index) => {
+              {data.map((item, index) => {
                 return (
-                  <tr key={request?.id} className=" border-b">
+                  <tr key={item?.id} className=" border-b">
                     <td>
-                      {request?.user?.first_name} {request?.user?.last_name}
+                      {item?.user?.first_name} {item?.user?.last_name}
                     </td>
-                    <td>{request?.shortlet?.name}</td>
+                    <td>{item?.shortlet?.name}</td>
                     <td>
-                      {formatDate(request?.created_at)}{" "}
-                      {formatTime(request?.created_at)}
+                      {formatDate(item?.created_at)}{" "}
+                      {formatTime(item?.created_at)}
                     </td>
-                    <td>{request?.subject}</td>
-                    <td>{request?.description}</td>
+                    <td>{item?.subject}</td>
+                    <td>{item?.description}</td>
                     <td>
                       <Status
                         status="additional-service-escalte"
-                        booleanVal={Boolean(request?.is_escalated)}
+                        booleanVal={Boolean(item?.is_escalated)}
                         falsyMessage="Not Escalated"
                         truthyMessage="Escalated"
                       />
                     </td>
                     <td>
-                      <Status status={request?.status} />
+                      <Status status={item?.status} />
                     </td>
                     <td className=" group relative">
                       <span className=" p-2 text-lg">...</span>
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                         <Link
-                          to={`/bookings/request-details/${request?.id}`}
+                          to={`/bookings/request-details/${item?.id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           View Details
@@ -132,7 +139,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
                         <button
                           type="button"
                           onClick={() => {
-                            markAsResolved(request);
+                            markAsResolved(item);
                           }}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
@@ -141,7 +148,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
                         <button
                           type="button"
                           onClick={() => {
-                            setSelectedId(String(request?.id));
+                            setSelectedId(String(item?.id));
                             setOpenDeleteConfirmation(true);
                           }}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"

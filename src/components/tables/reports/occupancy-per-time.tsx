@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 import LoadingButton from "../../button";
 import Filter from "../../filterAndSort/filter";
-import Search from "../../inputs/search";
-import ExportSelect from "../../inputs/select/exportSelect";
+// import Search from "../../inputs/search";
+// import ExportSelect from "../../inputs/select/exportSelect";
 import TimeRangeSelector from "../../inputs/select/timeRange";
 import { apartmentById } from "../../../types/apiData/apartment";
 import NoResult from "../../noResult";
@@ -14,6 +14,8 @@ import Status from "../../status";
 import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
+import ExportToCSV from "../../export-to-csv";
+import { occupancyPerTimeReportExportFormater } from "../../../utils/export-formerter-functions";
 
 export default function OccupancyPerTimeReportTable() {
   const dispatch = useAppDispatch();
@@ -81,7 +83,11 @@ export default function OccupancyPerTimeReportTable() {
             type="button"
             clickHandler={() => handleLoadData()}
           />
-          <ExportSelect id="report" />
+          <ExportToCSV
+            dataset={data}
+            jsonToCSVReformerter={occupancyPerTimeReportExportFormater}
+            fileName="ocupancy-per-time-report-list"
+          />
         </div>
       </div>
       {/* table */}{" "}

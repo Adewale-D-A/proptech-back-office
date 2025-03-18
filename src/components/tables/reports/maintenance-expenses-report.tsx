@@ -5,13 +5,19 @@ import Filter from "../../filterAndSort/filter";
 import Sort from "../../filterAndSort/sort";
 import TableSearch from "../../inputs/search/table-search";
 import Status from "../../status";
-import ExportSelect from "../../inputs/select/exportSelect";
-import BinIcon from "../../../assets/icons/bin-icon";
-import useGetAllMaintenanceExpenses from "../../../services-hooks/reports/useGetAllMaintenanceExpenses";
+// import ExportSelect from "../../inputs/select/exportSelect";
+// import BinIcon from "../../../assets/icons/bin-icon";
+// import useGetAllMaintenanceExpenses from "../../../services-hooks/reports/useGetAllMaintenanceExpenses";
 import { useAppDispatch } from "../../../stores/hooks";
 import useAxios from "../../../useHooks/useAxios";
 import DeleteConfirmation from "../../infoModal/delete-confirmation";
 import { removeMaintenanceExpensesInList } from "../../../stores/apiData/reports/maintenenace-expenses";
+// import useGetRequisitionRequest from "../../../services-hooks/userGetRequisitionRequest";
+import useGetRequisitionRequests from "../../../services-hooks/useGetRequisitionRequests";
+import ExportToCSV from "../../export-to-csv";
+import { maintenanceExpensesExportFormater } from "../../../utils/export-formerter-functions";
+import useGetRequestCategories from "../../../services-hooks/useGetRequestCategories";
+import Select from "../../inputs/select";
 
 export default function MaintenanceExpensesReportListTable() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -26,14 +32,29 @@ export default function MaintenanceExpensesReportListTable() {
   }>();
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("desc");
+  const [category, setCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  // const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
+  //   useGetAllMaintenanceExpenses({
+  //     page: currentPage,
+  //     start_date: filterDates?.start_date,
+  //     end_date: filterDates?.end_date,
+  //     sort: sort,
+  //     search,
+  //   });
+
+  const { data: categories } = useGetRequestCategories({
+    page: currentPage,
+    limit: 1000,
+  });
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllMaintenanceExpenses({
+    useGetRequisitionRequests({
       page: currentPage,
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
-      sort: sort,
       search,
+      sort,
+      category,
     });
   const handleCustomersFiltering = useCallback(
     (start_date: string, end_date: string) => {
@@ -67,7 +88,24 @@ export default function MaintenanceExpensesReportListTable() {
           </div>
           <div className=" flex items-center gap-2 flex-col md:flex-row">
             <Filter actionHandler={handleCustomersFiltering} />
-            <Sort setSort={setSort} id="sort-by" label="Sort by" />
+            <div className=" w-fit min-w-40">
+              <Sort setSort={setSort} id="sort-by" label="Sort by" />
+            </div>
+            <Select
+              isRequired={true}
+              value={category}
+              setValue={setCategory}
+              id="categories-filtering"
+            >
+              <option value="" disabled>
+                All categories
+              </option>
+              {categories?.map((item) => (
+                <option key={item?.id} value={String(item?.id || "")}>
+                  {item?.name}
+                </option>
+              ))}
+            </Select>
           </div>
         </div>
         <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
@@ -78,9 +116,11 @@ export default function MaintenanceExpensesReportListTable() {
                 {pagination?.total} total
               </span>
             </div>
-            <div>
-              <ExportSelect id="report" />
-            </div>
+            <ExportToCSV
+              dataset={data}
+              jsonToCSVReformerter={maintenanceExpensesExportFormater}
+              fileName="maintenance-expenses-list"
+            />
           </div>
           <div className="block px-5">
             {data && data.length > 0 ? (
@@ -93,10 +133,10 @@ export default function MaintenanceExpensesReportListTable() {
                       "Apartment",
                       "Category",
                       "Item",
-                      "Description of work",
+                      // "Description of work",
                       "Total amount",
                       "Status",
-                      "Action",
+                      // "Action",
                     ].map((head) => (
                       <th key={head}>{head}</th>
                     ))}
@@ -111,16 +151,16 @@ export default function MaintenanceExpensesReportListTable() {
                             {item?.id}
                           </span>
                         </td>
-                        <td>{item?.payment_date}</td>
-                        <td>{item?.shortlet_name}</td>
-                        <td>{item?.category}</td>
+                        <td>***</td>
+                        <td>{item?.shortlet?.name}</td>
+                        <td>{item?.category?.name}</td>
+                        {/* <td>{item?.item}</td> */}
                         <td>{item?.item}</td>
-                        <td>{item?.description_of_work}</td>
-                        <td>{item?.total_amount}</td>
+                        <td>{item?.amount}</td>
                         <td>
                           <Status status={item?.status} />
                         </td>
-                        <td>
+                        {/* <td>
                           <div className=" flex items-center gap-4">
                             <button
                               title="delete"
@@ -129,7 +169,7 @@ export default function MaintenanceExpensesReportListTable() {
                               <BinIcon className=" size-6 text-red-500" />
                             </button>
                           </div>
-                        </td>
+                        </td> */}
                       </tr>
                     );
                   })}

@@ -19,6 +19,8 @@ import AddEditEmployee from "../../pages/employees/add-edit-employee";
 import useGetAllAdmins from "../../services-hooks/useGetAllAdmins";
 import { removeAdminsInList } from "../../stores/apiData/admins-list";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import ExportToCSV from "../export-to-csv";
+import { employeesExportFormater } from "../../utils/export-formerter-functions";
 
 export default function EmployeesLists() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -117,7 +119,11 @@ export default function EmployeesLists() {
               </span>
             </h2>{" "}
             <div className=" w-fit flex items-center gap-3">
-              <ExportSelect id="employees" />
+              <ExportToCSV
+                dataset={data}
+                jsonToCSVReformerter={employeesExportFormater}
+                fileName="employees-list"
+              />
 
               <LoadingButton
                 label="New employee"

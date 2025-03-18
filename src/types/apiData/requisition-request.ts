@@ -28,7 +28,10 @@ export interface requisitionRequest {
     first_name: string;
     last_name: string;
   };
-  category: number;
+  category: {
+    id: number;
+    name: string;
+  };
   shortlet: {
     id: number;
     name: string;

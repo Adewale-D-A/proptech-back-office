@@ -33,7 +33,7 @@ export default function TriggerDownload({
   return (
     <button
       onClick={() => handleTrigger()}
-      className="w-fit py-2.5 px-6 bg-red-400 text-white hover:bg-red-300 transition-all rounded-full flex items-center gap-3"
+      className="w-fit text-nowrap py-2.5 px-6 bg-red-400 text-white hover:bg-red-300 transition-all rounded-full flex items-center gap-3"
     >
       {startIcon} {label || "Download"} {endIcon}
     </button>

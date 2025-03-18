@@ -14,6 +14,8 @@ import useGetReportSummary from "../../../services-hooks/reports/report-summary"
 import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
 import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import ExportToCSV from "../../export-to-csv";
+import { revenueReportExportFormater } from "../../../utils/export-formerter-functions";
 
 export default function DailyRoomReportTable() {
   const [type, setType] = useState("");
@@ -94,7 +96,11 @@ export default function DailyRoomReportTable() {
             type="button"
             clickHandler={() => handleLoadData()}
           />
-          <ExportSelect id="report" />
+          <ExportToCSV
+            dataset={data}
+            jsonToCSVReformerter={revenueReportExportFormater}
+            fileName="daily-room-report-list"
+          />
         </div>
       </div>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">

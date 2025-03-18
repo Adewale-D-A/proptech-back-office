@@ -20,6 +20,8 @@ import useGetReportSummary from "../../../services-hooks/reports/report-summary"
 import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
+import ExportToCSV from "../../export-to-csv";
+import { revenueReportExportFormater } from "../../../utils/export-formerter-functions";
 
 export default function OccupancyRankingReportTable() {
   const [group, setGroup] = useState("");
@@ -105,7 +107,11 @@ export default function OccupancyRankingReportTable() {
                 type="button"
                 clickHandler={() => handleLoadData()}
               />
-              <ExportSelect id="report" />
+              <ExportToCSV
+                dataset={data}
+                jsonToCSVReformerter={revenueReportExportFormater}
+                fileName="occupancy-report-list"
+              />
             </div>
           </div>
           <div className=" flex justify-end ">

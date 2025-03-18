@@ -20,6 +20,8 @@ import EyeIcon from "../../assets/icons/eye";
 import { Link } from "react-router-dom";
 import NewRequest from "../maintenance-requests/newRequest";
 import useGetMaintenanceRequests from "../../services-hooks/useGetMaintenanceRequests";
+import ExportToCSV from "../export-to-csv";
+import { maintenanceRequestsExportFormater } from "../../utils/export-formerter-functions";
 // import DeleteConfirmation from "../infoModal/delete-confirmation";
 // import useAxios from "../../useHooks/useAxios";
 // import { useAppDispatch } from "../../stores/hooks";
@@ -112,7 +114,11 @@ export default function MaintenanceRequestTable() {
               </span>
             </h2>{" "}
             <div className=" w-fit flex items-center gap-3">
-              <ExportSelect id="maintenance-requests" />
+              <ExportToCSV
+                dataset={data}
+                jsonToCSVReformerter={maintenanceRequestsExportFormater}
+                fileName="maintenance-request-list"
+              />
 
               <LoadingButton
                 label="New request"

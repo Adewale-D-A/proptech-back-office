@@ -16,6 +16,9 @@ import AddEditRequisitionRequest from "../../pages/requests/requisition-requests
 import RequisitionRequestStatusChanger from "../../pages/requests/requisition-requests/staus-update";
 import DoubleCheckIcon from "../../assets/icons/double-check";
 import { requisitionRequest } from "../../types/apiData/requisition-request";
+import useGetRequestCategories from "../../services-hooks/useGetRequestCategories";
+import ExportToCSV from "../export-to-csv";
+import { maintenanceExpensesExportFormater } from "../../utils/export-formerter-functions";
 // import BinIcon from "../../assets/icons/bin-icon";
 // import DeleteConfirmation from "../infoModal/delete-confirmation";
 // import useAxios from "../../useHooks/useAxios";
@@ -26,7 +29,7 @@ export default function RequisitionRequestTable() {
   // const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
   // const dispatch = useAppDispatch();
 
-  const [filterOption, setFilterOption] = useState("");
+  const [category, setCategory] = useState("");
   const [search, setSearch] = useState("");
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
@@ -43,12 +46,17 @@ export default function RequisitionRequestTable() {
   // const [openDelete, setOpenDelete] = useState(false);
   // const [isDeleting, setIsDeleting] = useState(false);
 
+  const { data: categories } = useGetRequestCategories({
+    page: currentPage,
+    limit: 1000,
+  });
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetRequisitionRequests({
       page: currentPage,
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
       search,
+      category,
     });
   const handleFiltering = useCallback(
     (start_date: string, end_date: string) => {
@@ -97,13 +105,18 @@ export default function RequisitionRequestTable() {
           <div className=" flex items-center gap-3 flex-col md:flex-row">
             <Select
               isRequired={true}
-              value={filterOption}
-              setValue={setFilterOption}
+              value={category}
+              setValue={setCategory}
               id="categories-filtering"
             >
               <option value="" disabled>
                 All categories
               </option>
+              {categories?.map((item) => (
+                <option key={item?.id} value={String(item?.id || "")}>
+                  {item?.name}
+                </option>
+              ))}
             </Select>
             <Filter actionHandler={handleFiltering} />
           </div>
@@ -112,7 +125,11 @@ export default function RequisitionRequestTable() {
           <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
             <h2 className="text-xl font-semibold">Requisition Requests</h2>{" "}
             <div className=" w-fit flex items-center gap-3">
-              <ExportSelect id="ratings-and-reviews" />
+              <ExportToCSV
+                dataset={data}
+                jsonToCSVReformerter={maintenanceExpensesExportFormater}
+                fileName="requisition-request-list"
+              />
 
               <LoadingButton
                 label="New request"

@@ -13,6 +13,8 @@ import useGetReportSummary from "../../../services-hooks/reports/report-summary"
 import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
 import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import ExportToCSV from "../../export-to-csv";
+import { revenueReportExportFormater } from "../../../utils/export-formerter-functions";
 
 export default function RevenueReportTable() {
   const [filterDates, setFilterDates] = useState<{
@@ -75,8 +77,12 @@ export default function RevenueReportTable() {
             type="button"
             clickHandler={() => handleLoadData()}
           />
-          <ExportSelect id="report" />
         </div>
+        <ExportToCSV
+          dataset={data}
+          jsonToCSVReformerter={revenueReportExportFormater}
+          fileName="revenue-report-list"
+        />
       </div>
       {/* table */}{" "}
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">
@@ -101,19 +107,19 @@ export default function RevenueReportTable() {
               </tr>
             </thead>
             <tbody className="">
-              {data.map((request: revenueReportList, index: number) => {
+              {data.map((item: revenueReportList, index: number) => {
                 return (
                   <tr key={index} className=" border-b">
-                    <td>{formatDate(request?.date)}</td>
-                    <td>{request?.rooms_sold}</td>
-                    <td>{request?.nights_booked}</td>
+                    <td>{formatDate(item?.date)}</td>
+                    <td>{item?.rooms_sold}</td>
+                    <td>{item?.nights_booked}</td>
                     <td>***</td>
-                    <td>{request?.occupancy_rate}</td>
-                    <td>{request?.ibe_revenue}</td>
-                    <td>{request?.ota_revenue}</td>
-                    <td>{request?.adr}</td>
-                    <td>{request?.revpar}</td>
-                    <td>{request?.taxes}</td>
+                    <td>{item?.occupancy_rate}</td>
+                    <td>{item?.ibe_revenue}</td>
+                    <td>{item?.ota_revenue}</td>
+                    <td>{item?.adr}</td>
+                    <td>{item?.revpar}</td>
+                    <td>{item?.taxes}</td>
                   </tr>
                 );
               })}
