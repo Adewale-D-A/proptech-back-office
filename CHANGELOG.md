@@ -1,3 +1,7 @@
+##### 21.03.2025
+
+> Mobile responsivess and UI inconsistencies fix
+
 ##### 18.03.2025
 
 > Export tables functions to a new file

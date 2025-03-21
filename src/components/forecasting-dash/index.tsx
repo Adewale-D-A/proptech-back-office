@@ -46,13 +46,13 @@ export default function ForecastDash() {
         </div>
       </div>
       <div className=" p-3 flex flex-col gap-3 justify-center items-center">
-        <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {[
             {
               id: 1,
               icon: <BuildingIcon className="w-5 h-5" />,
               label: "Occupancy Rate",
-              value: `${data?.occupancy_rate}%`,
+              value: `${data?.occupancy_rate || 0}%`,
               theme: "text-[#26397B] bg-[#26397B]/20",
               url: { src: "#", label: "View Apartment" },
             },
@@ -60,7 +60,7 @@ export default function ForecastDash() {
               id: 2,
               icon: <CalendarIcon className="w-5 h-5" />,
               label: "Total Bookings",
-              value: `${data?.total_bookings} Bookings`,
+              value: `${data?.total_bookings || 0} Bookings`,
               theme: "text-[#35BD29] bg-[#35BD29]/20",
               url: { src: "#", label: "View Bookings" },
             },
@@ -68,7 +68,9 @@ export default function ForecastDash() {
               id: 3,
               icon: <UserPlusIcon className="w-5 h-5" />,
               label: "Nights Booked",
-              value: `${data?.nights_booked} / ${data?.nights_available}`,
+              value: `${data?.nights_booked || 0} / ${
+                data?.nights_available || 0
+              }`,
               theme: "text-[#017EFF] bg-[#017EFF]/20",
               url: { src: "#", label: "View Requests" },
             },

@@ -270,18 +270,7 @@ export default function DashboardOverview() {
         </div>
 
         {/* top apartment table */}
-        <ApartmentTable
-          header={[
-            "S/N",
-            "Apartment Info",
-            "Price per Night",
-            "Last Booking",
-            "Total Bookings",
-            "Availability Status",
-            "Action",
-          ]}
-          title="Top Apartments"
-        />
+        <ApartmentTable title="Top Apartments" />
       </div>
     </section>
   );

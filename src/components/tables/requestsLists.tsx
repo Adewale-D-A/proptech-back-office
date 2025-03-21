@@ -75,7 +75,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
 
   return (
     <>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto">
+      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 overflow-auto">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <div>
             <TableSearch
@@ -94,74 +94,78 @@ export default function RequestsListTable({ header }: { header: string[] }) {
           </div>
         </div>
         {data && data.length > 0 ? (
-          <table className=" w-full text-xs overflow-x-auto">
-            <thead className="">
-              <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                {header.map((head) => (
-                  <th key={head}>{head}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="">
-              {data.map((item, index) => {
-                return (
-                  <tr key={item?.id} className=" border-b">
-                    <td>
-                      {item?.user?.first_name} {item?.user?.last_name}
-                    </td>
-                    <td>{item?.shortlet?.name}</td>
-                    <td>
-                      {formatDate(item?.created_at)}{" "}
-                      {formatTime(item?.created_at)}
-                    </td>
-                    <td>{item?.subject}</td>
-                    <td>{item?.description}</td>
-                    <td>
-                      <Status
-                        status="additional-service-escalte"
-                        booleanVal={Boolean(item?.is_escalated)}
-                        falsyMessage="Not Escalated"
-                        truthyMessage="Escalated"
-                      />
-                    </td>
-                    <td>
-                      <Status status={item?.status} />
-                    </td>
-                    <td className=" group relative">
-                      <span className=" p-2 text-lg">...</span>
-                      <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                        <Link
-                          to={`/bookings/request-details/${item?.id}`}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          View Details
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            markAsResolved(item);
-                          }}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Mark As Resolved
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSelectedId(String(item?.id));
-                            setOpenDeleteConfirmation(true);
-                          }}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Delete Request
-                        </button>
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div className=" w-full overflow-x-auto">
+            <table className=" w-full">
+              <thead>
+                <tr>
+                  {header.map((head) => (
+                    <th key={head}>{head}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((item) => {
+                  return (
+                    <tr key={item?.id} className=" border-b">
+                      <td>
+                        {item?.user?.first_name} {item?.user?.last_name}
+                      </td>
+                      <td>{item?.shortlet?.name}</td>
+                      <td>
+                        {formatDate(item?.created_at)}{" "}
+                        {formatTime(item?.created_at)}
+                      </td>
+                      <td>{item?.subject}</td>
+                      <td>{item?.description}</td>
+                      <td>
+                        <Status
+                          status="additional-service-escalte"
+                          booleanVal={Boolean(item?.is_escalated)}
+                          falsyMessage="Not Escalated"
+                          truthyMessage="Escalated"
+                        />
+                      </td>
+                      <td>
+                        <Status status={item?.status} />
+                      </td>
+                      <td className=" group relative">
+                        <span className=" p-2 bg-primary/15 rounded-lg">
+                          ...
+                        </span>
+                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
+                          <Link
+                            to={`/bookings/request-details/${item?.id}`}
+                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                          >
+                            View Details
+                          </Link>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              markAsResolved(item);
+                            }}
+                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                          >
+                            Mark As Resolved
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedId(String(item?.id));
+                              setOpenDeleteConfirmation(true);
+                            }}
+                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                          >
+                            Delete Request
+                          </button>
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <NoResult />
         )}
