@@ -189,7 +189,7 @@ export default function NavigationMenuItems() {
         },
         {
           id: 15,
-          url: "/requests/requisition-requests",
+          url: "/requests/maintenance-requests",
           label: "Requests",
           value: "requests",
           show: true,

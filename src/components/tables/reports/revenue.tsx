@@ -87,56 +87,58 @@ export default function RevenueReportTable() {
       {/* table */}{" "}
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">
         {data && data.length > 0 ? (
-          <table className=" w-full text-xs overflow-x-auto">
-            <thead className="">
-              <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                {[
-                  "Date",
-                  "Rooms Sold",
-                  "Nights Books",
-                  "Total Bookings",
-                  "%Occupancy",
-                  "IBE Revenue",
-                  "OTA Revenue",
-                  "ADR",
-                  "REVPAR",
-                  "Taxes/Fees",
-                ].map((head) => (
-                  <th key={head}>{head}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="">
-              {data.map((item: revenueReportList, index: number) => {
-                return (
-                  <tr key={index} className=" border-b">
-                    <td>{formatDate(item?.date)}</td>
-                    <td>{item?.rooms_sold}</td>
-                    <td>{item?.nights_booked}</td>
-                    <td>***</td>
-                    <td>{item?.occupancy_rate}</td>
-                    <td>{item?.ibe_revenue}</td>
-                    <td>{item?.ota_revenue}</td>
-                    <td>{item?.adr}</td>
-                    <td>{item?.revpar}</td>
-                    <td>{item?.taxes}</td>
-                  </tr>
-                );
-              })}
-              <tr className=" border-b font-semibold">
-                <td>Total</td>
-                <td></td>
-                <td>{reportSummary?.total_nights_booked}</td>
-                <td>{reportSummary?.total_bookings}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>{reportSummary?.total_revenue}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div className=" w-full overflow-x-auto">
+            <table className=" w-full">
+              <thead>
+                <tr>
+                  {[
+                    "Date",
+                    "Rooms Sold",
+                    "Nights Books",
+                    "Total Bookings",
+                    "%Occupancy",
+                    "IBE Revenue",
+                    "OTA Revenue",
+                    "ADR",
+                    "REVPAR",
+                    "Taxes/Fees",
+                  ].map((head) => (
+                    <th key={head}>{head}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((item: revenueReportList, index: number) => {
+                  return (
+                    <tr key={index} className=" border-b">
+                      <td>{formatDate(item?.date)}</td>
+                      <td>{item?.rooms_sold}</td>
+                      <td>{item?.nights_booked}</td>
+                      <td>***</td>
+                      <td>{item?.occupancy_rate}</td>
+                      <td>{item?.ibe_revenue}</td>
+                      <td>{item?.ota_revenue}</td>
+                      <td>{item?.adr}</td>
+                      <td>{item?.revpar}</td>
+                      <td>{item?.taxes}</td>
+                    </tr>
+                  );
+                })}
+                <tr className=" border-b font-semibold">
+                  <td>Total</td>
+                  <td></td>
+                  <td>{reportSummary?.total_nights_booked}</td>
+                  <td>{reportSummary?.total_bookings}</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>{reportSummary?.total_revenue}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         ) : (
           <NoResult title="No data found" message="No data available" />
         )}

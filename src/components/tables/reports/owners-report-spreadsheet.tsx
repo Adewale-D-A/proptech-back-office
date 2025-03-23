@@ -83,78 +83,80 @@ export default function OwnersReportSpreadsheetTableList() {
           </div>
           <div className="block px-5">
             {data && data.length > 0 ? (
-              <table className=" w-full text-xs  overflow-x-auto">
-                <thead className="">
-                  <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                    {["Expense", ...monthsAndDays.months, "Action"].map(
-                      (head) => (
-                        <th key={head}>{head}</th>
-                      )
-                    )}
-                  </tr>
-                </thead>
-                <tbody className="">
-                  {data.map((item) => {
-                    return (
-                      <tr key={item?.id} className=" border-b">
-                        <td>{item?.expense?.name}</td>
-                        <td>
-                          &#8358;{String(item?.monthly_amount?.jan || 0.0)}
-                        </td>
-                        <td>
-                          &#8358;{String(item?.monthly_amount?.feb || 0.0)}
-                        </td>
-                        <td>
-                          &#8358;{String(item?.monthly_amount?.mar || 0.0)}
-                        </td>
-                        <td>
-                          &#8358;{String(item?.monthly_amount?.apr || 0.0)}
-                        </td>
-                        <td>
-                          &#8358;{String(item?.monthly_amount?.may || 0.0)}
-                        </td>
-                        <td>
-                          &#8358;{String(item?.monthly_amount?.jun || 0.0)}
-                        </td>
-                        <td>
-                          &#8358;{String(item?.monthly_amount?.jul || 0.0)}
-                        </td>
-                        <td>
-                          &#8358;{String(item?.monthly_amount?.aug || 0.0)}
-                        </td>
-                        <td>
-                          &#8358;{String(item?.monthly_amount?.sep || 0.0)}
-                        </td>
-                        <td>
-                          &#8358;{String(item?.monthly_amount?.oct || 0.0)}
-                        </td>
-                        <td>
-                          &#8358;{String(item?.monthly_amount?.nov || 0.0)}
-                        </td>
-                        <td>
-                          &#8358;{String(item?.monthly_amount?.dec || 0.0)}
-                        </td>
-                        <td>
-                          <div className=" flex items-center gap-4">
-                            <button
-                              title="edit"
-                              onClick={() => openForEdit(item?.id)}
-                            >
-                              <PenIcon />
-                            </button>
-                            <button
-                              title="delete"
-                              onClick={() => handleOpenDelete(item?.id)}
-                            >
-                              <BinIcon className=" size-6 text-red-500" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              <div className=" w-full overflow-x-auto">
+                <table className=" w-full">
+                  <thead>
+                    <tr>
+                      {["Expense", ...monthsAndDays.months, "Action"].map(
+                        (head) => (
+                          <th key={head}>{head}</th>
+                        )
+                      )}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.map((item) => {
+                      return (
+                        <tr key={item?.id} className=" border-b">
+                          <td>{item?.expense?.name}</td>
+                          <td>
+                            &#8358;{String(item?.monthly_amount?.jan || 0.0)}
+                          </td>
+                          <td>
+                            &#8358;{String(item?.monthly_amount?.feb || 0.0)}
+                          </td>
+                          <td>
+                            &#8358;{String(item?.monthly_amount?.mar || 0.0)}
+                          </td>
+                          <td>
+                            &#8358;{String(item?.monthly_amount?.apr || 0.0)}
+                          </td>
+                          <td>
+                            &#8358;{String(item?.monthly_amount?.may || 0.0)}
+                          </td>
+                          <td>
+                            &#8358;{String(item?.monthly_amount?.jun || 0.0)}
+                          </td>
+                          <td>
+                            &#8358;{String(item?.monthly_amount?.jul || 0.0)}
+                          </td>
+                          <td>
+                            &#8358;{String(item?.monthly_amount?.aug || 0.0)}
+                          </td>
+                          <td>
+                            &#8358;{String(item?.monthly_amount?.sep || 0.0)}
+                          </td>
+                          <td>
+                            &#8358;{String(item?.monthly_amount?.oct || 0.0)}
+                          </td>
+                          <td>
+                            &#8358;{String(item?.monthly_amount?.nov || 0.0)}
+                          </td>
+                          <td>
+                            &#8358;{String(item?.monthly_amount?.dec || 0.0)}
+                          </td>
+                          <td>
+                            <div className=" flex items-center gap-4">
+                              <button
+                                title="edit"
+                                onClick={() => openForEdit(item?.id)}
+                              >
+                                <PenIcon />
+                              </button>
+                              <button
+                                title="delete"
+                                onClick={() => handleOpenDelete(item?.id)}
+                              >
+                                <BinIcon className=" size-6 text-red-500" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             ) : (
               <NoResult />
             )}

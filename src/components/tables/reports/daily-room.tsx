@@ -67,7 +67,6 @@ export default function DailyRoomReportTable() {
     <div className="w-full flex flex-col gap-5">
       <div className="flex items-center justify-between flex-col md:flex-row gap-4 p-4 rounded-md border flex-wrap lg:flex-nowrap">
         <div>
-          {" "}
           <Filter actionHandler={handleCustomersFiltering} />
         </div>
         <div>
@@ -105,10 +104,10 @@ export default function DailyRoomReportTable() {
       </div>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">
         {data && data.length > 0 ? (
-          <>
-            <table className=" w-full text-xs overflow-x-auto">
-              <thead className="">
-                <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+          <div className=" w-full overflow-x-auto">
+            <table className=" w-full">
+              <thead>
+                <tr>
                   {[
                     "Date",
                     "Rooms Sold",
@@ -194,7 +193,7 @@ export default function DailyRoomReportTable() {
                 </h6>
               ))}
             </div>
-          </>
+          </div>
         ) : (
           <NoResult />
         )}

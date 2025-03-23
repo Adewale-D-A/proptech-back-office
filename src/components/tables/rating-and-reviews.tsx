@@ -60,43 +60,47 @@ export default function RatingsAndReviewsTable() {
         </div>
         <div className="block px-5">
           {data && data.length > 0 ? (
-            <table className=" w-full overflow-x-auto">
-              <thead className="">
-                <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                  {[
-                    "Customer",
-                    "Question",
-                    "Date Added",
-                    "Rating",
-                    "Comment",
-                  ].map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="">
-                {data.map((item) => {
-                  return (
-                    <tr key={item?.id} className=" border-b">
-                      <td className=" text-lg  min-w-36">
-                        <div className=" flex flex-col">
-                          {item?.user?.first_name} {item?.user?.last_name}
-                          <span className=" text-gray-600 text-sm">
-                            {item?.user?.email}
-                          </span>
-                        </div>
-                      </td>
-                      <td>{item?.question}</td>
-                      <td>{formatDate(item?.created_at)}</td>
-                      <td>
-                        <CustomRating rating={item?.rating} />
-                      </td>
-                      <td>{item?.comment}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div className=" w-full overflow-x-auto">
+              <table className=" w-full">
+                <thead>
+                  <tr>
+                    {[
+                      "Customer",
+                      "Question",
+                      "Date Added",
+                      "Rating",
+                      // "Comment",
+                    ].map((head) => (
+                      <th key={head}>{head}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="">
+                  {data.map((item) => {
+                    return (
+                      <tr key={item?.id} className=" border-b">
+                        <td>
+                          <div className=" flex flex-col">
+                            <span className=" capitalize font-semibold text-lg">
+                              {item?.user?.first_name} {item?.user?.last_name}
+                            </span>
+                            <span className=" text-gray-600 text-sm">
+                              {item?.user?.email}
+                            </span>
+                          </div>
+                        </td>
+                        <td>{item?.question}</td>
+                        <td>{formatDate(item?.created_at)}</td>
+                        <td>
+                          <CustomRating rating={item?.rating} />
+                        </td>
+                        {/* <td>{item?.comment}</td> */}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           ) : (
             <NoResult />
           )}

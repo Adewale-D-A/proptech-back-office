@@ -1,3 +1,9 @@
+##### 23.03.2025
+
+> Ratings and referrals endpoints integrations
+> Reporting tables UI uplift
+> Maintenance expenses 'paid' filtering addition
+
 ##### 21.03.2025
 
 > Mobile responsivess and UI inconsistencies fix

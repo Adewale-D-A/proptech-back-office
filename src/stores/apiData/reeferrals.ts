@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { pagination } from "../../types/pagination";
-import { ratingsAndReviews } from "../../types/apiData/ratings-and-reviews";
 import { referrals } from "../../types/apiData/referrals";
 
 export const referralsListData = createSlice({

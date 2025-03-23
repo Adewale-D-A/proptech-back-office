@@ -16,6 +16,7 @@ export default function useGetRequisitionRequests({
   sort = "desc",
   search = "",
   category = "",
+  paid,
 }: {
   page?: number;
   start_date?: string;
@@ -23,6 +24,7 @@ export default function useGetRequisitionRequests({
   sort?: "desc" | "asc" | string;
   search?: string;
   category?: string;
+  paid?: "yes" | "no" | "";
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -47,7 +49,8 @@ export default function useGetRequisitionRequests({
           end_date: end_date,
           sort: sort,
           search: search,
-          category,
+          category_id: category,
+          paid,
         },
       });
       //check store if this requested data has been saved previously and retirve it
@@ -90,11 +93,11 @@ export default function useGetRequisitionRequests({
     } finally {
       setIsLoading(false);
     }
-  }, [page, start_date, end_date, sort, search, category]);
+  }, [page, start_date, end_date, sort, search, category, paid]);
 
   useEffect(() => {
     getAllRequisitionRequests();
-  }, [page, start_date, end_date, sort, search, category]);
+  }, [page, start_date, end_date, sort, search, category, paid]);
 
   return {
     data,

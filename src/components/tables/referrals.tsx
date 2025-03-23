@@ -7,7 +7,6 @@ import formatDate from "../../utils/isoDateConverter";
 import ExportSelect from "../inputs/select/exportSelect";
 import Select from "../inputs/select";
 import useGetReferrals from "../../services-hooks/userGetReferral";
-import Status from "../status";
 import BinIcon from "../../assets/icons/bin-icon";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import { useAppDispatch } from "../../stores/hooks";
@@ -51,7 +50,7 @@ export default function ReferralsTable() {
   const handleDelete = useCallback(async () => {
     setIsDeleting(true);
     try {
-      // await axios.delete(`/admin/extra-option/${selectedId}`);
+      await axios.delete(`/admin/referral/${selectedId}`);
       dispatch(removeReferralsInList({ id: Number(selectedId) }));
       setOpenDelete(false);
     } catch (error) {
@@ -89,47 +88,59 @@ export default function ReferralsTable() {
           </div>
           <div className="block px-5">
             {data && data.length > 0 ? (
-              <table className=" w-full overflow-x-auto">
-                <thead className="">
-                  <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                    {[
-                      "Name/Referral contact",
-                      "Referred by",
-                      "Referral date",
-                      "Status",
-                      "Action",
-                    ].map((head) => (
-                      <th key={head}>{head}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="">
-                  {data.map((item) => {
-                    return (
-                      <tr key={item?.id} className=" border-b">
-                        <td className=" text-lg  min-w-36">
-                          <div className=" flex flex-col">
-                            {item?.user?.first_name} {item?.user?.last_name}
-                            <span className=" text-gray-600 text-sm">
-                              {item?.user?.email}
-                            </span>
-                          </div>
-                        </td>
-                        <td>{item?.referred_by}</td>
-                        <td>{formatDate(item?.referral_date)}</td>
-                        <td>
-                          <Status status={item?.status} />
-                        </td>
-                        <td>
-                          <button onClick={() => handleOpenDelete(item?.id)}>
-                            <BinIcon className=" size-6 text-red-500" />
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              <div className=" w-full overflow-x-auto">
+                <table className=" w-full">
+                  <thead>
+                    <tr>
+                      {[
+                        "Name/Referral contact",
+                        "Referred by",
+                        "Referral date",
+                        "Referral code",
+                        "Action",
+                      ].map((head) => (
+                        <th key={head}>{head}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="">
+                    {data.map((item) => {
+                      return (
+                        <tr key={item?.id} className=" border-b">
+                          <td>
+                            <div className=" flex flex-col">
+                              <span className=" capitalize font-semibold text-lg">
+                                {item?.user?.first_name} {item?.user?.last_name}
+                              </span>
+                              <span className=" text-gray-600 text-sm">
+                                {item?.user?.email}
+                              </span>
+                            </div>
+                          </td>
+                          <td>
+                            <div className=" flex flex-col">
+                              <span className=" capitalize font-semibold text-lg">
+                                {item?.referred_user?.first_name}{" "}
+                                {item?.referred_user?.last_name}
+                              </span>
+                              <span className=" text-gray-600 text-sm">
+                                {item?.referred_user?.email}
+                              </span>
+                            </div>
+                          </td>
+                          <td>{formatDate(item?.created_at)}</td>
+                          <td>{item?.referral_code}</td>
+                          <td>
+                            <button onClick={() => handleOpenDelete(item?.id)}>
+                              <BinIcon className=" size-6 text-red-500" />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             ) : (
               <NoResult />
             )}

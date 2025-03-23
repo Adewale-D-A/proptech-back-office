@@ -2,9 +2,7 @@ import { useCallback, useState } from "react";
 import Filter from "../../filterAndSort/filter";
 import { apartmentById } from "../../../types/apiData/apartment";
 import Select from "../../inputs/select";
-import Search from "../../inputs/search";
 import LoadingButton from "../../button";
-import ExportSelect from "../../inputs/select/exportSelect";
 import { revenueReportList } from "../../../types/apiData/reports";
 import NoResult from "../../noResult";
 import Pagination from "../../pagination";
@@ -141,56 +139,58 @@ export default function OccupancyRankingReportTable() {
           {!(viewType === "chart") && (
             <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">
               {data && data.length > 0 ? (
-                <table className=" w-full text-xs overflow-x-auto">
-                  <thead className="">
-                    <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                      {[
-                        "Date",
-                        "Rooms Sold",
-                        "Nights Books",
-                        "Total Bookings",
-                        "%Occupancy",
-                        "IBE Revenue",
-                        "OTA Revenue",
-                        "ADR",
-                        "REVPAR",
-                        "Taxes/Fees",
-                      ].map((head) => (
-                        <th key={head}>{head}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="">
-                    {data.map((request: revenueReportList, index: number) => {
-                      return (
-                        <tr key={index} className=" border-b">
-                          <td>{formatDate(request?.date)}</td>
-                          <td>{request?.rooms_sold}</td>
-                          <td>{request?.nights_booked}</td>
-                          <td>***</td>
-                          <td>{request?.occupancy_rate}</td>
-                          <td>{request?.ibe_revenue}</td>
-                          <td>{request?.ota_revenue}</td>
-                          <td>{request?.adr}</td>
-                          <td>{request?.revpar}</td>
-                          <td>{request?.taxes}</td>
-                        </tr>
-                      );
-                    })}
-                    <tr className=" border-b font-semibold">
-                      <td>Total</td>
-                      <td></td>
-                      <td>{reportSummary?.total_nights_booked}</td>
-                      <td>{reportSummary?.total_bookings}</td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>{reportSummary?.total_revenue}</td>
-                    </tr>
-                  </tbody>
-                </table>
+                <div className=" w-full overflow-x-auto">
+                  <table className=" w-full">
+                    <thead>
+                      <tr>
+                        {[
+                          "Date",
+                          "Rooms Sold",
+                          "Nights Books",
+                          "Total Bookings",
+                          "%Occupancy",
+                          "IBE Revenue",
+                          "OTA Revenue",
+                          "ADR",
+                          "REVPAR",
+                          "Taxes/Fees",
+                        ].map((head) => (
+                          <th key={head}>{head}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.map((request: revenueReportList, index: number) => {
+                        return (
+                          <tr key={index} className=" border-b">
+                            <td>{formatDate(request?.date)}</td>
+                            <td>{request?.rooms_sold}</td>
+                            <td>{request?.nights_booked}</td>
+                            <td>***</td>
+                            <td>{request?.occupancy_rate}</td>
+                            <td>{request?.ibe_revenue}</td>
+                            <td>{request?.ota_revenue}</td>
+                            <td>{request?.adr}</td>
+                            <td>{request?.revpar}</td>
+                            <td>{request?.taxes}</td>
+                          </tr>
+                        );
+                      })}
+                      <tr className=" border-b font-semibold">
+                        <td>Total</td>
+                        <td></td>
+                        <td>{reportSummary?.total_nights_booked}</td>
+                        <td>{reportSummary?.total_bookings}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{reportSummary?.total_revenue}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               ) : (
                 <NoResult />
               )}

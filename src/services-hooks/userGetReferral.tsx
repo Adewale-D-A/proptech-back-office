@@ -7,7 +7,6 @@ import {
 import useAxios from "../useHooks/useAxios";
 import { pagination } from "../types/pagination";
 import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
-import sampleRReferralData from "../assets/temp-api-mockup-data/referrals.json";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetReferrals({
@@ -57,13 +56,19 @@ export default function useGetReferrals({
         setPagination(foundPage?.pagination_data);
         dispatch(updateReferralsList({ data: foundPage?.data }));
       } else {
-        // const response = await axios.get(`/admin/booking?${queryString}`);
-        // const { users } = response?.data?.data;
-        // const { data, current_page, last_page, per_page, total, from, to } =
-        //   users;
-
-        const data = sampleRReferralData?.data;
-        const paginationDataset = sampleRReferralData?.pagination;
+        const response = await axios.get(`/admin/referral?${queryString}`);
+        const { data: referrals } = response?.data?.data;
+        const { data, current_page, last_page, per_page, total, from, to } =
+          referrals;
+        const paginationDataset = {
+          current_page,
+          last_page,
+          per_page,
+          total,
+          from,
+          to,
+          length: data?.length,
+        };
         dispatch(updateReferralsList({ data }));
         if (!remakeRequest) {
           dispatch(

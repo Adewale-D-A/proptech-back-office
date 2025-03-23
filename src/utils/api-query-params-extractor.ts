@@ -26,7 +26,7 @@ export default function ApiQueryParamsExtractor({
         keyArray.includes("currency") ||
         keyArray.includes("room_option") ||
         keyArray.includes("payment_method") ||
-        keyArray.includes("category") ||
+        keyArray.includes("category_id") ||
         keyArray.includes("status") ||
         String(dataset["sort"] || "") === "asc"
         ? true

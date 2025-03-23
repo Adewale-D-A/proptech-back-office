@@ -93,10 +93,10 @@ export default function OccupancyPerTimeReportTable() {
       {/* table */}{" "}
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">
         {data && data.length > 0 ? (
-          <>
-            <table className=" w-full text-xs overflow-x-auto">
-              <thead className="">
-                <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+          <div className=" w-full overflow-x-auto">
+            <table className=" w-full">
+              <thead>
+                <tr>
                   {[
                     "Date",
                     "Apartment",
@@ -110,7 +110,7 @@ export default function OccupancyPerTimeReportTable() {
                   ))}
                 </tr>
               </thead>
-              <tbody className="">
+              <tbody>
                 {data.map((request, index) => {
                   return (
                     <tr key={index} className=" border-b">
@@ -156,7 +156,7 @@ export default function OccupancyPerTimeReportTable() {
                 </h6>
               ))}
             </div> */}
-          </>
+          </div>
         ) : (
           <NoResult />
         )}

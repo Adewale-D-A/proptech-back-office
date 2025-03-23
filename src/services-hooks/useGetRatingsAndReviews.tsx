@@ -7,7 +7,6 @@ import {
 import useAxios from "../useHooks/useAxios";
 import { pagination } from "../types/pagination";
 import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
-import sampleRtaingReviewsData from "../assets/temp-api-mockup-data/ratings-and-reviews.json";
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetRatingsAndReviews({
   page = 1,
@@ -56,12 +55,19 @@ export default function useGetRatingsAndReviews({
         setPagination(foundPage?.pagination_data);
         dispatch(updateRatingsAndReviewsList({ data: foundPage?.data }));
       } else {
-        // const response = await axios.get(`/admin/booking?${queryString}`);
-        // const { users } = response?.data?.data;
-        // const { data, current_page, last_page, per_page, total, from, to } =
-        //   users;
-        const data = sampleRtaingReviewsData?.data;
-        const paginationDataset = sampleRtaingReviewsData?.pagination;
+        const response = await axios.get(`/admin/rating?${queryString}`);
+        const { ratings } = response?.data?.data;
+        const { data, current_page, last_page, per_page, total, from, to } =
+          ratings;
+        const paginationDataset = {
+          current_page,
+          last_page,
+          per_page,
+          total,
+          from,
+          to,
+          length: data?.length,
+        };
         dispatch(updateRatingsAndReviewsList({ data }));
         if (!remakeRequest) {
           dispatch(

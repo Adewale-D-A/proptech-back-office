@@ -55,6 +55,7 @@ export default function MaintenanceExpensesReportListTable() {
       search,
       sort,
       category,
+      paid: "yes",
     });
   const handleCustomersFiltering = useCallback(
     (start_date: string, end_date: string) => {
@@ -97,9 +98,7 @@ export default function MaintenanceExpensesReportListTable() {
               setValue={setCategory}
               id="categories-filtering"
             >
-              <option value="" disabled>
-                All categories
-              </option>
+              <option value="">All categories</option>
               {categories?.map((item) => (
                 <option key={item?.id} value={String(item?.id || "")}>
                   {item?.name}
@@ -124,43 +123,44 @@ export default function MaintenanceExpensesReportListTable() {
           </div>
           <div className="block px-5">
             {data && data.length > 0 ? (
-              <table className=" w-full text-xs  overflow-x-auto">
-                <thead className="">
-                  <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                    {[
-                      "ID",
-                      "Payment date",
-                      "Apartment",
-                      "Category",
-                      "Item",
-                      // "Description of work",
-                      "Total amount",
-                      "Status",
-                      // "Action",
-                    ].map((head) => (
-                      <th key={head}>{head}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="">
-                  {data.map((item) => {
-                    return (
-                      <tr key={item?.id} className=" border-b">
-                        <td>
-                          <span className=" rounded-full p-2 border border-primary">
-                            {item?.id}
-                          </span>
-                        </td>
-                        <td>***</td>
-                        <td>{item?.shortlet?.name}</td>
-                        <td>{item?.category?.name}</td>
-                        {/* <td>{item?.item}</td> */}
-                        <td>{item?.item}</td>
-                        <td>{item?.amount}</td>
-                        <td>
-                          <Status status={item?.status} />
-                        </td>
-                        {/* <td>
+              <div className=" w-full overflow-x-auto">
+                <table className=" w-full">
+                  <thead>
+                    <tr>
+                      {[
+                        "ID",
+                        "Payment date",
+                        "Apartment",
+                        "Category",
+                        "Item",
+                        // "Description of work",
+                        "Total amount",
+                        "Status",
+                        // "Action",
+                      ].map((head) => (
+                        <th key={head}>{head}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="">
+                    {data.map((item) => {
+                      return (
+                        <tr key={item?.id} className=" border-b">
+                          <td>
+                            <span className=" rounded-full p-2 border border-primary">
+                              {item?.id}
+                            </span>
+                          </td>
+                          <td>{item?.date_paid}</td>
+                          <td>{item?.shortlet?.name}</td>
+                          <td>{item?.category?.name}</td>
+                          {/* <td>{item?.item}</td> */}
+                          <td>{item?.item}</td>
+                          <td>{item?.amount}</td>
+                          <td>
+                            <Status status={item?.status} />
+                          </td>
+                          {/* <td>
                           <div className=" flex items-center gap-4">
                             <button
                               title="delete"
@@ -170,11 +170,12 @@ export default function MaintenanceExpensesReportListTable() {
                             </button>
                           </div>
                         </td> */}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             ) : (
               <NoResult />
             )}

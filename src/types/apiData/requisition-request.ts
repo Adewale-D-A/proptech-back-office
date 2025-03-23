@@ -18,6 +18,7 @@ export interface requisitionRequest {
   account_name: string;
   account_number: string;
   invoice_file_path: string;
+  date_paid: string;
   is_paid: 1 | 0;
   is_deleted: 0 | 0;
   deleted_at: string;
