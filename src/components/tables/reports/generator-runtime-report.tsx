@@ -88,7 +88,7 @@ export default function GeneratorRuntimeReportListTable() {
             <Sort setSort={setSort} id="sort-by" label="Sort by" />
           </div>
         </div>
-        <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+        <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
           <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
             <div className=" flex items-center gap-4">
               <h2 className="text-xl font-semibold">Generator run-time</h2>
@@ -107,11 +107,11 @@ export default function GeneratorRuntimeReportListTable() {
               />
             </div>
           </div>
-          <div className="block px-5">
-            {data && data.length > 0 ? (
-              <table className=" w-full text-xs  overflow-x-auto">
-                <thead className="">
-                  <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+          {data && data.length > 0 ? (
+            <div className=" w-full overflow-x-auto">
+              <table className=" w-full">
+                <thead>
+                  <tr>
                     {[
                       "Apartment",
                       "Date",
@@ -124,7 +124,7 @@ export default function GeneratorRuntimeReportListTable() {
                     ))}
                   </tr>
                 </thead>
-                <tbody className="">
+                <tbody>
                   {data.map((item) => {
                     return (
                       <tr key={item?.id} className=" border-b">
@@ -154,10 +154,10 @@ export default function GeneratorRuntimeReportListTable() {
                   })}
                 </tbody>
               </table>
-            ) : (
-              <NoResult />
-            )}
-          </div>
+            </div>
+          ) : (
+            <NoResult />
+          )}
           <Pagination
             pagination={pagination}
             setCurrentPage={setCurrentPage}

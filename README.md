@@ -50,7 +50,7 @@ run **npm start** (start application on port:3000)
 
 [LIVE API](https://web-app-web-back-office.vercel.app/)
 
-[STAGING FRONTEND API](https://staging-backoffice.the99apartments.com/)
+[STAGING FRONTEND](https://staging-backoffice.the99apartments.com/)
 
 [LIVE WEB](https://web-app-web-back-office.vercel.app/)
 

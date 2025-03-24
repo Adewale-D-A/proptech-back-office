@@ -107,7 +107,7 @@ export default function MaintenanceExpensesReportListTable() {
             </Select>
           </div>
         </div>
-        <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+        <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
           <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
             <div className=" flex items-center gap-4">
               <h2 className="text-xl font-semibold">Expenses</h2>
@@ -121,7 +121,7 @@ export default function MaintenanceExpensesReportListTable() {
               fileName="maintenance-expenses-list"
             />
           </div>
-          <div className="block px-5">
+          <div className="md:px-5">
             {data && data.length > 0 ? (
               <div className=" w-full overflow-x-auto">
                 <table className=" w-full">

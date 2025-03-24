@@ -91,7 +91,7 @@ export default function OccupancyPerTimeReportTable() {
         </div>
       </div>
       {/* table */}{" "}
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">
+      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 overflow-auto ">
         {data && data.length > 0 ? (
           <div className=" w-full overflow-x-auto">
             <table className=" w-full">

@@ -2,9 +2,7 @@ import { useCallback, useState } from "react";
 import { apartmentById } from "../../../types/apiData/apartment";
 import Filter from "../../filterAndSort/filter";
 import Select from "../../inputs/select";
-import Search from "../../inputs/search";
 import LoadingButton from "../../button";
-import ExportSelect from "../../inputs/select/exportSelect";
 import { revenueReportList } from "../../../types/apiData/reports";
 import NoResult from "../../noResult";
 import Pagination from "../../pagination";
@@ -102,7 +100,7 @@ export default function DailyRoomReportTable() {
           />
         </div>
       </div>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">
+      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 overflow-auto ">
         {data && data.length > 0 ? (
           <div className=" w-full overflow-x-auto">
             <table className=" w-full">

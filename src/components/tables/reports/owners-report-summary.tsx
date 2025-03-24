@@ -75,48 +75,46 @@ export default function OwnersReportSummaryTableList() {
               />
             </div>
           </div>
-          <div className="block px-5">
-            {data && data.length > 0 ? (
-              <table className=" w-full text-xs  overflow-x-auto">
-                <thead className="">
-                  <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                    {["Expense", "Amount", "Note", "Action"].map((head) => (
-                      <th key={head}>{head}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="">
-                  {data.map((item) => {
-                    return (
-                      <tr key={item?.id} className=" border-b">
-                        <td>{item?.expense?.name}</td>
-                        <td>&#8358;{String(item?.amount || 0)}</td>
-                        <td>{item?.additional_note}</td>
-                        <td>
-                          <div className=" flex items-center gap-4">
-                            <button
-                              title="edit"
-                              onClick={() => openForEdit(item?.id)}
-                            >
-                              <PenIcon />
-                            </button>
-                            <button
-                              title="delete"
-                              onClick={() => handleOpenDelete(item?.id)}
-                            >
-                              <BinIcon className=" size-6 text-red-500" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            ) : (
-              <NoResult />
-            )}
-          </div>
+          {data && data.length > 0 ? (
+            <table className=" w-full text-xs  overflow-x-auto">
+              <thead className="">
+                <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+                  {["Expense", "Amount", "Note", "Action"].map((head) => (
+                    <th key={head}>{head}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="">
+                {data.map((item) => {
+                  return (
+                    <tr key={item?.id} className=" border-b">
+                      <td>{item?.expense?.name}</td>
+                      <td>&#8358;{String(item?.amount || 0)}</td>
+                      <td>{item?.additional_note}</td>
+                      <td>
+                        <div className=" flex items-center gap-4">
+                          <button
+                            title="edit"
+                            onClick={() => openForEdit(item?.id)}
+                          >
+                            <PenIcon />
+                          </button>
+                          <button
+                            title="delete"
+                            onClick={() => handleOpenDelete(item?.id)}
+                          >
+                            <BinIcon className=" size-6 text-red-500" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          ) : (
+            <NoResult />
+          )}
           <Pagination
             pagination={pagination}
             setCurrentPage={setCurrentPage}

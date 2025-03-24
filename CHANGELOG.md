@@ -1,3 +1,7 @@
+##### 24.03.2025
+
+> Reports mobile UI responsiveness fix
+
 ##### 23.03.2025
 
 > Ratings and referrals endpoints integrations
