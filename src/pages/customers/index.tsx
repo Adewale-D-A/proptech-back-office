@@ -46,7 +46,7 @@ export default function Customers() {
         <div className=" w-full flex justify-between">
           <h2 className="text-xl font-semibold">Customers</h2>
           <div className=" flex items-center flex-col md:flex-row gap-4">
-            <ExportSelect id="customers" />
+            {/* <ExportSelect id="customers" /> */}
             <LinkButton
               url={`/customers/add-customer/customer-details?redirect=${location?.pathname}`}
               label="Add New Customer"

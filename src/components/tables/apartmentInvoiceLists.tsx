@@ -13,6 +13,8 @@ import formatDate from "../../utils/isoDateConverter";
 import TableSearch from "../inputs/search/table-search";
 import useAxios from "../../useHooks/useAxios";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import ExportToCSV from "../export-to-csv";
+import { apartmentInvoiceExportFormater } from "../../utils/export-formerter-functions";
 
 export default function InvoiceListsTable({ header }: { header: string[] }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -88,6 +90,11 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
           <div className=" flex items-center gap-2 flex-col md:flex-row">
             <Filter actionHandler={handleCustomersFiltering} />
             <Sort setSort={setSort} id="sort-by" label="Sort by" />
+            <ExportToCSV
+              dataset={data}
+              jsonToCSVReformerter={apartmentInvoiceExportFormater}
+              fileName="apartment-invoice-list"
+            />
           </div>
         </div>
         {data && data.length > 0 ? (

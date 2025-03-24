@@ -8,6 +8,8 @@ import useGetAllCustomersLists from "../../services-hooks/useGetAllCustomersList
 import TableSearch from "../inputs/search/table-search";
 import MobileCustomersTable from "./mobile/customers";
 import Status from "../status";
+import ExportToCSV from "../export-to-csv";
+import { customersExportFormater } from "../../utils/export-formerter-functions";
 
 export default function CustomersListTable() {
   const [filterDates, setFilterDates] = useState<{
@@ -33,6 +35,13 @@ export default function CustomersListTable() {
   );
   return (
     <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+      <div className="w-full flex justify-end">
+        <ExportToCSV
+          dataset={data}
+          jsonToCSVReformerter={customersExportFormater}
+          fileName="customers-list"
+        />
+      </div>
       <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
         <h2 className="text-xl font-semibold">Customers Lists</h2>
         <div className=" max-w-md">
@@ -43,7 +52,7 @@ export default function CustomersListTable() {
         </div>
         <div className=" flex items-center gap-2 flex-col md:flex-row">
           <Filter actionHandler={handleCustomersFiltering} />
-          <Sort setSort={setSort} id="sort-by" label="Sort by" />
+          <Sort setSort={setSort} id="sort-by" label="Sort by" />{" "}
         </div>
       </div>
       <div className="hidden md:block px-5">
@@ -57,7 +66,7 @@ export default function CustomersListTable() {
                   "Last Name",
                   "Phone Number",
                   "Total Booking",
-                  "Identuty Verified",
+                  "Identity Verified",
                   "Action",
                 ].map((head) => (
                   <th key={head}>{head}</th>
@@ -65,22 +74,22 @@ export default function CustomersListTable() {
               </tr>
             </thead>
             <tbody className="">
-              {data.map((request) => {
+              {data.map((item) => {
                 return (
-                  <tr key={request?.id} className=" border-b">
+                  <tr key={item?.id} className=" border-b">
                     <td>
                       <span className=" rounded-full p-2 border border-primary">
-                        {request?.id}
+                        {item?.id}
                       </span>
                     </td>
-                    <td>{request?.first_name}</td>
-                    <td>{request?.last_name}</td>
-                    <td>{request?.phone}</td>
-                    <td>{request?.total_bookings}</td>
+                    <td>{item?.first_name}</td>
+                    <td>{item?.last_name}</td>
+                    <td>{item?.phone}</td>
+                    <td>{item?.total_bookings}</td>
                     <td>
                       <Status
                         status="identity"
-                        booleanVal={request?.identity_verified}
+                        booleanVal={item?.identity_verified}
                         falsyMessage="Unverified"
                         truthyMessage="Verified"
                       />
@@ -101,13 +110,13 @@ export default function CustomersListTable() {
                           Generate Invoice
                         </Link> */}
                         <Link
-                          to={`/customers/customer-details/${request?.id}`}
+                          to={`/customers/customer-details/${item?.id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           View Details
                         </Link>
                         <Link
-                          to={`/customers/edit-customer/customer-details/${request?.id}`}
+                          to={`/customers/edit-customer/customer-details/${item?.id}`}
                           className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
                           Edit Customer

@@ -24,7 +24,7 @@ const PhoneInput: React.FC<Props> = ({
 }) => {
   return (
     <div className="w-full">
-      <label htmlFor={id} className=" text-sm font-medium">
+      <label htmlFor={id} className=" text-sm text-[#344054] font-medium">
         {label}
       </label>
       <div className="w-full flex pl-4 border rounded-lg bg-gray-200/15">

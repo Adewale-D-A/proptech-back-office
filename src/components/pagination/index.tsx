@@ -29,7 +29,7 @@ export default function Pagination({
     }
   }, [pagination]);
   return (
-    <div className="w-full flex items-center flex-col md:flex-row justify-end gap-2 my-8">
+    <div className="w-full flex items-center flex-col md:flex-row justify-end gap-2 my-8 px-2.5">
       <span>
         showing {pagination?.to} of {pagination?.total} {label}{" "}
       </span>

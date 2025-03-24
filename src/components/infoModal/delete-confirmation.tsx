@@ -33,8 +33,8 @@ export default function DeleteConfirmation({
       <div className={` w-full flex items-center flex-col gap-8 my-6`}>
         <BinIcon className=" text-red-500 h-24 w-24" />
         <div className=" w-ful flex flex-col gap-2 text-center">
-          <h4 className={`font-semibold text-3xl`}>{title}</h4>
-          <p className=" text-sm text-gray-600">{description}</p>
+          <h4 className={`font-semibold text-lg text-[#101828]`}>{title}</h4>
+          <p className=" text-sm font-normal text-[#475467]">{description}</p>
         </div>
         <div className=" flex items-center gap-3">
           <LoadingButton

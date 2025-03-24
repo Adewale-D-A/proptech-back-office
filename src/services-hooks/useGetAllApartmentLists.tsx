@@ -71,7 +71,7 @@ export default function useGetAllApartmentLists({
           length: data?.length,
         };
         dispatch(updateApartmentList({ data }));
-        if (!search) {
+        if (!remakeRequest) {
           dispatch(
             addToPaginationHistory({
               pagination_data: paginationDataset,

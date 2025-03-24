@@ -9,10 +9,12 @@ export default function CustomersSingleSearch({
   placeholder,
   selected,
   setSelected,
+  label,
 }: {
   placeholder: string;
   selected: customersById;
   setSelected: (item: customersById) => void;
+  label?: string;
 }) {
   const wrapperRef = useRef(null) as any;
   const [isMenuDocked, setIsMenuDocked] = useState(true);
@@ -55,54 +57,66 @@ export default function CustomersSingleSearch({
   }, []);
 
   return (
-    <div className=" relative" ref={wrapperRef}>
-      <button
-        type="button"
-        onClick={() => toggleMenuDock()}
-        className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between"
-      >
-        {selected?.first_name ? (
-          <span className="">
-            {selected?.first_name} {selected?.last_name}
-          </span>
-        ) : (
-          <div className=" flex items-center text-gray-400 gap-3">
-            {users_loading ? (
-              <LoaderIcon className=" animate-spin size-6" />
-            ) : (
-              <SearchIcon />
-            )}
-            <span className=" ">{placeholder}</span>
+    <div className=" w-full flex flex-col gap-2">
+      {label && (
+        <label
+          htmlFor={"customer-search-feature"}
+          className="  text-[#344054] font-sm font-medium"
+        >
+          {label}
+        </label>
+      )}
+      <div className=" relative" ref={wrapperRef}>
+        <button
+          // title="single-customer-search"
+          // id="single-customer-search"
+          type="button"
+          onClick={() => toggleMenuDock()}
+          className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between"
+        >
+          {selected?.first_name ? (
+            <span className="">
+              {selected?.first_name} {selected?.last_name}
+            </span>
+          ) : (
+            <div className=" flex items-center text-gray-400 gap-3">
+              {users_loading ? (
+                <LoaderIcon className=" animate-spin size-6" />
+              ) : (
+                <SearchIcon />
+              )}
+              <span className=" ">{placeholder}</span>
+            </div>
+          )}
+          <CaretDownIcon
+            className={`size-6 ${
+              isMenuDocked ? "rotate-0" : "rotate-180"
+            } transition-all`}
+          />
+        </button>
+        {!isMenuDocked && (
+          <div className="w-full p-2 border z-10 absolute top-14 left-0 bg-gray-50">
+            <input
+              id="customer-search-feature"
+              placeholder={placeholder}
+              value={keywords}
+              onChange={(e) => setKeywords(e.target.value)}
+              className=" border rounded-md p-3 w-full bg-gray-100"
+            />
+            <div className=" flex flex-col gap-1 max-h-64 overflow-auto">
+              {users_data.map((user) => (
+                <button
+                  key={user?.id}
+                  onClick={() => handleSelection(user)}
+                  className=" p-2 hover:border-primary hover:border transition-all text-left"
+                >
+                  {user?.first_name} {user?.last_name}
+                </button>
+              ))}
+            </div>
           </div>
         )}
-        <CaretDownIcon
-          className={`size-6 ${
-            isMenuDocked ? "rotate-0" : "rotate-180"
-          } transition-all`}
-        />
-      </button>
-      {!isMenuDocked && (
-        <div className="w-full p-2 border z-10 absolute top-14 left-0 bg-gray-50">
-          <input
-            id="search-feature"
-            placeholder={placeholder}
-            value={keywords}
-            onChange={(e) => setKeywords(e.target.value)}
-            className=" border rounded-md p-3 w-full bg-gray-100"
-          />
-          <div className=" flex flex-col gap-1 max-h-64 overflow-auto">
-            {users_data.map((user) => (
-              <button
-                key={user?.id}
-                onClick={() => handleSelection(user)}
-                className=" p-2 hover:border-primary hover:border transition-all text-left"
-              >
-                {user?.first_name} {user?.last_name}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 }

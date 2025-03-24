@@ -10,6 +10,7 @@ import useAxios from "../useHooks/useAxios";
 import NextArrowIcon from "../assets/icons/next-arrow";
 import NavigatePrevIcon from "../assets/icons/navigate-prev";
 import signOut from "../utils/auth/signOut";
+import PreviousArrowIcon from "../assets/icons/previous-arrow";
 
 //full view
 function FullMenuView() {
@@ -46,7 +47,7 @@ function FullMenuView() {
         <div className="w-full justify-between md:justify-center flex items-center gap-2 p-2 md:p-5">
           <div className="flex items-center justify-center  gap-2 ">
             <Link
-              to={"/dashboard"}
+              to={"/dashboard-overview"}
               className="flex items-center justify-center h-8 w-8 aspect-square rounded-full overflow-hidden"
             >
               <img src="/logo512.png" alt="avatar" className="w-full h-auto" />
@@ -63,7 +64,7 @@ function FullMenuView() {
               onClick={() => toggleMenu()}
               className=" block md:hidden"
             >
-              <MenuIcon />
+              <PreviousArrowIcon />
             </button>
           )}
         </div>

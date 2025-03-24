@@ -1,0 +1,117 @@
+[
+    {
+        "id": 1,
+        "label": "Cable TV",
+        "value": "cable-tv"
+    },
+    {
+        "id": 2,
+        "label": "Carpentry",
+        "value": "carpentry"
+    },
+    {
+        "id": 3,
+        "label": "Decor",
+        "value": "decor"
+    },
+    {
+        "id": 4,
+        "label": "Electrical",
+        "value": "electrical"
+    },
+    {
+        "id": 5,
+        "label": "Fuel",
+        "value": "fuel"
+    },
+    {
+        "id": 6,
+        "label": "Furniture",
+        "value": "furniture"
+    },
+    {
+        "id": 7,
+        "label": "Gas",
+        "value": "gas"
+    },
+    {
+        "id": 8,
+        "label": "Health & Safety",
+        "value": "health-and-safety"
+    },
+    {
+        "id": 9,
+        "label": "HVAC",
+        "value": "hvac"
+    },
+    {
+        "id": 10,
+        "label": "Kitchen Utensils",
+        "value": "kitchen-utensils"
+    },
+    {
+        "id": 11,
+        "label": "Marketing",
+        "value": "marketing"
+    },
+    {
+        "id": 12,
+        "label": "Operations",
+        "value": "operations"
+    },
+    {
+        "id": 13,
+        "label": "Pest Control",
+        "value": "pest-control"
+    },
+    {
+        "id": 14,
+        "label": "Plumbing",
+        "value": "plumbing"
+    },
+    {
+        "id":15,
+        "label": "Power",
+        "value": "power"
+    },
+    {
+        "id": 16,
+        "label": "Rent & SC",
+        "value": "rent-and-sc"
+    },
+    {
+        "id": 17,
+        "label": "Structural",
+        "value": "structural"
+    },
+    {
+        "id": 18,
+        "label": "Waste Management",
+        "value": "waste-management"
+    },
+    {
+        "id": 19,
+        "label": "Security",
+        "value": "security"
+    },
+    {
+        "id": 20,
+        "label": "Swimming Pool",
+        "value": "swimming-pool"
+    },
+    {
+        "id": 21,
+        "label": "Cleaning",
+        "value": "cleaning"
+    },
+    {
+        "id": 22,
+        "label": "Water Treatment Plant",
+        "value": "water-treatment-plant"
+    },
+    {
+        "id":100,
+        "label": "Others",
+        "value": "others"
+    }
+]

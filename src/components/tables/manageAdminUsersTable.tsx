@@ -7,9 +7,6 @@ import { removeAdminsInList } from "../../stores/apiData/admins-list";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import useGetAllAdmins from "../../services-hooks/useGetAllAdmins";
 import Pagination from "../pagination";
-import TableSearch from "../inputs/search/table-search";
-import Filter from "../filterAndSort/filter";
-import Sort from "../filterAndSort/sort";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import MobileAdminTable from "./mobile/admins";
 
@@ -105,7 +102,7 @@ export default function ManageAdminUsersTable() {
                         {request?.first_name} {request?.last_name}
                       </td>
                       <td className=" max-w-xs">{request?.email}</td>
-                      <td className=" max-w-xs">{request?.role}</td>
+                      <td className=" max-w-xs">{request?.role_id}</td>
                       <td className=" group relative">
                         <span className=" p-2 text-lg">...</span>
                         <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">

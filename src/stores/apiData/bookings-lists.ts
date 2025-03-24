@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { bookingsById, bookingsists } from "../../types/apiData/bookings";
+import { bookingsById } from "../../types/apiData/bookings";
 import { pagination } from "../../types/pagination";
 
 export const bookingsListsData = createSlice({

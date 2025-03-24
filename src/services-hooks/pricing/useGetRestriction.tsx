@@ -5,6 +5,8 @@ import {
   addToPaginationHistory,
   updateRestrictionssList,
 } from "../../stores/apiData/restrictions";
+import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
+import { pagination } from "../../types/pagination";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetRestrictions({
@@ -30,42 +32,31 @@ export default function useGetRestrictions({
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const [pagination, setPagination] = useState<{
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    from: number;
-    to: number;
-  }>({} as any);
+  const [pagination, setPagination] = useState<pagination>({} as any);
 
   const getAllRestrictions = useCallback(async () => {
     setIsLoading(true);
     setIsFailed(false);
     try {
+      const { queryString, remakeRequest } = ApiQueryParamsExtractor({
+        dataset: {
+          page: search ? 1 : page,
+          start_date: start_date,
+          end_date: end_date,
+          sort: sort,
+          search: search,
+        },
+      });
       //check store if this requested data has been saved previously and retirve it
       //if not, make a new request and save into store
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (
-        foundPage &&
-        !(start_date && end_date) &&
-        !(sort === "asc") &&
-        !search
-      ) {
+      if (foundPage && !remakeRequest) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateRestrictionssList({ data: foundPage?.data }));
       } else {
-        const response = await axios.get(
-          start_date && end_date
-            ? `/admin/restriction?sort=${sort}&limit=20&search=${
-                search || ""
-              }&page=${page}&start_date=${start_date}&end_date=${end_date}`
-            : `/admin/restriction?sort=${sort}&limit=20&search=${
-                search || ""
-              }&page=${page}`
-        );
+        const response = await axios.get(`/admin/restriction?${queryString}`);
         const { restriction } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
           restriction;
@@ -79,12 +70,14 @@ export default function useGetRestrictions({
           length: data?.length,
         };
         dispatch(updateRestrictionssList({ data }));
-        dispatch(
-          addToPaginationHistory({
-            pagination_data: paginationDataset,
-            data: data,
-          })
-        );
+        if (!remakeRequest) {
+          dispatch(
+            addToPaginationHistory({
+              pagination_data: paginationDataset,
+              data: data,
+            })
+          );
+        }
         setPagination(paginationDataset);
       }
     } catch (error) {

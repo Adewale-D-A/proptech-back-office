@@ -21,7 +21,11 @@ export default function ModalTemplate({
 }) {
   return (
     <Transition appear show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={() => setOpen(false)}>
+      <Dialog
+        as="div"
+        className="relative z-10 mx-auto"
+        onClose={() => setOpen(false)}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -48,12 +52,12 @@ export default function ModalTemplate({
               <Dialog.Panel
                 className={`w-full ${
                   className ? className : "max-w-screen-sm"
-                }  transform overflow-hidden rounded-lg bg-white p-4 text-left align-middle shadow-xl transition-all`}
+                }  transform overflow-hidden fit  rounded-lg bg-white p-4 text-left align-middle shadow-xl transition-all`}
               >
                 <div className="flex flex-col gap-3 justify-center items-center">
                   {showXicon && (
                     <div className="flex justify-between w-full items-center mb-8">
-                      <h4 className=" font-semibold text-xl flex items-center gap-2">
+                      <h4 className=" font-bold text-[#101828] text-lg flex items-center gap-2">
                         {titleIcon} {title}
                       </h4>
                       <button

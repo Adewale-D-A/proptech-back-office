@@ -9,6 +9,8 @@ import { useAppDispatch } from "../../stores/hooks";
 import { removeLocationGroupingInList } from "../../stores/apiData/apartment/location-groupings";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import AddEditLocationGroup from "../apartment/add-edit-location-group";
+import NoResult from "../noResult";
+import paginatedPageSerializer from "../../utils/page-serializer";
 
 export default function LocationGroupTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -54,51 +56,65 @@ export default function LocationGroupTable() {
 
   return (
     <>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Location Groupings</h2>
           <div className=" max-w-md">
             <TableSearch setValue={setSearch} placeholder="Search..." />
           </div>
         </div>
-        <table className=" w-full overflow-x-auto">
-          <thead className="">
-            <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-              {["S/N", "Name", "Action"].map((head) => (
-                <th key={head}>{head}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="">
-            {data.map((item, index) => {
-              return (
-                <tr key={item?.id} className=" border-b">
-                  <td>{index + 1}</td>
-                  <td>{item?.name}</td>
-                  <td className=" group relative">
-                    <span className=" p-2 text-lg">...</span>
-                    <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                      <button
-                        type="button"
-                        onClick={() => handleOpeEdit(item?.id)}
-                        className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleOpenDelete(item?.id)}
-                        className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                      >
-                        Delete
-                      </button>
-                    </span>
-                  </td>
+        {data && data.length > 0 ? (
+          <div className=" w-full overflow-x-auto">
+            <table className=" w-full overflow-x-auto">
+              <thead>
+                <tr>
+                  {["S/N", "Name", "Action"].map((head) => (
+                    <th key={head}>{head}</th>
+                  ))}
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {data.map((item, index) => {
+                  return (
+                    <tr key={item?.id} className=" border-b">
+                      <td>
+                        {paginatedPageSerializer({
+                          currentPage: pagination?.current_page,
+                          pageSize: pagination?.per_page,
+                          index,
+                        })}
+                      </td>
+                      <td>{item?.name}</td>
+                      <td className=" group relative">
+                        <span className=" p-2 bg-primary/15 rounded-lg">
+                          ...
+                        </span>
+                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
+                          <button
+                            type="button"
+                            onClick={() => handleOpeEdit(item?.id)}
+                            className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleOpenDelete(item?.id)}
+                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                          >
+                            Delete
+                          </button>
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <NoResult />
+        )}
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}

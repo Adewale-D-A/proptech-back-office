@@ -37,11 +37,10 @@ import AddNewPackageAndOffer from "./pages/plans-and-promotions/package-and-offe
 import AdditionalServiceDetailsById from "./pages/additional-services/99apartment-services/service-details";
 import VendorServiceDetailsById from "./pages/additional-services/vendor-services/vendor-details";
 import NewBookings from "./pages/bookings/new-booking";
-import EditAdminUser from "./pages/manage-admins/users/edit-user";
-import AddAdminUser from "./pages/manage-admins/users/add-user";
-import EditRoles from "./pages/manage-admins/roles-and-permissions/edit-roles";
-import AddRoles from "./pages/manage-admins/roles-and-permissions/add-roles";
+import EditRoles from "./pages/employees/roles-and-permissions/edit-roles";
+import AddRoles from "./pages/employees/roles-and-permissions/add-roles";
 import Profile from "./pages/profile";
+import Employees from "./pages/employees";
 // APARTMENTS
 import ApartmentTabWrapper from "./routeProtectors/wrapper/apartment";
 
@@ -71,11 +70,7 @@ import AdditionalServicesTabWrapper from "./routeProtectors/wrapper/additiona-se
 import AptAdditionalServicesList from "./pages/additional-services/99apartment-services";
 import VendorServicesList from "./pages/additional-services/vendor-services";
 
-// ADMINS MANAGEMENT
-import AdminUsersTabWrapper from "./routeProtectors/wrapper/admin-users";
-
-import AdminManagementViewAll from "./pages/manage-admins/view-all-users";
-import AdminManagementViewAllRoles from "./pages/manage-admins/view-all-roles";
+import AdminManagementViewAllRoles from "./pages/employees/view-all-roles";
 
 // PRICING
 import PricingTabWrapper from "./routeProtectors/wrapper/pricing";
@@ -120,7 +115,26 @@ import DailyRoomReport from "./pages/reports/daily-room";
 import OccupancyPerTimeReport from "./pages/reports/occupancy-per-time";
 import EditInvoice from "./pages/invoices/edit-invoice";
 import CustomerDetail from "./pages/customers/customer-detail";
+// calendar views
+import MaintenanceCalendar from "./pages/calendar/maintenance-calendar";
+import CalendarTabWrapper from "./routeProtectors/wrapper/calendar";
+import ApartmentCalendarPage from "./pages/calendar/booking-calendar";
+import CustomerEngagementsTabWrapper from "./routeProtectors/wrapper/customer-engagement";
+import RatingsAndReviews from "./pages/customer-engagements/ratings-and-reviews";
+import Referrals from "./pages/customer-engagements/referrals";
+import RequisitionRequests from "./pages/requests/requisition-requests";
+import RequestsTabWrapper from "./routeProtectors/wrapper/requests";
+import MaintenanceRequests from "./pages/requests/maintenance-requests";
+import ViewEmployee from "./pages/employees/view-employee";
+import ViewMaintenanceRequest from "./pages/requests/maintenance-requests/view-maintenance/view-maintenance";
+import GeneratorRuntime from "./pages/reports/generator-runtime";
+import BookingsReport from "./pages/reports/bookings";
+import MaintenanceExpenses from "./pages/reports/maintenance-expenses";
 import BlockedDatesReasonListView from "./pages/apartments/block-dates-reason";
+import RequestsCategoriesListView from "./pages/requests/requests-categories";
+import EmployeesTabWrapper from "./routeProtectors/wrapper/admin-users";
+import OwnersReportSummary from "./pages/reports/owners/summary";
+import OwnersReportSpreadsheet from "./pages/reports/owners/spreadsheet";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -270,6 +284,22 @@ function App() {
             />
             {/* customers flows  */}
             <Route path="/customers" element={<Customers />} />
+
+            {/* employees flows  */}
+            <Route element={<EmployeesTabWrapper />}>
+              <Route path="/employees/employee-list" element={<Employees />} />
+              <Route
+                path="/employees/roles"
+                element={<AdminManagementViewAllRoles />}
+              />
+            </Route>
+            <Route
+              path="/employees/view-employee/:id"
+              element={<ViewEmployee />}
+            />
+            <Route path="/employees/roles/add" element={<AddRoles />} />
+            <Route path="/employees/roles/edit/:id" element={<EditRoles />} />
+
             <Route
               path="/customers/customer-details/:id"
               element={<CustomerDetail />}
@@ -307,23 +337,17 @@ function App() {
               path="/customers/edit-customer/customer-sales-channel/:id"
               element={<EditCustomerSalesChannelPage />}
             />
-
-            {/* Admin management */}
-            {/* admin users flows wrapper */}
-            <Route element={<AdminUsersTabWrapper />}>
+            {/* customer engaements */}
+            <Route element={<CustomerEngagementsTabWrapper />}>
               <Route
-                path="/admin/admin-users"
-                element={<AdminManagementViewAll />}
+                path="/customer-engagements/ratings-and-reviews"
+                element={<RatingsAndReviews />}
               />
               <Route
-                path="/admin/users-roles"
-                element={<AdminManagementViewAllRoles />}
+                path="/customer-engagements/referrals"
+                element={<Referrals />}
               />
             </Route>
-            <Route path="/admin/add" element={<AddAdminUser />} />
-            <Route path="/admin/edit/:id" element={<EditAdminUser />} />
-            <Route path="/admin/admin-roles/add" element={<AddRoles />} />
-            <Route path="/admin/admin-roles/edit/:id" element={<EditRoles />} />
 
             {/* pricing flows wrapper */}
             <Route element={<PricingTabWrapper />}>
@@ -382,6 +406,39 @@ function App() {
               path="/plans-and-promotions/package-and-offer/edit-new-package-and-offer/:id"
               element={<AddNewPackageAndOffer />}
             />
+            {/* requests */}
+            <Route element={<RequestsTabWrapper />}>
+              <Route
+                path="/requests/maintenance-requests"
+                element={<MaintenanceRequests />}
+              />
+
+              <Route
+                path="/requests/requisition-requests"
+                element={<RequisitionRequests />}
+              />
+
+              <Route
+                path="/requests/categories"
+                element={<RequestsCategoriesListView />}
+              />
+            </Route>
+            <Route
+              path="/requests/maintenance-requests/view-maintenance/:id"
+              element={<ViewMaintenanceRequest />}
+            />
+
+            {/* calendar */}
+            <Route element={<CalendarTabWrapper />}>
+              <Route
+                path="/calendar/maintenance-calendar"
+                element={<MaintenanceCalendar />}
+              />
+              <Route
+                path="/calendar/apartment-calendar"
+                element={<ApartmentCalendarPage />}
+              />
+            </Route>
 
             {/* chats flows wrapper */}
             <Route element={<ChatsTabWrapper />}>
@@ -419,6 +476,15 @@ function App() {
             <Route element={<ReportsTabWrapper />}>
               <Route path="/reports/revenue" element={<RevenueReport />} />
               <Route
+                path="/reports/maintenance-expenses"
+                element={<MaintenanceExpenses />}
+              />
+              <Route path="/reports/bookings" element={<BookingsReport />} />
+              <Route
+                path="/reports/generator-runtime"
+                element={<GeneratorRuntime />}
+              />
+              <Route
                 path="/reports/occupancy-ranking"
                 element={<OccupancyRankingReport />}
               />
@@ -426,6 +492,14 @@ function App() {
               <Route
                 path="/reports/occupancy-per-time"
                 element={<OccupancyPerTimeReport />}
+              />
+              <Route
+                path="/reports/owners-report/summary"
+                element={<OwnersReportSummary />}
+              />
+              <Route
+                path="/reports/owners-report/spreadsheet"
+                element={<OwnersReportSpreadsheet />}
               />
             </Route>
             <Route path="/notification" element={<Notification />} />

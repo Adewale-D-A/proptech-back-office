@@ -1,12 +1,11 @@
 import { ChangeEvent, useCallback } from "react";
 import CautionIcon from "../../../assets/icons/caution";
-import PhotoIcon from "../../../assets/icons/photo";
 import CancelIcon from "../../../assets/icons/cancel";
 import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 
 interface Props {
-  value: { name: string; size: number; preview: string };
+  value: { name: string; size: number; preview: string; is_local?: boolean };
   setValue: Function;
   label?: string;
   isRequired?: boolean;

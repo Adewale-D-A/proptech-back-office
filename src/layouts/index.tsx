@@ -54,7 +54,7 @@ function MainLayout({ children }: layoutProps) {
                 onClick={() => toggleMenu()}
                 className=" h-fit"
               >
-                {breadCrumb[0]?.icon ? breadCrumb[0]?.icon : <MenuIcon />}
+                {<MenuIcon />}
               </button>
               <div className="w-full flex justify-between">
                 <div className=" flex items-center flex-wrap md:flex-nowrap gap-2 whitespace-nowrap">

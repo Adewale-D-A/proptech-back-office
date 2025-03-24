@@ -17,7 +17,7 @@ export default function ChatModule({
   const [selectedChatId, setSelectedChatId] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetChatList({ page: currentPage });
+    useGetChatList({ page: currentPage, limit: 1000 });
   return (
     <div className=" w-full flex flex-col md:flex-row items-stretch gap-5">
       <div className="rounded-md border flex-1 md:flex-[0.3] flex flex-col gap-2 ">

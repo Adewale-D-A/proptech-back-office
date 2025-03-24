@@ -49,8 +49,24 @@ import locationGroupings from "./apiData/apartment/location-groupings";
 import blockedDateReasonData from "./apiData/blocked-dates-reason";
 
 import chatListData from "./apiData/chat-list";
+
+// customer engagements
+import ratingsAndReviewsListData from "./apiData/rating-and-reviews";
+import referralsListData from "./apiData/reeferrals";
+// requisition request
+import requisitionRequestsListData from "./apiData/requisition-requests";
+
+// maintenance request
+import maintenanceRequestsListData from "./apiData/maintenance-requests";
+import requestsCategoriesData from "./apiData/requests-categories";
+
 // report
 import revenueReports from "./apiData/reports/revenue";
+import maintenanceExpensesReports from "./apiData/reports/maintenenace-expenses";
+import bookingsReportReports from "./apiData/reports/bookings-report";
+import generatorRuntimeReporteports from "./apiData/reports/generator-runtime";
+import ownersReportsData from "./apiData/reports/owners-report";
+
 // admins
 import adminsListData from "./apiData/admins-list";
 import rolesListData from "./apiData/roles-lists";
@@ -124,8 +140,19 @@ export const adminStore = () => {
       allVendorServices: vendorServiceListData,
       chatList: chatListData,
 
+      // customer engagements
+      ratingsAndReviews: ratingsAndReviewsListData,
+      referralsData: referralsListData,
+      // request
+      maintenanceRequestsList: maintenanceRequestsListData,
+      requisitionRequestsList: requisitionRequestsListData,
+      requesCategories: requestsCategoriesData,
       // reports
       revenueReports: revenueReports,
+      maintenanceExpensesReports: maintenanceExpensesReports,
+      bookingsReportReports: bookingsReportReports,
+      generatorRuntimeReporteports: generatorRuntimeReporteports,
+      ownersReport: ownersReportsData,
       // admins
       allAdminsLists: adminsListData,
       allRolesLists: rolesListData,

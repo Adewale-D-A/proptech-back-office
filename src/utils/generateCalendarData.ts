@@ -1,4 +1,5 @@
 import weekdayMonth from "../assets/days-months.json";
+import { dateGeneratorUtilResponse } from "../types/date-generator-util-response";
 export default function generateCalendarData({
   selectedDate,
   highlights,
@@ -15,7 +16,7 @@ export default function generateCalendarData({
   maintenance?: Date[];
 }) {
   const generateDays = () => {
-    const daysArray = [];
+    const daysArray = [] as dateGeneratorUtilResponse[];
     const firstDayOfMonth = new Date(
       selectedDate?.getFullYear(),
       selectedDate?.getMonth(),
@@ -50,39 +51,49 @@ export default function generateCalendarData({
         selected:
           firstDayOfMonth.toDateString() === selectedDate.toDateString(),
         year: firstDayOfMonth.getFullYear(),
-        highlight: highlights?.find(
-          (item) =>
-            `${item.getFullYear()}-${item?.getMonth()}-${item?.getDate()}` ===
+        highlight: highlights?.find((item) => {
+          const dateValue = new Date(item);
+          return (
+            `${dateValue.getFullYear()}-${dateValue?.getMonth()}-${dateValue?.getDate()}` ===
             `${firstDayOfMonth.getFullYear()}-${firstDayOfMonth?.getMonth()}-${firstDayOfMonth?.getDate()}`
-        )
+          );
+        })
           ? true
           : false,
-        notAvailable: notAvailable?.find(
-          (item) =>
-            `${item.getFullYear()}-${item?.getMonth()}-${item?.getDate()}` ===
+        notAvailable: notAvailable?.find((item) => {
+          const dateValue = new Date(item);
+          return (
+            `${dateValue.getFullYear()}-${dateValue?.getMonth()}-${dateValue?.getDate()}` ===
             `${firstDayOfMonth.getFullYear()}-${firstDayOfMonth?.getMonth()}-${firstDayOfMonth?.getDate()}`
-        )
+          );
+        })
           ? true
           : false,
-        booked: booked?.find(
-          (item) =>
-            `${item.getFullYear()}-${item?.getMonth()}-${item?.getDate()}` ===
+        booked: booked?.find((item) => {
+          const dateValue = new Date(item);
+          return (
+            `${dateValue.getFullYear()}-${dateValue?.getMonth()}-${dateValue?.getDate()}` ===
             `${firstDayOfMonth.getFullYear()}-${firstDayOfMonth?.getMonth()}-${firstDayOfMonth?.getDate()}`
-        )
+          );
+        })
           ? true
           : false,
-        blocked: blocked?.find(
-          (item) =>
-            `${item.getFullYear()}-${item?.getMonth()}-${item?.getDate()}` ===
+        blocked: blocked?.find((item) => {
+          const dateValue = new Date(item);
+          return (
+            `${dateValue.getFullYear()}-${dateValue?.getMonth()}-${dateValue?.getDate()}` ===
             `${firstDayOfMonth.getFullYear()}-${firstDayOfMonth?.getMonth()}-${firstDayOfMonth?.getDate()}`
-        )
+          );
+        })
           ? true
           : false,
-        maintenance: maintenance?.find(
-          (item) =>
-            `${item.getFullYear()}-${item?.getMonth()}-${item?.getDate()}` ===
+        maintenance: maintenance?.find((item) => {
+          const dateValue = new Date(item);
+          return (
+            `${dateValue.getFullYear()}-${dateValue?.getMonth()}-${dateValue?.getDate()}` ===
             `${firstDayOfMonth.getFullYear()}-${firstDayOfMonth?.getMonth()}-${firstDayOfMonth?.getDate()}`
-        )
+          );
+        })
           ? true
           : false,
       };

@@ -35,7 +35,7 @@ export default function LoadingButton({
     <button
       type={type}
       disabled={disabled}
-      className={`w-full flex justify-center p-3 px-6 rounded-full transition-all  
+      className={`w-full flex justify-center py-2.5 px-5 rounded-full transition-all  
         ${
           disabled
             ? "bg-primary/30 text-white"
@@ -50,7 +50,7 @@ export default function LoadingButton({
       {isLoading ? (
         <LoaderIcon className="w-6 h-6 animate-spin" />
       ) : (
-        <span className=" flex items-center gap-2 text-nowrap">
+        <span className=" flex items-center gap-2 text-xs text-nowrap">
           {startIcon} {label} {endIcon}
         </span>
       )}

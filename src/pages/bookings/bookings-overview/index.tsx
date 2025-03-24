@@ -61,17 +61,17 @@ export default function BookingsOverview() {
               {[
                 {
                   id: 1,
-                  value: visitorCount?.visitors_today,
+                  value: visitorCount?.visitors_today || 0,
                   label: "Visitors today",
                 },
                 {
                   id: 2,
-                  value: visitorCount?.visitors_this_month,
+                  value: visitorCount?.visitors_this_month || 0,
                   label: "Visitors this month",
                 },
                 {
                   id: 3,
-                  value: visitorCount?.visitors_last_month,
+                  value: visitorCount?.visitors_last_month || 0,
                   label: "Visitors last month",
                 },
                 {
@@ -133,7 +133,9 @@ export default function BookingsOverview() {
             {data.blocked_dates && (
               <CalendarView
                 date={new Date()}
-                highlights={[...data?.booked_dates, ...data?.blocked_dates]}
+                booked={data?.booked_dates || []}
+                blocked={data?.blocked_dates || []}
+                // highlights={[...data?.booked_dates, ...data?.blocked_dates]}
                 onDateClick={handleDateClick}
               />
             )}
@@ -208,9 +210,7 @@ export default function BookingsOverview() {
             <Search id="apartment-search" placeholder="Apartment name..." />
           </div> */}
         </div>
-        <div className=" p-3">
-          <RoomOccupancyListTable />
-        </div>
+        <RoomOccupancyListTable />
       </div>
     </div>
   );

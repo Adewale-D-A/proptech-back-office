@@ -20,9 +20,9 @@ const Select: React.FC<Props> = ({
   id,
 }) => {
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col gap-1">
       {label && (
-        <label htmlFor={id} className=" font-medium">
+        <label htmlFor={id} className="text-[#344054] text-sm font-medium">
           {label}
         </label>
       )}

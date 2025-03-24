@@ -14,6 +14,8 @@ import MobileBookingsTable from "./mobile/bookings";
 import TableSearch from "../inputs/search/table-search";
 import BookingsFilterSearch from "../filterAndSort/bookings-filter";
 import { BookingFilterPayload } from "../../types/apiData/bookings/booking-filter-options";
+import ExportToCSV from "../export-to-csv";
+import { bookingsExportFormater } from "../../utils/export-formerter-functions";
 
 export default function AllBookingsListTable({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
@@ -63,7 +65,7 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
   }, [selectedId]);
   return (
     <>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5 ">
+      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 ">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <div className=" max-w-md">
             <TableSearch
@@ -72,23 +74,27 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
             />
           </div>
           <BookingsFilterSearch setData={setFilter} />
+          <ExportToCSV
+            dataset={data}
+            jsonToCSVReformerter={bookingsExportFormater}
+            fileName="bookings-list"
+          />
         </div>
-        <div className="hidden md:block">
-          {data && data.length > 0 ? (
-            <table className=" w-full text-xs overflow-x-auto">
-              <thead className="">
-                <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+        {data && data.length > 0 ? (
+          <div className=" w-full overflow-x-auto">
+            <table className=" w-full">
+              <thead>
+                <tr>
                   {header.map((head) => (
                     <th key={head}>{head}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="">
+              <tbody>
                 {data.map((item) => {
                   return (
                     <tr key={item?.id} className=" border-b">
                       <td>
-                        {" "}
                         <Link
                           to={`/bookings/booking-details/edit-reservation/${item?.id}`}
                           className=" rounded-full p-2 border border-primary"
@@ -116,7 +122,9 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
                         <Status status={item?.status} />
                       </td>
                       <td className=" group relative">
-                        <span className=" p-2 text-lg">...</span>
+                        <span className=" p-2 bg-primary/15 rounded-lg">
+                          ...
+                        </span>
                         <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                           <button
                             onClick={() => openSummary(item?.id)}
@@ -150,17 +158,17 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
                 })}
               </tbody>
             </table>
-          ) : (
-            <NoResult />
-          )}
-        </div>
-        <div className="w-full block md:hidden">
+          </div>
+        ) : (
+          <NoResult />
+        )}
+        {/* <div className="w-full block md:hidden">
           <MobileBookingsTable
             data={data}
             openDelete={openDelete}
             openSummary={openSummary}
           />
-        </div>
+        </div> */}
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}
