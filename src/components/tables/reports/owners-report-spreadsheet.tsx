@@ -65,7 +65,7 @@ export default function OwnersReportSpreadsheetTableList() {
   return (
     <>
       <div className=" w-full flex flex-col gap-3">
-        <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+        <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
           <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
             <div className=" max-w-md">
               <TableSearch setValue={setSearch} placeholder="Search..." />

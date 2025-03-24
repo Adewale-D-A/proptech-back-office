@@ -53,65 +53,62 @@ export default function BookingsReportListTable() {
             />
           </div>
         </div>
-        <div className="block md:px-5">
-          {data && data.length > 0 ? (
-            <div className=" w-full overflow-x-auto">
-              <table className=" w-full">
-                <thead>
-                  <tr>
-                    {[
-                      "Customer name",
-                      "Apartment",
-                      "Amount",
-                      "Check-in",
-                      "Check-out",
-                      "Status",
-                      "Action",
-                    ].map((head) => (
-                      <th key={head}>{head}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((item) => {
-                    return (
-                      <tr key={item?.id} className=" border-b">
-                        <td>
-                          {item?.user?.first_name} {item?.user?.last_name}
-                        </td>
-                        <td>{item?.shortlet?.name}</td>
-                        <td>
-                          {item?.currency} {item?.total_price}
-                        </td>
-                        <td>
-                          {formatDate(item?.check_in_date)}{" "}
-                          {item?.check_in_time}
-                        </td>
-                        <td>
-                          {formatDate(item?.check_out_date)}{" "}
-                          {item?.check_out_time}
-                        </td>
-                        <td>
-                          <Status status={item?.status} />
-                        </td>
-                        <td>
-                          <Link
-                            to={`/bookings/booking-details/${item?.id}`}
-                            className=" px-4 py-2 border font-semibold"
-                          >
-                            View
-                          </Link>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <NoResult />
-          )}
-        </div>
+        {data && data.length > 0 ? (
+          <div className=" w-full overflow-x-auto">
+            <table className=" w-full">
+              <thead>
+                <tr>
+                  {[
+                    "Customer name",
+                    "Apartment",
+                    "Amount",
+                    "Check-in",
+                    "Check-out",
+                    "Status",
+                    "Action",
+                  ].map((head) => (
+                    <th key={head}>{head}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((item) => {
+                  return (
+                    <tr key={item?.id} className=" border-b">
+                      <td>
+                        {item?.user?.first_name} {item?.user?.last_name}
+                      </td>
+                      <td>{item?.shortlet?.name}</td>
+                      <td>
+                        {item?.currency} {item?.total_price}
+                      </td>
+                      <td>
+                        {formatDate(item?.check_in_date)} {item?.check_in_time}
+                      </td>
+                      <td>
+                        {formatDate(item?.check_out_date)}{" "}
+                        {item?.check_out_time}
+                      </td>
+                      <td>
+                        <Status status={item?.status} />
+                      </td>
+                      <td>
+                        <Link
+                          to={`/bookings/booking-details/${item?.id}`}
+                          className=" px-4 py-2 border font-semibold"
+                        >
+                          View
+                        </Link>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <NoResult />
+        )}
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}

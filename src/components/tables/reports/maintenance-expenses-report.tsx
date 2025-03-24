@@ -121,46 +121,45 @@ export default function MaintenanceExpensesReportListTable() {
               fileName="maintenance-expenses-list"
             />
           </div>
-          <div className="md:px-5">
-            {data && data.length > 0 ? (
-              <div className=" w-full overflow-x-auto">
-                <table className=" w-full">
-                  <thead>
-                    <tr>
-                      {[
-                        "ID",
-                        "Payment date",
-                        "Apartment",
-                        "Category",
-                        "Item",
-                        // "Description of work",
-                        "Total amount",
-                        "Status",
-                        // "Action",
-                      ].map((head) => (
-                        <th key={head}>{head}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="">
-                    {data.map((item) => {
-                      return (
-                        <tr key={item?.id} className=" border-b">
-                          <td>
-                            <span className=" rounded-full p-2 border border-primary">
-                              {item?.id}
-                            </span>
-                          </td>
-                          <td>{item?.date_paid}</td>
-                          <td>{item?.shortlet?.name}</td>
-                          <td>{item?.category?.name}</td>
-                          {/* <td>{item?.item}</td> */}
-                          <td>{item?.item}</td>
-                          <td>{item?.amount}</td>
-                          <td>
-                            <Status status={item?.status} />
-                          </td>
-                          {/* <td>
+          {data && data.length > 0 ? (
+            <div className=" w-full overflow-x-auto">
+              <table className=" w-full">
+                <thead>
+                  <tr>
+                    {[
+                      "ID",
+                      "Payment date",
+                      "Apartment",
+                      "Category",
+                      "Item",
+                      // "Description of work",
+                      "Total amount",
+                      "Status",
+                      // "Action",
+                    ].map((head) => (
+                      <th key={head}>{head}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="">
+                  {data.map((item) => {
+                    return (
+                      <tr key={item?.id} className=" border-b">
+                        <td>
+                          <span className=" rounded-full p-2 border border-primary">
+                            {item?.id}
+                          </span>
+                        </td>
+                        <td>{item?.date_paid}</td>
+                        <td>{item?.shortlet?.name}</td>
+                        <td>{item?.category?.name}</td>
+                        {/* <td>{item?.item}</td> */}
+                        <td>{item?.item}</td>
+                        <td>{item?.amount}</td>
+                        <td>
+                          <Status status={item?.status} />
+                        </td>
+                        {/* <td>
                           <div className=" flex items-center gap-4">
                             <button
                               title="delete"
@@ -170,16 +169,15 @@ export default function MaintenanceExpensesReportListTable() {
                             </button>
                           </div>
                         </td> */}
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <NoResult />
-            )}
-          </div>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <NoResult />
+          )}
           <Pagination
             pagination={pagination}
             setCurrentPage={setCurrentPage}
