@@ -15,6 +15,8 @@ import ReceiptIcon from "../../assets/icons/receipt";
 import ModalTemplate from "../modal";
 import CalculateRate from "../check-availability/calculate-rate";
 import useAxios from "../../useHooks/useAxios";
+import ExportToCSV from "../export-to-csv";
+import { apartmentExportFormater } from "../../utils/export-formerter-functions";
 
 export default function ApartmentListsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -52,7 +54,7 @@ export default function ApartmentListsTable() {
 
   return (
     <>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Apartment List</h2>
           <div className=" max-w-md">
@@ -62,12 +64,17 @@ export default function ApartmentListsTable() {
             />
           </div>
           <Sort setSort={setSort} id="sort-by" label="Sort by" />
+          <ExportToCSV
+            dataset={data}
+            jsonToCSVReformerter={apartmentExportFormater}
+            fileName="apartment-list"
+          />
         </div>
-        <div className="hidden md:block px-5">
-          {data && data.length > 0 ? (
-            <table className=" w-full overflow-x-auto">
-              <thead className="">
-                <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+        {data && data.length > 0 ? (
+          <div className=" w-full overflow-x-auto">
+            <table className=" w-full">
+              <thead>
+                <tr>
                   {[
                     "Apartment Name",
                     "No of Guests",
@@ -81,7 +88,7 @@ export default function ApartmentListsTable() {
                   ))}
                 </tr>
               </thead>
-              <tbody className="">
+              <tbody>
                 {data.map((request, index) => {
                   return (
                     <tr key={request?.id} className=" border-b">
@@ -99,12 +106,10 @@ export default function ApartmentListsTable() {
                           </span>
                         </span>
                       </td>
-                      <td className=" text-lg  min-w-36">
-                        {request?.max_guests} Guests
-                      </td>
+                      <td>{request?.max_guests} Guests</td>
                       <td>{request?.room_option?.name}</td>
                       <td>
-                        <div className=" flex items-center gap-2">
+                        <div className=" flex items-center flex-wrap gap-2">
                           {request?.amenities?.map((item) => (
                             <span key={item?.id}>{item?.name},</span>
                           ))}
@@ -115,7 +120,9 @@ export default function ApartmentListsTable() {
                         <Status status={request?.availability_status} />
                       </td>
                       <td className=" group relative">
-                        <span className=" p-2 text-lg">...</span>
+                        <span className=" p-2 bg-primary/15  rounded-lg">
+                          ...
+                        </span>
                         <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                           <Link
                             to={`/apartments/apartment-details/${request?.id}`}
@@ -159,16 +166,16 @@ export default function ApartmentListsTable() {
                 })}
               </tbody>
             </table>
-          ) : (
-            <NoResult />
-          )}
-        </div>
-        <div className="w-full block md:hidden">
+          </div>
+        ) : (
+          <NoResult />
+        )}
+        {/* <div className="w-full block md:hidden">
           <MobileApartmentTable
             data={data}
             handleOpenCalculateRate={handleOpenCalculateRate}
           />
-        </div>
+        </div> */}
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}

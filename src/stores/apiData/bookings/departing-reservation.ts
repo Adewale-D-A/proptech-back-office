@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { reservations } from "../../../types/apiData/bookings/reservation";
+import { pagination } from "../../../types/pagination";
 
 export const departingReservation = createSlice({
   name: "departing-reservations",
@@ -7,14 +8,7 @@ export const departingReservation = createSlice({
     value: {
       status: false,
       pagination: [] as {
-        pagination_data: {
-          current_page: number;
-          last_page: number;
-          per_page: number;
-          total: number;
-          from: number;
-          to: number;
-        };
+        pagination_data: pagination;
         data: reservations[];
       }[],
       data: [] as reservations[],

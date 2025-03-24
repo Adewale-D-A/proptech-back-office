@@ -7,14 +7,17 @@ import {
   addToPaginationHistory,
   updateLocationGroupingList,
 } from "../../stores/apiData/apartment/location-groupings";
+import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetLocationGroupings({
   page = 1,
   search = "",
+  limit = 20,
 }: {
   page?: number;
   search?: string;
+  limit?: number;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -32,17 +35,24 @@ export default function useGetLocationGroupings({
     setIsLoading(true);
     setIsFailed(false);
     try {
+      const { queryString, remakeRequest } = ApiQueryParamsExtractor({
+        dataset: {
+          page: search ? 1 : page,
+          search: search,
+          limit,
+        },
+      });
       //check store if this requested data has been saved previously and retirve it
       //if not, make a new request and save into store
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage && !search) {
+      if (foundPage && !remakeRequest) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateLocationGroupingList({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          `/admin/location-group?limit=20&search=${search || ""}&page=${page}`
+          `/admin/location-group?${queryString}`
         );
         const { location_groups } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
@@ -57,7 +67,7 @@ export default function useGetLocationGroupings({
           length: data?.length,
         };
         dispatch(updateLocationGroupingList({ data }));
-        if (!search) {
+        if (!remakeRequest) {
           dispatch(
             addToPaginationHistory({
               pagination_data: paginationDataset,
@@ -72,11 +82,11 @@ export default function useGetLocationGroupings({
     } finally {
       setIsLoading(false);
     }
-  }, [page, search]);
+  }, [page, search, limit]);
 
   useEffect(() => {
     getLocationGroupings();
-  }, [page, search]);
+  }, [page, search, limit]);
 
   return {
     data,

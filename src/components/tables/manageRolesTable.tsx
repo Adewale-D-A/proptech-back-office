@@ -103,7 +103,7 @@ export default function ManageRoleTableData() {
                         <span className=" p-2 text-lg">...</span>
                         <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                           <Link
-                            to={`/admin/admin-roles/edit/${request?.id}`}
+                            to={`/employees/roles/edit/${request?.id}`}
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                           >
                             Edit role

@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 import LoadingButton from "../../button";
 import Filter from "../../filterAndSort/filter";
-import Search from "../../inputs/search";
-import ExportSelect from "../../inputs/select/exportSelect";
+// import Search from "../../inputs/search";
+// import ExportSelect from "../../inputs/select/exportSelect";
 import TimeRangeSelector from "../../inputs/select/timeRange";
 import { apartmentById } from "../../../types/apiData/apartment";
 import NoResult from "../../noResult";
@@ -14,6 +14,8 @@ import Status from "../../status";
 import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
+import ExportToCSV from "../../export-to-csv";
+import { occupancyPerTimeReportExportFormater } from "../../../utils/export-formerter-functions";
 
 export default function OccupancyPerTimeReportTable() {
   const dispatch = useAppDispatch();
@@ -81,16 +83,20 @@ export default function OccupancyPerTimeReportTable() {
             type="button"
             clickHandler={() => handleLoadData()}
           />
-          <ExportSelect id="report" />
+          <ExportToCSV
+            dataset={data}
+            jsonToCSVReformerter={occupancyPerTimeReportExportFormater}
+            fileName="ocupancy-per-time-report-list"
+          />
         </div>
       </div>
       {/* table */}{" "}
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">
+      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 overflow-auto ">
         {data && data.length > 0 ? (
-          <>
-            <table className=" w-full text-xs overflow-x-auto">
-              <thead className="">
-                <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+          <div className=" w-full overflow-x-auto">
+            <table className=" w-full">
+              <thead>
+                <tr>
                   {[
                     "Date",
                     "Apartment",
@@ -104,7 +110,7 @@ export default function OccupancyPerTimeReportTable() {
                   ))}
                 </tr>
               </thead>
-              <tbody className="">
+              <tbody>
                 {data.map((request, index) => {
                   return (
                     <tr key={index} className=" border-b">
@@ -150,7 +156,7 @@ export default function OccupancyPerTimeReportTable() {
                 </h6>
               ))}
             </div> */}
-          </>
+          </div>
         ) : (
           <NoResult />
         )}

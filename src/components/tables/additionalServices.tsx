@@ -94,22 +94,21 @@ export default function AdditionalServiceListTable({
           </div>
           {/* <FilterSearch /> */}
         </div>
-        <div className="hidden md:block px-5">
-          {data && data.length > 0 ? (
-            <table className=" w-full text-xs  overflow-x-auto">
-              <thead className="">
-                <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+        {data && data.length > 0 ? (
+          <div className=" w-full overflow-x-auto">
+            <table className=" w-full">
+              <thead>
+                <tr>
                   {header.map((head) => (
                     <th key={head}>{head}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="">
+              <tbody>
                 {data?.map((item) => {
                   return (
                     <tr key={item?.id} className=" border-b">
                       <td>
-                        {" "}
                         {item?.user?.first_name} {item?.user?.last_name}
                       </td>
                       <td>{item?.booking?.shortlet?.name}</td>
@@ -128,7 +127,9 @@ export default function AdditionalServiceListTable({
                         <Status status={item?.status} />
                       </td>
                       <td className=" group relative">
-                        <span className=" p-2 text-lg">...</span>
+                        <span className=" p-2 bg-primary/15  rounded-lg">
+                          ...
+                        </span>
                         <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
                           <Link
                             to={`/additional-services/service-details/${item?.id}`}
@@ -159,16 +160,16 @@ export default function AdditionalServiceListTable({
                 })}
               </tbody>
             </table>
-          ) : (
-            <NoResult />
-          )}
-        </div>
-        <div className="w-full block md:hidden">
+          </div>
+        ) : (
+          <NoResult />
+        )}
+        {/* <div className="w-full block md:hidden">
           <MobileAdditionalServicesTable
             data={data}
             deleteFunction={deleteModal}
           />
-        </div>
+        </div> */}
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}

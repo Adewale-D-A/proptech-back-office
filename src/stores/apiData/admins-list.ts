@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { admin } from "../../types/apiData/admins";
+import { pagination } from "../../types/pagination";
 
 export const adminsListData = createSlice({
   name: "all-admins",
@@ -7,14 +8,7 @@ export const adminsListData = createSlice({
     value: {
       status: false,
       pagination: [] as {
-        pagination_data: {
-          current_page: number;
-          last_page: number;
-          per_page: number;
-          total: number;
-          from: number;
-          to: number;
-        };
+        pagination_data: pagination;
         data: admin[];
       }[],
       data: [] as admin[],

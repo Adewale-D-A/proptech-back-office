@@ -6,6 +6,7 @@ import Filter from "../filterAndSort/filter";
 import formatDate from "../../utils/isoDateConverter";
 import useGetReservation from "../../services-hooks/bookings/userGetReservation";
 import MobileReservationsTable from "./mobile/reservations";
+import NoResult from "../noResult";
 
 export default function BookingsListTable({
   variant,
@@ -51,57 +52,61 @@ export default function BookingsListTable({
           <Filter actionHandler={handleSalesFiltering} />
         </div>
       </div>
-      <div className=" hidden px-3 md:flex flex-col gap-3 justify-center items-center">
-        <table className=" w-full text-xs overflow-x-auto">
-          <thead className="">
-            <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-              {["ID", "Customer Name", "Rooms", "Check-in", "Status"].map(
-                (head) => (
-                  <th key={head}>{head}</th>
-                )
-              )}
-            </tr>
-          </thead>
-          <tbody className="">
-            {data.map((request) => {
-              return (
-                <tr key={request?.id} className=" border-b">
-                  <td>
-                    <Link
-                      to={`/bookings/booking-details/edit-reservation/${request?.id}`}
-                      className=" rounded-full p-2 border border-primary"
-                    >
-                      {request?.id}
-                    </Link>
-                  </td>
-                  <td>
-                    {request?.user?.first_name} {request?.user?.last_name}
-                  </td>
-                  <td>{request?.shortlet?.name}</td>
-                  <td>{formatDate(request?.check_in_date)}</td>
-                  {variant === "action" ? (
+      {data && data.length > 0 ? (
+        <div className=" w-full overflow-x-auto">
+          <table className=" w-full">
+            <thead className="">
+              <tr>
+                {["ID", "Customer Name", "Rooms", "Check-in", "Status"].map(
+                  (head) => (
+                    <th key={head}>{head}</th>
+                  )
+                )}
+              </tr>
+            </thead>
+            <tbody className="">
+              {data.map((request) => {
+                return (
+                  <tr key={request?.id} className=" border-b">
                     <td>
                       <Link
                         to={`/bookings/booking-details/edit-reservation/${request?.id}`}
-                        className=" text-primary"
+                        className=" rounded-full p-2 border border-primary"
                       >
-                        View Details
+                        {request?.id}
                       </Link>
                     </td>
-                  ) : (
                     <td>
-                      <Status status={request?.status} />
+                      {request?.user?.first_name} {request?.user?.last_name}
                     </td>
-                  )}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      <div className="w-full block md:hidden">
+                    <td>{request?.shortlet?.name}</td>
+                    <td>{formatDate(request?.check_in_date)}</td>
+                    {variant === "action" ? (
+                      <td>
+                        <Link
+                          to={`/bookings/booking-details/edit-reservation/${request?.id}`}
+                          className=" text-primary"
+                        >
+                          View Details
+                        </Link>
+                      </td>
+                    ) : (
+                      <td>
+                        <Status status={request?.status} />
+                      </td>
+                    )}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <NoResult />
+      )}
+      {/* <div className="w-full block md:hidden">
         <MobileReservationsTable data={data} variant={variant} />
-      </div>
+      </div> */}
       <Pagination
         pagination={pagination}
         setCurrentPage={setCurrentPage}

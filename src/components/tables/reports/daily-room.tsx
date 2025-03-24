@@ -2,9 +2,7 @@ import { useCallback, useState } from "react";
 import { apartmentById } from "../../../types/apiData/apartment";
 import Filter from "../../filterAndSort/filter";
 import Select from "../../inputs/select";
-import Search from "../../inputs/search";
 import LoadingButton from "../../button";
-import ExportSelect from "../../inputs/select/exportSelect";
 import { revenueReportList } from "../../../types/apiData/reports";
 import NoResult from "../../noResult";
 import Pagination from "../../pagination";
@@ -14,6 +12,8 @@ import useGetReportSummary from "../../../services-hooks/reports/report-summary"
 import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
 import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import ExportToCSV from "../../export-to-csv";
+import { revenueReportExportFormater } from "../../../utils/export-formerter-functions";
 
 export default function DailyRoomReportTable() {
   const [type, setType] = useState("");
@@ -65,7 +65,6 @@ export default function DailyRoomReportTable() {
     <div className="w-full flex flex-col gap-5">
       <div className="flex items-center justify-between flex-col md:flex-row gap-4 p-4 rounded-md border flex-wrap lg:flex-nowrap">
         <div>
-          {" "}
           <Filter actionHandler={handleCustomersFiltering} />
         </div>
         <div>
@@ -94,15 +93,19 @@ export default function DailyRoomReportTable() {
             type="button"
             clickHandler={() => handleLoadData()}
           />
-          <ExportSelect id="report" />
+          <ExportToCSV
+            dataset={data}
+            jsonToCSVReformerter={revenueReportExportFormater}
+            fileName="daily-room-report-list"
+          />
         </div>
       </div>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto ">
+      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 overflow-auto ">
         {data && data.length > 0 ? (
-          <>
-            <table className=" w-full text-xs overflow-x-auto">
-              <thead className="">
-                <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+          <div className=" w-full overflow-x-auto">
+            <table className=" w-full">
+              <thead>
+                <tr>
                   {[
                     "Date",
                     "Rooms Sold",
@@ -188,7 +191,7 @@ export default function DailyRoomReportTable() {
                 </h6>
               ))}
             </div>
-          </>
+          </div>
         ) : (
           <NoResult />
         )}

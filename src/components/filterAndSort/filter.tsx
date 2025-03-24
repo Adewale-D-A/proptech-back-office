@@ -20,11 +20,11 @@ export default function Filter({
   );
 
   return (
-    <div className=" flex items-center gap-1 text-xs">
+    <div className=" flex items-start md:items-center flex-col md:flex-row gap-1 text-xs">
       <span className=" text-nowrap">Filter by:</span>
       <form
         onSubmit={handleFiltering}
-        className=" flex items-center gap-2 border p-4 rounded-lg"
+        className=" flex items-center gap-2 border p-2 md:p-4 rounded-lg"
       >
         <input
           type="date"

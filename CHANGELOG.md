@@ -1,3 +1,49 @@
+##### 24.03.2025
+
+> Reports mobile UI responsiveness fix
+
+##### 23.03.2025
+
+> Ratings and referrals endpoints integrations
+> Reporting tables UI uplift
+> Maintenance expenses 'paid' filtering addition
+
+##### 21.03.2025
+
+> Mobile responsivess and UI inconsistencies fix
+
+##### 18.03.2025
+
+> Export tables functions to a new file
+
+##### 17.03.2025
+
+> Feature -> Export table data to CSV (apartment list and bookings list completed)
+> Calendar module Api integration
+> Api query params sort and limit logic update
+
+##### 13.03.2025
+
+> Feature => Owner's report module UI development
+
+##### 10.04.2025
+
+> Maintenance expenses reports and generator runtime reports redux same name bug fix
+> Referrals static dataset pagination count updates
+
+##### 08.04.2025
+
+> Employees logic and UI placement redefinition
+
+##### 05.04.2025
+
+> Integrations -> Requisition and Maintenance requests CRU operations completions
+> Integrations -> Maintenance requests conversions to requisition requests
+
+##### 04.04.2025
+
+> Feature => Maintenance request, converstion of maintenance request to requisition request and requisition requests API integrations
+
 ##### 23.02.2025
 
 > Feature -> Block date feature addition
@@ -8,6 +54,15 @@
 > Add-on -> remove empty payload keys and values util function creation
 > bug-fix -> Upload profile_photo and identity document optional requirement addition
 > bug-fix -> Systematic 99Apt team bug list reviews and fixes
+
+##### 19.02.2025
+
+> Maintenance reuest category options assets setup
+> maintenace report, bookings report, and generator runtime fix
+
+##### 18.02.2025
+
+> Feature -> Operations module reporting section UI development
 
 ##### 15.02.2025
 
@@ -22,6 +77,12 @@
 > Reporting data retrieval with and without selecting apartments
 
 ##### 23.01.2025
+
+> Completed Requisition request UI flow, api logic and data flow schema
+> Completed Rating and Reviews with Referrals screens
+> Completed Calendar view UI
+>
+> > > > > OPERATIONS MODULES INTEGRATIONS BEGINS
 
 > Booking details administrative view chat functional chat component addition
 > Update reservation auto populate fields adjustments

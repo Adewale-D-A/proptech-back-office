@@ -3,11 +3,6 @@ import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import useAxios from "../../../useHooks/useAxios";
 import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
-import useGetlocationGrouping from "../../../services-hooks/apartment/useGetLocationGrouping";
-import {
-  addLocationGroupingToList,
-  replaceLocationGroupingInList,
-} from "../../../stores/apiData/apartment/location-groupings";
 import TextInput from "../../../components/inputs/textInput";
 import LoadingButton from "../../../components/button";
 import TextAreaInput from "../../../components/inputs/textArea";

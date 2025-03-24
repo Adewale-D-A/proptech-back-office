@@ -13,15 +13,10 @@ import Filter from "../filterAndSort/filter";
 import Sort from "../filterAndSort/sort";
 import useGetTopApartmentLists from "../../services-hooks/dashboards/useGetTopApartment";
 import CalculateRate from "../check-availability/calculate-rate";
-import MobileTopApartmentTable from "./mobile/top-apartment";
+import paginatedPageSerializer from "../../utils/page-serializer";
+// import MobileTopApartmentTable from "./mobile/top-apartment";
 
-export default function ApartmentTable({
-  header,
-  title,
-}: {
-  header: string[];
-  title: string;
-}) {
+export default function ApartmentTable({ title }: { title: string }) {
   const { open: openAssignToCustomerView } = useAppSelector(
     (state) => state.assignCustomer.value
   );
@@ -64,7 +59,7 @@ export default function ApartmentTable({
 
   return (
     <>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">{title}</h2>
           {/* <Search
@@ -77,21 +72,35 @@ export default function ApartmentTable({
             <Sort setSort={setSort} id={"sales-analytics"} label={"Sort by:"} />
           </div>
         </div>
-        <div className="hidden md:block px-5">
-          {data && data.length > 0 ? (
-            <table className=" w-full overflow-x-auto">
-              <thead className="">
-                <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                  {header.map((head) => (
+        {data && data.length > 0 ? (
+          <div className=" w-full overflow-x-auto">
+            <table className=" w-full">
+              <thead>
+                <tr>
+                  <th className=" text-nowrap">S/N</th>
+                  {[
+                    "Apartment Info",
+                    "Price per Night",
+                    "Last Booking",
+                    "Total Bookings",
+                    "Availability Status",
+                    "Action",
+                  ].map((head) => (
                     <th key={head}>{head}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="">
+              <tbody>
                 {data.map((item, index) => {
                   return (
                     <tr key={item?.id} className=" border-b">
-                      <td className=" min-w-16">{index + 1}</td>
+                      <td>
+                        {paginatedPageSerializer({
+                          currentPage: pagination?.current_page,
+                          pageSize: pagination?.per_page,
+                          index,
+                        })}
+                      </td>
                       <td className=" flex gap-2 items-center min-w-36">
                         <img
                           src={"/logo_blue.png"}
@@ -106,7 +115,7 @@ export default function ApartmentTable({
                           </span>
                         </span>
                       </td>
-                      <td className=" text-lg  min-w-36">{`${item?.currency} ${item?.price}`}</td>
+                      <td>{`${item?.currency} ${item?.price}`}</td>
                       <td>
                         {item?.last_booking_date
                           ? `${formatDate(
@@ -119,7 +128,7 @@ export default function ApartmentTable({
                         <Status status={item?.availability_status} />
                       </td>
                       <td className=" group relative">
-                        <span className=" p-2 text-lg bg-primary/15  rounded-lg">
+                        <span className=" p-2 bg-primary/15 rounded-lg">
                           ...
                         </span>
                         <span className="z-10 group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
@@ -158,17 +167,17 @@ export default function ApartmentTable({
                 })}
               </tbody>
             </table>
-          ) : (
-            <NoResult />
-          )}
-        </div>
-        <div className="w-full block md:hidden">
+          </div>
+        ) : (
+          <NoResult />
+        )}
+        {/* <div className="w-full block md:hidden">
           <MobileTopApartmentTable
             data={data}
             setOpenCalculateRate={handleOpenCalculateRate}
             setOpenReservation={handleOpenQuickReservation}
           />
-        </div>
+        </div> */}
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}

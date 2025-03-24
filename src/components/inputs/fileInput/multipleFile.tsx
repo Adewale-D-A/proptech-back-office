@@ -8,7 +8,13 @@ import BinIcon from "../../../assets/icons/bin-icon";
 import { addRemovableImages } from "../../../stores/inAppDataInterations/addEditApartmentInfo";
 
 interface Props {
-  value: { name: string; size: number; preview: string; id?: number }[];
+  value: {
+    name: string;
+    size: number;
+    preview: string;
+    id?: number;
+    is_local?: boolean;
+  }[];
   setValue: Function;
   label?: string;
   isRequired?: boolean;

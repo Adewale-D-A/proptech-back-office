@@ -13,6 +13,9 @@ import ClipBoardIcon from "./icons/clipboard";
 import NotificationIcon from "./icons/notification";
 import CaretDownIcon from "./icons/caret-down";
 import { useCallback, useState } from "react";
+import HeadsetIcon from "./icons/headset";
+import DoubleDocumentIcon from "./icons/double-document";
+import UserGroupIcon from "./icons/user-group";
 
 export default function NavigationMenuItems() {
   const location = useLocation();
@@ -128,12 +131,12 @@ export default function NavigationMenuItems() {
           ],
         },
         {
-          id: 12,
-          url: "/admin/admin-users",
-          label: "Admin Users",
-          value: "admin",
+          id: 14,
+          url: "/customer-engagements/ratings-and-reviews",
+          label: "Customers Engagement",
+          value: "customer-engagements",
           show: true,
-          icon: <UsersIcon />,
+          icon: <HeadsetIcon />,
           hasSubMenu: false,
           subMenu: [
             {
@@ -172,6 +175,44 @@ export default function NavigationMenuItems() {
           value: "plans-and-promotions",
           show: true,
           icon: <PercentageIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 15,
+          url: "/requests/maintenance-requests",
+          label: "Requests",
+          value: "requests",
+          show: true,
+          icon: <DoubleDocumentIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 13,
+          url: "/calendar/apartment-calendar",
+          label: "Calendar",
+          value: "calendar",
+          show: true,
+          icon: <CalendarIcon />,
           hasSubMenu: false,
           subMenu: [
             {
@@ -248,6 +289,25 @@ export default function NavigationMenuItems() {
           value: "notification",
           show: true,
           icon: <NotificationIcon />,
+          hasSubMenu: false,
+          subMenu: [
+            {
+              url: "#",
+              label: "",
+              value: "",
+              show: true,
+              icon: "",
+              id: 1.1,
+            },
+          ],
+        },
+        {
+          id: 16,
+          url: "/employees/employee-list",
+          label: "Employees",
+          value: "employees",
+          show: true,
+          icon: <UserGroupIcon />,
           hasSubMenu: false,
           subMenu: [
             {

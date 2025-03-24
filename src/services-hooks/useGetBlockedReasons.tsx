@@ -48,7 +48,7 @@ export default function useGetBlockedReasons({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage && !remakeRequest && !(sort === "asc")) {
+      if (foundPage && !remakeRequest) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateBlockedDatesReason({ data: foundPage?.data }));
       } else {
@@ -68,7 +68,7 @@ export default function useGetBlockedReasons({
           length: data?.length,
         };
         dispatch(updateBlockedDatesReason({ data }));
-        if (!search) {
+        if (!remakeRequest) {
           dispatch(
             addToPaginationHistory({
               pagination_data: paginationDataset,

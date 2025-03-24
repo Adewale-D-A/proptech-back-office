@@ -52,7 +52,7 @@ export default function GuestChatModule() {
   const [chatIdSeleted, setChatIdSelected] = useState<chatList>();
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction } =
-    useGetChatList({});
+    useGetChatList({ limit: 1000 });
 
   // add searched and selected user to list
   useEffect(() => {
