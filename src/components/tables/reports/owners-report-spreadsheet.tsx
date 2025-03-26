@@ -15,6 +15,8 @@ import LoadingButton from "../../button";
 import PlusIcon from "../../../assets/icons/plus";
 import monthsAndDays from "../../../assets/days-months.json";
 import TableSearch from "../../inputs/search/table-search";
+import UpdateManagementFee from "../../../pages/reports/owners/update-management-fee";
+import PencilSquareIcon from "../../../assets/icons/pencil-square";
 
 export default function OwnersReportSpreadsheetTableList() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -24,6 +26,7 @@ export default function OwnersReportSpreadsheetTableList() {
 
   const [openDelete, setOpenDelete] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [openMgtFeeModal, setOpenMgtFeeModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -81,7 +84,7 @@ export default function OwnersReportSpreadsheetTableList() {
               />
             </div>
           </div>
-          {data && data.length > 0 ? (
+          {data && data?.data?.length > 0 ? (
             <div className=" w-full overflow-x-auto">
               <table className=" w-full">
                 <thead>
@@ -94,7 +97,7 @@ export default function OwnersReportSpreadsheetTableList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((item) => {
+                  {data?.data?.map((item) => {
                     return (
                       <tr key={item?.id} className=" border-b">
                         <td>{item?.expense?.name}</td>
@@ -153,6 +156,228 @@ export default function OwnersReportSpreadsheetTableList() {
                       </tr>
                     );
                   })}
+                  {/* totals  */}
+                  <tr className=" border-b">
+                    <td className=" bg-[#E4E7EC]">Total</td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_totals?.jan || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_totals?.feb || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_totals?.mar || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_totals?.apr || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_totals?.may || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_totals?.jun || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_totals?.jul || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_totals?.aug || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_totals?.sep || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_totals?.oct || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_totals?.nov || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_totals?.dec || 0.0)}
+                    </td>
+                    <td></td>
+                  </tr>
+                  {/* revenue */}
+                  <tr className=" border-b">
+                    <td className=" bg-[#FEF0C7]">Revenue</td>
+                    <td>
+                      &#8358;
+                      {String(data?.summary?.monthly_revenue?.jan || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(data?.summary?.monthly_revenue?.feb || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(data?.summary?.monthly_revenue?.mar || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(data?.summary?.monthly_revenue?.apr || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(data?.summary?.monthly_revenue?.may || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(data?.summary?.monthly_revenue?.jun || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(data?.summary?.monthly_revenue?.jul || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(data?.summary?.monthly_revenue?.aug || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(data?.summary?.monthly_revenue?.sep || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(data?.summary?.monthly_revenue?.oct || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(data?.summary?.monthly_revenue?.nov || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(data?.summary?.monthly_revenue?.dec || 0.0)}
+                    </td>
+                    <td></td>
+                  </tr>
+                  {/* management fee */}
+                  <tr className=" border-b">
+                    <td className=" bg-[#FEC7C7]">
+                      <div className=" flex items-center justify-between gap-2">
+                        <span>Management fee </span>
+                        <button
+                          onClick={() => setOpenMgtFeeModal(true)}
+                          className=" aspect-square rounded-full bg-white border border-green-300 p-1 hover:scale-125 transition-all"
+                        >
+                          <PencilSquareIcon className=" w-5 h-5 text-gray-700" />
+                        </button>
+                      </div>
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(
+                        data?.summary?.monthly_management_fee?.jan || 0.0
+                      )}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(
+                        data?.summary?.monthly_management_fee?.feb || 0.0
+                      )}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(
+                        data?.summary?.monthly_management_fee?.mar || 0.0
+                      )}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(
+                        data?.summary?.monthly_management_fee?.apr || 0.0
+                      )}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(
+                        data?.summary?.monthly_management_fee?.may || 0.0
+                      )}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(
+                        data?.summary?.monthly_management_fee?.jun || 0.0
+                      )}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(
+                        data?.summary?.monthly_management_fee?.jul || 0.0
+                      )}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(
+                        data?.summary?.monthly_management_fee?.aug || 0.0
+                      )}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(
+                        data?.summary?.monthly_management_fee?.sep || 0.0
+                      )}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(
+                        data?.summary?.monthly_management_fee?.oct || 0.0
+                      )}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(
+                        data?.summary?.monthly_management_fee?.nov || 0.0
+                      )}
+                    </td>
+                    <td>
+                      &#8358;
+                      {String(
+                        data?.summary?.monthly_management_fee?.dec || 0.0
+                      )}
+                    </td>
+                    <td></td>
+                  </tr>
+                  {/* profit */}
+                  <tr className=" border-b">
+                    <td className="bg-[#D1FADF]">Profit</td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_profit?.jan || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_profit?.feb || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_profit?.mar || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_profit?.apr || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_profit?.may || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_profit?.jun || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_profit?.jul || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_profit?.aug || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_profit?.sep || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_profit?.oct || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_profit?.nov || 0.0)}
+                    </td>
+                    <td>
+                      &#8358;{String(data?.summary?.monthly_profit?.dec || 0.0)}
+                    </td>
+                    <td></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -185,6 +410,15 @@ export default function OwnersReportSpreadsheetTableList() {
         className=" max-w-screen-md"
       >
         <AddEditOwnersReport id={selectedId} setOpen={setOpenModal} />
+      </ModalTemplate>
+      <ModalTemplate
+        open={openMgtFeeModal}
+        setOpen={setOpenMgtFeeModal}
+        showXicon={true}
+        title="Edit Management Fee"
+        className=" max-w-screen-md"
+      >
+        <UpdateManagementFee setOpen={setOpenMgtFeeModal} />
       </ModalTemplate>
     </>
   );

@@ -1,3 +1,8 @@
+##### 26.03.2025
+
+> Expense categories CRUD operation development
+> Management fee Owner's report configuration addition
+
 ##### 24.03.2025
 
 > Reports mobile UI responsiveness fix

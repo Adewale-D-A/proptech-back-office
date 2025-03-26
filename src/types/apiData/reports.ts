@@ -70,6 +70,20 @@ export type generatorRuntimeReport = {
   run_time: string;
 };
 
+interface monthlies {
+  jan: number;
+  feb: number;
+  mar: number;
+  apr: number;
+  may: number;
+  jun: number;
+  jul: number;
+  aug: number;
+  sep: number;
+  oct: number;
+  nov: number;
+  dec: number;
+}
 export interface ownersReport {
   id: number;
   building_id: number;
@@ -81,18 +95,11 @@ export interface ownersReport {
   amount: number;
   date: string;
   additional_note: string;
-  monthly_amount: {
-    jan: number;
-    feb: number;
-    mar: number;
-    apr: number;
-    may: number;
-    jun: number;
-    jul: number;
-    aug: number;
-    sep: number;
-    oct: number;
-    nov: number;
-    dec: number;
-  };
+  monthly_amount: monthlies;
+}
+export interface ownerReportSummaries {
+  monthly_totals: monthlies;
+  monthly_revenue: monthlies;
+  monthly_management_fee: monthlies;
+  monthly_profit: monthlies;
 }

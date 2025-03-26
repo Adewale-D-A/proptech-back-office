@@ -49,6 +49,12 @@ const tabList = [
     label: "Owners Report",
     url: "/reports/owners-report/summary",
   },
+  {
+    id: 8,
+    icon: <BillIcon />,
+    label: "Expense Category",
+    url: "/reports/expense-category",
+  },
   // {
   //   id: 7,
   //   icon: <PowerIcon />,

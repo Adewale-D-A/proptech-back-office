@@ -75,7 +75,7 @@ export default function OwnersReportSummaryTableList() {
               />
             </div>
           </div>
-          {data && data.length > 0 ? (
+          {data && data?.data?.length > 0 ? (
             <div className=" w-full overflow-x-auto">
               <table className=" w-full">
                 <thead>
@@ -86,7 +86,7 @@ export default function OwnersReportSummaryTableList() {
                   </tr>
                 </thead>
                 <tbody className="">
-                  {data.map((item) => {
+                  {data?.data?.map((item) => {
                     return (
                       <tr key={item?.id} className=" border-b">
                         <td>{item?.expense?.name}</td>

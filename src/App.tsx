@@ -135,6 +135,7 @@ import RequestsCategoriesListView from "./pages/requests/requests-categories";
 import EmployeesTabWrapper from "./routeProtectors/wrapper/admin-users";
 import OwnersReportSummary from "./pages/reports/owners/summary";
 import OwnersReportSpreadsheet from "./pages/reports/owners/spreadsheet";
+import ExpenseCategoriesListView from "./pages/reports/owners/expense-categories";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -500,6 +501,10 @@ function App() {
               <Route
                 path="/reports/owners-report/spreadsheet"
                 element={<OwnersReportSpreadsheet />}
+              />
+              <Route
+                path="/reports/expense-category"
+                element={<ExpenseCategoriesListView />}
               />
             </Route>
             <Route path="/notification" element={<Notification />} />

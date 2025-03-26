@@ -1,29 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { pagination } from "../../../types/pagination";
-import {
-  ownerReportSummaries,
-  ownersReport,
-} from "../../../types/apiData/reports";
+import { pagination } from "../../types/pagination";
+import { requestCategories } from "../../types/apiData/request-categories";
 
-export const ownersReportsData = createSlice({
-  name: "owners-reports",
+export const expensesCategoriesData = createSlice({
+  name: "expense_categroies_data",
   initialState: {
     value: {
       status: false,
       pagination: [] as {
         pagination_data: pagination;
-        data: { data: ownersReport[]; summary: ownerReportSummaries };
+        data: requestCategories[];
       }[],
-      data: {} as { data: ownersReport[]; summary: ownerReportSummaries },
+      data: [] as requestCategories[],
     },
   },
   reducers: {
-    updateOwnersReportReport: (state, action) => {
+    updateExpenseategory: (state, action) => {
       state.value.status = true;
       state.value.data = action?.payload?.data;
     },
-    addOwnersReportReportToList: (state, action) => {
-      state.value.data.data = [...state.value.data?.data, action?.payload];
+    addExpenseategory: (state, action) => {
+      state.value.data = [...state.value.data, action?.payload];
       //include in pagination data
       const pagination_data = [...state.value.pagination];
       const lastIndex = pagination_data?.length - 1;
@@ -31,10 +28,7 @@ export const ownersReportsData = createSlice({
         if (lastIndex === index) {
           return {
             pagination_data: item?.pagination_data,
-            data: {
-              data: [...item.data.data, action?.payload],
-              summary: item?.data?.summary,
-            },
+            data: [...item.data, action?.payload],
           };
         } else {
           return item;
@@ -58,44 +52,44 @@ export const ownersReportsData = createSlice({
         ];
       }
     },
-    removeOwnersReportInList: (state, action) => {
+    removeExpenseategory: (state, action) => {
       const { id } = action?.payload;
-      const currentArray = [...state.value.data.data];
+      const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
-        (v: { id: number }) => String(v.id) === String(id)
+        (v: { id: number }) => v.id === id
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1);
-        state.value.data.data = currentArray;
+        state.value.data = currentArray;
       }
       //remove from paginated data
       const pagination_data = [...state.value.pagination];
       const removed = pagination_data.map((item, index) => {
-        const sencondFilter = item.data.data.filter((data, i) => {
-          return !(String(data.id) === String(id));
+        const sencondFilter = item.data.filter((data, i) => {
+          return !(Number(data.id) === Number(id));
         });
         return {
           pagination_data: { ...item.pagination_data },
-          data: { data: sencondFilter, summary: item.data.summary },
+          data: sencondFilter,
         };
       });
       state.value.pagination = removed;
     },
-    replaceOwnersReportInList: (state, action) => {
+    replaceExpenseategory: (state, action) => {
       const { id } = action?.payload;
-      const currentArray = state.value.data.data;
+      const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
-        (v: { id: number }) => String(v.id) === String(id)
+        (v: { id: number }) => v.id === id
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1, action?.payload);
-        state.value.data.data = currentArray;
+        state.value.data = currentArray;
       }
       //REPLACE pagination data
       const pagination_data = [...state.value.pagination];
       const replacedItem = pagination_data.map((item, index) => {
-        const sencondFilter = item.data.data.map((data, i) => {
-          if (String(data.id) === String(id)) {
+        const sencondFilter = item.data.map((data, i) => {
+          if (Number(data.id) === Number(id)) {
             return { ...action.payload };
           } else {
             return data;
@@ -103,25 +97,25 @@ export const ownersReportsData = createSlice({
         });
         return {
           pagination_data: { ...item.pagination_data },
-          data: { data: sencondFilter, summary: item.data.summary },
+          data: sencondFilter,
         };
       });
       state.value.pagination = replacedItem;
     },
-    clearOwnersReportReport: (state) => {
+    clearExpenseategory: (state) => {
       state.value.status = false;
-      state.value.data = { data: [], summary: {} as any };
+      state.value.data = [];
     },
   },
 });
 
 export const {
-  updateOwnersReportReport,
-  addOwnersReportReportToList,
+  updateExpenseategory,
+  addExpenseategory,
   addToPaginationHistory,
-  clearOwnersReportReport,
-  removeOwnersReportInList,
-  replaceOwnersReportInList,
-} = ownersReportsData.actions;
+  removeExpenseategory,
+  replaceExpenseategory,
+  clearExpenseategory,
+} = expensesCategoriesData.actions;
 
-export default ownersReportsData.reducer;
+export default expensesCategoriesData.reducer;
