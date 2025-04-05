@@ -1,6 +1,7 @@
 export interface requestCategories {
   id: number;
   name: string;
+  description: string;
   slug: string;
   deleted_at: string;
   created_at: string;

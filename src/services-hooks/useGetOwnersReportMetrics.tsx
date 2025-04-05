@@ -1,39 +1,42 @@
 import { useCallback, useEffect, useState } from "react";
 import useAxios from "../useHooks/useAxios";
-import { requestCategories } from "../types/apiData/request-categories";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetExpenseCategory({ id }: { id?: string }) {
+export default function useGetOwnersReportMetrics() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
-  const [data, setData] = useState<requestCategories>({} as any);
+  const [data, setData] = useState<{
+    total_expenses: number;
+    total_revenue: number;
+    management_fee_percentage: number;
+    management_fee_amount: number;
+    total_profit: number;
+  }>({} as any);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const expenseCategory = useCallback(async () => {
+  const ownersReportMetrics = useCallback(async () => {
     setIsLoading(true);
     setIsFailed(false);
     try {
-      const response = await axios.get(`/admin/expense-category/${id}`);
-      const { expense_category } = response?.data?.data;
-      setData(expense_category);
+      const response = await axios.get(`/admin/owner-report/metrics`);
+      const data = response.data?.data;
+      setData(data);
     } catch (error) {
       setIsFailed(true);
     } finally {
       setIsLoading(false);
     }
-  }, [id]);
+  }, []);
 
   useEffect(() => {
-    if (id) {
-      expenseCategory();
-    }
-  }, [id]);
+    ownersReportMetrics();
+  }, []);
 
   return {
     data,
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: expenseCategory,
+    retryFunction: ownersReportMetrics,
   };
 }

@@ -14,8 +14,9 @@ import { apartmentById } from "../../../types/apiData/apartment";
 import useGetLocationGroupings from "../../../services-hooks/apartment/useGetLocationGroupings";
 import Select from "../../../components/inputs/select";
 import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
-import useGetRequestCategories from "../../../services-hooks/useGetRequestCategories";
 import TextInput from "../../../components/inputs/textInput";
+import purgeEmptyPayload from "../../../utils/remove-empty-payload";
+import useGetExpenseCategories from "../../../services-hooks/useGetRequestCategories";
 
 export default function AddEditOwnersReport({
   id,
@@ -38,7 +39,7 @@ export default function AddEditOwnersReport({
 
   const { data } = useGetOwnerReportById({ id });
   const { data: locationGroupsDataset } = useGetLocationGroupings({ page: 1 });
-  const { data: requestCategoryDataset } = useGetRequestCategories({ page: 1 });
+  const { data: expenseCategories } = useGetExpenseCategories({ page: 1 });
 
   //   populate field provided id is available denoting update functionality
   useEffect(() => {
@@ -47,8 +48,8 @@ export default function AddEditOwnersReport({
       setDate(toDate || "");
       setBuildingId(String(data?.building_id || ""));
       setAmount(String(data?.amount || ""));
-      setExpenseId(String(data?.expense_id || ""));
-      setAdditionalNotes(data?.additional_note || "");
+      setExpenseId(String(data?.expense_category_id || ""));
+      setAdditionalNotes(data?.note || "");
     }
   }, [id, data]);
 
@@ -59,32 +60,20 @@ export default function AddEditOwnersReport({
       const payload = {
         building_id: buildingId,
         shortlet_id: apartment?.id,
-        expense: expenseId,
+        expense_category_id: expenseId,
         amount: amount,
         date: date,
-        additional_note: additionalNotes,
+        // additional_note: additionalNotes,
       };
-      const dummytResponse = {
-        id: 1,
-        building_id: buildingId,
-        building: locationGroupsDataset?.find(
-          (item) => String(item?.id) === buildingId
-        ),
-        shortlet_id: apartment?.id,
-        shortlet: apartment,
-        expense_id: expenseId,
-        expense: requestCategoryDataset?.find(
-          (item) => String(item?.id) === expenseId
-        ),
-        amount: amount,
-        date: date,
-        additional_note: additionalNotes,
-      };
+      const newPayload = purgeEmptyPayload({ payload });
       try {
         if (id) {
-          //   const response = await axios.put(`/admin/requisition-request/${id}`,payload)
-          //   const data = response?.data;
-          dispatch(replaceOwnersReportInList(dummytResponse));
+          const response = await axios.put(
+            `/admin/owner-report/${id}`,
+            newPayload
+          );
+          const data = response?.data;
+          dispatch(replaceOwnersReportInList(data));
           dispatch(
             openSnackbar({
               message: "Owner report successfully updated",
@@ -92,9 +81,9 @@ export default function AddEditOwnersReport({
             })
           );
         } else {
-          //   const response = axios.post("/admin/requisition-request",payload)
-          //   const data = response?.data;
-          dispatch(addOwnersReportReportToList(dummytResponse));
+          const response = await axios.post("/admin/owner-report", newPayload);
+          const data = response?.data;
+          dispatch(addOwnersReportReportToList(data));
           dispatch(
             openSnackbar({
               message: "Owner report successfully added",
@@ -117,7 +106,7 @@ export default function AddEditOwnersReport({
       apartment,
       amount,
       locationGroupsDataset,
-      requestCategoryDataset,
+      expenseCategories,
     ]
   );
 
@@ -155,7 +144,7 @@ export default function AddEditOwnersReport({
           <option value={``} disabled>
             Expense
           </option>
-          {requestCategoryDataset?.map((item) => (
+          {expenseCategories?.map((item) => (
             <option key={item?.id} value={`${item?.id}`}>
               {item?.name}
             </option>

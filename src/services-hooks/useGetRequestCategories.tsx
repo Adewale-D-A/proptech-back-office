@@ -54,11 +54,11 @@ export default function useGetExpenseCategories({
         dispatch(updateRequestCategory({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          `/admin/maintenance-category?${queryString}`
+          `/admin/expense-category/?${queryString}`
         );
-        const { maintenance_category } = response?.data?.data;
+        const { expense_category } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
-          maintenance_category;
+          expense_category;
         const paginationDataset = {
           current_page,
           last_page,

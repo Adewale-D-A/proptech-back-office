@@ -14,6 +14,8 @@ import ModalTemplate from "../../modal";
 import LoadingButton from "../../button";
 import PlusIcon from "../../../assets/icons/plus";
 import MonthsCarousel from "../../../pages/reports/owners/months-carousel";
+import { apartmentById } from "../../../types/apiData/apartment";
+import OwnersReportFilterOptions from "../../../pages/reports/owners/filter-options";
 
 export default function OwnersReportSummaryTableList() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -23,6 +25,15 @@ export default function OwnersReportSummaryTableList() {
   const [openDelete, setOpenDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [buildingId, setBuildingId] = useState("");
+  const [apartment, setApartment] = useState<apartmentById>({} as any);
+  const [category, setCategory] = useState("");
+  const [filterDates, setFilterDates] = useState<{
+    start_date: string;
+    end_date: string;
+  }>();
+
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetAllOwnersReport({
       page: currentPage,
@@ -48,7 +59,7 @@ export default function OwnersReportSummaryTableList() {
   const handleDelete = useCallback(async () => {
     setIsDeleting(true);
     try {
-      // await axios.delete(`/admin/extra-option/${selectedId}`);
+      await axios.delete(`/admin/owner-report/${selectedId}`);
       dispatch(removeOwnersReportInList({ id: Number(selectedId) }));
       setOpenDelete(false);
     } catch (error) {
@@ -58,71 +69,83 @@ export default function OwnersReportSummaryTableList() {
   }, [selectedId]);
   return (
     <>
-      <div className=" w-full flex flex-col gap-3">
-        <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
-          <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
-            <div className=" flex items-center gap-3">
-              <MonthsCarousel />
+      <div className="w-full flex flex-col gap-10">
+        <OwnersReportFilterOptions
+          buildingId={buildingId}
+          setBuildingId={setBuildingId}
+          apartment={apartment}
+          setApartment={setApartment}
+          category={category}
+          setCategory={setCategory}
+          setFilterDates={setFilterDates}
+        />
+
+        <div className=" w-full flex flex-col gap-3">
+          <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
+            <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
+              <div className=" flex items-center gap-3">
+                <MonthsCarousel />
+              </div>
+              <div className=" flex items-center gap-2">
+                <ExportSelect id="report" />
+                <LoadingButton
+                  label="New entry"
+                  startIcon={<PlusIcon />}
+                  type="button"
+                  isLoading={false}
+                  clickHandler={() => openForNewRequest()}
+                />
+              </div>
             </div>
-            <div className=" flex items-center gap-2">
-              <ExportSelect id="report" />
-              <LoadingButton
-                label="New entry"
-                startIcon={<PlusIcon />}
-                type="button"
-                isLoading={false}
-                clickHandler={() => openForNewRequest()}
-              />
-            </div>
+            {data && data?.data?.length > 0 ? (
+              <div className=" w-full overflow-x-auto">
+                <table className=" w-full">
+                  <thead>
+                    <tr>
+                      {["Expense", "Amount", "Note", "Action"].map((head) => (
+                        <th key={head}>{head}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="">
+                    {data?.data?.map((item) => {
+                      return (
+                        <tr key={item?.id} className=" border-b">
+                          <td>{item?.expense_category?.name}</td>
+                          <td>&#8358;{String(item?.amount || 0)}</td>
+                          <td>{item?.note}</td>
+                          <td>
+                            <div className=" flex items-center gap-4">
+                              <button
+                                title="edit"
+                                onClick={() => openForEdit(item?.id)}
+                              >
+                                <PenIcon />
+                              </button>
+                              <button
+                                title="delete"
+                                onClick={() => handleOpenDelete(item?.id)}
+                              >
+                                <BinIcon className=" size-6 text-red-500" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <NoResult />
+            )}
+            <Pagination
+              pagination={pagination}
+              setCurrentPage={setCurrentPage}
+              isLoading={isLoading}
+              label="owners report"
+            />
           </div>
-          {data && data?.data?.length > 0 ? (
-            <div className=" w-full overflow-x-auto">
-              <table className=" w-full">
-                <thead>
-                  <tr>
-                    {["Expense", "Amount", "Note", "Action"].map((head) => (
-                      <th key={head}>{head}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="">
-                  {data?.data?.map((item) => {
-                    return (
-                      <tr key={item?.id} className=" border-b">
-                        <td>{item?.expense?.name}</td>
-                        <td>&#8358;{String(item?.amount || 0)}</td>
-                        <td>{item?.additional_note}</td>
-                        <td>
-                          <div className=" flex items-center gap-4">
-                            <button
-                              title="edit"
-                              onClick={() => openForEdit(item?.id)}
-                            >
-                              <PenIcon />
-                            </button>
-                            <button
-                              title="delete"
-                              onClick={() => handleOpenDelete(item?.id)}
-                            >
-                              <BinIcon className=" size-6 text-red-500" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <NoResult />
-          )}
-          <Pagination
-            pagination={pagination}
-            setCurrentPage={setCurrentPage}
-            isLoading={isLoading}
-            label="owners report"
-          />
         </div>
       </div>
 

@@ -11,6 +11,7 @@ import {
   replaceExpenseategory,
 } from "../../../../stores/apiData/expense-categories";
 import useGetExpenseCategory from "../../../../services-hooks/useGetExpenseCategory";
+import TextAreaInput from "../../../../components/inputs/textArea";
 
 export default function AddEditExpensesCategories({
   id,
@@ -23,7 +24,7 @@ export default function AddEditExpensesCategories({
   const dispatch = useAppDispatch();
 
   const [name, setName] = useState("");
-  // const [description, setDescription] = useState("");
+  const [description, setDescription] = useState("");
   // const [hexCode, setHexCode] = useState("");
 
   const [isSubmitting, setIsSubmiting] = useState(false);
@@ -33,8 +34,9 @@ export default function AddEditExpensesCategories({
   // populate data with existing data if id is provided
   useEffect(() => {
     if (id && data?.name) {
-      const { name } = data || {};
+      const { name, description } = data || {};
       setName(name || "");
+      setDescription(description || "");
     }
   }, [data]);
 
@@ -48,12 +50,13 @@ export default function AddEditExpensesCategories({
       setIsSubmiting(true);
       const payload = {
         name: name,
+        description: description,
       };
       const newPayload = purgeEmptyPayload({ payload });
       try {
         if (id) {
           const response = await axios.put(
-            `/admin/maintenance-category/${id}`,
+            `/admin/expense-category/${id}`,
             newPayload
           );
           const { data, message } = response?.data;
@@ -67,7 +70,7 @@ export default function AddEditExpensesCategories({
           );
         } else {
           const response = await axios.post(
-            "/admin/maintenance-category",
+            "/admin/expense-category",
             newPayload
           );
           const { data, message } = response?.data;
@@ -85,7 +88,7 @@ export default function AddEditExpensesCategories({
         setIsSubmiting(false);
       }
     },
-    [name, id]
+    [name, description, id]
   );
 
   return (
@@ -100,14 +103,14 @@ export default function AddEditExpensesCategories({
             id="blocked-dates-name"
             placeholder="Enter name"
           />
-          {/* <TextAreaInput
+          <TextAreaInput
             isRequired={false}
             value={description}
             setValue={setDescription}
-            id="blocked-dates-descriptions"
+            id="descriptions"
             placeholder="Enter description"
           />
-          <TextInput
+          {/* <TextInput
             inputType="text"
             isRequired={false}
             value={hexCode}

@@ -6,18 +6,25 @@ import { apartmentById } from "../../../types/apiData/apartment";
 import useGetLocationGroupings from "../../../services-hooks/apartment/useGetLocationGroupings";
 import useGetRequestCategories from "../../../services-hooks/useGetRequestCategories";
 
-export default function OwnersReportFilterOptions() {
-  const [building, setBuilding] = useState("");
-  const [buildingId, setBuildingId] = useState("");
-  const [apartment, setApartment] = useState<apartmentById>({} as any);
-  const [category, setCategory] = useState("");
+export default function OwnersReportFilterOptions({
+  buildingId,
+  setBuildingId,
+  apartment,
+  setApartment,
+  category,
+  setCategory,
+  setFilterDates,
+}: {
+  buildingId: string;
+  setBuildingId: (id: string) => void;
+  apartment: apartmentById;
+  setApartment: (apt: apartmentById) => void;
+  category: string;
+  setCategory: (cat: string) => void;
+  setFilterDates: (load: { start_date: string; end_date: string }) => void;
+}) {
   const { data: locationGroupsDataset } = useGetLocationGroupings({ page: 1 });
   const { data: requestCategoryDataset } = useGetRequestCategories({ page: 1 });
-
-  const [filterDates, setFilterDates] = useState<{
-    start_date: string;
-    end_date: string;
-  }>();
 
   const handleSalesFiltering = useCallback(
     (start_date: string, end_date: string) => {

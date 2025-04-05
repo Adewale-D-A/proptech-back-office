@@ -4,7 +4,6 @@ import { useAppDispatch } from "../../../../stores/hooks";
 import { updatePageProperties } from "../../../../stores/appFunctionality/pageProperties";
 import OwnersReportTabSwitch from "../tab-switch";
 import DashboardCard from "../../../../components/cards/dashboard-cards";
-import OwnersReportFilterOptions from "../filter-options";
 import OwnersReportSummaryTableList from "../../../../components/tables/reports/owners-report-summary";
 
 const breadCrumb = [
@@ -31,6 +30,7 @@ export default function OwnersReportSummary() {
       })
     );
   }, []);
+
   return (
     <div className="w-full flex flex-col gap-10">
       <OwnersReportTabSwitch state="summary" />
@@ -72,7 +72,6 @@ export default function OwnersReportSummary() {
           />
         ))}
       </div>
-      <OwnersReportFilterOptions />
       <OwnersReportSummaryTableList />
     </div>
   );

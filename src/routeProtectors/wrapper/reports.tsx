@@ -50,7 +50,7 @@ const tabList = [
     url: "/reports/owners-report/summary",
   },
   {
-    id: 8,
+    id: 9,
     icon: <BillIcon />,
     label: "Expense Category",
     url: "/reports/expense-category",

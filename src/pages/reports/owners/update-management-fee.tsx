@@ -22,8 +22,10 @@ export default function UpdateManagementFee({
       e.preventDefault();
       setLoading(true);
       try {
-        //   const response = await axios.put(`/admin/requisition-request/${id}`,payload)
-        //   const data = response?.data;
+        const response = await axios.post(`/admin/tax`, {
+          rate: value,
+        });
+        // const data = response?.data;
         dispatch(
           openSnackbar({
             message: "Mangement fee successfully updated",

@@ -1,3 +1,7 @@
+##### 05.04.2025
+
+> Owners reports endpoint integrations
+
 ##### 26.03.2025
 
 > Expense categories CRUD operation development

@@ -90,11 +90,12 @@ export interface ownersReport {
   building: locationGrouping;
   shortlet_id: number;
   shortlet: apartment;
-  expense_id: number;
-  expense: requestCategories;
+  expense_category_id: number;
+  expense_category: requestCategories;
   amount: number;
+  currency: string;
   date: string;
-  additional_note: string;
+  note: string;
   monthly_amount: monthlies;
 }
 export interface ownerReportSummaries {
@@ -102,4 +103,29 @@ export interface ownerReportSummaries {
   monthly_revenue: monthlies;
   monthly_management_fee: monthlies;
   monthly_profit: monthlies;
+}
+
+export interface ownerReportSpreadsheet {
+  period: {
+    start_date: string;
+    end_date: string;
+  };
+  management_fee_percentage: number;
+  monthly_breakdown: {
+    month: string;
+    revenue: number;
+    management_fee: number;
+    expenses: {
+      category: string;
+      amount: number;
+    }[];
+    total_expenses: number;
+    net_income: number;
+  }[];
+  totals: {
+    total_revenue: number;
+    total_management_fee: number;
+    total_expenses: number;
+    total_net_income: number;
+  };
 }
