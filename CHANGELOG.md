@@ -1,3 +1,7 @@
+##### 08.04.2025
+
+> Feature Update: Owners report logic integrations completions
+
 ##### 05.04.2025
 
 > Owners reports endpoint integrations

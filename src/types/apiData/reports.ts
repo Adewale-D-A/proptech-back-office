@@ -105,7 +105,7 @@ export interface ownerReportSummaries {
   monthly_profit: monthlies;
 }
 
-export interface ownerReportSpreadsheet {
+export interface ownerReportSpreadsheetResponse {
   period: {
     start_date: string;
     end_date: string;
@@ -128,4 +128,20 @@ export interface ownerReportSpreadsheet {
     total_expenses: number;
     total_net_income: number;
   };
+}
+
+export interface ownerReportSpreadsheet {
+  data: {
+    expense_name: string;
+    monthly_total_expenses: {
+      month: number;
+      total: number;
+    }[];
+  }[];
+  monthlySummaries: {
+    revenue: number;
+    management_fee: number;
+    total_expenses: number;
+    net_income: number;
+  }[];
 }

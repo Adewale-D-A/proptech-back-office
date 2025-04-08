@@ -9,7 +9,7 @@ import { useAppDispatch } from "../../stores/hooks";
 import { removeExpenseategory } from "../../stores/apiData/expense-categories";
 import PlusIcon from "../../assets/icons/plus";
 import LoadingButton from "../button";
-import useGetExpenseCategories from "../../services-hooks/useGetRequestCategories";
+import useGetExpenseCategories from "../../services-hooks/useGetExpenseCategories";
 import AddEditExpensesCategories from "../../pages/reports/owners/expense-categories/add-edit-expense-category";
 
 export default function ExpenseCategoriesistsTable() {

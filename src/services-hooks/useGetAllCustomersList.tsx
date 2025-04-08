@@ -15,12 +15,16 @@ export default function useGetAllCustomersLists({
   end_date,
   sort = "desc",
   search = "",
+  limit = 20,
+  type,
 }: {
   page?: number;
   start_date?: string;
   end_date?: string;
   sort?: "desc" | "asc" | string;
   search?: string;
+  limit?: number;
+  type?: "user" | "owner";
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -45,6 +49,8 @@ export default function useGetAllCustomersLists({
           end_date: end_date,
           sort: sort,
           search: search,
+          limit,
+          type: type,
         },
       });
       //check store if this requested data has been saved previously and retirve it
@@ -85,11 +91,11 @@ export default function useGetAllCustomersLists({
     } finally {
       setIsLoading(false);
     }
-  }, [page, start_date, end_date, sort, search]);
+  }, [page, start_date, end_date, sort, search, type]);
 
   useEffect(() => {
     getAllCustomerstList();
-  }, [page, start_date, end_date, sort, search]);
+  }, [page, start_date, end_date, sort, search, type]);
 
   return {
     data,

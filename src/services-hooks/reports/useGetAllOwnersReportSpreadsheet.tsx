@@ -3,6 +3,8 @@ import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
 import useAxios from "../../useHooks/useAxios";
 import { pagination } from "../../types/pagination";
 import { ownerReportSpreadsheet } from "../../types/apiData/reports";
+import reformOwnerSpreadsheet from "../../utils/reform-owners-spreadsheet";
+import getMonthStartEndDates from "../../utils/start-end-dates-generator";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetAllOwnersReportSpreadsheet({
@@ -13,7 +15,7 @@ export default function useGetAllOwnersReportSpreadsheet({
   search = "",
   building_id,
   apartment_id,
-  category_id,
+  expense_category_id,
 }: {
   page?: number;
   start_date?: string;
@@ -22,7 +24,7 @@ export default function useGetAllOwnersReportSpreadsheet({
   search?: string;
   building_id?: string;
   apartment_id?: string;
-  category_id?: string;
+  expense_category_id?: string;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [isLoading, setIsLoading] = useState(false);
@@ -39,18 +41,29 @@ export default function useGetAllOwnersReportSpreadsheet({
       const { queryString, remakeRequest } = ApiQueryParamsExtractor({
         dataset: {
           page: page,
-          start_date: start_date,
-          end_date: end_date,
+          start_date: start_date
+            ? getMonthStartEndDates(
+                1,
+                Number(start_date?.split("-")?.[0] || undefined)
+              )?.start
+            : "",
+          end_date: end_date
+            ? getMonthStartEndDates(
+                12,
+                Number(start_date?.split("-")?.[0] || undefined)
+              )?.end
+            : "",
           building_id,
           apartment_id,
-          category_id,
+          expense_category_id,
         },
       });
       const response = await axios.get(
         `/admin/owner-report/spreadsheet/?${queryString}`
       );
-      const result = response?.data?.data;
-      console.log(result);
+      const data = response?.data?.data;
+      const result = reformOwnerSpreadsheet(data);
+      setData(result || []);
     } catch (error) {
       setIsFailed(true);
     } finally {
@@ -64,11 +77,13 @@ export default function useGetAllOwnersReportSpreadsheet({
     search,
     building_id,
     apartment_id,
-    category_id,
+    expense_category_id,
   ]);
 
   useEffect(() => {
-    getAllOwnersReportSpreadsheetList();
+    if (apartment_id) {
+      getAllOwnersReportSpreadsheetList();
+    }
   }, [
     page,
     start_date,
@@ -77,7 +92,7 @@ export default function useGetAllOwnersReportSpreadsheet({
     search,
     building_id,
     apartment_id,
-    category_id,
+    expense_category_id,
   ]);
 
   return {

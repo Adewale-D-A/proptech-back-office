@@ -13,6 +13,7 @@ import MultipleSelect from "../inputs/select/multipleSelect";
 import useGetHouseRules from "../../services-hooks/useGetAllRules";
 import Select from "../inputs/select";
 import { requestPayload } from "../../types/apiData/apartment/request-payload";
+import purgeEmptyPayload from "../../utils/remove-empty-payload";
 
 export default function AddEditApartmentPolicies({
   id,
@@ -27,14 +28,7 @@ export default function AddEditApartmentPolicies({
   const storeAptDataset = useAppSelector(
     (state) => state.addEditApartmentInfo.value.data
   );
-  const {
-    data: houseRules,
-    isLoading,
-    isFailed,
-    setIsFailed,
-    retryFunction,
-    pagination,
-  } = useGetHouseRules({ page: 1, limit: 20 });
+  const { data: houseRules } = useGetHouseRules({ page: 1, limit: 20 });
 
   const [rules, setRules] = useState<string[]>([]);
   const [cancellationPolicy, setCancellationPolicy] = useState("");
@@ -56,6 +50,7 @@ export default function AddEditApartmentPolicies({
       e.preventDefault();
       const { apartmentDetails, apartmentFeatures } = storeAptDataset;
       const {
+        building_id,
         name,
         roomOption,
         images,
@@ -99,12 +94,15 @@ export default function AddEditApartmentPolicies({
         images: images,
         extra_option_items: extraOptions,
         location_group, //ID
+        building_id,
         city,
         state,
         country,
         longitude,
         latitude,
       };
+
+      const purgePayloadResult = purgeEmptyPayload({ payload: uploadPayload });
       dispatch(
         updateApartmentPolicies({
           rules,
@@ -114,7 +112,7 @@ export default function AddEditApartmentPolicies({
         })
       );
       try {
-        handleSubmit(uploadPayload);
+        handleSubmit(purgePayloadResult);
       } catch (error) {}
     },
     [rules, cancellationPolicy, maxGuest, cautionFee, storeAptDataset, id]

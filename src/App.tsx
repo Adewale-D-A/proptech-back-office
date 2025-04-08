@@ -136,6 +136,7 @@ import EmployeesTabWrapper from "./routeProtectors/wrapper/admin-users";
 import OwnersReportSummary from "./pages/reports/owners/summary";
 import OwnersReportSpreadsheet from "./pages/reports/owners/spreadsheet";
 import ExpenseCategoriesListView from "./pages/reports/owners/expense-categories";
+import BuildingsListView from "./pages/apartments/buildings";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -186,6 +187,10 @@ function App() {
               <Route
                 path="/apartments/blocked-dates-reasons"
                 element={<BlockedDatesReasonListView />}
+              />
+              <Route
+                path="/apartments/buildings"
+                element={<BuildingsListView />}
               />
             </Route>
 

@@ -9,7 +9,7 @@ import {
 import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetRequestCategories({
+export default function useGetExpenseCategories({
   page = 1,
   limit = 20,
   sort = "desc",
@@ -26,16 +26,16 @@ export default function useGetRequestCategories({
     status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.expensesCategories.value);
+  } = useAppSelector((state) => state.requesCategories.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const [pagination, setPagination] = useState<pagination>({} as any);
 
-  const getRequestCategories = useCallback(async () => {
+  const getExpenseCategories = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
-
       const { queryString, remakeRequest } = ApiQueryParamsExtractor({
         dataset: {
           page: search ? 1 : page,
@@ -56,9 +56,9 @@ export default function useGetRequestCategories({
         const response = await axios.get(
           `/admin/expense-category?${queryString}`
         );
-        const { maintenance_category } = response?.data?.data;
+        const { expense_category } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
-          maintenance_category;
+          expense_category;
         const paginationDataset = {
           current_page,
           last_page,
@@ -79,14 +79,15 @@ export default function useGetRequestCategories({
         }
         setPagination(paginationDataset);
       }
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [page, limit, sort, search]);
 
   useEffect(() => {
-    getRequestCategories();
+    getExpenseCategories();
   }, [page, limit, sort, search]);
 
   return {
@@ -94,7 +95,7 @@ export default function useGetRequestCategories({
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getRequestCategories,
+    retryFunction: getExpenseCategories,
     pagination,
   };
 }

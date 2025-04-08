@@ -16,7 +16,7 @@ export default function useGetAllOwnersReport({
   sort = "desc",
   search = "",
   building_id,
-  apartment_id,
+  shortlet_id,
   category_id,
 }: {
   page?: number;
@@ -25,7 +25,7 @@ export default function useGetAllOwnersReport({
   sort?: "desc" | "asc" | string;
   search?: string;
   building_id?: string;
-  apartment_id?: string;
+  shortlet_id?: string;
   category_id?: string;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -52,7 +52,7 @@ export default function useGetAllOwnersReport({
           start_date: start_date,
           end_date: end_date,
           building_id,
-          apartment_id,
+          shortlet_id,
           category_id,
         },
       });
@@ -63,7 +63,7 @@ export default function useGetAllOwnersReport({
         setPagination(foundPage?.pagination_data);
         dispatch(updateOwnersReportReport({ data: foundPage?.data }));
       } else {
-        const response = await axios.get(`/admin/owner-report/?${queryString}`);
+        const response = await axios.get(`/admin/owner-report?${queryString}`);
         const { owner_reports } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
           owner_reports;
@@ -76,131 +76,6 @@ export default function useGetAllOwnersReport({
         //   from,
         //   to,
         //   length: data?.length,
-        // };
-        // const dataset = [
-        //   {
-        //     id: 1,
-        //     building_id: 1,
-        //     building: {
-        //       id: 1,
-        //       name: "Lekki",
-        //       is_deleted: 0,
-        //       deleted_at: "",
-        //       deleted_by: "",
-        //       created_at: "",
-        //       updated_at: "",
-        //     },
-        //     shortlet_id: 1,
-        //     shortlet: {
-        //       id: 1,
-        //       name: "Top Apartment",
-        //       slug: "",
-        //       description: "",
-        //       location: "",
-        //       currency: "",
-        //       price: 500,
-        //       caution_fee: 200,
-        //       tax_fee: 10,
-        //       no_of_bedrooms: 2,
-        //       no_of_bathrooms: 2,
-        //       min_guests: "",
-        //       max_guests: 2,
-        //       point_of_interest: "",
-        //       cancellation_policy: "",
-        //       availability_status: "",
-        //       created_at: "",
-        //       updated_at: "",
-        //       room_option_id: 2,
-        //       bookings_count: 2,
-        //       last_booking_date: "",
-        //       no_of_bookings: 2,
-        //     },
-        //     expense_id: 1,
-        //     expense: {
-        //       id: 1,
-        //       name: "Lekki",
-        //       slug: "",
-        //       deleted_at: "",
-        //       deleted_by: "",
-        //       created_at: "",
-        //       updated_at: "",
-        //     },
-        //     amount: 200,
-        //     date: "",
-        //     additional_note: "",
-        //     monthly_amount: {
-        //       jan: 1,
-        //       feb: 1,
-        //       mar: 1,
-        //       apr: 1,
-        //       may: 1,
-        //       jun: 1,
-        //       jul: 1,
-        //       aug: 1,
-        //       sep: 1,
-        //       oct: 1,
-        //       nov: 1,
-        //       dec: 1,
-        //     },
-        //   },
-        // ];
-        // const summaries = {
-        //   monthly_totals: {
-        //     jan: 1,
-        //     feb: 1,
-        //     mar: 1,
-        //     apr: 1,
-        //     may: 1,
-        //     jun: 1,
-        //     jul: 1,
-        //     aug: 1,
-        //     sep: 1,
-        //     oct: 1,
-        //     nov: 1,
-        //     dec: 1,
-        //   },
-        //   monthly_revenue: {
-        //     jan: 1,
-        //     feb: 1,
-        //     mar: 1,
-        //     apr: 1,
-        //     may: 1,
-        //     jun: 1,
-        //     jul: 1,
-        //     aug: 1,
-        //     sep: 1,
-        //     oct: 1,
-        //     nov: 1,
-        //     dec: 1,
-        //   },
-        //   monthly_management_fee: {
-        //     jan: 1,
-        //     feb: 1,
-        //     mar: 1,
-        //     apr: 1,
-        //     may: 1,
-        //     jun: 1,
-        //     jul: 1,
-        //     aug: 1,
-        //     sep: 1,
-        //     oct: 1,
-        //     nov: 1,
-        //     dec: 1,
-        //   },
-        //   monthly_profit: {
-        //     jan: 1,
-        //     feb: 1,
-        //     mar: 1,
-        //     apr: 1,
-        //     may: 1,
-        //     jun: 1,
-        //     jul: 1,
-        //     aug: 1,
-        //     sep: 1,
-        //     oct: 1,
-        //     nov: 1,
-        //     dec: 1,
-        //   },
         // };
         // dispatch(
         //   updateOwnersReportReport({
@@ -229,12 +104,14 @@ export default function useGetAllOwnersReport({
     sort,
     search,
     building_id,
-    apartment_id,
+    shortlet_id,
     category_id,
   ]);
 
   useEffect(() => {
-    getAllOwnersReportList();
+    if (shortlet_id) {
+      getAllOwnersReportList();
+    }
   }, [
     page,
     start_date,
@@ -242,7 +119,7 @@ export default function useGetAllOwnersReport({
     sort,
     search,
     building_id,
-    apartment_id,
+    shortlet_id,
     category_id,
   ]);
 

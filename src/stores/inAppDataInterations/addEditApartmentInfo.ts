@@ -8,6 +8,7 @@ export const addEditApartmentInfo = createSlice({
         id: "",
         removeImages: [] as number[],
         apartmentDetails: {
+          building_id: "",
           name: "",
           roomOption: "",
           images: [],
@@ -61,6 +62,7 @@ export const addEditApartmentInfo = createSlice({
         id: "",
         removeImages: [],
         apartmentDetails: {
+          building_id: "",
           name: "",
           roomOption: "",
           images: [],

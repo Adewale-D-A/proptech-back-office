@@ -14,7 +14,6 @@ import ModalTemplate from "../../modal";
 import LoadingButton from "../../button";
 import PlusIcon from "../../../assets/icons/plus";
 import MonthsCarousel from "../../../pages/reports/owners/months-carousel";
-import { apartmentById } from "../../../types/apiData/apartment";
 import OwnersReportFilterOptions from "../../../pages/reports/owners/filter-options";
 
 export default function OwnersReportSummaryTableList() {
@@ -26,8 +25,7 @@ export default function OwnersReportSummaryTableList() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [buildingId, setBuildingId] = useState("");
-  const [apartment, setApartment] = useState<apartmentById>({} as any);
+  const [apartmentId, setApartmentId] = useState("");
   const [category, setCategory] = useState("");
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
@@ -37,8 +35,9 @@ export default function OwnersReportSummaryTableList() {
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetAllOwnersReport({
       page: currentPage,
-      start_date: "",
-      end_date: "",
+      start_date: filterDates?.start_date,
+      end_date: filterDates?.end_date,
+      shortlet_id: String(apartmentId || ""),
     });
 
   const openForNewRequest = useCallback(() => {
@@ -71,10 +70,8 @@ export default function OwnersReportSummaryTableList() {
     <>
       <div className="w-full flex flex-col gap-10">
         <OwnersReportFilterOptions
-          buildingId={buildingId}
-          setBuildingId={setBuildingId}
-          apartment={apartment}
-          setApartment={setApartment}
+          apartmentId={apartmentId}
+          setApartmentId={setApartmentId}
           category={category}
           setCategory={setCategory}
           setFilterDates={setFilterDates}
@@ -84,7 +81,7 @@ export default function OwnersReportSummaryTableList() {
           <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
             <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
               <div className=" flex items-center gap-3">
-                <MonthsCarousel />
+                <MonthsCarousel setFilterDate={setFilterDates} />
               </div>
               <div className=" flex items-center gap-2">
                 <ExportSelect id="report" />

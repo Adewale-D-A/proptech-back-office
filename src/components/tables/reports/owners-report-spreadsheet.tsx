@@ -1,10 +1,6 @@
 import { useCallback, useState } from "react";
-import useGetAllOwnersReport from "../../../services-hooks/reports/useGetAllOwnersReport";
 import ExportSelect from "../../inputs/select/exportSelect";
-import BinIcon from "../../../assets/icons/bin-icon";
-import PenIcon from "../../../assets/icons/pen";
 import NoResult from "../../noResult";
-import Pagination from "../../pagination";
 import useAxios from "../../../useHooks/useAxios";
 import { useAppDispatch } from "../../../stores/hooks";
 import { removeOwnersReportInList } from "../../../stores/apiData/reports/owners-report";
@@ -17,8 +13,13 @@ import monthsAndDays from "../../../assets/days-months.json";
 import TableSearch from "../../inputs/search/table-search";
 import UpdateManagementFee from "../../../pages/reports/owners/update-management-fee";
 import PencilSquareIcon from "../../../assets/icons/pencil-square";
-import { apartmentById } from "../../../types/apiData/apartment";
 import OwnersReportFilterOptions from "../../../pages/reports/owners/filter-options";
+import useGetAllOwnersReportSpreadsheet from "../../../services-hooks/reports/useGetAllOwnersReportSpreadsheet";
+import currencyFormat from "../../../utils/currency-formatter";
+// import useGetAllOwnersReport from "../../../services-hooks/reports/useGetAllOwnersReport";
+// import BinIcon from "../../../assets/icons/bin-icon";
+// import PenIcon from "../../../assets/icons/pen";
+// import Pagination from "../../pagination";
 
 export default function OwnersReportSpreadsheetTableList() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -34,8 +35,7 @@ export default function OwnersReportSpreadsheetTableList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
 
-  const [buildingId, setBuildingId] = useState("");
-  const [apartment, setApartment] = useState<apartmentById>({} as any);
+  const [apartmentId, setApartmentId] = useState("");
   const [category, setCategory] = useState("");
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
@@ -43,11 +43,13 @@ export default function OwnersReportSpreadsheetTableList() {
   }>();
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllOwnersReport({
+    useGetAllOwnersReportSpreadsheet({
       page: currentPage,
-      start_date: "",
-      end_date: "",
+      start_date: filterDates?.start_date,
+      end_date: filterDates?.end_date,
       search,
+      apartment_id: apartmentId,
+      expense_category_id: category,
     });
 
   const openForNewRequest = useCallback(() => {
@@ -55,15 +57,15 @@ export default function OwnersReportSpreadsheetTableList() {
     setOpenModal(true);
   }, []);
 
-  const openForEdit = useCallback((id: number) => {
-    setSelectedId(String(id || ""));
-    setOpenModal(true);
-  }, []);
+  // const openForEdit = useCallback((id: number) => {
+  //   setSelectedId(String(id || ""));
+  //   setOpenModal(true);
+  // }, []);
 
-  const handleOpenDelete = useCallback((id: number) => {
-    setSelectedId(String(id) || "");
-    setOpenDelete(true);
-  }, []);
+  // const handleOpenDelete = useCallback((id: number) => {
+  //   setSelectedId(String(id) || "");
+  //   setOpenDelete(true);
+  // }, []);
 
   const handleDelete = useCallback(async () => {
     setIsDeleting(true);
@@ -80,10 +82,8 @@ export default function OwnersReportSpreadsheetTableList() {
     <>
       <div className="w-full flex flex-col gap-10">
         <OwnersReportFilterOptions
-          buildingId={buildingId}
-          setBuildingId={setBuildingId}
-          apartment={apartment}
-          setApartment={setApartment}
+          apartmentId={apartmentId}
+          setApartmentId={setApartmentId}
           category={category}
           setCategory={setCategory}
           setFilterDates={setFilterDates}
@@ -110,55 +110,20 @@ export default function OwnersReportSpreadsheetTableList() {
                 <table className=" w-full">
                   <thead>
                     <tr>
-                      {["Expense", ...monthsAndDays.months, "Action"].map(
-                        (head) => (
-                          <th key={head}>{head}</th>
-                        )
-                      )}
+                      {["Expense", ...monthsAndDays.months].map((head) => (
+                        <th key={head}>{head}</th>
+                      ))}
                     </tr>
                   </thead>
                   <tbody>
                     {data?.data?.map((item) => {
                       return (
-                        <tr key={item?.id} className=" border-b">
-                          <td>{item?.expense_category?.name}</td>
-                          <td>
-                            &#8358;{String(item?.monthly_amount?.jan || 0.0)}
-                          </td>
-                          <td>
-                            &#8358;{String(item?.monthly_amount?.feb || 0.0)}
-                          </td>
-                          <td>
-                            &#8358;{String(item?.monthly_amount?.mar || 0.0)}
-                          </td>
-                          <td>
-                            &#8358;{String(item?.monthly_amount?.apr || 0.0)}
-                          </td>
-                          <td>
-                            &#8358;{String(item?.monthly_amount?.may || 0.0)}
-                          </td>
-                          <td>
-                            &#8358;{String(item?.monthly_amount?.jun || 0.0)}
-                          </td>
-                          <td>
-                            &#8358;{String(item?.monthly_amount?.jul || 0.0)}
-                          </td>
-                          <td>
-                            &#8358;{String(item?.monthly_amount?.aug || 0.0)}
-                          </td>
-                          <td>
-                            &#8358;{String(item?.monthly_amount?.sep || 0.0)}
-                          </td>
-                          <td>
-                            &#8358;{String(item?.monthly_amount?.oct || 0.0)}
-                          </td>
-                          <td>
-                            &#8358;{String(item?.monthly_amount?.nov || 0.0)}
-                          </td>
-                          <td>
-                            &#8358;{String(item?.monthly_amount?.dec || 0.0)}
-                          </td>
-                          <td>
+                        <tr key={item?.expense_name} className=" border-b">
+                          <td>{item?.expense_name}</td>
+                          {item?.monthly_total_expenses.map((item) => (
+                            <td>{currencyFormat(item?.total || 0.0)}</td>
+                          ))}
+                          {/* <td>
                             <div className=" flex items-center gap-4">
                               <button
                                 title="edit"
@@ -173,115 +138,25 @@ export default function OwnersReportSpreadsheetTableList() {
                                 <BinIcon className=" size-6 text-red-500" />
                               </button>
                             </div>
-                          </td>
+                          </td> */}
                         </tr>
                       );
                     })}
                     {/* totals  */}
                     <tr className=" border-b">
                       <td className=" bg-[#E4E7EC]">Total</td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_totals?.jan || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_totals?.feb || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_totals?.mar || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_totals?.apr || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_totals?.may || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_totals?.jun || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_totals?.jul || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_totals?.aug || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_totals?.sep || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_totals?.oct || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_totals?.nov || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_totals?.dec || 0.0)}
-                      </td>
-                      <td></td>
+                      {data?.monthlySummaries.map((item) => (
+                        <td>{currencyFormat(item?.total_expenses || 0.0)}</td>
+                      ))}
+                      {/* <td></td> */}
                     </tr>
                     {/* revenue */}
                     <tr className=" border-b">
                       <td className=" bg-[#FEF0C7]">Revenue</td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_revenue?.jan || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_revenue?.feb || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_revenue?.mar || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_revenue?.apr || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_revenue?.may || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_revenue?.jun || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_revenue?.jul || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_revenue?.aug || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_revenue?.sep || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_revenue?.oct || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_revenue?.nov || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_revenue?.dec || 0.0)}
-                      </td>
-                      <td></td>
+                      {data?.monthlySummaries.map((item) => (
+                        <td>{currencyFormat(item?.revenue || 0.0)}</td>
+                      ))}
+                      {/* <td></td> */}
                     </tr>
                     {/* management fee */}
                     <tr className=" border-b">
@@ -296,132 +171,18 @@ export default function OwnersReportSpreadsheetTableList() {
                           </button>
                         </div>
                       </td>
-                      <td>
-                        &#8358;
-                        {String(
-                          data?.summary?.monthly_management_fee?.jan || 0.0
-                        )}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(
-                          data?.summary?.monthly_management_fee?.feb || 0.0
-                        )}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(
-                          data?.summary?.monthly_management_fee?.mar || 0.0
-                        )}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(
-                          data?.summary?.monthly_management_fee?.apr || 0.0
-                        )}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(
-                          data?.summary?.monthly_management_fee?.may || 0.0
-                        )}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(
-                          data?.summary?.monthly_management_fee?.jun || 0.0
-                        )}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(
-                          data?.summary?.monthly_management_fee?.jul || 0.0
-                        )}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(
-                          data?.summary?.monthly_management_fee?.aug || 0.0
-                        )}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(
-                          data?.summary?.monthly_management_fee?.sep || 0.0
-                        )}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(
-                          data?.summary?.monthly_management_fee?.oct || 0.0
-                        )}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(
-                          data?.summary?.monthly_management_fee?.nov || 0.0
-                        )}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(
-                          data?.summary?.monthly_management_fee?.dec || 0.0
-                        )}
-                      </td>
-                      <td></td>
+                      {data?.monthlySummaries.map((item) => (
+                        <td>{currencyFormat(item?.management_fee || 0.0)} </td>
+                      ))}
+                      {/* <td></td> */}
                     </tr>
                     {/* profit */}
                     <tr className=" border-b">
                       <td className="bg-[#D1FADF]">Profit</td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_profit?.jan || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_profit?.feb || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_profit?.mar || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_profit?.apr || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_profit?.may || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_profit?.jun || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_profit?.jul || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_profit?.aug || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_profit?.sep || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_profit?.oct || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_profit?.nov || 0.0)}
-                      </td>
-                      <td>
-                        &#8358;
-                        {String(data?.summary?.monthly_profit?.dec || 0.0)}
-                      </td>
-                      <td></td>
+                      {data?.monthlySummaries.map((item) => (
+                        <td>{currencyFormat(item?.net_income || 0.0)}</td>
+                      ))}
+                      {/* <td></td> */}
                     </tr>
                   </tbody>
                 </table>
@@ -429,12 +190,12 @@ export default function OwnersReportSpreadsheetTableList() {
             ) : (
               <NoResult />
             )}
-            <Pagination
+            {/* <Pagination
               pagination={pagination}
               setCurrentPage={setCurrentPage}
               isLoading={isLoading}
               label="owners report"
-            />
+            /> */}
           </div>
         </div>
       </div>
