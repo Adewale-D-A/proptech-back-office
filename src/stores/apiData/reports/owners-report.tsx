@@ -12,18 +12,18 @@ export const ownersReportsData = createSlice({
       status: false,
       pagination: [] as {
         pagination_data: pagination;
-        data: { data: ownersReport[]; summary: ownerReportSummaries };
+        data: ownersReport[];
       }[],
-      data: {} as { data: ownersReport[]; summary: ownerReportSummaries },
+      data: [] as ownersReport[],
     },
   },
   reducers: {
-    updateOwnersReportReport: (state, action) => {
+    updateOwnersReport: (state, action) => {
       state.value.status = true;
       state.value.data = action?.payload?.data;
     },
-    addOwnersReportReportToList: (state, action) => {
-      state.value.data.data = [...state.value.data?.data, action?.payload];
+    addOwnersReportToList: (state, action) => {
+      state.value.data = [...state.value.data, action?.payload];
       //include in pagination data
       const pagination_data = [...state.value.pagination];
       const lastIndex = pagination_data?.length - 1;
@@ -31,10 +31,7 @@ export const ownersReportsData = createSlice({
         if (lastIndex === index) {
           return {
             pagination_data: item?.pagination_data,
-            data: {
-              data: [...item.data.data, action?.payload],
-              summary: item?.data?.summary,
-            },
+            data: [...item.data, action?.payload],
           };
         } else {
           return item;
@@ -42,6 +39,7 @@ export const ownersReportsData = createSlice({
       });
       state.value.pagination = addedItem;
     },
+
     addToPaginationHistory: (state, action) => {
       const found = state.value?.pagination?.find(
         (item) =>
@@ -60,41 +58,41 @@ export const ownersReportsData = createSlice({
     },
     removeOwnersReportInList: (state, action) => {
       const { id } = action?.payload;
-      const currentArray = [...state.value.data.data];
+      const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
         (v: { id: number }) => String(v.id) === String(id)
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1);
-        state.value.data.data = currentArray;
+        state.value.data = currentArray;
       }
       //remove from paginated data
       const pagination_data = [...state.value.pagination];
       const removed = pagination_data.map((item, index) => {
-        const sencondFilter = item.data.data.filter((data, i) => {
+        const sencondFilter = item.data.filter((data, i) => {
           return !(String(data.id) === String(id));
         });
         return {
           pagination_data: { ...item.pagination_data },
-          data: { data: sencondFilter, summary: item.data.summary },
+          data: sencondFilter,
         };
       });
       state.value.pagination = removed;
     },
     replaceOwnersReportInList: (state, action) => {
       const { id } = action?.payload;
-      const currentArray = state.value.data.data;
+      const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
         (v: { id: number }) => String(v.id) === String(id)
       );
       if (currentIndex >= 0) {
         currentArray.splice(currentIndex, 1, action?.payload);
-        state.value.data.data = currentArray;
+        state.value.data = currentArray;
       }
       //REPLACE pagination data
       const pagination_data = [...state.value.pagination];
       const replacedItem = pagination_data.map((item, index) => {
-        const sencondFilter = item.data.data.map((data, i) => {
+        const sencondFilter = item.data.map((data, i) => {
           if (String(data.id) === String(id)) {
             return { ...action.payload };
           } else {
@@ -103,23 +101,23 @@ export const ownersReportsData = createSlice({
         });
         return {
           pagination_data: { ...item.pagination_data },
-          data: { data: sencondFilter, summary: item.data.summary },
+          data: sencondFilter,
         };
       });
       state.value.pagination = replacedItem;
     },
-    clearOwnersReportReport: (state) => {
+    clearOwnersReport: (state) => {
       state.value.status = false;
-      state.value.data = { data: [], summary: {} as any };
+      state.value.data = [];
     },
   },
 });
 
 export const {
-  updateOwnersReportReport,
-  addOwnersReportReportToList,
+  updateOwnersReport,
+  addOwnersReportToList,
   addToPaginationHistory,
-  clearOwnersReportReport,
+  clearOwnersReport,
   removeOwnersReportInList,
   replaceOwnersReportInList,
 } = ownersReportsData.actions;

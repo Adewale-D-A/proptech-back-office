@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { pagination } from "../../types/pagination";
 import {
   addToPaginationHistory,
-  updateOwnersReportReport,
+  updateOwnersReport,
 } from "../../stores/apiData/reports/owners-report";
 
 //axios instace interceptor for access token integration and refresh tokens
@@ -56,42 +56,25 @@ export default function useGetAllOwnersReport({
           category_id,
         },
       });
-      const foundPage = store_pagination.find(
-        (item) => item?.pagination_data?.current_page === page
+      const response = await axios.get(`/admin/owner-report?${queryString}`);
+      const { owner_reports } = response?.data?.data;
+      const { data, current_page, last_page, per_page, total, from, to } =
+        owner_reports;
+      const paginationDataset = {
+        current_page,
+        last_page,
+        per_page,
+        total,
+        from,
+        to,
+        length: data?.length,
+      };
+      dispatch(
+        updateOwnersReport({
+          data,
+        })
       );
-      if (foundPage && !remakeRequest) {
-        setPagination(foundPage?.pagination_data);
-        dispatch(updateOwnersReportReport({ data: foundPage?.data }));
-      } else {
-        const response = await axios.get(`/admin/owner-report?${queryString}`);
-        const { owner_reports } = response?.data?.data;
-        const { data, current_page, last_page, per_page, total, from, to } =
-          owner_reports;
-        console.log({ data });
-        // const paginationDataset = {
-        //   current_page,
-        //   last_page,
-        //   per_page,
-        //   total,
-        //   from,
-        //   to,
-        //   length: data?.length,
-        // };
-        // dispatch(
-        //   updateOwnersReportReport({
-        //     data: { data: dataset, summary: summaries },
-        //   })
-        // );
-        // if (!remakeRequest) {
-        //   dispatch(
-        //     addToPaginationHistory({
-        //       pagination_data: paginationDataset,
-        //       data: data,
-        //     })
-        //   );
-        // }
-        // setPagination(paginationDataset);
-      }
+      setPagination(paginationDataset);
     } catch (error) {
       setIsFailed(true);
     } finally {

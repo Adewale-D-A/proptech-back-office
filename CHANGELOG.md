@@ -1,3 +1,7 @@
+##### 09.04.2025
+
+> Fix: Owners reports integration bugs resolution
+
 ##### 08.04.2025
 
 > Feature Update: Owners report logic integrations completions

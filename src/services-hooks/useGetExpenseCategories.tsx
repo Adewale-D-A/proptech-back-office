@@ -26,7 +26,7 @@ export default function useGetExpenseCategories({
     status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.requesCategories.value);
+  } = useAppSelector((state) => state.expensesCategories.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 

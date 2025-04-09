@@ -1,12 +1,14 @@
 import { useCallback } from "react";
 import Select from "../../../components/inputs/select";
 import Filter from "../../../components/filterAndSort/filter";
-import useGetRequestCategories from "../../../services-hooks/useGetRequestCategories";
+import useGetExpenseCategories from "../../../services-hooks/useGetExpenseCategories";
 import ApartmentThroughBuildingSelector from "../../../components/inputs/select/apartment-through-building-selector";
 
 export default function OwnersReportFilterOptions({
   apartmentId,
   setApartmentId,
+  buildingId,
+  setBuildingId,
   category,
   setCategory,
   setFilterDates,
@@ -16,8 +18,10 @@ export default function OwnersReportFilterOptions({
   category: string;
   setCategory: (cat: string) => void;
   setFilterDates: (load: { start_date: string; end_date: string }) => void;
+  buildingId: string;
+  setBuildingId: (val: string) => void;
 }) {
-  const { data: requestCategoryDataset } = useGetRequestCategories({ page: 1 });
+  const { data: expenseCategories } = useGetExpenseCategories({ page: 1 });
 
   const handleSalesFiltering = useCallback(
     (start_date: string, end_date: string) => {
@@ -31,6 +35,8 @@ export default function OwnersReportFilterOptions({
         <ApartmentThroughBuildingSelector
           setApartmentId={setApartmentId}
           apartmentId={apartmentId}
+          buildingId={buildingId}
+          setBuildingId={setBuildingId}
         />
         <Select
           label="Category"
@@ -41,7 +47,7 @@ export default function OwnersReportFilterOptions({
           <option value={``} disabled>
             All
           </option>
-          {requestCategoryDataset?.map((item) => (
+          {expenseCategories?.map((item) => (
             <option key={item?.id} value={`${item?.id}`}>
               {item?.name}
             </option>

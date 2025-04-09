@@ -26,6 +26,7 @@ export default function OwnersReportSummaryTableList() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [apartmentId, setApartmentId] = useState("");
+  const [buildingId, setBuildingId] = useState("");
   const [category, setCategory] = useState("");
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
@@ -38,6 +39,7 @@ export default function OwnersReportSummaryTableList() {
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
       shortlet_id: String(apartmentId || ""),
+      category_id: category,
     });
 
   const openForNewRequest = useCallback(() => {
@@ -75,6 +77,8 @@ export default function OwnersReportSummaryTableList() {
           category={category}
           setCategory={setCategory}
           setFilterDates={setFilterDates}
+          buildingId={buildingId}
+          setBuildingId={setBuildingId}
         />
 
         <div className=" w-full flex flex-col gap-3">
@@ -94,7 +98,7 @@ export default function OwnersReportSummaryTableList() {
                 />
               </div>
             </div>
-            {data && data?.data?.length > 0 ? (
+            {data && data?.length > 0 ? (
               <div className=" w-full overflow-x-auto">
                 <table className=" w-full">
                   <thead>
@@ -105,7 +109,7 @@ export default function OwnersReportSummaryTableList() {
                     </tr>
                   </thead>
                   <tbody className="">
-                    {data?.data?.map((item) => {
+                    {data?.map((item) => {
                       return (
                         <tr key={item?.id} className=" border-b">
                           <td>{item?.expense_category?.name}</td>

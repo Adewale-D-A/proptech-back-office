@@ -3,7 +3,7 @@ import useAxios from "../../../useHooks/useAxios";
 import { useAppDispatch } from "../../../stores/hooks";
 import useGetOwnerReportById from "../../../services-hooks/reports/userGetOwnerReportById";
 import {
-  addOwnersReportReportToList,
+  addOwnersReportToList,
   replaceOwnersReportInList,
 } from "../../../stores/apiData/reports/owners-report";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
@@ -16,7 +16,8 @@ import Select from "../../../components/inputs/select";
 import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
 import TextInput from "../../../components/inputs/textInput";
 import purgeEmptyPayload from "../../../utils/remove-empty-payload";
-import useGetExpenseCategories from "../../../services-hooks/useGetRequestCategories";
+import useGetExpenseCategories from "../../../services-hooks/useGetExpenseCategories";
+import ApartmentThroughBuildingSelector from "../../../components/inputs/select/apartment-through-building-selector";
 
 export default function AddEditOwnersReport({
   id,
@@ -28,17 +29,17 @@ export default function AddEditOwnersReport({
   const axios = useAxios({});
   const dispatch = useAppDispatch();
 
-  const [buildingId, setBuildingId] = useState("");
-  const [apartment, setApartment] = useState<apartmentById>({} as any);
   const [expenseId, setExpenseId] = useState("");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
   const [additionalNotes, setAdditionalNotes] = useState("");
 
+  const [apartmentId, setApartmentId] = useState("");
+  const [buildingId, setBuildingId] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   const { data } = useGetOwnerReportById({ id });
-  const { data: locationGroupsDataset } = useGetLocationGroupings({ page: 1 });
   const { data: expenseCategories } = useGetExpenseCategories({ page: 1 });
 
   //   populate field provided id is available denoting update functionality
@@ -48,6 +49,7 @@ export default function AddEditOwnersReport({
       setDate(toDate || "");
       setBuildingId(String(data?.building_id || ""));
       setAmount(String(data?.amount || ""));
+      setApartmentId(String(data?.shortlet_id || ""));
       setExpenseId(String(data?.expense_category_id || ""));
       setAdditionalNotes(data?.note || "");
     }
@@ -59,7 +61,7 @@ export default function AddEditOwnersReport({
       setLoading(true);
       const payload = {
         building_id: buildingId,
-        shortlet_id: apartment?.id,
+        shortlet_id: apartmentId,
         expense_category_id: expenseId,
         amount: amount,
         date: date,
@@ -83,7 +85,7 @@ export default function AddEditOwnersReport({
         } else {
           const response = await axios.post("/admin/owner-report", newPayload);
           const data = response?.data;
-          dispatch(addOwnersReportReportToList(data));
+          dispatch(addOwnersReportToList(data));
           dispatch(
             openSnackbar({
               message: "Owner report successfully added",
@@ -103,38 +105,20 @@ export default function AddEditOwnersReport({
       additionalNotes,
       buildingId,
       expenseId,
-      apartment,
       amount,
-      locationGroupsDataset,
       expenseCategories,
     ]
   );
 
   return (
     <form onSubmit={handleSubmit} className="w-full grid grid-cols-1 gap-3">
+      <ApartmentThroughBuildingSelector
+        setApartmentId={setApartmentId}
+        apartmentId={apartmentId}
+        buildingId={buildingId}
+        setBuildingId={setBuildingId}
+      />
       <div className="w-full items-end grid grid-cols-1 md:grid-cols-2 gap-3">
-        <Select
-          label="Building"
-          value={buildingId}
-          setValue={setBuildingId}
-          id={"building-select"}
-        >
-          <option value={``} disabled>
-            Select Building
-          </option>
-          {locationGroupsDataset?.map((item) => (
-            <option key={item?.id} value={`${item?.id}`}>
-              {item?.name}
-            </option>
-          ))}
-        </Select>
-        <ApartmentSingleSearch
-          label="Apartment"
-          selected={apartment}
-          setSelected={setApartment}
-          placeholder="Apartment"
-          defaultId={String(data?.shortlet_id)}
-        />
         <Select
           label="Expense"
           value={expenseId}
@@ -152,7 +136,7 @@ export default function AddEditOwnersReport({
         </Select>
         <TextInput
           inputType="number"
-          label="Expense"
+          label="Amount"
           value={amount}
           setValue={setAmount}
           id={"amount"}

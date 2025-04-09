@@ -36,6 +36,7 @@ export default function OwnersReportSpreadsheetTableList() {
   const [search, setSearch] = useState("");
 
   const [apartmentId, setApartmentId] = useState("");
+  const [buildingId, setBuildingId] = useState("");
   const [category, setCategory] = useState("");
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
@@ -48,6 +49,7 @@ export default function OwnersReportSpreadsheetTableList() {
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
       search,
+      building_id: buildingId,
       apartment_id: apartmentId,
       expense_category_id: category,
     });
@@ -87,6 +89,8 @@ export default function OwnersReportSpreadsheetTableList() {
           category={category}
           setCategory={setCategory}
           setFilterDates={setFilterDates}
+          buildingId={buildingId}
+          setBuildingId={setBuildingId}
         />
         <div className=" w-full flex flex-col gap-3">
           <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">

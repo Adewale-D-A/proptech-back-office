@@ -5,12 +5,15 @@ import Select from ".";
 export default function ApartmentThroughBuildingSelector({
   apartmentId,
   setApartmentId,
+  buildingId,
+  setBuildingId,
 }: {
   apartmentId: string;
   setApartmentId: (val: string) => void;
+  buildingId: string;
+  setBuildingId: (val: string) => void;
 }) {
   const { data } = useGetBuildings({ page: 1 });
-  const [buildingId, setBuildingId] = useState("");
   return (
     <div className="w-full flex items-end gap-3 flex-col md:flex-row">
       <Select

@@ -59,7 +59,7 @@ export default function useGetAllOwnersReportSpreadsheet({
         },
       });
       const response = await axios.get(
-        `/admin/owner-report/spreadsheet/?${queryString}`
+        `/admin/owner-report/spreadsheet?${queryString}`
       );
       const data = response?.data?.data;
       const result = reformOwnerSpreadsheet(data);

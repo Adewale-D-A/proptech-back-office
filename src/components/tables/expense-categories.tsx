@@ -11,6 +11,8 @@ import PlusIcon from "../../assets/icons/plus";
 import LoadingButton from "../button";
 import useGetExpenseCategories from "../../services-hooks/useGetExpenseCategories";
 import AddEditExpensesCategories from "../../pages/reports/owners/expense-categories/add-edit-expense-category";
+import PenIcon from "../../assets/icons/pen";
+import BinIcon from "../../assets/icons/bin-icon";
 
 export default function ExpenseCategoriesistsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -37,7 +39,7 @@ export default function ExpenseCategoriesistsTable() {
 
   const openForDelete = useCallback((id: string) => {
     setSelectedId(id);
-    setOpenEditExpenseCategory(true);
+    setOpenDelete(true);
   }, []);
 
   const handleDelete = useCallback(async () => {
@@ -84,24 +86,21 @@ export default function ExpenseCategoriesistsTable() {
                 return (
                   <tr key={item?.id} className=" border-b">
                     <td>{item?.name}</td>
-                    <td className=" group relative">
-                      <span className=" p-2 text-lg">...</span>
-                      <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
+                    <td>
+                      <div className=" flex items-center gap-4">
                         <button
-                          type="button"
+                          title="edit"
                           onClick={() => openForEdit(String(item?.id))}
-                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
-                          Edit
+                          <PenIcon />
                         </button>
                         <button
-                          type="button"
+                          title="delete"
                           onClick={() => openForDelete(String(item?.id))}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
-                          Delete
+                          <BinIcon className=" size-6 text-red-500" />
                         </button>
-                      </span>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -123,7 +122,7 @@ export default function ExpenseCategoriesistsTable() {
         setOpen={setOpenDelete}
         isLoading={isDeleting}
         confirmationHandler={handleDelete}
-        title="Delete Request Category"
+        title="Delete Expense Category"
         description="Are you sure you want to delete this expense category?"
         btnTitle="Yes, I want to"
       />
