@@ -3,13 +3,13 @@ import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import useAxios from "../useHooks/useAxios";
 import { pagination } from "../types/pagination";
 import {
-  updateRequestCategory,
+  updateExpenseategory,
   addToPaginationHistory,
-} from "../stores/apiData/requests-categories";
+} from "../stores/apiData/expense-categories";
 import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetRequestCategories({
+export default function useGetExpenseCategories({
   page = 1,
   limit = 20,
   sort = "desc",
@@ -32,10 +32,10 @@ export default function useGetRequestCategories({
 
   const [pagination, setPagination] = useState<pagination>({} as any);
 
-  const getRequestCategories = useCallback(async () => {
+  const getExpenseCategories = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
-
       const { queryString, remakeRequest } = ApiQueryParamsExtractor({
         dataset: {
           page: search ? 1 : page,
@@ -51,14 +51,14 @@ export default function useGetRequestCategories({
       );
       if (foundPage && !remakeRequest) {
         setPagination(foundPage?.pagination_data);
-        dispatch(updateRequestCategory({ data: foundPage?.data }));
+        dispatch(updateExpenseategory({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          `/admin/maintenance-category?${queryString}`
+          `/admin/expense-category?${queryString}`
         );
-        const { maintenance_category } = response?.data?.data;
+        const { expense_category } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
-          maintenance_category;
+          expense_category;
         const paginationDataset = {
           current_page,
           last_page,
@@ -68,7 +68,7 @@ export default function useGetRequestCategories({
           to,
           length: data?.length,
         };
-        dispatch(updateRequestCategory({ data }));
+        dispatch(updateExpenseategory({ data }));
         if (!remakeRequest) {
           dispatch(
             addToPaginationHistory({
@@ -79,14 +79,15 @@ export default function useGetRequestCategories({
         }
         setPagination(paginationDataset);
       }
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [page, limit, sort, search]);
 
   useEffect(() => {
-    getRequestCategories();
+    getExpenseCategories();
   }, [page, limit, sort, search]);
 
   return {
@@ -94,7 +95,7 @@ export default function useGetRequestCategories({
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getRequestCategories,
+    retryFunction: getExpenseCategories,
     pagination,
   };
 }

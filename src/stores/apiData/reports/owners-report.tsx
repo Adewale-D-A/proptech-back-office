@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { pagination } from "../../../types/pagination";
-import { ownersReport } from "../../../types/apiData/reports";
+import {
+  ownerReportSummaries,
+  ownersReport,
+} from "../../../types/apiData/reports";
 
 export const ownersReportsData = createSlice({
   name: "owners-reports",
@@ -15,11 +18,11 @@ export const ownersReportsData = createSlice({
     },
   },
   reducers: {
-    updateOwnersReportReport: (state, action) => {
+    updateOwnersReport: (state, action) => {
       state.value.status = true;
       state.value.data = action?.payload?.data;
     },
-    addOwnersReportReportToList: (state, action) => {
+    addOwnersReportToList: (state, action) => {
       state.value.data = [...state.value.data, action?.payload];
       //include in pagination data
       const pagination_data = [...state.value.pagination];
@@ -36,6 +39,7 @@ export const ownersReportsData = createSlice({
       });
       state.value.pagination = addedItem;
     },
+
     addToPaginationHistory: (state, action) => {
       const found = state.value?.pagination?.find(
         (item) =>
@@ -102,7 +106,7 @@ export const ownersReportsData = createSlice({
       });
       state.value.pagination = replacedItem;
     },
-    clearOwnersReportReport: (state) => {
+    clearOwnersReport: (state) => {
       state.value.status = false;
       state.value.data = [];
     },
@@ -110,10 +114,10 @@ export const ownersReportsData = createSlice({
 });
 
 export const {
-  updateOwnersReportReport,
-  addOwnersReportReportToList,
+  updateOwnersReport,
+  addOwnersReportToList,
   addToPaginationHistory,
-  clearOwnersReportReport,
+  clearOwnersReport,
   removeOwnersReportInList,
   replaceOwnersReportInList,
 } = ownersReportsData.actions;

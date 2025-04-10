@@ -92,34 +92,40 @@ export default function CustomerDetail() {
             />
           </div>
           <div className=" w-full grid grid-col-1 md:grid-cols-3 gap-3">
-            <span>
-              First name: <b></b>
-              {data?.first_name}
-            </span>
-            <span>
-              Last name: <b></b>
-              {data?.last_name}
-            </span>
-            <span>
-              Gender: <b></b>
-              {data?.gender}
-            </span>
-            <span>
-              Date of Birth: <b></b>
-              {formatDate(data?.dob)}
-            </span>
-            <span>
-              Phone Number: <b></b>
-              {data?.phone}
-            </span>
-            <span>
-              Email: <b></b>
-              {data?.email}
-            </span>
-            <span>
-              Email verification Status: <b></b>
-              {formatDate(data?.email_verified_at) || "Unveriffied"}
-            </span>
+            {[
+              {
+                label: "First Name",
+                value: data?.first_name,
+              },
+              {
+                label: "Last name",
+                value: data?.last_name,
+              },
+              {
+                label: "Gender",
+                value: data?.gender,
+              },
+              {
+                label: "Date of Birth",
+                value: formatDate(data?.dob),
+              },
+              {
+                label: "Phone Number",
+                value: data?.phone,
+              },
+              {
+                label: "Email",
+                value: data?.email,
+              },
+              {
+                label: "Email verification Status",
+                value: formatDate(data?.email_verified_at) || "Unveriffied",
+              },
+            ].map((item) => (
+              <span key={item?.label}>
+                {item?.label}: <b>{item?.value}</b>
+              </span>
+            ))}
           </div>
         </div>
 

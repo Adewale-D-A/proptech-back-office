@@ -135,6 +135,9 @@ import RequestsCategoriesListView from "./pages/requests/requests-categories";
 import EmployeesTabWrapper from "./routeProtectors/wrapper/admin-users";
 import OwnersReportSummary from "./pages/reports/owners/summary";
 import OwnersReportSpreadsheet from "./pages/reports/owners/spreadsheet";
+import ExpenseCategoriesListView from "./pages/reports/owners/expense-categories";
+import BuildingsListView from "./pages/apartments/buildings";
+import AssignApartmentToOwner from "./pages/customers/assign-apartment";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -185,6 +188,10 @@ function App() {
               <Route
                 path="/apartments/blocked-dates-reasons"
                 element={<BlockedDatesReasonListView />}
+              />
+              <Route
+                path="/apartments/buildings"
+                element={<BuildingsListView />}
               />
             </Route>
 
@@ -284,6 +291,10 @@ function App() {
             />
             {/* customers flows  */}
             <Route path="/customers" element={<Customers />} />
+            <Route
+              path="/customers/assign-apartment/:owner_id"
+              element={<AssignApartmentToOwner />}
+            />
 
             {/* employees flows  */}
             <Route element={<EmployeesTabWrapper />}>
@@ -500,6 +511,10 @@ function App() {
               <Route
                 path="/reports/owners-report/spreadsheet"
                 element={<OwnersReportSpreadsheet />}
+              />
+              <Route
+                path="/reports/expense-category"
+                element={<ExpenseCategoriesListView />}
               />
             </Route>
             <Route path="/notification" element={<Notification />} />

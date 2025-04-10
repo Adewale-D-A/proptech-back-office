@@ -21,6 +21,7 @@ import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import LinkButton from "../button/linkButton";
 import useGetRoomOptions from "../../services-hooks/useGetRoomOptions";
 import useGetLocationGroupings from "../../services-hooks/apartment/useGetLocationGroupings";
+import useGetBuildings from "../../services-hooks/apartment/useGetBuildings";
 
 export default function AddEditApartmentDetails({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
@@ -31,6 +32,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
     (state) => state.addEditApartmentInfo.value.data?.apartmentDetails
   );
 
+  const [building, setBuilding] = useState("");
   const [name, setName] = useState("");
   const [roomOption, setRoomOption] = useState("");
   const [images, setImages] = useState([]);
@@ -49,6 +51,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
   // populate apartment details interface
   useEffect(() => {
     const {
+      building_id,
       name,
       roomOption,
       images,
@@ -57,6 +60,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
       aboutLocation,
       location_group,
     } = storeAptDetails;
+    setBuilding(building_id);
     setName(name);
     setRoomOption(roomOption);
     setImages(images);
@@ -72,6 +76,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
       e.preventDefault();
       if (images.length > 0) {
         const payload = {
+          building_id: building,
           name: name,
           roomOption: roomOption,
           images: images,
@@ -103,6 +108,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
       }
     },
     [
+      building,
       name,
       roomOption,
       images,
@@ -116,6 +122,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetRoomOptions({ page: 1, limit: 20 });
+  const { data: buildings } = useGetBuildings({ page: 1, limit: 100 });
   const { data: location_groups } = useGetLocationGroupings({ page: 1 });
 
   return (
@@ -138,6 +145,31 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
           placeholder="Apartment name"
         />
       </div>
+      {/* building  */}
+      <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
+        <div className=" max-w-md">
+          <h6 className=" text-lg font-semibold">Building</h6>
+          <p className=" text-gray-500">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
+            labore.
+          </p>
+        </div>
+        <Select
+          isRequired={true}
+          value={building}
+          setValue={setBuilding}
+          id="building"
+        >
+          <option value="" disabled>
+            Building
+          </option>
+          {buildings?.map((item) => (
+            <option key={item?.id} value={item?.id}>
+              {item?.name}
+            </option>
+          ))}
+        </Select>
+      </div>
       {/* room options */}
       <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
         <div className=" max-w-md">
@@ -157,7 +189,9 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
             Room options
           </option>
           {data?.map((item) => (
-            <option value={item?.id}>{item?.name}</option>
+            <option key={item?.id} value={item?.id}>
+              {item?.name}
+            </option>
           ))}
         </Select>
       </div>
@@ -221,7 +255,9 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
             Location Group
           </option>
           {location_groups?.map((item) => (
-            <option value={String(item?.id)}>{item?.name}</option>
+            <option key={item?.id} value={String(item?.id)}>
+              {item?.name}
+            </option>
           ))}
         </Select>
       </div>

@@ -1,25 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { customersById } from "../../types/apiData/customers";
 import { pagination } from "../../types/pagination";
+import { requestCategories } from "../../types/apiData/request-categories";
 
-export const customersListData = createSlice({
-  name: "all customers",
+export const expensesCategoriesData = createSlice({
+  name: "expense_categroies_data",
   initialState: {
     value: {
       status: false,
       pagination: [] as {
         pagination_data: pagination;
-        data: customersById[];
+        data: requestCategories[];
       }[],
-      data: [] as customersById[],
+      data: [] as requestCategories[],
     },
   },
   reducers: {
-    updateCustomersList: (state, action) => {
+    updateExpenseategory: (state, action) => {
       state.value.status = true;
       state.value.data = action?.payload?.data;
     },
-    addCustomersToList: (state, action) => {
+    addExpenseategory: (state, action) => {
       state.value.data = [...state.value.data, action?.payload];
       //include in pagination data
       const pagination_data = [...state.value.pagination];
@@ -52,7 +52,7 @@ export const customersListData = createSlice({
         ];
       }
     },
-    removeCustomersInList: (state, action) => {
+    removeExpenseategory: (state, action) => {
       const { id } = action?.payload;
       const currentArray = [...state.value.data];
       const currentIndex = currentArray.findIndex(
@@ -75,7 +75,7 @@ export const customersListData = createSlice({
       });
       state.value.pagination = removed;
     },
-    replaceCustomersInList: (state, action) => {
+    replaceExpenseategory: (state, action) => {
       const { id } = action?.payload;
       const currentArray = state.value.data;
       const currentIndex = currentArray.findIndex(
@@ -102,7 +102,7 @@ export const customersListData = createSlice({
       });
       state.value.pagination = replacedItem;
     },
-    clearCustomersList: (state) => {
+    clearExpenseategory: (state) => {
       state.value.status = false;
       state.value.data = [];
     },
@@ -110,12 +110,12 @@ export const customersListData = createSlice({
 });
 
 export const {
-  updateCustomersList,
-  addCustomersToList,
+  updateExpenseategory,
+  addExpenseategory,
   addToPaginationHistory,
-  removeCustomersInList,
-  replaceCustomersInList,
-  clearCustomersList,
-} = customersListData.actions;
+  removeExpenseategory,
+  replaceExpenseategory,
+  clearExpenseategory,
+} = expensesCategoriesData.actions;
 
-export default customersListData.reducer;
+export default expensesCategoriesData.reducer;

@@ -1,19 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
 import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
 import useAxios from "../../useHooks/useAxios";
-import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { pagination } from "../../types/pagination";
-import { updateOwnersReport } from "../../stores/apiData/reports/owners-report";
+import { ownerReportSpreadsheet } from "../../types/apiData/reports";
+import reformOwnerSpreadsheet from "../../utils/reform-owners-spreadsheet";
+import getMonthStartEndDates from "../../utils/start-end-dates-generator";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetAllOwnersReport({
+export default function useGetAllOwnersReportSpreadsheet({
   page = 1,
-  start_date,
-  end_date,
+  start_date = getMonthStartEndDates(1)?.start,
+  end_date = getMonthStartEndDates(12)?.end,
   sort = "desc",
   search = "",
   building_id,
-  shortlet_id,
+  apartment_id,
   expense_category_id,
 }: {
   page?: number;
@@ -22,22 +23,16 @@ export default function useGetAllOwnersReport({
   sort?: "desc" | "asc" | string;
   search?: string;
   building_id?: string;
-  shortlet_id?: string;
+  apartment_id?: string;
   expense_category_id?: string;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
-  const dispatch = useAppDispatch();
-  const {
-    status,
-    data,
-    pagination: store_pagination,
-  } = useAppSelector((state) => state.ownersReport.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
-
+  const [data, setData] = useState<ownerReportSpreadsheet>({} as any);
   const [pagination, setPagination] = useState<pagination>({} as any);
 
-  const getAllOwnersReportList = useCallback(async () => {
+  const getAllOwnersReportSpreadsheetList = useCallback(async () => {
     setIsLoading(true);
     setIsFailed(false);
     try {
@@ -46,32 +41,29 @@ export default function useGetAllOwnersReport({
       const { queryString, remakeRequest } = ApiQueryParamsExtractor({
         dataset: {
           page: page,
-          start_date: start_date,
-          end_date: end_date,
+          start_date: start_date
+            ? getMonthStartEndDates(
+                1,
+                Number(start_date?.split("-")?.[0] || undefined)
+              )?.start
+            : "",
+          end_date: end_date
+            ? getMonthStartEndDates(
+                12,
+                Number(start_date?.split("-")?.[0] || undefined)
+              )?.end
+            : "",
           building_id,
-          shortlet_id,
+          apartment_id,
           expense_category_id,
         },
       });
-      const response = await axios.get(`/admin/owner-report?${queryString}`);
-      const { owner_reports } = response?.data?.data;
-      const { data, current_page, last_page, per_page, total, from, to } =
-        owner_reports;
-      const paginationDataset = {
-        current_page,
-        last_page,
-        per_page,
-        total,
-        from,
-        to,
-        length: data?.length,
-      };
-      dispatch(
-        updateOwnersReport({
-          data,
-        })
+      const response = await axios.get(
+        `/admin/owner-report/spreadsheet?${queryString}`
       );
-      setPagination(paginationDataset);
+      const data = response?.data?.data;
+      const result = reformOwnerSpreadsheet(data);
+      setData(result || []);
     } catch (error) {
       setIsFailed(true);
     } finally {
@@ -84,12 +76,12 @@ export default function useGetAllOwnersReport({
     sort,
     search,
     building_id,
-    shortlet_id,
+    apartment_id,
     expense_category_id,
   ]);
 
   useEffect(() => {
-    getAllOwnersReportList();
+    getAllOwnersReportSpreadsheetList();
   }, [
     page,
     start_date,
@@ -97,7 +89,7 @@ export default function useGetAllOwnersReport({
     sort,
     search,
     building_id,
-    shortlet_id,
+    apartment_id,
     expense_category_id,
   ]);
 
@@ -106,7 +98,7 @@ export default function useGetAllOwnersReport({
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getAllOwnersReportList,
+    retryFunction: getAllOwnersReportSpreadsheetList,
     pagination,
   };
 }

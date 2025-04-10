@@ -3,7 +3,6 @@ import { useEffect, useLayoutEffect } from "react";
 import UsersIcon from "../../assets/icons/users";
 import { useAppDispatch } from "../../stores/hooks";
 import { updatePageProperties } from "../../stores/appFunctionality/pageProperties";
-import ExportSelect from "../../components/inputs/select/exportSelect";
 import LinkButton from "../../components/button/linkButton";
 import PlusIcon from "../../assets/icons/plus";
 import CustomersListTable from "../../components/tables/customer";

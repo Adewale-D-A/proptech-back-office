@@ -26,6 +26,7 @@ export default function useGetApartmentById(id?: string) {
       const response = await axios.get(`/admin/shortlet/${id}`);
       const { shortlet } = response?.data?.data;
       const {
+        building_id,
         name,
         description,
         location,
@@ -59,6 +60,7 @@ export default function useGetApartmentById(id?: string) {
       dispatch(updateApartmentInfoId({ id: id }));
       dispatch(
         updateApartmentDetails({
+          building_id,
           name: name,
           roomOption: room_option_id,
           images: images?.map((item: { id: number; path: string }) => ({

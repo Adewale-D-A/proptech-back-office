@@ -3,19 +3,19 @@ import useAxios from "../../../useHooks/useAxios";
 import { useAppDispatch } from "../../../stores/hooks";
 import useGetOwnerReportById from "../../../services-hooks/reports/userGetOwnerReportById";
 import {
-  addOwnersReportReportToList,
+  addOwnersReportToList,
   replaceOwnersReportInList,
 } from "../../../stores/apiData/reports/owners-report";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import LoadingButton from "../../../components/button";
 import TextAreaInput from "../../../components/inputs/textArea";
 import DateInput from "../../../components/inputs/dateInput";
-import { apartmentById } from "../../../types/apiData/apartment";
-import useGetLocationGroupings from "../../../services-hooks/apartment/useGetLocationGroupings";
 import Select from "../../../components/inputs/select";
-import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
-import useGetRequestCategories from "../../../services-hooks/useGetRequestCategories";
 import TextInput from "../../../components/inputs/textInput";
+import purgeEmptyPayload from "../../../utils/remove-empty-payload";
+import useGetExpenseCategories from "../../../services-hooks/useGetExpenseCategories";
+import ApartmentThroughBuildingSelector from "../../../components/inputs/select/apartment-through-building-selector";
+import { formatDateToString } from "../../../utils/isoDateConverter";
 
 export default function AddEditOwnersReport({
   id,
@@ -27,28 +27,29 @@ export default function AddEditOwnersReport({
   const axios = useAxios({});
   const dispatch = useAppDispatch();
 
-  const [buildingId, setBuildingId] = useState("");
-  const [apartment, setApartment] = useState<apartmentById>({} as any);
   const [expenseId, setExpenseId] = useState("");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
   const [additionalNotes, setAdditionalNotes] = useState("");
 
+  const [apartmentId, setApartmentId] = useState("");
+  const [buildingId, setBuildingId] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   const { data } = useGetOwnerReportById({ id });
-  const { data: locationGroupsDataset } = useGetLocationGroupings({ page: 1 });
-  const { data: requestCategoryDataset } = useGetRequestCategories({ page: 1 });
+  const { data: expenseCategories } = useGetExpenseCategories({ page: 1 });
 
   //   populate field provided id is available denoting update functionality
   useEffect(() => {
     if (id && data?.id) {
-      const toDate = new Date(data?.date)?.toISOString()?.slice(0, 10);
+      const toDate = formatDateToString(new Date(data?.date));
       setDate(toDate || "");
       setBuildingId(String(data?.building_id || ""));
       setAmount(String(data?.amount || ""));
-      setExpenseId(String(data?.expense_id || ""));
-      setAdditionalNotes(data?.additional_note || "");
+      setApartmentId(String(data?.shortlet_id || ""));
+      setExpenseId(String(data?.expense_category_id || ""));
+      setAdditionalNotes(data?.note || "");
     }
   }, [id, data]);
 
@@ -58,33 +59,33 @@ export default function AddEditOwnersReport({
       setLoading(true);
       const payload = {
         building_id: buildingId,
-        shortlet_id: apartment?.id,
-        expense: expenseId,
+        shortlet_id: apartmentId,
+        expense_category_id: expenseId,
         amount: amount,
         date: date,
-        additional_note: additionalNotes,
+        note: additionalNotes,
       };
-      const dummytResponse = {
-        id: 1,
-        building_id: buildingId,
-        building: locationGroupsDataset?.find(
-          (item) => String(item?.id) === buildingId
-        ),
-        shortlet_id: apartment?.id,
-        shortlet: apartment,
-        expense_id: expenseId,
-        expense: requestCategoryDataset?.find(
-          (item) => String(item?.id) === expenseId
-        ),
-        amount: amount,
-        date: date,
-        additional_note: additionalNotes,
-      };
+      const newPayload = purgeEmptyPayload({ payload });
       try {
         if (id) {
-          //   const response = await axios.put(`/admin/requisition-request/${id}`,payload)
-          //   const data = response?.data;
-          dispatch(replaceOwnersReportInList(dummytResponse));
+          const response = await axios.put(
+            `/admin/owner-report/${id}`,
+            newPayload
+          );
+          const { owner_report } = response?.data?.data;
+          const result = {
+            ...owner_report,
+            expense_category: {
+              id: owner_report?.expense_category_id,
+              name:
+                expenseCategories?.find(
+                  (item) =>
+                    String(item?.id) ===
+                    String(owner_report?.expense_category_id)
+                )?.name || "",
+            },
+          };
+          dispatch(replaceOwnersReportInList(result));
           dispatch(
             openSnackbar({
               message: "Owner report successfully updated",
@@ -92,9 +93,21 @@ export default function AddEditOwnersReport({
             })
           );
         } else {
-          //   const response = axios.post("/admin/requisition-request",payload)
-          //   const data = response?.data;
-          dispatch(addOwnersReportReportToList(dummytResponse));
+          const response = await axios.post("/admin/owner-report", newPayload);
+          const { owner_report } = response?.data?.data;
+          const result = {
+            ...owner_report,
+            expense_category: {
+              id: owner_report?.expense_category_id,
+              name:
+                expenseCategories?.find(
+                  (item) =>
+                    String(item?.id) ===
+                    String(owner_report?.expense_category_id)
+                )?.name || "",
+            },
+          };
+          dispatch(addOwnersReportToList(result));
           dispatch(
             openSnackbar({
               message: "Owner report successfully added",
@@ -114,38 +127,20 @@ export default function AddEditOwnersReport({
       additionalNotes,
       buildingId,
       expenseId,
-      apartment,
       amount,
-      locationGroupsDataset,
-      requestCategoryDataset,
+      expenseCategories,
     ]
   );
 
   return (
     <form onSubmit={handleSubmit} className="w-full grid grid-cols-1 gap-3">
+      <ApartmentThroughBuildingSelector
+        setApartmentId={setApartmentId}
+        apartmentId={apartmentId}
+        buildingId={buildingId}
+        setBuildingId={setBuildingId}
+      />
       <div className="w-full items-end grid grid-cols-1 md:grid-cols-2 gap-3">
-        <Select
-          label="Building"
-          value={buildingId}
-          setValue={setBuildingId}
-          id={"building-select"}
-        >
-          <option value={``} disabled>
-            Select Building
-          </option>
-          {locationGroupsDataset?.map((item) => (
-            <option key={item?.id} value={`${item?.id}`}>
-              {item?.name}
-            </option>
-          ))}
-        </Select>
-        <ApartmentSingleSearch
-          label="Apartment"
-          selected={apartment}
-          setSelected={setApartment}
-          placeholder="Apartment"
-          defaultId={String(data?.shortlet_id)}
-        />
         <Select
           label="Expense"
           value={expenseId}
@@ -155,7 +150,7 @@ export default function AddEditOwnersReport({
           <option value={``} disabled>
             Expense
           </option>
-          {requestCategoryDataset?.map((item) => (
+          {expenseCategories?.map((item) => (
             <option key={item?.id} value={`${item?.id}`}>
               {item?.name}
             </option>
@@ -163,7 +158,7 @@ export default function AddEditOwnersReport({
         </Select>
         <TextInput
           inputType="number"
-          label="Expense"
+          label="Amount"
           value={amount}
           setValue={setAmount}
           id={"amount"}

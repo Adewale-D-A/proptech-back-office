@@ -1,3 +1,25 @@
+##### 10.04.2025
+
+> Feature: Assign apartment to owner user
+> Completion of owners reports API integrations
+
+##### 09.04.2025
+
+> Fix: Owners reports integration bugs resolution
+
+##### 08.04.2025
+
+> Feature Update: Owners report logic integrations completions
+
+##### 05.04.2025
+
+> Owners reports endpoint integrations
+
+##### 26.03.2025
+
+> Expense categories CRUD operation development
+> Management fee Owner's report configuration addition
+
 ##### 24.03.2025
 
 > Reports mobile UI responsiveness fix
