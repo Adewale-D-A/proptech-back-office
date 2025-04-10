@@ -1,24 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../stores/hooks";
-import useAxios from "../useHooks/useAxios";
-import { pagination } from "../types/pagination";
+
+import { pagination } from "../../types/pagination";
+import useAxios from "../../useHooks/useAxios";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import {
-  updateRequestCategory,
   addToPaginationHistory,
-} from "../stores/apiData/requests-categories";
-import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
+  updateBuildingList,
+} from "../../stores/apiData/apartment/buildings";
+import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetRequestCategories({
+export default function useGetBuildings({
   page = 1,
-  limit = 20,
-  sort = "desc",
   search = "",
+  limit = 20,
 }: {
   page?: number;
-  limit?: number;
-  sort?: "desc" | "asc" | string;
   search?: string;
+  limit?: number;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -26,21 +25,20 @@ export default function useGetRequestCategories({
     status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.expensesCategories.value);
+  } = useAppSelector((state) => state.buildings.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const [pagination, setPagination] = useState<pagination>({} as any);
 
-  const getRequestCategories = useCallback(async () => {
+  const getBuildings = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
-
       const { queryString, remakeRequest } = ApiQueryParamsExtractor({
         dataset: {
           page: search ? 1 : page,
-          sort,
-          search,
+          search: search,
           limit,
         },
       });
@@ -51,14 +49,12 @@ export default function useGetRequestCategories({
       );
       if (foundPage && !remakeRequest) {
         setPagination(foundPage?.pagination_data);
-        dispatch(updateRequestCategory({ data: foundPage?.data }));
+        dispatch(updateBuildingList({ data: foundPage?.data }));
       } else {
-        const response = await axios.get(
-          `/admin/maintenance-category?${queryString}`
-        );
-        const { maintenance_category } = response?.data?.data;
+        const response = await axios.get(`/admin/building?${queryString}`);
+        const { buildings } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
-          maintenance_category;
+          buildings;
         const paginationDataset = {
           current_page,
           last_page,
@@ -68,7 +64,7 @@ export default function useGetRequestCategories({
           to,
           length: data?.length,
         };
-        dispatch(updateRequestCategory({ data }));
+        dispatch(updateBuildingList({ data }));
         if (!remakeRequest) {
           dispatch(
             addToPaginationHistory({
@@ -79,22 +75,23 @@ export default function useGetRequestCategories({
         }
         setPagination(paginationDataset);
       }
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
-  }, [page, limit, sort, search]);
+  }, [page, search, limit]);
 
   useEffect(() => {
-    getRequestCategories();
-  }, [page, limit, sort, search]);
+    getBuildings();
+  }, [page, search, limit]);
 
   return {
     data,
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getRequestCategories,
+    retryFunction: getBuildings,
     pagination,
   };
 }

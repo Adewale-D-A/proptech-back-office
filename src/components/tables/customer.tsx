@@ -67,6 +67,7 @@ export default function CustomersListTable() {
                   "Phone Number",
                   "Total Booking",
                   "Identity Verified",
+                  "User type",
                   "Action",
                 ].map((head) => (
                   <th key={head}>{head}</th>
@@ -94,6 +95,7 @@ export default function CustomersListTable() {
                         truthyMessage="Verified"
                       />
                     </td>
+                    <td>{item?.type}</td>
                     <td className=" group relative">
                       <span className=" p-2 text-lg">...</span>
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
@@ -121,6 +123,14 @@ export default function CustomersListTable() {
                         >
                           Edit Customer
                         </Link>
+                        {item?.type === "owner" && (
+                          <Link
+                            to={`/customers/assign-apartment/${item?.id}`}
+                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                          >
+                            Assign to Apartment (s)
+                          </Link>
+                        )}
                       </span>
                     </td>
                   </tr>

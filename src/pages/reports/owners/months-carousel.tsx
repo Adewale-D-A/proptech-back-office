@@ -2,21 +2,39 @@ import { useCallback, useState } from "react";
 import NavigatePrevIcon from "../../../assets/icons/navigate-prev";
 import NavigateNextIcon from "../../../assets/icons/navigate-next";
 import monthsAndDays from "../../../assets/days-months.json";
+import getMonthStartEndDates from "../../../utils/start-end-dates-generator";
 
-export default function MonthsCarousel() {
+const today = new Date();
+export default function MonthsCarousel({
+  setFilterDate,
+}: {
+  setFilterDate: (dates: { start_date: string; end_date: string }) => void;
+}) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   // productsArray next function
-  const showNextImage = useCallback(() => {
+  const showNext = useCallback(() => {
     if (currentIndex + 1 < monthsAndDays?.months?.length) {
       setCurrentIndex((prev) => prev + 1);
+      const response = getMonthStartEndDates(currentIndex + 2);
+      const dataObject = {
+        start_date: response?.start,
+        end_date: response?.end,
+      };
+      setFilterDate(dataObject);
     }
   }, [monthsAndDays, currentIndex]);
 
   // productsArray next previous
-  const showPrevImage = useCallback(() => {
+  const showPrev = useCallback(() => {
     if (currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
+      const response = getMonthStartEndDates(currentIndex);
+      const dataObject = {
+        start_date: response?.start,
+        end_date: response?.end,
+      };
+      setFilterDate(dataObject);
     }
   }, [currentIndex]);
 
@@ -25,7 +43,7 @@ export default function MonthsCarousel() {
       <button
         title="previous"
         type="button"
-        onClick={() => showPrevImage()}
+        onClick={() => showPrev()}
         className={`${currentIndex > 0 ? "" : "cursor-not-allowed"} `}
       >
         <NavigatePrevIcon
@@ -43,7 +61,7 @@ export default function MonthsCarousel() {
       <button
         type="button"
         title="next"
-        onClick={() => showNextImage()}
+        onClick={() => showNext()}
         className={`${
           currentIndex + 1 < monthsAndDays?.months?.length
             ? ""

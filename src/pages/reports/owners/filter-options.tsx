@@ -1,23 +1,27 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import Select from "../../../components/inputs/select";
 import Filter from "../../../components/filterAndSort/filter";
-import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
-import { apartmentById } from "../../../types/apiData/apartment";
-import useGetLocationGroupings from "../../../services-hooks/apartment/useGetLocationGroupings";
-import useGetRequestCategories from "../../../services-hooks/useGetRequestCategories";
+import useGetExpenseCategories from "../../../services-hooks/useGetExpenseCategories";
+import ApartmentThroughBuildingSelector from "../../../components/inputs/select/apartment-through-building-selector";
 
-export default function OwnersReportFilterOptions() {
-  const [building, setBuilding] = useState("");
-  const [buildingId, setBuildingId] = useState("");
-  const [apartment, setApartment] = useState<apartmentById>({} as any);
-  const [category, setCategory] = useState("");
-  const { data: locationGroupsDataset } = useGetLocationGroupings({ page: 1 });
-  const { data: requestCategoryDataset } = useGetRequestCategories({ page: 1 });
-
-  const [filterDates, setFilterDates] = useState<{
-    start_date: string;
-    end_date: string;
-  }>();
+export default function OwnersReportFilterOptions({
+  apartmentId,
+  setApartmentId,
+  buildingId,
+  setBuildingId,
+  category,
+  setCategory,
+  setFilterDates,
+}: {
+  apartmentId: string;
+  setApartmentId: (id: string) => void;
+  category: string;
+  setCategory: (cat: string) => void;
+  setFilterDates: (load: { start_date: string; end_date: string }) => void;
+  buildingId: string;
+  setBuildingId: (val: string) => void;
+}) {
+  const { data: expenseCategories } = useGetExpenseCategories({ page: 1 });
 
   const handleSalesFiltering = useCallback(
     (start_date: string, end_date: string) => {
@@ -28,25 +32,12 @@ export default function OwnersReportFilterOptions() {
   return (
     <div className=" w-full flex justify-between gap-4 items-end flex-col md:flex-row">
       <div className="w-full flex items-end gap-3 flex-col md:flex-row">
-        <Select
-          label="Building"
-          value={buildingId}
-          setValue={setBuildingId}
-          id={"building-filter"}
-        >
-          {locationGroupsDataset?.map((item) => (
-            <option key={item?.id} value={`${item?.id}`}>
-              {item?.name}
-            </option>
-          ))}
-        </Select>
-        <ApartmentSingleSearch
-          label="Apartment"
-          selected={apartment}
-          setSelected={setApartment}
-          placeholder="Apartment"
+        <ApartmentThroughBuildingSelector
+          setApartmentId={setApartmentId}
+          apartmentId={apartmentId}
+          buildingId={buildingId}
+          setBuildingId={setBuildingId}
         />
-
         <Select
           label="Category"
           value={category}
@@ -56,7 +47,7 @@ export default function OwnersReportFilterOptions() {
           <option value={``} disabled>
             All
           </option>
-          {requestCategoryDataset?.map((item) => (
+          {expenseCategories?.map((item) => (
             <option key={item?.id} value={`${item?.id}`}>
               {item?.name}
             </option>

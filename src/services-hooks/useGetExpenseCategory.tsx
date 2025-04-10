@@ -1,21 +1,21 @@
 import { useCallback, useEffect, useState } from "react";
-import useAxios from "../../useHooks/useAxios";
-import { ownersReport } from "../../types/apiData/reports";
+import useAxios from "../useHooks/useAxios";
+import { requestCategories } from "../types/apiData/request-categories";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetOwnerReportById({ id }: { id?: string }) {
+export default function useGetExpenseCategory({ id }: { id?: string }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
-  const [data, setData] = useState<ownersReport>({} as any);
+  const [data, setData] = useState<requestCategories>({} as any);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const getOwnerReport = useCallback(async () => {
+  const expenseCategory = useCallback(async () => {
     setIsLoading(true);
     setIsFailed(false);
     try {
-      const response = await axios.get(`/admin/owner-report/${id}`);
-      const { owner_report } = response?.data?.data;
-      setData(owner_report);
+      const response = await axios.get(`/admin/expense-category/${id}`);
+      const { expense_category } = response?.data?.data;
+      setData(expense_category);
     } catch (error) {
       setIsFailed(true);
     } finally {
@@ -25,7 +25,7 @@ export default function useGetOwnerReportById({ id }: { id?: string }) {
 
   useEffect(() => {
     if (id) {
-      getOwnerReport();
+      expenseCategory();
     }
   }, [id]);
 
@@ -34,6 +34,6 @@ export default function useGetOwnerReportById({ id }: { id?: string }) {
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getOwnerReport,
+    retryFunction: expenseCategory,
   };
 }

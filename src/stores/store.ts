@@ -47,6 +47,7 @@ import roomOptionsData from "./apiData/room-options";
 import houseRulesData from "./apiData/house-rules";
 import locationGroupings from "./apiData/apartment/location-groupings";
 import blockedDateReasonData from "./apiData/blocked-dates-reason";
+import buildings from "./apiData/apartment/buildings";
 
 import chatListData from "./apiData/chat-list";
 
@@ -66,6 +67,8 @@ import maintenanceExpensesReports from "./apiData/reports/maintenenace-expenses"
 import bookingsReportReports from "./apiData/reports/bookings-report";
 import generatorRuntimeReporteports from "./apiData/reports/generator-runtime";
 import ownersReportsData from "./apiData/reports/owners-report";
+import ownersReportsSpreadsheetData from "./apiData/reports/owners-report-spreadsheet";
+import expensesCategoriesData from "./apiData/expense-categories";
 
 // admins
 import adminsListData from "./apiData/admins-list";
@@ -130,6 +133,7 @@ export const adminStore = () => {
       allRoomOptions: roomOptionsData,
       allHouseRules: houseRulesData,
       lcoationgGrouping: locationGroupings,
+      buildings: buildings,
       blockedDateReasons: blockedDateReasonData,
 
       allBookingsLists: bookingsListsData,
@@ -153,6 +157,8 @@ export const adminStore = () => {
       bookingsReportReports: bookingsReportReports,
       generatorRuntimeReporteports: generatorRuntimeReporteports,
       ownersReport: ownersReportsData,
+      ownersSpreadsheetReport: ownersReportsSpreadsheetData,
+      expensesCategories: expensesCategoriesData,
       // admins
       allAdminsLists: adminsListData,
       allRolesLists: rolesListData,

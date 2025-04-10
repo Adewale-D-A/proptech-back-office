@@ -1,3 +1,5 @@
+import { apartmentById } from "./apartment";
+
 export type customers = {
   id: number;
   first_name: string;
@@ -27,6 +29,8 @@ export type customersById = {
   last_name: string;
   email: string;
   phone: string;
+  type: "owner" | "user";
+  shortlets?: apartmentById[];
   profile_photo: string;
   dob: string;
   gender: string;

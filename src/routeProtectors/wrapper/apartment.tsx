@@ -18,6 +18,7 @@ import LocationPinIcon from "../../assets/icons/location";
 import AddEditLocationGroup from "../../components/apartment/add-edit-location-group";
 import BlockedDatesReasonsIcon from "../../assets/icons/blocked-dates-reasons";
 import AddEditBlockedDatesReason from "../../pages/apartments/block-dates-reason/add-edit-blocked-dates";
+import AddEditBuildings from "../../pages/apartments/buildings/add-edit-buildings";
 
 const tabList = [
   {
@@ -57,6 +58,12 @@ const tabList = [
     url: "/apartments/rules",
   },
   {
+    id: 9,
+    icon: <BuildingIcon />,
+    label: "Buildings",
+    url: "/apartments/buildings",
+  },
+  {
     id: 7,
     icon: <LocationPinIcon />,
     label: "Location Grouping",
@@ -77,6 +84,7 @@ export default function ApartmentTabWrapper() {
   const [openAddEdit, setOpenAddEdit] = useState(false);
   const [openAddLocationGroup, setOpenAddLocationGroup] = useState(false);
   const [openBlockedReason, setOpenBlockedReason] = useState(false);
+  const [openBuilding, setOpenBuilding] = useState(false);
 
   //   update current tab value based on the current URL
   useEffect(() => {
@@ -153,6 +161,14 @@ export default function ApartmentTabWrapper() {
                 clickHandler={() => setOpenBlockedReason(true)}
                 startIcon={<PlusIcon />}
               />
+            ) : trackTab === 9 ? (
+              <LoadingButton
+                label="Add Building"
+                isLoading={false}
+                type="button"
+                clickHandler={() => setOpenBuilding(true)}
+                startIcon={<PlusIcon />}
+              />
             ) : (
               <></>
             )}
@@ -217,6 +233,15 @@ export default function ApartmentTabWrapper() {
         className=" max-w-md"
       >
         <AddEditBlockedDatesReason setOpen={setOpenBlockedReason} />
+      </ModalTemplate>
+      <ModalTemplate
+        open={openBuilding}
+        setOpen={setOpenBuilding}
+        showXicon={true}
+        title="Building"
+        className=" max-w-md"
+      >
+        <AddEditBuildings setOpen={setOpenBuilding} />
       </ModalTemplate>
     </>
   );

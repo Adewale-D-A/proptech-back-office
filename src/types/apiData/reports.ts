@@ -70,29 +70,78 @@ export type generatorRuntimeReport = {
   run_time: string;
 };
 
+interface monthlies {
+  jan: number;
+  feb: number;
+  mar: number;
+  apr: number;
+  may: number;
+  jun: number;
+  jul: number;
+  aug: number;
+  sep: number;
+  oct: number;
+  nov: number;
+  dec: number;
+}
 export interface ownersReport {
   id: number;
   building_id: number;
   building: locationGrouping;
   shortlet_id: number;
   shortlet: apartment;
-  expense_id: number;
-  expense: requestCategories;
+  expense_category_id: number;
+  expense_category: requestCategories;
   amount: number;
+  currency: string;
   date: string;
-  additional_note: string;
-  monthly_amount: {
-    jan: number;
-    feb: number;
-    mar: number;
-    apr: number;
-    may: number;
-    jun: number;
-    jul: number;
-    aug: number;
-    sep: number;
-    oct: number;
-    nov: number;
-    dec: number;
+  note: string;
+  monthly_amount: monthlies;
+}
+export interface ownerReportSummaries {
+  monthly_totals: monthlies;
+  monthly_revenue: monthlies;
+  monthly_management_fee: monthlies;
+  monthly_profit: monthlies;
+}
+
+export interface ownerReportSpreadsheetResponse {
+  period: {
+    start_date: string;
+    end_date: string;
   };
+  management_fee_percentage: number;
+  monthly_breakdown: {
+    month: string;
+    revenue: number;
+    management_fee: number;
+    expenses: {
+      category: string;
+      amount: number;
+    }[];
+    total_expenses: number;
+    profit: number;
+  }[];
+  totals: {
+    total_revenue: number;
+    total_management_fee: number;
+    total_expenses: number;
+    total_net_income: number;
+  };
+}
+
+export interface ownerReportSpreadsheet {
+  data: {
+    expense_name: string;
+    monthly_total_expenses: {
+      month: number;
+      total: number;
+    }[];
+  }[];
+  monthlySummaries: {
+    revenue: number;
+    management_fee: number;
+    total_expenses: number;
+    profit: number;
+  }[];
 }
