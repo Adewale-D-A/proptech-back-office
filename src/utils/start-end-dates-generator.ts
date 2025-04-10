@@ -1,3 +1,5 @@
+import { formatDateToString } from "./isoDateConverter";
+
 const today = new Date();
 export default function getMonthStartEndDates(month: number, year?: number) {
   // Ensure the month is 1-12 (JavaScript Date uses 0-11 for months)
@@ -11,16 +13,9 @@ export default function getMonthStartEndDates(month: number, year?: number) {
 
   const startDate = new Date(year || today.getFullYear(), month - 1, 1);
   const endDate = new Date(year || today.getFullYear(), month, 0); // Day 0 of next month is last day of current month
-  //   console.log(startDate.toDateString(), startDate.toISOString());  // Format function to return date as yy/mm/dd
-  function formatDate(date: Date) {
-    const yyyy = String(date.getFullYear());
-    const mm = String(date.getMonth() + 1).padStart(2, "0"); // JS months are 0-indexed
-    const dd = String(date.getDate()).padStart(2, "0");
-    return `${yyyy}-${mm}-${dd}`;
-  }
 
   return {
-    start: formatDate(startDate),
-    end: formatDate(endDate),
+    start: formatDateToString(startDate),
+    end: formatDateToString(endDate),
   };
 }

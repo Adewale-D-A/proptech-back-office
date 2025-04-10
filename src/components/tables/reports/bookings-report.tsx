@@ -49,7 +49,7 @@ export default function BookingsReportListTable() {
             <ExportToCSV
               dataset={data}
               jsonToCSVReformerter={bookingsExportFormater}
-              fileName="bookings-eport-list"
+              fileName="bookings-report-list"
             />
           </div>
         </div>

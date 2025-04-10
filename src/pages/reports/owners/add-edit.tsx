@@ -10,14 +10,12 @@ import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import LoadingButton from "../../../components/button";
 import TextAreaInput from "../../../components/inputs/textArea";
 import DateInput from "../../../components/inputs/dateInput";
-import { apartmentById } from "../../../types/apiData/apartment";
-import useGetLocationGroupings from "../../../services-hooks/apartment/useGetLocationGroupings";
 import Select from "../../../components/inputs/select";
-import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
 import TextInput from "../../../components/inputs/textInput";
 import purgeEmptyPayload from "../../../utils/remove-empty-payload";
 import useGetExpenseCategories from "../../../services-hooks/useGetExpenseCategories";
 import ApartmentThroughBuildingSelector from "../../../components/inputs/select/apartment-through-building-selector";
+import { formatDateToString } from "../../../utils/isoDateConverter";
 
 export default function AddEditOwnersReport({
   id,
@@ -45,7 +43,7 @@ export default function AddEditOwnersReport({
   //   populate field provided id is available denoting update functionality
   useEffect(() => {
     if (id && data?.id) {
-      const toDate = new Date(data?.date)?.toISOString()?.slice(0, 10);
+      const toDate = formatDateToString(new Date(data?.date));
       setDate(toDate || "");
       setBuildingId(String(data?.building_id || ""));
       setAmount(String(data?.amount || ""));
@@ -65,7 +63,7 @@ export default function AddEditOwnersReport({
         expense_category_id: expenseId,
         amount: amount,
         date: date,
-        // additional_note: additionalNotes,
+        note: additionalNotes,
       };
       const newPayload = purgeEmptyPayload({ payload });
       try {
@@ -74,8 +72,20 @@ export default function AddEditOwnersReport({
             `/admin/owner-report/${id}`,
             newPayload
           );
-          const data = response?.data;
-          dispatch(replaceOwnersReportInList(data));
+          const { owner_report } = response?.data?.data;
+          const result = {
+            ...owner_report,
+            expense_category: {
+              id: owner_report?.expense_category_id,
+              name:
+                expenseCategories?.find(
+                  (item) =>
+                    String(item?.id) ===
+                    String(owner_report?.expense_category_id)
+                )?.name || "",
+            },
+          };
+          dispatch(replaceOwnersReportInList(result));
           dispatch(
             openSnackbar({
               message: "Owner report successfully updated",
@@ -84,8 +94,20 @@ export default function AddEditOwnersReport({
           );
         } else {
           const response = await axios.post("/admin/owner-report", newPayload);
-          const data = response?.data;
-          dispatch(addOwnersReportToList(data));
+          const { owner_report } = response?.data?.data;
+          const result = {
+            ...owner_report,
+            expense_category: {
+              id: owner_report?.expense_category_id,
+              name:
+                expenseCategories?.find(
+                  (item) =>
+                    String(item?.id) ===
+                    String(owner_report?.expense_category_id)
+                )?.name || "",
+            },
+          };
+          dispatch(addOwnersReportToList(result));
           dispatch(
             openSnackbar({
               message: "Owner report successfully added",

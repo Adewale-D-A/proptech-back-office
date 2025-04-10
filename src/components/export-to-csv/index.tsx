@@ -37,7 +37,7 @@ export default function ExportToCSV({
           onClick={() => handleDownload()}
           className="w-fit text-nowrap relative py-2.5 px-6 bg-[#F2F4F7] text-[#1D2939] hover:bg-primary transition-all hover:text-white rounded-full flex items-center gap-3"
         >
-          {isExporting ? "...loading" : "Export to CSV"}
+          {isExporting ? "...loading" : "Export to Excel"}
         </button>
       ) : (
         <TriggerDownload

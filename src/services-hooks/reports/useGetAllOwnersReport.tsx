@@ -3,10 +3,7 @@ import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import { pagination } from "../../types/pagination";
-import {
-  addToPaginationHistory,
-  updateOwnersReport,
-} from "../../stores/apiData/reports/owners-report";
+import { updateOwnersReport } from "../../stores/apiData/reports/owners-report";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetAllOwnersReport({
@@ -17,7 +14,7 @@ export default function useGetAllOwnersReport({
   search = "",
   building_id,
   shortlet_id,
-  category_id,
+  expense_category_id,
 }: {
   page?: number;
   start_date?: string;
@@ -26,7 +23,7 @@ export default function useGetAllOwnersReport({
   search?: string;
   building_id?: string;
   shortlet_id?: string;
-  category_id?: string;
+  expense_category_id?: string;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -53,7 +50,7 @@ export default function useGetAllOwnersReport({
           end_date: end_date,
           building_id,
           shortlet_id,
-          category_id,
+          expense_category_id,
         },
       });
       const response = await axios.get(`/admin/owner-report?${queryString}`);
@@ -88,13 +85,11 @@ export default function useGetAllOwnersReport({
     search,
     building_id,
     shortlet_id,
-    category_id,
+    expense_category_id,
   ]);
 
   useEffect(() => {
-    if (shortlet_id) {
-      getAllOwnersReportList();
-    }
+    getAllOwnersReportList();
   }, [
     page,
     start_date,
@@ -103,7 +98,7 @@ export default function useGetAllOwnersReport({
     search,
     building_id,
     shortlet_id,
-    category_id,
+    expense_category_id,
   ]);
 
   return {

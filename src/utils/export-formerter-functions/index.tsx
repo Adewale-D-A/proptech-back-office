@@ -1,5 +1,7 @@
+import currencyFormat from "../currency-formatter";
 import formatDate, { formatTime } from "../isoDateConverter";
 
+import monthsAndDays from "../../assets/days-months.json";
 export const apartmentExportFormater = (item: { [key: string]: any }) => {
   return [
     ["name", item?.name],
@@ -57,6 +59,7 @@ export const customersExportFormater = (item: { [key: string]: any }) => {
     ["phone_number", item?.phone],
     ["total_bookings", item?.total_bookings],
     ["identity_verified", item?.identity_verified],
+    ["user_type", item?.type],
   ];
 };
 
@@ -137,4 +140,32 @@ export const maintenanceExpensesExportFormater = (item: {
   ];
 };
 
+export const ownersReportExportFormater = (item: { [key: string]: any }) => {
+  return [
+    ["Expense", item?.expense_category?.name],
+    ["Amount", item?.amount],
+    ["Note", item.note],
+    ["Apartment", item.shortlet?.name],
+  ];
+};
+
+export const ownersReportSpreadsheetExportFormater = (item: {
+  [key: string]: any;
+}) => {
+  return [
+    ["Expense", item?.expense_name],
+    ["January", item?.monthly_total_expenses?.[0]?.total],
+    ["February", item?.monthly_total_expenses?.[1]?.total],
+    ["March", item?.monthly_total_expenses?.[2]?.total],
+    ["April", item?.monthly_total_expenses?.[3]?.total],
+    ["May", item?.monthly_total_expenses?.[4]?.total],
+    ["June", item?.monthly_total_expenses?.[5]?.total],
+    ["July", item?.monthly_total_expenses?.[6]?.total],
+    ["August", item?.monthly_total_expenses?.[7]?.total],
+    ["September", item?.monthly_total_expenses?.[8]?.total],
+    ["October", item?.monthly_total_expenses?.[9]?.total],
+    ["November", item?.monthly_total_expenses?.[10]?.total],
+    ["December", item?.monthly_total_expenses?.[11]?.total],
+  ];
+};
 // REPORTS

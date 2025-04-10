@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 import useGetAllOwnersReport from "../../../services-hooks/reports/useGetAllOwnersReport";
-import ExportSelect from "../../inputs/select/exportSelect";
 import BinIcon from "../../../assets/icons/bin-icon";
 import PenIcon from "../../../assets/icons/pen";
 import NoResult from "../../noResult";
@@ -15,6 +14,9 @@ import LoadingButton from "../../button";
 import PlusIcon from "../../../assets/icons/plus";
 import MonthsCarousel from "../../../pages/reports/owners/months-carousel";
 import OwnersReportFilterOptions from "../../../pages/reports/owners/filter-options";
+import ExportToCSV from "../../export-to-csv";
+import { ownersReportExportFormater } from "../../../utils/export-formerter-functions";
+import currencyFormat from "../../../utils/currency-formatter";
 
 export default function OwnersReportSummaryTableList() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -39,7 +41,7 @@ export default function OwnersReportSummaryTableList() {
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
       shortlet_id: String(apartmentId || ""),
-      category_id: category,
+      expense_category_id: category,
     });
 
   const openForNewRequest = useCallback(() => {
@@ -88,7 +90,11 @@ export default function OwnersReportSummaryTableList() {
                 <MonthsCarousel setFilterDate={setFilterDates} />
               </div>
               <div className=" flex items-center gap-2">
-                <ExportSelect id="report" />
+                <ExportToCSV
+                  dataset={data}
+                  jsonToCSVReformerter={ownersReportExportFormater}
+                  fileName="owners-report-summary"
+                />
                 <LoadingButton
                   label="New entry"
                   startIcon={<PlusIcon />}
@@ -113,7 +119,7 @@ export default function OwnersReportSummaryTableList() {
                       return (
                         <tr key={item?.id} className=" border-b">
                           <td>{item?.expense_category?.name}</td>
-                          <td>&#8358;{String(item?.amount || 0)}</td>
+                          <td>{currencyFormat(item?.amount || 0)}</td>
                           <td>{item?.note}</td>
                           <td>
                             <div className=" flex items-center gap-4">

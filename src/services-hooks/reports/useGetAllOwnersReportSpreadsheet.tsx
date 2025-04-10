@@ -9,8 +9,8 @@ import getMonthStartEndDates from "../../utils/start-end-dates-generator";
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetAllOwnersReportSpreadsheet({
   page = 1,
-  start_date,
-  end_date,
+  start_date = getMonthStartEndDates(1)?.start,
+  end_date = getMonthStartEndDates(12)?.end,
   sort = "desc",
   search = "",
   building_id,
@@ -81,9 +81,7 @@ export default function useGetAllOwnersReportSpreadsheet({
   ]);
 
   useEffect(() => {
-    if (apartment_id) {
-      getAllOwnersReportSpreadsheetList();
-    }
+    getAllOwnersReportSpreadsheetList();
   }, [
     page,
     start_date,

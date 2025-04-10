@@ -1,9 +1,10 @@
-import { SyntheticEvent, useCallback, useState } from "react";
+import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import useAxios from "../../../useHooks/useAxios";
 import { useAppDispatch } from "../../../stores/hooks";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import LoadingButton from "../../../components/button";
 import TextInput from "../../../components/inputs/textInput";
+import useGetManagementFee from "../../../services-hooks/reports/useGetManagementFee";
 
 export default function UpdateManagementFee({
   setOpen,
@@ -16,16 +17,22 @@ export default function UpdateManagementFee({
   const [value, setValue] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const { data } = useGetManagementFee();
+
+  useEffect(() => {
+    if (data?.id) {
+      setValue(String(data?.amount || ""));
+    }
+  }, [data]);
 
   const handleSubmit = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
       setLoading(true);
       try {
-        const response = await axios.post(`/admin/tax`, {
-          rate: value,
+        await axios.post(`/admin/management-fee`, {
+          amount: value,
         });
-        // const data = response?.data;
         dispatch(
           openSnackbar({
             message: "Mangement fee successfully updated",
@@ -47,6 +54,7 @@ export default function UpdateManagementFee({
         <span className=" text-gray-500">Quick selection:</span>
         {[5, 10, 15, 20].map((item) => (
           <button
+            type="button"
             onClick={() => setValue(String(item))}
             className=" rounded-full px-3 p-1 bg-gray-100"
           >

@@ -137,6 +137,7 @@ import OwnersReportSummary from "./pages/reports/owners/summary";
 import OwnersReportSpreadsheet from "./pages/reports/owners/spreadsheet";
 import ExpenseCategoriesListView from "./pages/reports/owners/expense-categories";
 import BuildingsListView from "./pages/apartments/buildings";
+import AssignApartmentToOwner from "./pages/customers/assign-apartment";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -290,6 +291,10 @@ function App() {
             />
             {/* customers flows  */}
             <Route path="/customers" element={<Customers />} />
+            <Route
+              path="/customers/assign-apartment/:owner_id"
+              element={<AssignApartmentToOwner />}
+            />
 
             {/* employees flows  */}
             <Route element={<EmployeesTabWrapper />}>

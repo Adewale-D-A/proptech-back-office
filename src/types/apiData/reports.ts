@@ -120,7 +120,7 @@ export interface ownerReportSpreadsheetResponse {
       amount: number;
     }[];
     total_expenses: number;
-    net_income: number;
+    profit: number;
   }[];
   totals: {
     total_revenue: number;
@@ -142,6 +142,6 @@ export interface ownerReportSpreadsheet {
     revenue: number;
     management_fee: number;
     total_expenses: number;
-    net_income: number;
+    profit: number;
   }[];
 }

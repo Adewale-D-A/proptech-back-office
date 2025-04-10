@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
-import ExportSelect from "../../inputs/select/exportSelect";
 import NoResult from "../../noResult";
-import useAxios from "../../../useHooks/useAxios";
+// import useAxios from "../../../useHooks/useAxios";
 import { useAppDispatch } from "../../../stores/hooks";
 import { removeOwnersReportInList } from "../../../stores/apiData/reports/owners-report";
 import DeleteConfirmation from "../../infoModal/delete-confirmation";
@@ -10,19 +9,20 @@ import ModalTemplate from "../../modal";
 import LoadingButton from "../../button";
 import PlusIcon from "../../../assets/icons/plus";
 import monthsAndDays from "../../../assets/days-months.json";
-import TableSearch from "../../inputs/search/table-search";
 import UpdateManagementFee from "../../../pages/reports/owners/update-management-fee";
 import PencilSquareIcon from "../../../assets/icons/pencil-square";
 import OwnersReportFilterOptions from "../../../pages/reports/owners/filter-options";
 import useGetAllOwnersReportSpreadsheet from "../../../services-hooks/reports/useGetAllOwnersReportSpreadsheet";
 import currencyFormat from "../../../utils/currency-formatter";
+import ExportToCSV from "../../export-to-csv";
+import { ownersReportSpreadsheetExportFormater } from "../../../utils/export-formerter-functions";
 // import useGetAllOwnersReport from "../../../services-hooks/reports/useGetAllOwnersReport";
 // import BinIcon from "../../../assets/icons/bin-icon";
 // import PenIcon from "../../../assets/icons/pen";
 // import Pagination from "../../pagination";
 
 export default function OwnersReportSpreadsheetTableList() {
-  const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
+  // const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
   const dispatch = useAppDispatch();
 
   const [selectedId, setSelectedId] = useState("");
@@ -96,10 +96,14 @@ export default function OwnersReportSpreadsheetTableList() {
           <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
             <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
               <div className=" max-w-md">
-                <TableSearch setValue={setSearch} placeholder="Search..." />
+                {/* <TableSearch setValue={setSearch} placeholder="Search..." /> */}
               </div>
               <div className=" flex items-center gap-2">
-                <ExportSelect id="report" />
+                <ExportToCSV
+                  dataset={data?.data}
+                  jsonToCSVReformerter={ownersReportSpreadsheetExportFormater}
+                  fileName="owners-report-spreadsheet"
+                />
                 <LoadingButton
                   label="New entry"
                   startIcon={<PlusIcon />}
@@ -125,7 +129,9 @@ export default function OwnersReportSpreadsheetTableList() {
                         <tr key={item?.expense_name} className=" border-b">
                           <td>{item?.expense_name}</td>
                           {item?.monthly_total_expenses.map((item) => (
-                            <td>{currencyFormat(item?.total || 0.0)}</td>
+                            <td key={item?.month}>
+                              {currencyFormat(item?.total || 0.0)}
+                            </td>
                           ))}
                           {/* <td>
                             <div className=" flex items-center gap-4">
@@ -149,16 +155,20 @@ export default function OwnersReportSpreadsheetTableList() {
                     {/* totals  */}
                     <tr className=" border-b">
                       <td className=" bg-[#E4E7EC]">Total</td>
-                      {data?.monthlySummaries.map((item) => (
-                        <td>{currencyFormat(item?.total_expenses || 0.0)}</td>
+                      {data?.monthlySummaries.map((item, index) => (
+                        <td key={index}>
+                          {currencyFormat(item?.total_expenses || 0.0)}
+                        </td>
                       ))}
                       {/* <td></td> */}
                     </tr>
                     {/* revenue */}
                     <tr className=" border-b">
                       <td className=" bg-[#FEF0C7]">Revenue</td>
-                      {data?.monthlySummaries.map((item) => (
-                        <td>{currencyFormat(item?.revenue || 0.0)}</td>
+                      {data?.monthlySummaries.map((item, index) => (
+                        <td key={index}>
+                          {currencyFormat(item?.revenue || 0.0)}
+                        </td>
                       ))}
                       {/* <td></td> */}
                     </tr>
@@ -175,16 +185,20 @@ export default function OwnersReportSpreadsheetTableList() {
                           </button>
                         </div>
                       </td>
-                      {data?.monthlySummaries.map((item) => (
-                        <td>{currencyFormat(item?.management_fee || 0.0)} </td>
+                      {data?.monthlySummaries.map((item, index) => (
+                        <td key={index}>
+                          {currencyFormat(item?.management_fee || 0.0)}{" "}
+                        </td>
                       ))}
                       {/* <td></td> */}
                     </tr>
                     {/* profit */}
                     <tr className=" border-b">
                       <td className="bg-[#D1FADF]">Profit</td>
-                      {data?.monthlySummaries.map((item) => (
-                        <td>{currencyFormat(item?.net_income || 0.0)}</td>
+                      {data?.monthlySummaries.map((item, index) => (
+                        <td key={index}>
+                          {currencyFormat(item?.profit || 0.0)}
+                        </td>
                       ))}
                       {/* <td></td> */}
                     </tr>
