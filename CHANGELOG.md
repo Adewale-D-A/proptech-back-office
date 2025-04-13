@@ -1,3 +1,7 @@
+##### 13.04.2025
+
+> Feature: Permission base UI displays
+
 ##### 10.04.2025
 
 > Feature: Assign apartment to owner user
