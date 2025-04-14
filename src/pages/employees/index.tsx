@@ -1,12 +1,7 @@
-import { useLocation, useParams } from "react-router-dom";
+// import { useLocation, useParams } from "react-router-dom";
 import { useEffect, useLayoutEffect } from "react";
-import UsersIcon from "../../assets/icons/users";
 import { useAppDispatch } from "../../stores/hooks";
 import { updatePageProperties } from "../../stores/appFunctionality/pageProperties";
-import ExportSelect from "../../components/inputs/select/exportSelect";
-import LinkButton from "../../components/button/linkButton";
-import PlusIcon from "../../assets/icons/plus";
-import CustomersListTable from "../../components/tables/customer";
 import { clearAllCustomerInfo } from "../../stores/inAppDataInterations/addEditCustomerInfo";
 import EmployeesListTable from "../../components/tables/employeesLists";
 import UserGroupIcon from "../../assets/icons/user-group";
@@ -19,8 +14,8 @@ const breadCrumb = [
   },
 ];
 export default function Employees() {
-  const { id } = useParams();
-  const location = useLocation();
+  // const { id } = useParams();
+  // const location = useLocation();
   const dispatch = useAppDispatch();
   // update page props on component mount
   useLayoutEffect(() => {

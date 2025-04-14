@@ -1,5 +1,6 @@
 import weekdayMonth from "../assets/days-months.json";
 import { dateGeneratorUtilResponse } from "../types/date-generator-util-response";
+import { formatDateToString } from "./isoDateConverter";
 export default function generateCalendarData({
   selectedDate,
   highlights,
@@ -38,13 +39,13 @@ export default function generateCalendarData({
       let calendarDay = {
         currentMonth: firstDayOfMonth.getMonth() === selectedDate.getMonth(),
         date: new Date(firstDayOfMonth),
-        isoStringDate: new Date(
-          firstDayOfMonth.getFullYear(),
-          firstDayOfMonth.getMonth(),
-          firstDayOfMonth.getDate() + 1
-        )
-          ?.toISOString()
-          ?.slice(0, 10),
+        isoStringDate: formatDateToString(
+          new Date(
+            firstDayOfMonth.getFullYear(),
+            firstDayOfMonth.getMonth(),
+            firstDayOfMonth.getDate() + 1
+          )
+        ),
         month: firstDayOfMonth.getMonth(),
         day: firstDayOfMonth.getDate(),
         weekday: weekdayMonth?.days[firstDayOfMonth.getDay()],

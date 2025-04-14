@@ -50,7 +50,7 @@ export default function AddRoles() {
           permissions,
         });
         const { role } = response?.data?.data;
-        dispatch(addRolesToList(role));
+        dispatch(addRolesToList({ ...role, guard_name: "admin" }));
         dispatch(
           openSnackbar({
             message: "Role name successfully added",

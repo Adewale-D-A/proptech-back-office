@@ -292,30 +292,36 @@ export default function AvailabilityOverview() {
                         length: currentDays.filter((item) => item.currentMonth)
                           .length,
                       },
-                      (_, ind) => (
-                        <span
-                          key={ind}
-                          className={`${
-                            apt?.booked?.find(
-                              (item) =>
-                                item?.date ===
-                                currentDays?.find(
-                                  (item) => item?.day === ind + 1
-                                )?.isoStringDate
-                            )
-                              ? "bg-red-500"
-                              : apt?.blocked?.find(
-                                  (item) =>
-                                    item?.date ===
-                                    currentDays?.find(
-                                      (item) => item?.day === ind + 1
-                                    )?.isoStringDate
-                                )
-                              ? " bg-[#293056]"
-                              : "bg-white"
-                          } min-h-[39px] min-w-[39px]  border rounded-md`}
-                        ></span>
-                      )
+                      (_, ind) => {
+                        const isBooked = apt?.booked?.find(
+                          (item) =>
+                            item?.date ===
+                            currentDays?.find((item) => item?.day === ind + 1)
+                              ?.isoStringDate
+                        );
+                        const isBlocked = apt?.blocked?.find(
+                          (item) =>
+                            item?.date ===
+                            currentDays?.find((item) => item?.day === ind + 1)
+                              ?.isoStringDate
+                        );
+                        return (
+                          <div
+                            key={ind}
+                            className={`${
+                              isBooked
+                                ? "bg-red-500"
+                                : isBlocked
+                                ? " bg-[#293056]"
+                                : "bg-gray-50 "
+                            } min-h-[39px] min-w-[39px]  border rounded-md relative overflow-hidden`}
+                          >
+                            {!(isBlocked || isBooked) && (
+                              <div className=" absolute top-0 right-0 aspect-square border-l-8 border-l-transparent border-b-8 border-b-transparent border-8 border-green-500"></div>
+                            )}
+                          </div>
+                        );
+                      }
                     )}
                   </div>
                 </div>

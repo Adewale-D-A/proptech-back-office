@@ -4,7 +4,6 @@ import Filter from "../filterAndSort/filter";
 import NoResult from "../noResult";
 import Pagination from "../pagination";
 import formatDate from "../../utils/isoDateConverter";
-import ExportSelect from "../inputs/select/exportSelect";
 import Select from "../inputs/select";
 import useGetRequisitionRequests from "../../services-hooks/useGetRequisitionRequests";
 import Status from "../status";
@@ -121,7 +120,7 @@ export default function RequisitionRequestTable() {
             <Filter actionHandler={handleFiltering} />
           </div>
         </div>
-        <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+        <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
           <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
             <h2 className="text-xl font-semibold">Requisition Requests</h2>{" "}
             <div className=" w-fit flex items-center gap-3">
@@ -142,84 +141,86 @@ export default function RequisitionRequestTable() {
           </div>
           <div className="block px-5">
             {data && data.length > 0 ? (
-              <table className=" w-full overflow-x-auto">
-                <thead className="">
-                  <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                    {[
-                      "Requesting employee",
-                      "Apartment",
-                      "Amount",
-                      "Currency",
-                      "Request date",
-                      "Paid",
-                      "Status",
-                      "Action",
-                    ].map((head) => (
-                      <th key={head}>{head}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="">
-                  {data.map((item) => {
-                    return (
-                      <tr key={item?.id} className=" border-b">
-                        <td className=" flex gap-2 items-center min-w-36">
-                          <img
-                            src={"/logo_blue.png"}
-                            alt={item?.admin?.first_name}
-                            className=" h-10 w-10 rounded aspect-square"
-                          />
-                          <span className=" flex flex-col gap-1">
-                            <span>{item?.admin?.first_name}</span>
-                            <span className=" text-xs text-gray-500 flex items-center gap-1">
-                              {item?.admin?.last_name}
+              <div className=" w-full overflow-x-auto">
+                <table className=" w-full">
+                  <thead>
+                    <tr>
+                      {[
+                        "Requesting employee",
+                        "Apartment",
+                        "Amount",
+                        "Currency",
+                        "Request date",
+                        "Paid",
+                        "Status",
+                        "Action",
+                      ].map((head) => (
+                        <th key={head}>{head}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.map((item) => {
+                      return (
+                        <tr key={item?.id} className=" border-b">
+                          <td className=" flex gap-2 items-center min-w-36">
+                            <img
+                              src={"/logo_blue.png"}
+                              alt={item?.admin?.first_name}
+                              className=" h-10 w-10 rounded aspect-square"
+                            />
+                            <span className=" flex flex-col gap-1">
+                              <span>{item?.admin?.first_name}</span>
+                              <span className=" text-xs text-gray-500 flex items-center gap-1">
+                                {item?.admin?.last_name}
+                              </span>
                             </span>
-                          </span>
-                        </td>
-                        <td className=" text-lg  min-w-36">
-                          {item?.shortlet?.name}
-                        </td>
-                        <td>{item?.amount}</td>
-                        <td>{item?.currency}</td>
-                        <td>{formatDate(item?.created_at)}</td>
-                        <td>
-                          <Status
-                            status={"requisition_payment_state"}
-                            booleanVal={Boolean(item?.is_paid)}
-                            truthyMessage="Yes"
-                            falsyMessage="No"
-                          />
-                        </td>
-                        <td>
-                          <Status status={item?.status} />
-                        </td>
-                        <td>
-                          <div className=" flex items-center gap-4">
-                            <button
-                              onClick={() => openForStatusUpdate(item?.id)}
-                              title="mark as paid"
-                            >
-                              <DoubleCheckIcon className=" size-8" />
-                            </button>
-                            <button
-                              title="edit"
-                              onClick={() => openForEdit(item)}
-                            >
-                              <PenIcon />
-                            </button>
-                            {/* <button
+                          </td>
+                          <td className=" text-lg  min-w-36">
+                            {item?.shortlet?.name}
+                          </td>
+                          <td>{item?.amount}</td>
+                          <td>{item?.currency}</td>
+                          <td>{formatDate(item?.created_at)}</td>
+                          <td>
+                            <Status
+                              status={"requisition_payment_state"}
+                              booleanVal={Boolean(item?.is_paid)}
+                              truthyMessage="Yes"
+                              falsyMessage="No"
+                            />
+                          </td>
+                          <td>
+                            <Status status={item?.status} />
+                          </td>
+                          <td>
+                            <div className=" flex items-center gap-4">
+                              <button
+                                onClick={() => openForStatusUpdate(item?.id)}
+                                title="mark as paid"
+                              >
+                                <DoubleCheckIcon className=" size-8" />
+                              </button>
+                              <button
+                                title="edit"
+                                onClick={() => openForEdit(item)}
+                              >
+                                <PenIcon />
+                              </button>
+                              {/* <button
                               title="delete"
                               onClick={() => handleOpenDelete(item?.id)}
                             >
                               <BinIcon className=" size-6 text-red-500" />
                             </button> */}
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             ) : (
               <NoResult />
             )}

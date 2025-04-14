@@ -6,6 +6,7 @@ import formatDate from "../../utils/isoDateConverter";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
 type props = {
   //   header,
@@ -46,6 +47,9 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
       setConfirming(false);
     }
   }, [id]);
+  const { data: booking } = useGetResourceAccessChecker({
+    resource: "booking",
+  });
   return (
     <table className=" w-full text-xs overflow-x-auto">
       <thead className="">
@@ -100,12 +104,14 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
                   >
                     Resend Email
                   </button>
-                  <Link
-                    to={`/bookings/booking-details/edit-reservation/${request?.id}`}
-                    className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                  >
-                    Edit Reservation
-                  </Link>
+                  {booking?.update && (
+                    <Link
+                      to={`/bookings/booking-details/edit-reservation/${request?.id}`}
+                      className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                    >
+                      Edit Reservation
+                    </Link>
+                  )}
                   {/* <Link
                     to={`#`}
                     className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"

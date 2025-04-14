@@ -8,7 +8,8 @@ import Pagination from "../pagination";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import useGetRoles from "../../services-hooks/useGetRoles";
 import { removeRolesInList } from "../../stores/apiData/roles-lists";
-import MobileRolesTable from "./mobile/roles";
+// import MobileRolesTable from "./mobile/roles";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
 export default function ManageRoleTableData() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -33,12 +34,6 @@ export default function ManageRoleTableData() {
       sort: sort,
       search,
     });
-  const handleCustomersFiltering = useCallback(
-    (start_date: string, end_date: string) => {
-      setFilterDates({ start_date, end_date });
-    },
-    []
-  );
 
   // handle remove user from list
   const handleDelete = useCallback(async () => {
@@ -65,9 +60,12 @@ export default function ManageRoleTableData() {
     setSelectedId(id);
   }, []);
 
+  const { data: role } = useGetResourceAccessChecker({
+    resource: "role",
+  });
   return (
     <>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Roles List</h2>
           {/* <div className=" max-w-md">
@@ -81,18 +79,18 @@ export default function ManageRoleTableData() {
             <Sort setSort={setSort} id="sort-by" label="Sort by" />
           </div> */}
         </div>
-        <div className="hidden md:block px-5">
-          {data?.length > 0 ? (
-            <table className=" w-full py-10 border rounded-md">
+        {data?.length > 0 ? (
+          <div className=" w-full overflow-x-auto">
+            <table className=" w-full">
               <thead>
-                <tr className=" text-left bg-gray-200/15 text-gray-500">
+                <tr>
                   <th>S/N</th>
                   <th>Name</th>
                   <th>Guard Name</th>
                   <th>Action</th>
                 </tr>
               </thead>
-              <tbody className="">
+              <tbody>
                 {data.map((request, index) => {
                   return (
                     <tr key={request?.id} className=" border-b">
@@ -102,19 +100,23 @@ export default function ManageRoleTableData() {
                       <td className=" group relative">
                         <span className=" p-2 text-lg">...</span>
                         <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          <Link
-                            to={`/employees/roles/edit/${request?.id}`}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Edit role
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() => onDeleteClick(request?.id)}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Delete role
-                          </button>
+                          {role?.update && (
+                            <Link
+                              to={`/employees/roles/edit/${request?.id}`}
+                              className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              Edit role
+                            </Link>
+                          )}
+                          {role?.delete && (
+                            <button
+                              type="button"
+                              onClick={() => onDeleteClick(request?.id)}
+                              className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              Delete role
+                            </button>
+                          )}
                         </span>
                       </td>
                     </tr>
@@ -122,13 +124,10 @@ export default function ManageRoleTableData() {
                 })}
               </tbody>
             </table>
-          ) : (
-            <NoResult title="No Result" message="No data found for this page" />
-          )}
-        </div>
-        <div className="w-full block md:hidden">
-          <MobileRolesTable data={data} onDeleteClick={onDeleteClick} />
-        </div>
+          </div>
+        ) : (
+          <NoResult title="No Result" message="No data found for this page" />
+        )}
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}

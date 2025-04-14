@@ -1,3 +1,13 @@
+##### 14.04.2025
+
+> Feature: Remove owner shortlet feature update
+> Feature: 'Who sees what' logic completion
+> Fix: Today's meeting highlighted bug fixes
+
+##### 13.04.2025
+
+> Feature: Permission base UI displays
+
 ##### 10.04.2025
 
 > Feature: Assign apartment to owner user

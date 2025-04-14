@@ -75,7 +75,7 @@ export default function MaintenanceRequestTable() {
   // const handleDelete = useCallback(async () => {
   //   setIsDeleting(true);
   //   try {
-  //     await axios.delete(`/admin/extra-option/${selectedId}`);
+  //     await axios.delete(`/admin/maintenance-request/${selectedId}`);
   //     dispatch(removeMaintenanceRequestInList({ id: Number(selectedId) }));
   //     setOpenDelete(false);
   //   } catch (error) {
@@ -106,7 +106,7 @@ export default function MaintenanceRequestTable() {
           </div>
         </div>
         <div className="w-full rounded-lg border  flex flex-col gap-5">
-          <div className=" w-full justify-between p-5 gap-6 flex items-center flex-col lg:flex-row">
+          <div className=" w-full justify-between md:p-5 gap-6 flex items-center flex-col lg:flex-row">
             <h2 className="text-xl font-semibold flex items-center gap-2">
               Maintenance Requests{" "}
               <span className=" bg-[#F9F5FF] rounded-full text-xs text-[#2A3F8F] px-2.5 py-1">
@@ -131,82 +131,87 @@ export default function MaintenanceRequestTable() {
           </div>
           <div className="block">
             {data && data.length > 0 ? (
-              <table className=" w-full overflow-x-auto">
-                <thead className="">
-                  <tr className=" text-left text-xs font-medium bg-[#F9FAFB] text-[#475467] rounded-lg">
-                    {[
-                      "Requesting employee",
-                      "Apartment",
-                      "Category",
-                      "Request date",
-                      "Status",
-                      "Action",
-                    ].map((head) => (
-                      <th key={head}>{head}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="">
-                  {data.map((item) => {
-                    return (
-                      <tr key={item?.id} className=" border-b">
-                        <td className=" flex gap-2 items-center min-w-36">
-                          <img
-                            src={item?.admin?.profile_photo || "/logo_blue.png"}
-                            alt={item?.admin?.first_name}
-                            className=" h-10 w-10 rounded aspect-square"
-                          />
-                          <span className=" flex flex-col gap-1">
-                            <span className=" text-xs font-medium text-[#101828]">
-                              {item?.admin?.first_name} {item?.admin?.last_name}
-                            </span>
-                            <span className=" text-xs text-[#475467] font-medium">
-                              Operations
-                            </span>
-                          </span>
-                        </td>
-                        <td className=" text-xs font-medium text-[#475467]  min-w-36">
-                          {item?.shortlet?.name}
-                        </td>
-                        <td className="text-xs font-medium text-[#475467] ">
-                          {item?.category?.name}
-                        </td>
-
-                        <td className="text-xs font-medium text-[#475467] ">
-                          {formatDate(item?.request_date)}
-                        </td>
-                        <td className="">
-                          <Status status={item?.status} />
-                        </td>
-                        <td>
-                          <div className=" flex items-center gap-4">
-                            <Link
-                              to={`/requests/maintenance-requests/view-maintenance/${item?.id}`}
-                            >
-                              <EyeIcon />
-                            </Link>
-
-                            <button
-                              title="edit"
-                              onClick={() =>
-                                openForEditMaintenanceRequest(item?.id)
+              <div className=" w-full overflow-x-auto">
+                <table className=" w-full">
+                  <thead>
+                    <tr>
+                      {[
+                        "Requesting employee",
+                        "Apartment",
+                        "Category",
+                        "Request date",
+                        "Status",
+                        "Action",
+                      ].map((head) => (
+                        <th key={head}>{head}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.map((item) => {
+                      return (
+                        <tr key={item?.id} className=" border-b">
+                          <td className=" flex gap-2 items-center min-w-36">
+                            <img
+                              src={
+                                item?.admin?.profile_photo || "/logo_blue.png"
                               }
-                            >
-                              <PenIcon />
-                            </button>
-                            {/* <button
+                              alt={item?.admin?.first_name}
+                              className=" h-10 w-10 rounded aspect-square"
+                            />
+                            <span className=" flex flex-col gap-1">
+                              <span className=" text-xs font-medium text-[#101828]">
+                                {item?.admin?.first_name}{" "}
+                                {item?.admin?.last_name}
+                              </span>
+                              <span className=" text-xs text-[#475467] font-medium">
+                                Operations
+                              </span>
+                            </span>
+                          </td>
+                          <td className=" text-xs font-medium text-[#475467]  min-w-36">
+                            {item?.shortlet?.name}
+                          </td>
+                          <td className="text-xs font-medium text-[#475467] ">
+                            {item?.category?.name}
+                          </td>
+
+                          <td className="text-xs font-medium text-[#475467] ">
+                            {formatDate(item?.request_date)}
+                          </td>
+                          <td className="">
+                            <Status status={item?.status} />
+                          </td>
+                          <td>
+                            <div className=" flex items-center gap-4">
+                              <Link
+                                to={`/requests/maintenance-requests/view-maintenance/${item?.id}`}
+                              >
+                                <EyeIcon />
+                              </Link>
+
+                              <button
+                                title="edit"
+                                onClick={() =>
+                                  openForEditMaintenanceRequest(item?.id)
+                                }
+                              >
+                                <PenIcon />
+                              </button>
+                              {/* <button
                               title="delete"
                               onClick={() => handleOpenDelete(item?.id)}
                             >
                               <BinIcon className=" size-6 text-red-500" />
                             </button> */}
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             ) : (
               <NoResult />
             )}
