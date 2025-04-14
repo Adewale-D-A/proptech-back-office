@@ -1,5 +1,6 @@
 ##### 14.04.2025
 
+> Bug fixes: Amenities description not required feature addition
 > Feature: Remove owner shortlet feature update
 > Feature: 'Who sees what' logic completion
 > Fix: Today's meeting highlighted bug fixes
