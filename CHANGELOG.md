@@ -1,3 +1,7 @@
+##### 14.04.2025
+
+> Feature: Remove owner shortlet feature update
+
 ##### 13.04.2025
 
 > Feature: Permission base UI displays
