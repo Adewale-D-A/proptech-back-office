@@ -8,11 +8,10 @@ import CalendarView from "../../../components/calendar";
 import CalendarAvailabilitySymbol from "../../../components/calender-availability-symbol";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import dateRangeIterator from "../../../utils/dateRangeIterator";
-import { apartmentById } from "../../../types/apiData/apartment";
-import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
-import Select from "../../../components/inputs/select";
 import useGetApartmentCalendar from "../../../services-hooks/apartmentCalendar";
-import useGetLocationGroupings from "../../../services-hooks/apartment/useGetLocationGroupings";
+import ApartmentThroughBuildingSelector from "../../../components/inputs/select/apartment-through-building-selector";
+import { formatDateToString } from "../../../utils/isoDateConverter";
+// import useGetLocationGroupings from "../../../services-hooks/apartment/useGetLocationGroupings";
 
 const breadCrumb = [
   {
@@ -28,7 +27,7 @@ const breadCrumb = [
 ];
 
 const today = new Date();
-const todayString = new Date()?.toISOString()?.slice(0, 10);
+const todayString = formatDateToString(new Date());
 const nextMonthString = new Date(today?.getFullYear(), today?.getMonth() + 6, 0)
   ?.toISOString()
   ?.slice(0, 10);
@@ -54,8 +53,8 @@ export default function ApartmentCalendarPage() {
   const dispatch = useAppDispatch();
 
   // component states
-  const [apartment, setApartment] = useState<apartmentById>({} as any);
-  const [buildingSelect, setBuildingSelect] = useState("");
+  const [apartmentId, setApartmentId] = useState("");
+  const [buildingId, setBuildingId] = useState("");
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
@@ -69,14 +68,14 @@ export default function ApartmentCalendarPage() {
   // calendar data fetching based on filtered dates
   const { data, isLoading, isFailed, retryFunction, setIsFailed } =
     useGetApartmentCalendar({
-      id: String(apartment?.id || ""),
+      id: String(apartmentId || ""),
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
     });
-  const { data: locationGroups } = useGetLocationGroupings({
-    page: 1,
-    limit: 1000,
-  });
+  // const { data: locationGroups } = useGetLocationGroupings({
+  //   page: 1,
+  //   limit: 1000,
+  // });
 
   // update page props on component mount
   useLayoutEffect(() => {
@@ -134,29 +133,13 @@ export default function ApartmentCalendarPage() {
             <CalendarIcon /> <span>Apartment Calendar</span>
           </h4>
           <div className="w-full max-w-screen-md flex items-center flex-col md:flex-row gap-2">
-            <ApartmentSingleSearch
-              placeholder="Apartment name..."
-              selected={apartment}
-              setSelected={setApartment}
+            <ApartmentThroughBuildingSelector
+              setApartmentId={setApartmentId}
+              apartmentId={apartmentId}
+              buildingId={buildingId}
+              setBuildingId={setBuildingId}
+              withLabel={false}
             />
-            <Select
-              value={buildingSelect}
-              setValue={setBuildingSelect}
-              id={"building-filter"}
-            >
-              <option value={""} disabled>
-                Filter by building
-              </option>
-              <option value={""}>All</option>
-              {locationGroups.map((item) => (
-                <option
-                  key={String(item?.id || "")}
-                  value={String(item?.id || "")}
-                >
-                  {item?.name}
-                </option>
-              ))}
-            </Select>
           </div>
           <Filter actionHandler={handleSalesFiltering} />
         </div>
@@ -166,7 +149,7 @@ export default function ApartmentCalendarPage() {
         <div className="w-full p-2 flex flex-col gap-5">
           {calendarVewData?.length > 0 && (
             <div className="w-full flex justify-center flex-col gap-5">
-              <div className="w-full flex flex-wrap gap-8 gap-y-16 justify-center items-start">
+              <div className="w-full flex flex-wrap gap-8 gap-y-16 justify-right items-start">
                 {calendarVewData?.map((item, index) => (
                   <div key={item?.toString()} className=" border-r px-3">
                     <CalendarView

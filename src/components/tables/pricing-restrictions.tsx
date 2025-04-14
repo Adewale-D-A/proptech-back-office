@@ -56,18 +56,18 @@ export default function PricingRestrictionsTable() {
   }, [selectedId]);
   return (
     <>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Restrictions</h2>
           <div>
             <TableSearch setValue={setSearch} placeholder="Search..." />
           </div>
         </div>
-        <div className="hidden md:block px-5">
-          {data && data.length > 0 ? (
-            <table className=" w-full overflow-x-auto">
-              <thead className="">
-                <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+        {data && data.length > 0 ? (
+          <div className=" w-full overflow-x-auto">
+            <table className=" w-full">
+              <thead>
+                <tr>
                   {["S/N", "Name", "Min Nights", "Max Nights", "Action"].map(
                     (head) => (
                       <th key={head}>{head}</th>
@@ -75,7 +75,7 @@ export default function PricingRestrictionsTable() {
                   )}
                 </tr>
               </thead>
-              <tbody className="">
+              <tbody>
                 {data.map((item, index) => {
                   return (
                     <tr key={item?.id} className=" border-b">
@@ -112,13 +112,10 @@ export default function PricingRestrictionsTable() {
                 })}
               </tbody>
             </table>
-          ) : (
-            <NoResult />
-          )}
-        </div>
-        <div className="w-full block md:hidden">
-          <MobilePriceRestriction data={data} handleDelete={selectForDelete} />
-        </div>
+          </div>
+        ) : (
+          <NoResult />
+        )}
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}

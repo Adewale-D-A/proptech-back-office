@@ -29,7 +29,10 @@ import useGetRequestCategories from "../../services-hooks/useGetRequestCategorie
 import purgeEmptyPayload from "../../utils/remove-empty-payload";
 import useAxios from "../../useHooks/useAxios";
 import { requisitionRequest } from "../../types/apiData/requisition-request";
+import formatDate, { formatDateToString } from "../../utils/isoDateConverter";
 
+const today = new Date();
+const todayDate = formatDateToString(today);
 export default function AddEditMaintenanceRequest({
   id,
   setOpen,
@@ -61,7 +64,7 @@ export default function AddEditMaintenanceRequest({
   const [email, setEmail] = useState("");
   const [apartment, setApartment] = useState<apartmentById>({} as any);
   const [category, setCategory] = useState("");
-  const [requestDate, setRequestDate] = useState("");
+  const [requestDate, setRequestDate] = useState(todayDate);
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("");
   const [item, setItem] = useState("");
@@ -93,20 +96,20 @@ export default function AddEditMaintenanceRequest({
         images,
         category_id,
         item,
-        frequency,
         note,
+        frequency,
         admin,
         amount,
         currency,
         request_date,
       } = data;
-      const toDate = new Date(
-        request_date
-          ? request_date
-          : existing_fields_dataset?.request_date || ""
-      )
-        ?.toISOString()
-        ?.slice(0, 10);
+      const toDate = formatDateToString(
+        new Date(
+          request_date
+            ? request_date
+            : existing_fields_dataset?.request_date || ""
+        )
+      );
       // setEmployee("")
       // setApartment("")
       setCategory(
@@ -146,43 +149,28 @@ export default function AddEditMaintenanceRequest({
         // email,
         category_id: category,
         request_date: requestDate,
+        item,
         amount,
         currency,
-        item,
         frequency,
         note: additionalNotes,
         images: attachedImages?.filter((item) => !Boolean(item?.id)) || [],
         remove_images: removedImageIdSet,
-        // vendor_name: vendorName,
-        // vendor_account_name: vendorAccountName,
-        // vendor_bank: vendorBank,
-        // vendor_account_number: vendorAccountNumber,
-        // additional_note: additionalNotes,
-        // invoice: invoice,
-        // mark_as_paid: markAsPaid,
       };
       const newPayload = purgeEmptyPayload({ payload });
-      // const dummytResponse = {
-      //   id: 14,
-      //   employee: { id: 1, first_name: "John", last_name: "Doe" },
-      //   email: "john.doe@example.com",
-      //   shortlet: {
-      //     id: 32,
-      //     name: "Apartment 32",
-      //   },
-      //   category,
-      //   amount: amount,
-      //   currency: currency,
-      //   status: "pending",
-      //   request_date: new Date(),
-      //   created_at: new Date(),
-      // };
+
       try {
         if (type === "maintenance") {
+          const maintenancePayload = {
+            ...newPayload,
+            // amount: 0,
+            // currency: "NGN",
+            // frequency: "One-off",
+          };
           if (id) {
             const response = await axios.post(
               `/admin/maintenance-request/update/${id}`,
-              newPayload
+              maintenancePayload
             );
             const { maintenance_request } = response?.data?.data;
             dispatch(
@@ -205,7 +193,7 @@ export default function AddEditMaintenanceRequest({
           } else {
             const response = await axios.post(
               "/admin/maintenance-request",
-              newPayload
+              maintenancePayload
             );
             const { maintenance_request } = response?.data?.data;
             dispatch(
@@ -323,40 +311,6 @@ export default function AddEditMaintenanceRequest({
           label="Request Date"
           staticLabel="Request Date"
         />
-        <Select
-          isRequired={true}
-          value={frequency}
-          setValue={setFrequency}
-          id="frequency"
-          label="Frequency"
-        >
-          <option value="" disabled>
-            Select frequency
-          </option>
-          <option value="One-off">on - off</option>
-        </Select>
-        <Select
-          isRequired={true}
-          value={currency}
-          setValue={setCurrency}
-          id="currency"
-          label="Currency"
-        >
-          <option value="" disabled>
-            Select currency
-          </option>
-          <option value="NGN">NGN</option>
-          <option value="USD">USD</option>
-        </Select>
-        <TextInput
-          id="amount"
-          placeholder="Amount"
-          isRequired={true}
-          value={amount}
-          setValue={setAmount}
-          inputType="number"
-          label="Amount"
-        />
         {/* <TextInput
           id="category"
           placeholder="others"
@@ -395,17 +349,55 @@ export default function AddEditMaintenanceRequest({
           </option>
           <option value="on - off">something</option>
         </Select> */}
-
-        <TextInput
-          id="item"
-          placeholder="Item"
-          isRequired={true}
-          value={item}
-          setValue={setItem}
-          inputType="string"
-          label="Item"
-        />
       </div>
+      <TextInput
+        id="item"
+        placeholder="Item"
+        isRequired={true}
+        value={item}
+        setValue={setItem}
+        inputType="string"
+        label="Item"
+      />
+
+      {type !== "maintenance" && (
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
+          <Select
+            isRequired={true}
+            value={frequency}
+            setValue={setFrequency}
+            id="frequency"
+            label="Frequency"
+          >
+            <option value="" disabled>
+              Select frequency
+            </option>
+            <option value="One-off">on - off</option>
+          </Select>
+          <Select
+            isRequired={true}
+            value={currency}
+            setValue={setCurrency}
+            id="currency"
+            label="Currency"
+          >
+            <option value="" disabled>
+              Select currency
+            </option>
+            <option value="NGN">NGN</option>
+            <option value="USD">USD</option>
+          </Select>
+          <TextInput
+            id="amount"
+            placeholder="Amount"
+            isRequired={true}
+            value={amount}
+            setValue={setAmount}
+            inputType="number"
+            label="Amount"
+          />
+        </div>
+      )}
       {children}
       <div className="w-full flex flex-col gap-2">
         <MultipleFileInputDesignTwo

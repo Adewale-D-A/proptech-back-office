@@ -16,6 +16,7 @@ import useGetSalesAnalytics from "../../services-hooks/dashboards/useGetSalesAna
 import Sort from "../../components/filterAndSort/sort";
 import Filter from "../../components/filterAndSort/filter";
 import useGetSalesChannels from "../../services-hooks/dashboards/useGetSalesChannels";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
 const breadCrumb = [
   {
@@ -77,103 +78,107 @@ export default function DashboardOverview() {
     },
     []
   );
+  const { data: dashboard } = useGetResourceAccessChecker({
+    resource: "admin-dashboard",
+  });
   return (
     <section className="w-full flex flex-col items-center">
-      <div className="w-full max-w-screen-xl flex flex-col gap-16">
-        <h2 className=" text-2xl font-semibold">Services Breakdown</h2>
-        {/* sales breakdown cards */}
-        <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          {[
-            {
-              id: 1,
-              icon: <BuildingIcon className="w-5 h-5" />,
-              label: "Number of Apartment",
-              value: data?.number_of_shortlets,
-              theme: "text-[#26397B] bg-[#26397B]/20",
-              url: { src: "/apartments/view-all", label: "View Apartment" },
-            },
-            {
-              id: 2,
-              icon: <CalendarIcon className="w-5 h-5" />,
-              label: "Total Bookings",
-              value: `${data?.number_of_bookings} Bookings`,
-              theme: "text-[#35BD29] bg-[#35BD29]/20",
-              url: { src: "/bookings/view-all", label: "View Bookings" },
-            },
-            {
-              id: 3,
-              icon: <UserPlusIcon className="w-5 h-5" />,
-              label: "Additional Requests",
-              value: `${data?.no_of_additional_request} Requests`,
-              theme: "text-[#017EFF] bg-[#017EFF]/20",
-              url: { src: "/bookings/requests", label: "View Requests" },
-            },
-            {
-              id: 4,
-              icon: <UsersIcon className="w-5 h-5" />,
-              label: "Number of Guests",
-              value: `${data?.number_of_guests} Guests`,
-              theme: "text-[#7C0DBE] bg-[#7C0DBE]/20",
-              url: { src: "/customers", label: "View Users" },
-            },
-          ].map((item) => (
-            <DashboardCard
-              key={item?.id}
-              theme={item.theme}
-              icon={item?.icon}
-              label={item?.label}
-              value={item?.value}
-              urlSrc={item?.url.src}
-              urlLabel={item?.url?.label}
-            />
-          ))}
-        </div>
-        {/* sales analytics */}
-
-        <div className="w-full rounded-lg border">
-          <div className=" w-full border-b p-4 flex items-start gap-3 md:items-center justify-between flex-col md:flex-row ">
-            <h2 className="text-lg font-semibold">Sales Analytics</h2>
-            <div className=" flex items-center flex-col md:flex-row gap-3 text-sm text-gray-500">
-              <Filter actionHandler={handleSalesFiltering} />
-              <Sort id={"sales-analytics"} label={"Sort by:"} />
-            </div>
-          </div>
-          <div className=" p-5 md:p-10">
-            <div className=" border p-5 rounded-md h-full w-full flex justify-center">
-              <BarChart
-                data={{
-                  labels: [
-                    "JAN",
-                    "FEB",
-                    "MAR",
-                    "APR",
-                    "MAY",
-                    "JUN",
-                    "JUL",
-                    "AUG",
-                    "SEP",
-                    "OCT",
-                    "NOV",
-                    "DEC",
-                  ],
-                  datasets: [
-                    {
-                      label: "Sales Analytics",
-                      data: stats,
-                      backgroundColor: "#2E4393",
-                      indexAxis: "x",
-                      borderRadius: 50,
-                    },
-                  ],
-                }}
+      {dashboard?.view ? (
+        <div className="w-full max-w-screen-xl flex flex-col gap-16">
+          <h2 className=" text-2xl font-semibold">Services Breakdown</h2>
+          {/* sales breakdown cards */}
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            {[
+              {
+                id: 1,
+                icon: <BuildingIcon className="w-5 h-5" />,
+                label: "Number of Apartment",
+                value: data?.number_of_shortlets,
+                theme: "text-[#26397B] bg-[#26397B]/20",
+                url: { src: "/apartments/view-all", label: "View Apartment" },
+              },
+              {
+                id: 2,
+                icon: <CalendarIcon className="w-5 h-5" />,
+                label: "Total Bookings",
+                value: `${data?.number_of_bookings} Bookings`,
+                theme: "text-[#35BD29] bg-[#35BD29]/20",
+                url: { src: "/bookings/view-all", label: "View Bookings" },
+              },
+              {
+                id: 3,
+                icon: <UserPlusIcon className="w-5 h-5" />,
+                label: "Additional Requests",
+                value: `${data?.no_of_additional_request} Requests`,
+                theme: "text-[#017EFF] bg-[#017EFF]/20",
+                url: { src: "/bookings/requests", label: "View Requests" },
+              },
+              {
+                id: 4,
+                icon: <UsersIcon className="w-5 h-5" />,
+                label: "Number of Guests",
+                value: `${data?.number_of_guests} Guests`,
+                theme: "text-[#7C0DBE] bg-[#7C0DBE]/20",
+                url: { src: "/customers", label: "View Users" },
+              },
+            ].map((item) => (
+              <DashboardCard
+                key={item?.id}
+                theme={item.theme}
+                icon={item?.icon}
+                label={item?.label}
+                value={item?.value}
+                urlSrc={item?.url.src}
+                urlLabel={item?.url?.label}
               />
+            ))}
+          </div>
+          {/* sales analytics */}
+
+          <div className="w-full rounded-lg border">
+            <div className=" w-full border-b p-4 flex items-start gap-3 md:items-center justify-between flex-col md:flex-row ">
+              <h2 className="text-lg font-semibold">Sales Analytics</h2>
+              <div className=" flex items-center flex-col md:flex-row gap-3 text-sm text-gray-500">
+                <Filter actionHandler={handleSalesFiltering} />
+                <Sort id={"sales-analytics"} label={"Sort by:"} />
+              </div>
+            </div>
+            <div className=" p-5 md:p-10">
+              <div className=" border p-5 rounded-md h-full w-full flex justify-center">
+                <BarChart
+                  data={{
+                    labels: [
+                      "JAN",
+                      "FEB",
+                      "MAR",
+                      "APR",
+                      "MAY",
+                      "JUN",
+                      "JUL",
+                      "AUG",
+                      "SEP",
+                      "OCT",
+                      "NOV",
+                      "DEC",
+                    ],
+                    datasets: [
+                      {
+                        label: "Sales Analytics",
+                        data: stats,
+                        backgroundColor: "#2E4393",
+                        indexAxis: "x",
+                        borderRadius: 50,
+                      },
+                    ],
+                  }}
+                />
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* top countries and sales channel */}
-        <div className=" w-full gap-5 grid grid-cols-1">
-          {/* <div className="w-full rounded-lg border">
+          {/* top countries and sales channel */}
+          <div className=" w-full gap-5 grid grid-cols-1">
+            {/* <div className="w-full rounded-lg border">
             <div className=" w-full border-b p-4">
               <h2 className="text-lg font-semibold">Top Countries</h2>
             </div>
@@ -201,77 +206,84 @@ export default function DashboardOverview() {
             </div>
           </div> */}
 
-          <div className=" w-full rounded-lg border">
-            <div className=" w-full border-b p-4 flex flex-start flex-col md:flex-row gap-3 md:items-center justify-between">
-              <h2 className="text-lg font-semibold">Sales Channel</h2>
-              <div className=" flex items-center gap-3 text-sm text-gray-500">
-                <Filter actionHandler={handleSalesChannelFiltering} />
+            <div className=" w-full rounded-lg border">
+              <div className=" w-full border-b p-4 flex flex-start flex-col md:flex-row gap-3 md:items-center justify-between">
+                <h2 className="text-lg font-semibold">Sales Channel</h2>
+                <div className=" flex items-center gap-3 text-sm text-gray-500">
+                  <Filter actionHandler={handleSalesChannelFiltering} />
+                </div>
+              </div>
+              <div className="w-full p-5 flex justify-center">
+                <div className=" max-w-screen-sm">
+                  <DoughnutChart
+                    data={{
+                      labels: pieChart.map((item) => item?.channel) || [
+                        "Website",
+                      ],
+                      datasets: [
+                        {
+                          label: "",
+                          data: pieChart.map((item) => item?.percentage) || [0],
+                          backgroundColor: ["#FFA500", "#2E4393"],
+                        },
+                      ],
+                    }}
+                  />
+                </div>
               </div>
             </div>
-            <div className="w-full p-5 flex justify-center">
-              <div className=" max-w-screen-sm">
-                <DoughnutChart
-                  data={{
-                    labels: pieChart.map((item) => item?.channel) || [
-                      "Website",
-                    ],
-                    datasets: [
-                      {
-                        label: "",
-                        data: pieChart.map((item) => item?.percentage) || [0],
-                        backgroundColor: ["#FFA500", "#2E4393"],
-                      },
-                    ],
-                  }}
+          </div>
+
+          {/* Total  */}
+          <div className="w-full">
+            <div className=" w-full my-3">
+              <h2 className="text-lg font-semibold">Totals</h2>
+            </div>
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                {
+                  id: 2,
+                  icon: <CalendarIcon className="w-5 h-5" />,
+                  label: "Total Gross Income",
+                  value: "N0",
+                  theme: "text-[#35BD29] bg-[#35BD29]/20",
+                },
+                {
+                  id: 3,
+                  icon: <UserPlusIcon className="w-5 h-5" />,
+                  label: "Total After Commissions",
+                  value: "N0",
+                  theme: "text-[#017EFF] bg-[#017EFF]/20",
+                },
+                {
+                  id: 4,
+                  icon: <UsersIcon className="w-5 h-5" />,
+                  label: "Total Net Income",
+                  value: "N0",
+                  theme: "text-[#7C0DBE] bg-[#7C0DBE]/20",
+                },
+              ].map((item) => (
+                <DashboardCard
+                  key={item?.id}
+                  theme={item.theme}
+                  icon={item?.icon}
+                  label={item?.label}
+                  value={item?.value}
                 />
-              </div>
+              ))}
             </div>
           </div>
-        </div>
 
-        {/* Total  */}
-        <div className="w-full">
-          <div className=" w-full my-3">
-            <h2 className="text-lg font-semibold">Totals</h2>
-          </div>
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                id: 2,
-                icon: <CalendarIcon className="w-5 h-5" />,
-                label: "Total Gross Income",
-                value: "N0",
-                theme: "text-[#35BD29] bg-[#35BD29]/20",
-              },
-              {
-                id: 3,
-                icon: <UserPlusIcon className="w-5 h-5" />,
-                label: "Total After Commissions",
-                value: "N0",
-                theme: "text-[#017EFF] bg-[#017EFF]/20",
-              },
-              {
-                id: 4,
-                icon: <UsersIcon className="w-5 h-5" />,
-                label: "Total Net Income",
-                value: "N0",
-                theme: "text-[#7C0DBE] bg-[#7C0DBE]/20",
-              },
-            ].map((item) => (
-              <DashboardCard
-                key={item?.id}
-                theme={item.theme}
-                icon={item?.icon}
-                label={item?.label}
-                value={item?.value}
-              />
-            ))}
-          </div>
+          {/* top apartment table */}
+          <ApartmentTable title="Top Apartments" />
         </div>
-
-        {/* top apartment table */}
-        <ApartmentTable title="Top Apartments" />
-      </div>
+      ) : (
+        <div className=" w-full px-5 flex items-center justify-center bg-primary/15 rounded-lg h-[calc(100vh-300px)]">
+          <h1 className=" text-2xl md:text-5xl text-center font-semibold text-gray-400 italic">
+            Welcome to 99Apartment Admin
+          </h1>
+        </div>
+      )}
     </section>
   );
 }

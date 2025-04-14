@@ -18,34 +18,47 @@ import AddTax from "../../components/tax/addTax";
 import AddNewPrices from "../../components/inputs/plansAndPromotions/prices";
 import AddNewCoupon from "../../components/inputs/plansAndPromotions/coupons";
 import NavTab from "../../components/tab/nav-tab";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
-const tabList = [
-  {
-    id: 1,
-    icon: <BuildingIcon />,
-    label: "Tax Rates",
-    url: "/plans-and-promotions/tax-rates",
-  },
-  // {
-  //   id: 2,
-  //   icon: <TagsIcon />,
-  //   label: "Types of Prices",
-  //   url: "/plans-and-promotions/types-of-prices",
-  // },
-  {
-    id: 3,
-    icon: <PercentageBadgeIcon />,
-    label: "Coupons",
-    url: "/plans-and-promotions/coupons",
-  },
-  {
-    id: 4,
-    icon: <GiftIcon />,
-    label: "Package & Offers",
-    url: "/plans-and-promotions/packages-and-offers",
-  },
-];
 export default function PlansAndPromotionsTabWrapper() {
+  const { data: tax } = useGetResourceAccessChecker({
+    resource: "tax",
+  });
+  const { data: offer } = useGetResourceAccessChecker({
+    resource: "offer",
+  });
+  const { data: coupon } = useGetResourceAccessChecker({
+    resource: "coupon",
+  });
+  const tabList = [
+    {
+      id: 1,
+      icon: <BuildingIcon />,
+      label: "Tax Rates",
+      url: "/plans-and-promotions/tax-rates",
+      hide: !tax?.view,
+    },
+    // {
+    //   id: 2,
+    //   icon: <TagsIcon />,
+    //   label: "Types of Prices",
+    //   url: "/plans-and-promotions/types-of-prices",
+    // },
+    {
+      id: 3,
+      icon: <PercentageBadgeIcon />,
+      label: "Coupons",
+      url: "/plans-and-promotions/coupons",
+      hide: !coupon?.view,
+    },
+    {
+      id: 4,
+      icon: <GiftIcon />,
+      label: "Package & Offers",
+      url: "/plans-and-promotions/packages-and-offers",
+      hide: !offer?.view,
+    },
+  ];
   const location = useLocation();
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -109,7 +122,7 @@ export default function PlansAndPromotionsTabWrapper() {
         <div className={"flex items-center gap-5 flex-col md:flex-row"}>
           <NavTab tabList={tabList} />
           <div className="w-fit whitespace-nowrap">
-            {trackTab === 1 ? (
+            {trackTab === 1 && tax?.create ? (
               <LoadingButton
                 type="button"
                 isLoading={false}
@@ -125,7 +138,7 @@ export default function PlansAndPromotionsTabWrapper() {
                 label="Add New Price"
                 startIcon={<PlusIcon />}
               />
-            ) : trackTab === 3 ? (
+            ) : trackTab === 3 && coupon?.create ? (
               <LoadingButton
                 type="button"
                 isLoading={false}
@@ -133,12 +146,14 @@ export default function PlansAndPromotionsTabWrapper() {
                 label="Add New Coupon"
                 startIcon={<PlusIcon />}
               />
-            ) : (
+            ) : trackTab === 4 && offer?.create ? (
               <LinkButton
                 url="/plans-and-promotions/package-and-offer/add-new-package-and-offer"
                 label="Add New Package & Offer"
                 startIcon={<PlusIcon />}
               />
+            ) : (
+              <></>
             )}
           </div>
         </div>

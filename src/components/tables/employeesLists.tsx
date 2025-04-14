@@ -21,6 +21,7 @@ import { removeAdminsInList } from "../../stores/apiData/admins-list";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import ExportToCSV from "../export-to-csv";
 import { employeesExportFormater } from "../../utils/export-formerter-functions";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
 export default function EmployeesLists() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -89,6 +90,9 @@ export default function EmployeesLists() {
     }
   }, [selectedId]);
 
+  const { data: admin } = useGetResourceAccessChecker({
+    resource: "admin",
+  });
   return (
     <>
       <div className="w-full flex flex-col gap-5">
@@ -124,27 +128,28 @@ export default function EmployeesLists() {
                 jsonToCSVReformerter={employeesExportFormater}
                 fileName="employees-list"
               />
-
-              <LoadingButton
-                label="New employee"
-                isLoading={false}
-                type="button"
-                clickHandler={() => openForNewEmployee()}
-                startIcon={<PlusIcon />}
-              />
+              {admin?.create && (
+                <LoadingButton
+                  label="New employee"
+                  isLoading={false}
+                  type="button"
+                  clickHandler={() => openForNewEmployee()}
+                  startIcon={<PlusIcon />}
+                />
+              )}
             </div>
           </div>
-          <div className="block">
-            {data && data.length > 0 ? (
-              <table className=" w-full overflow-x-auto">
-                <thead className="">
-                  <tr className=" text-left text-xs font-medium bg-[#F9FAFB] text-[#475467] rounded-lg">
+          {data && data.length > 0 ? (
+            <div className=" w-full overflow-x-auto">
+              <table className=" w-full">
+                <thead>
+                  <tr>
                     {["Employee", "Role", "Action"].map((head) => (
                       <th key={head}>{head}</th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="">
+                <tbody>
                   {data.map((item) => {
                     return (
                       <tr key={item?.id} className=" border-b">
@@ -172,18 +177,22 @@ export default function EmployeesLists() {
                               <EyeIcon />
                             </Link>
 
-                            <button
-                              title="edit"
-                              onClick={() => openForEdit(item?.id)}
-                            >
-                              <PenIcon />
-                            </button>
-                            <button
-                              title="delete"
-                              onClick={() => handleOpenDelete(item?.id)}
-                            >
-                              <BinIcon className=" size-6 text-red-500" />
-                            </button>
+                            {admin?.update && (
+                              <button
+                                title="edit"
+                                onClick={() => openForEdit(item?.id)}
+                              >
+                                <PenIcon />
+                              </button>
+                            )}
+                            {admin?.delete && (
+                              <button
+                                title="delete"
+                                onClick={() => handleOpenDelete(item?.id)}
+                              >
+                                <BinIcon className=" size-6 text-red-500" />
+                              </button>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -191,10 +200,10 @@ export default function EmployeesLists() {
                   })}
                 </tbody>
               </table>
-            ) : (
-              <NoResult />
-            )}
-          </div>
+            </div>
+          ) : (
+            <NoResult />
+          )}
           <Pagination
             pagination={pagination}
             setCurrentPage={setCurrentPage}

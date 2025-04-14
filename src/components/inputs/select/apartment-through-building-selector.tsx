@@ -7,17 +7,19 @@ export default function ApartmentThroughBuildingSelector({
   setApartmentId,
   buildingId,
   setBuildingId,
+  withLabel = true,
 }: {
   apartmentId: string;
   setApartmentId: (val: string) => void;
   buildingId: string;
   setBuildingId: (val: string) => void;
+  withLabel?: boolean;
 }) {
   const { data } = useGetBuildings({ page: 1 });
   return (
     <div className="w-full flex items-end gap-3 flex-col md:flex-row">
       <Select
-        label="Building"
+        label={withLabel ? "Building" : undefined}
         value={buildingId}
         setValue={setBuildingId}
         id={"building-filter"}
@@ -33,7 +35,7 @@ export default function ApartmentThroughBuildingSelector({
       </Select>
       {buildingId && (
         <Select
-          label="Apartment"
+          label={withLabel ? "Apartment" : undefined}
           value={apartmentId}
           setValue={setApartmentId}
           id={"apartment-filter"}

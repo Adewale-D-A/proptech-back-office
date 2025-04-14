@@ -7,6 +7,7 @@ import LinkButton from "../../../components/button/linkButton";
 import PlusIcon from "../../../assets/icons/plus";
 import AllBookingsListTable from "../../../components/tables/allBookingsLists";
 import ExportSelect from "../../../components/inputs/select/exportSelect";
+import useGetResourceAccessChecker from "../../../utils/admin/useAccessChecker";
 
 const breadCrumb = [
   {
@@ -37,6 +38,10 @@ export default function AllBookings() {
       })
     );
   }, []);
+  const { data: booking } = useGetResourceAccessChecker({
+    resource: "booking",
+  });
+
   return (
     <section className="w-full flex flex-col items-center my-5">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
@@ -44,11 +49,13 @@ export default function AllBookings() {
           <h2 className="text-xl font-semibold">All Bookings List</h2>
           <div className=" flex items-center gap-4">
             {/* <ExportSelect id="bookings" /> */}
-            <LinkButton
-              url="/bookings/new-booking"
-              label="Add New Booking"
-              startIcon={<PlusIcon />}
-            />
+            {booking?.create && (
+              <LinkButton
+                url="/bookings/new-booking"
+                label="Add New Booking"
+                startIcon={<PlusIcon />}
+              />
+            )}
           </div>
         </div>
         <div>

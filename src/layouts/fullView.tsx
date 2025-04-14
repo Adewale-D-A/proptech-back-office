@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import { toggleMenuView } from "../stores/appFunctionality/navMenuFunctions";
 import NavigationMenuItems from "../assets/menuItem";
 import LogoutIcon from "../assets/icons/logout";
-import MenuIcon from "../assets/icons/menu";
 import useAxios from "../useHooks/useAxios";
 import NextArrowIcon from "../assets/icons/next-arrow";
 import NavigatePrevIcon from "../assets/icons/navigate-prev";

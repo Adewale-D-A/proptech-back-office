@@ -9,6 +9,7 @@ import RequestsListTable from "../../../components/tables/requestsLists";
 import ModalTemplate from "../../../components/modal";
 import NewRequest from "../../../components/booking-detail/new-request";
 import LoadingButton from "../../../components/button";
+import useGetResourceAccessChecker from "../../../utils/admin/useAccessChecker";
 
 const breadCrumb = [
   {
@@ -41,6 +42,9 @@ export default function Requests() {
   }, []);
 
   const [openNewRequest, setOpenNewRequest] = useState(false);
+  const { data: userRequest } = useGetResourceAccessChecker({
+    resource: "user-request",
+  });
   return (
     <>
       <section className="w-full flex flex-col items-center my-10">
@@ -49,13 +53,15 @@ export default function Requests() {
             <h2 className="text-xl font-semibold">All Requests List</h2>
             <div className=" flex items-center gap-4 flex-col md:flex-row ">
               {/* <ExportSelect id="bookings" /> */}
-              <LoadingButton
-                clickHandler={() => setOpenNewRequest(true)}
-                isLoading={false}
-                type="button"
-                label="Add Request"
-                startIcon={<PlusIcon />}
-              />
+              {userRequest?.create && (
+                <LoadingButton
+                  clickHandler={() => setOpenNewRequest(true)}
+                  isLoading={false}
+                  type="button"
+                  label="Add Request"
+                  startIcon={<PlusIcon />}
+                />
+              )}
             </div>
           </div>
           <div>

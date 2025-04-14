@@ -19,64 +19,101 @@ import AddEditLocationGroup from "../../components/apartment/add-edit-location-g
 import BlockedDatesReasonsIcon from "../../assets/icons/blocked-dates-reasons";
 import AddEditBlockedDatesReason from "../../pages/apartments/block-dates-reason/add-edit-blocked-dates";
 import AddEditBuildings from "../../pages/apartments/buildings/add-edit-buildings";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
-const tabList = [
-  {
-    id: 1,
-    icon: <BuildingIcon />,
-    label: "Apartment List",
-    url: "/apartments/view-all",
-  },
-  {
-    id: 2,
-    icon: <AdjustmentIcon />,
-    label: "Room Options",
-    url: "/apartments/room-options",
-  },
-  {
-    id: 3,
-    icon: <AmenitiesIcon />,
-    label: "Amenities",
-    url: "/apartments/amenities",
-  },
-  {
-    id: 4,
-    icon: <ExtraOptionsIcon />,
-    label: "Extra Options",
-    url: "/apartments/extra-options",
-  },
-  {
-    id: 5,
-    icon: <SecurityIcon />,
-    label: "Safety and Security",
-    url: "/apartments/safety-and-securities",
-  },
-  {
-    id: 6,
-    icon: <CheckListIcon />,
-    label: "Rules",
-    url: "/apartments/rules",
-  },
-  {
-    id: 9,
-    icon: <BuildingIcon />,
-    label: "Buildings",
-    url: "/apartments/buildings",
-  },
-  {
-    id: 7,
-    icon: <LocationPinIcon />,
-    label: "Location Grouping",
-    url: "/apartments/location-grouping",
-  },
-  {
-    id: 8,
-    icon: <BlockedDatesReasonsIcon />,
-    label: "Blocked Dates Reasons",
-    url: "/apartments/blocked-dates-reasons",
-  },
-];
 export default function ApartmentTabWrapper() {
+  const { data: shortlet } = useGetResourceAccessChecker({
+    resource: "shortlet",
+  });
+  const { data: roomOption } = useGetResourceAccessChecker({
+    resource: "room-option",
+  });
+  const { data: amenity } = useGetResourceAccessChecker({
+    resource: "amenity",
+  });
+  const { data: extraOption } = useGetResourceAccessChecker({
+    resource: "extra-option",
+  });
+  const { data: safety } = useGetResourceAccessChecker({
+    resource: "safety",
+  });
+  const { data: rule } = useGetResourceAccessChecker({
+    resource: "rule",
+  });
+  const { data: building } = useGetResourceAccessChecker({
+    resource: "building",
+  });
+  const { data: locationGroup } = useGetResourceAccessChecker({
+    resource: "location-group",
+  });
+  const { data: blockDateReason } = useGetResourceAccessChecker({
+    resource: "blocked-date-reason",
+  });
+  const tabList = [
+    {
+      id: 1,
+      icon: <BuildingIcon />,
+      label: "Apartment List",
+      url: "/apartments/view-all",
+      hide: !shortlet?.view,
+    },
+    {
+      id: 2,
+      icon: <AdjustmentIcon />,
+      label: "Room Options",
+      url: "/apartments/room-options",
+      hide: !roomOption?.view,
+    },
+    {
+      id: 3,
+      icon: <AmenitiesIcon />,
+      label: "Amenities",
+      url: "/apartments/amenities",
+      hide: !amenity?.view,
+    },
+    {
+      id: 4,
+      icon: <ExtraOptionsIcon />,
+      label: "Extra Options",
+      url: "/apartments/extra-options",
+      hide: !extraOption?.view,
+    },
+    {
+      id: 5,
+      icon: <SecurityIcon />,
+      label: "Safety and Security",
+      url: "/apartments/safety-and-securities",
+      hide: !safety?.view,
+    },
+    {
+      id: 6,
+      icon: <CheckListIcon />,
+      label: "Rules",
+      url: "/apartments/rules",
+      hide: !rule?.view,
+    },
+    {
+      id: 9,
+      icon: <BuildingIcon />,
+      label: "Buildings",
+      url: "/apartments/buildings",
+      hide: !building?.view,
+    },
+    {
+      id: 7,
+      icon: <LocationPinIcon />,
+      label: "Location Grouping",
+      url: "/apartments/location-grouping",
+      hide: !locationGroup?.view,
+    },
+    {
+      id: 8,
+      icon: <BlockedDatesReasonsIcon />,
+      label: "Blocked Dates Reasons",
+      url: "/apartments/blocked-dates-reasons",
+      hide: !blockDateReason?.view,
+    },
+  ];
   const location = useLocation();
   const [trackTab, setTrackTab] = useState(1);
   const [openAddOption, setOpenAddOption] = useState(false);
@@ -99,13 +136,13 @@ export default function ApartmentTabWrapper() {
           <NavTab tabList={tabList} />
 
           <div className="w-fit whitespace-nowrap">
-            {trackTab === 1 ? (
+            {trackTab === 1 && shortlet?.create ? (
               <LinkButton
                 url="/apartments/add-apartment/apartment-details"
                 label="Add New Apartment"
                 startIcon={<PlusIcon />}
               />
-            ) : trackTab === 2 ? (
+            ) : trackTab === 2 && roomOption?.create ? (
               <LoadingButton
                 label="Add New Room Option"
                 isLoading={false}
@@ -113,7 +150,7 @@ export default function ApartmentTabWrapper() {
                 startIcon={<PlusIcon />}
                 clickHandler={() => setOpenAddOption(true)}
               />
-            ) : trackTab === 3 ? (
+            ) : trackTab === 3 && amenity?.create ? (
               <LoadingButton
                 label="New Amenities"
                 isLoading={false}
@@ -121,7 +158,7 @@ export default function ApartmentTabWrapper() {
                 startIcon={<PlusIcon />}
                 clickHandler={() => setOpenAddAmenity(true)}
               />
-            ) : trackTab === 4 ? (
+            ) : trackTab === 4 && extraOption?.create ? (
               <LoadingButton
                 label="New Extra Option"
                 isLoading={false}
@@ -129,7 +166,7 @@ export default function ApartmentTabWrapper() {
                 clickHandler={() => setOpenAddOption(true)}
                 startIcon={<PlusIcon />}
               />
-            ) : trackTab === 5 ? (
+            ) : trackTab === 5 && safety?.create ? (
               <LoadingButton
                 label="Add Safety & Security"
                 isLoading={false}
@@ -137,7 +174,7 @@ export default function ApartmentTabWrapper() {
                 clickHandler={() => setOpenAddEdit(true)}
                 startIcon={<PlusIcon />}
               />
-            ) : trackTab === 6 ? (
+            ) : trackTab === 6 && rule?.create ? (
               <LoadingButton
                 label="Add Rule"
                 isLoading={false}
@@ -145,7 +182,7 @@ export default function ApartmentTabWrapper() {
                 clickHandler={() => setOpenAddEdit(true)}
                 startIcon={<PlusIcon />}
               />
-            ) : trackTab === 7 ? (
+            ) : trackTab === 7 && locationGroup?.create ? (
               <LoadingButton
                 label="Add Location Group"
                 isLoading={false}
@@ -153,7 +190,7 @@ export default function ApartmentTabWrapper() {
                 clickHandler={() => setOpenAddLocationGroup(true)}
                 startIcon={<PlusIcon />}
               />
-            ) : trackTab === 8 ? (
+            ) : trackTab === 8 && blockDateReason?.create ? (
               <LoadingButton
                 label="Add Blocked Reason"
                 isLoading={false}
@@ -161,7 +198,7 @@ export default function ApartmentTabWrapper() {
                 clickHandler={() => setOpenBlockedReason(true)}
                 startIcon={<PlusIcon />}
               />
-            ) : trackTab === 9 ? (
+            ) : trackTab === 9 && building?.create ? (
               <LoadingButton
                 label="Add Building"
                 isLoading={false}

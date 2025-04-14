@@ -4,22 +4,31 @@ import NavTab from "../../components/tab/nav-tab";
 import { useEffect, useState } from "react";
 import PlusIcon from "../../assets/icons/plus";
 import LinkButton from "../../components/button/linkButton";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
-const tabList = [
-  {
-    id: 1,
-    icon: <UsersIcon />,
-    label: "Employees",
-    url: "/employees/employee-list",
-  },
-  {
-    id: 2,
-    icon: <UsersIcon />,
-    label: "Employee Roles",
-    url: "/employees/roles",
-  },
-];
 export default function EmployeesTabWrapper() {
+  const { data: admin } = useGetResourceAccessChecker({
+    resource: "admin",
+  });
+  const { data: role } = useGetResourceAccessChecker({
+    resource: "role",
+  });
+  const tabList = [
+    {
+      id: 1,
+      icon: <UsersIcon />,
+      label: "Employees",
+      url: "/employees/employee-list",
+      hide: !admin?.view,
+    },
+    {
+      id: 2,
+      icon: <UsersIcon />,
+      label: "Employee Roles",
+      url: "/employees/roles",
+      hide: !role?.view,
+    },
+  ];
   const [trackTab, setTrackTab] = useState(1);
   const location = useLocation();
   //   update current tab value based on the current URL
@@ -32,7 +41,7 @@ export default function EmployeesTabWrapper() {
       <div className={"flex items-center gap-5 flex-col md:flex-row"}>
         <NavTab tabList={tabList} />
         <div className="w-fit whitespace-nowrap">
-          {trackTab === 2 && (
+          {trackTab === 2 && role?.create && (
             <LinkButton
               url="/employees/roles/add"
               label="Add New Employee Role"

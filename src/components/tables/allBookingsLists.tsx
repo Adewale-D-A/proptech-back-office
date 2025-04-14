@@ -16,6 +16,7 @@ import BookingsFilterSearch from "../filterAndSort/bookings-filter";
 import { BookingFilterPayload } from "../../types/apiData/bookings/booking-filter-options";
 import ExportToCSV from "../export-to-csv";
 import { bookingsExportFormater } from "../../utils/export-formerter-functions";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
 export default function AllBookingsListTable({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
@@ -63,6 +64,9 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
       setIsDeleting(false);
     }
   }, [selectedId]);
+  const { data: booking } = useGetResourceAccessChecker({
+    resource: "booking",
+  });
   return (
     <>
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 ">
@@ -132,12 +136,14 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
                           >
                             View Booking
                           </button>
-                          <Link
-                            to={`/bookings/booking-details/edit-reservation/${item?.id}`}
-                            className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Edit Booking
-                          </Link>
+                          {booking?.update && (
+                            <Link
+                              to={`/bookings/booking-details/edit-reservation/${item?.id}`}
+                              className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              Edit Booking
+                            </Link>
+                          )}
                           {/* <Link
                             to={`/apartment-caledar/${item?.id}`}
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"

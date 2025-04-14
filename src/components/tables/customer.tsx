@@ -6,10 +6,10 @@ import Filter from "../filterAndSort/filter";
 import Sort from "../filterAndSort/sort";
 import useGetAllCustomersLists from "../../services-hooks/useGetAllCustomersList";
 import TableSearch from "../inputs/search/table-search";
-import MobileCustomersTable from "./mobile/customers";
 import Status from "../status";
 import ExportToCSV from "../export-to-csv";
 import { customersExportFormater } from "../../utils/export-formerter-functions";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
 export default function CustomersListTable() {
   const [filterDates, setFilterDates] = useState<{
@@ -33,8 +33,11 @@ export default function CustomersListTable() {
     },
     []
   );
+  const { data: user } = useGetResourceAccessChecker({
+    resource: "user",
+  });
   return (
-    <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+    <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
       <div className="w-full flex justify-end">
         <ExportToCSV
           dataset={data}
@@ -55,11 +58,11 @@ export default function CustomersListTable() {
           <Sort setSort={setSort} id="sort-by" label="Sort by" />{" "}
         </div>
       </div>
-      <div className="hidden md:block px-5">
-        {data && data.length > 0 ? (
-          <table className=" w-full text-xs  overflow-x-auto">
-            <thead className="">
-              <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
+      {data && data.length > 0 ? (
+        <div className=" w-full overflow-x-auto">
+          <table className=" w-full">
+            <thead>
+              <tr>
                 {[
                   "ID",
                   "First Name",
@@ -74,7 +77,7 @@ export default function CustomersListTable() {
                 ))}
               </tr>
             </thead>
-            <tbody className="">
+            <tbody>
               {data.map((item) => {
                 return (
                   <tr key={item?.id} className=" border-b">
@@ -117,13 +120,15 @@ export default function CustomersListTable() {
                         >
                           View Details
                         </Link>
-                        <Link
-                          to={`/customers/edit-customer/customer-details/${item?.id}`}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Edit Customer
-                        </Link>
-                        {item?.type === "owner" && (
+                        {user?.update && (
+                          <Link
+                            to={`/customers/edit-customer/customer-details/${item?.id}`}
+                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                          >
+                            Edit Customer
+                          </Link>
+                        )}
+                        {item?.type === "owner" && user?.update && (
                           <Link
                             to={`/customers/assign-apartment/${item?.id}`}
                             className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
@@ -138,13 +143,10 @@ export default function CustomersListTable() {
               })}
             </tbody>
           </table>
-        ) : (
-          <NoResult />
-        )}
-      </div>
-      <div className="w-full block md:hidden">
-        <MobileCustomersTable data={data} />
-      </div>
+        </div>
+      ) : (
+        <NoResult />
+      )}
       <Pagination
         pagination={pagination}
         setCurrentPage={setCurrentPage}

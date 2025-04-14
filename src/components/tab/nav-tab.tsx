@@ -4,11 +4,18 @@ import { NavLink } from "react-router-dom";
 export default function NavTab({
   tabList,
 }: {
-  tabList: { id: number; icon: ReactNode; label: string; url: string }[];
+  tabList: {
+    id: number;
+    icon: ReactNode;
+    label: string;
+    url: string;
+    hide?: boolean;
+  }[];
 }) {
   return (
     <nav className="w-full flex items-center flex-wrap gap-6 px-5 ">
       {tabList?.map((items) => {
+        if (items.hide) return null;
         return (
           <div key={items?.id} className="w-fit text-nowrap group">
             <NavLink

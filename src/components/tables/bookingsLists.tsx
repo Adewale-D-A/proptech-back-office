@@ -5,7 +5,6 @@ import Status from "../status";
 import Filter from "../filterAndSort/filter";
 import formatDate from "../../utils/isoDateConverter";
 import useGetReservation from "../../services-hooks/bookings/userGetReservation";
-import MobileReservationsTable from "./mobile/reservations";
 import NoResult from "../noResult";
 
 export default function BookingsListTable({
@@ -41,7 +40,6 @@ export default function BookingsListTable({
     },
     []
   );
-
   return (
     <div className=" w-full flex flex-col gap-4 border rounded-md">
       <div className="flex  flex-col md:flex-row items-center justify-between gap-2 border-b p-3">
