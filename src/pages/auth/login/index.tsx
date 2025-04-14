@@ -88,7 +88,7 @@ function Login() {
           />
           <Link
             className="w-full text-end text-primary_green-500"
-            to="/reset-password"
+            to="/auth/reset-password"
           >
             forgot password?
           </Link>

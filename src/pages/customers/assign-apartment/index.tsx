@@ -127,7 +127,7 @@ export default function AssignApartmentToOwner() {
       setSubmitting(true);
       await axios.post(`/admin/user/${owner_id}`, {
         shortlets: value,
-        // remove_shotlets: Array.from(new Set(removed)),
+        remove_shortlets: Array.from(new Set(removed)),
       });
       dispatch(
         openSnackbar({

@@ -43,7 +43,7 @@ export default function PackagesAndOfferList({ header }: { header: string[] }) {
   }, [selectedId]);
   return (
     <>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5 ">
+      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 ">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Offer List</h2>
           <div className=" max-w-md">
@@ -56,47 +56,49 @@ export default function PackagesAndOfferList({ header }: { header: string[] }) {
         </div>
         <div className="hidden md:block px-5">
           {data && data.length > 0 ? (
-            <table className=" w-full text-xs overflow-x-auto">
-              <thead className="">
-                <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                  {header.map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="">
-                {data.map((request) => {
-                  return (
-                    <tr key={request?.id} className=" border-b">
-                      <td>{request?.id}</td>
-                      <td>{request?.name}</td>
-                      <td>{request?.start_date}</td>
-                      <td>{request?.end_date}</td>
-                      <td>{request?.price}</td>
-                      <td>{request?.applicable_shortlet_count}</td>
-                      <td className=" group relative">
-                        <span className=" p-2 text-lg">...</span>
-                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          <Link
-                            to={`/plans-and-promotions/package-and-offer/edit-new-package-and-offer/${request?.id}`}
-                            className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Edit Offer
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() => selectForDelete(request?.id)}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Delete Offer
-                          </button>
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div className=" w-full overflow-x-auto">
+              <table className=" w-full">
+                <thead>
+                  <tr>
+                    {header.map((head) => (
+                      <th key={head}>{head}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((request) => {
+                    return (
+                      <tr key={request?.id} className=" border-b">
+                        <td>{request?.id}</td>
+                        <td>{request?.name}</td>
+                        <td>{request?.start_date}</td>
+                        <td>{request?.end_date}</td>
+                        <td>{request?.price}</td>
+                        <td>{request?.applicable_shortlet_count}</td>
+                        <td className=" group relative">
+                          <span className=" p-2 text-lg">...</span>
+                          <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
+                            <Link
+                              to={`/plans-and-promotions/package-and-offer/edit-new-package-and-offer/${request?.id}`}
+                              className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              Edit Offer
+                            </Link>
+                            <button
+                              type="button"
+                              onClick={() => selectForDelete(request?.id)}
+                              className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              Delete Offer
+                            </button>
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           ) : (
             <NoResult />
           )}

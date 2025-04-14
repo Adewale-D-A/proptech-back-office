@@ -72,7 +72,7 @@ export default function ServiceTypeTable() {
 
   return (
     <>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
+      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Service Types</h2>
           <div>
@@ -86,47 +86,49 @@ export default function ServiceTypeTable() {
             <Sort setSort={setSort} id={"service-types"} label={"Sort by:"} />
           </div>
         </div>
-        <table className=" w-full overflow-x-auto">
-          <thead className="">
-            <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-              {["Name", "Price", "Description", "Action"].map((head) => (
-                <th key={head}>{head}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="">
-            {data.map((item) => {
-              return (
-                <tr key={item?.id} className=" border-b">
-                  <td>{item?.name}</td>
-                  <td>
-                    {item?.currency} {item?.price}
-                  </td>
-                  <td>{item?.description}</td>
-                  <td className=" group relative">
-                    <span className=" p-2 text-lg">...</span>
-                    <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                      <button
-                        type="button"
-                        onClick={() => handleOpeEdit(item?.id)}
-                        className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleOpenDelete(item?.id)}
-                        className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                      >
-                        Delete
-                      </button>
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div className=" w-full overflow-x-auto">
+          <table className=" w-full">
+            <thead>
+              <tr>
+                {["Name", "Price", "Description", "Action"].map((head) => (
+                  <th key={head}>{head}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item) => {
+                return (
+                  <tr key={item?.id} className=" border-b">
+                    <td>{item?.name}</td>
+                    <td>
+                      {item?.currency} {item?.price}
+                    </td>
+                    <td>{item?.description}</td>
+                    <td className=" group relative">
+                      <span className=" p-2 text-lg">...</span>
+                      <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
+                        <button
+                          type="button"
+                          onClick={() => handleOpeEdit(item?.id)}
+                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleOpenDelete(item?.id)}
+                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete
+                        </button>
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
         <Pagination
           pagination={pagination}
           setCurrentPage={setCurrentPage}

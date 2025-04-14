@@ -8,12 +8,12 @@ import { dateGeneratorUtilResponse } from "../../types/date-generator-util-respo
 // import NavigateNextIcon from "../../assets/icons/navigate-next";
 
 // const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const sampleBookedDates = [new Date(2024, 8, 23), new Date(2024, 8, 22)];
+// const sampleBookedDates = [new Date(2024, 8, 23), new Date(2024, 8, 22)];
 
 const dateValue = new Date();
 export default function CalendarView({
   date,
-  highlights = sampleBookedDates,
+  highlights,
   notAvailable = [],
   booked = [],
   blocked = [],
@@ -118,7 +118,7 @@ export default function CalendarView({
             onClick={() => changeHandler(item)}
           >
             <span>{item?.day}</span>
-            {item?.booked && (
+            {!(item?.booked || item?.maintenance || item?.blocked) && (
               <div className=" absolute top-0 right-0 aspect-square border-l-8 border-l-transparent border-b-8 border-b-transparent border-8 border-green-500"></div>
             )}
           </button>

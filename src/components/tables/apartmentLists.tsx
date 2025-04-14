@@ -17,6 +17,7 @@ import CalculateRate from "../check-availability/calculate-rate";
 import useAxios from "../../useHooks/useAxios";
 import ExportToCSV from "../export-to-csv";
 import { apartmentExportFormater } from "../../utils/export-formerter-functions";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
 export default function ApartmentListsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -52,6 +53,12 @@ export default function ApartmentListsTable() {
     }
   }, [deleteId]);
 
+  const { data: shortlet } = useGetResourceAccessChecker({
+    resource: "shortlet",
+  });
+  const { data: calendar } = useGetResourceAccessChecker({
+    resource: "view-calendar",
+  });
   return (
     <>
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
@@ -130,18 +137,22 @@ export default function ApartmentListsTable() {
                           >
                             View Apartment
                           </Link>
-                          <Link
-                            to={`/apartments/edit-apartment/apartment-details/${request?.id}?redirect=${location?.pathname}`}
-                            className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Edit Apartment
-                          </Link>
-                          <Link
-                            to={`/apartments/apartment-caledar/${request?.id}`}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Check Calender
-                          </Link>
+                          {shortlet?.update && (
+                            <Link
+                              to={`/apartments/edit-apartment/apartment-details/${request?.id}?redirect=${location?.pathname}`}
+                              className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              Edit Apartment
+                            </Link>
+                          )}
+                          {calendar?.view && (
+                            <Link
+                              to={`/apartments/apartment-caledar/${request?.id}`}
+                              className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              Check Calender
+                            </Link>
+                          )}
                           <button
                             type="button"
                             onClick={() => handleOpenCalculateRate(request?.id)}

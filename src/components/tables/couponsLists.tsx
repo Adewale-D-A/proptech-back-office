@@ -68,7 +68,7 @@ export default function CouponList({ header }: { header: string[] }) {
   );
   return (
     <>
-      <div className="w-full rounded-lg border p-5 flex flex-col gap-5 ">
+      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 ">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Coupon List</h2>
           <div className=" max-w-md">
@@ -84,55 +84,57 @@ export default function CouponList({ header }: { header: string[] }) {
         </div>
         <div className="hidden md:block px-5">
           {data && data.length > 0 ? (
-            <table className=" w-full text-xs overflow-x-auto">
-              <thead className="">
-                <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                  {header.map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="">
-                {data.map((request) => {
-                  return (
-                    <tr key={request?.id} className=" border-b">
-                      <td>{request?.code}</td>
-                      <td>{request?.type}</td>
-                      <td>
-                        {formatDate(request?.start_date)} -{" "}
-                        {formatDate(request?.end_date)}
-                      </td>
-                      <td>{request?.applicable_shortlet_count}</td>
-                      <td>{request?.applicable_user_count}</td>
-                      <td>{request?.validity}</td>
-                      <td className=" group relative">
-                        <span className=" p-2 text-lg">...</span>
-                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              openCouponEditModal(String(request?.id));
-                            }}
-                            className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Edit Coupon
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              openDeletePrompt(String(request?.id));
-                            }}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Delete Coupon
-                          </button>
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <div className=" w-full overflow-x-auto">
+              <table className=" w-full">
+                <thead>
+                  <tr>
+                    {header.map((head) => (
+                      <th key={head}>{head}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((request) => {
+                    return (
+                      <tr key={request?.id} className=" border-b">
+                        <td>{request?.code}</td>
+                        <td>{request?.type}</td>
+                        <td>
+                          {formatDate(request?.start_date)} -{" "}
+                          {formatDate(request?.end_date)}
+                        </td>
+                        <td>{request?.applicable_shortlet_count}</td>
+                        <td>{request?.applicable_user_count}</td>
+                        <td>{request?.validity}</td>
+                        <td className=" group relative">
+                          <span className=" p-2 text-lg">...</span>
+                          <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                openCouponEditModal(String(request?.id));
+                              }}
+                              className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              Edit Coupon
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                openDeletePrompt(String(request?.id));
+                              }}
+                              className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              Delete Coupon
+                            </button>
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           ) : (
             <NoResult />
           )}

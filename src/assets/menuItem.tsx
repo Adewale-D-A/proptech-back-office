@@ -16,6 +16,7 @@ import { useCallback, useState } from "react";
 import HeadsetIcon from "./icons/headset";
 import DoubleDocumentIcon from "./icons/double-document";
 import UserGroupIcon from "./icons/user-group";
+import useGetResourceAccessChecker from "../utils/admin/useAccessChecker";
 
 export default function NavigationMenuItems() {
   const location = useLocation();
@@ -28,6 +29,135 @@ export default function NavigationMenuItems() {
     setSubMenuState((prev) => ({ open: !prev.open, id: id }));
   }, []);
 
+  // dashbaord
+  const { data: dashboard } = useGetResourceAccessChecker({
+    resource: "admin-dashboard",
+  });
+  // apartment
+  const { data: shortlet } = useGetResourceAccessChecker({
+    resource: "shortlet",
+  });
+  const { data: roomOption } = useGetResourceAccessChecker({
+    resource: "room-option",
+  });
+  const { data: amenity } = useGetResourceAccessChecker({
+    resource: "amenity",
+  });
+  const { data: extraOption } = useGetResourceAccessChecker({
+    resource: "extra-option",
+  });
+  const { data: safety } = useGetResourceAccessChecker({
+    resource: "safety",
+  });
+  const { data: rule } = useGetResourceAccessChecker({
+    resource: "rule",
+  });
+  const { data: building } = useGetResourceAccessChecker({
+    resource: "building",
+  });
+  const { data: locationGroup } = useGetResourceAccessChecker({
+    resource: "location-group",
+  });
+  const { data: blockDateReason } = useGetResourceAccessChecker({
+    resource: "blocked-date-reason",
+  });
+  // apartment
+
+  // bookings
+  const { data: booking } = useGetResourceAccessChecker({
+    resource: "booking",
+  });
+  // bookings
+
+  // additional service
+  const { data: additionaService } = useGetResourceAccessChecker({
+    resource: "additional-service",
+  });
+  const { data: serviceType } = useGetResourceAccessChecker({
+    resource: "service-type",
+  });
+  // additional service
+
+  // user/customer
+  const { data: user } = useGetResourceAccessChecker({
+    resource: "user",
+  });
+  // user/customer
+
+  // pricing
+  const { data: rateList } = useGetResourceAccessChecker({
+    resource: "rate-list",
+  });
+  const { data: specialPricing } = useGetResourceAccessChecker({
+    resource: "special-price",
+  });
+  const { data: restriction } = useGetResourceAccessChecker({
+    resource: "restriction",
+  });
+  // pricing
+
+  // plans and promotions
+  const { data: tax } = useGetResourceAccessChecker({
+    resource: "tax",
+  });
+  const { data: offer } = useGetResourceAccessChecker({
+    resource: "offer",
+  });
+  const { data: coupon } = useGetResourceAccessChecker({
+    resource: "coupon",
+  });
+  // plans and promotions
+
+  // requests
+  const { data: maintenanceReqCategory } = useGetResourceAccessChecker({
+    resource: "maintenance-request-category",
+  });
+  const { data: maintenanceReq } = useGetResourceAccessChecker({
+    resource: "maintenance-request",
+  });
+  const { data: requisitionReq } = useGetResourceAccessChecker({
+    resource: "requisition-request",
+  });
+  // requests
+
+  // calendar
+  const { data: calendar } = useGetResourceAccessChecker({
+    resource: "view-calendar",
+  });
+  // calendar
+
+  // chat
+  const { data: chat } = useGetResourceAccessChecker({
+    resource: "user-chat",
+  });
+  // chat
+
+  // invoice
+  const { data: invoice } = useGetResourceAccessChecker({
+    resource: "invoice",
+  });
+  // invoice
+
+  // report
+  const { data: reportDashboard } = useGetResourceAccessChecker({
+    resource: "report-dashboard",
+  });
+  const { data: revenueReport } = useGetResourceAccessChecker({
+    resource: "revenue-report",
+  });
+  const { data: occupancyReport } = useGetResourceAccessChecker({
+    resource: "occupancy-report",
+  });
+  // report
+
+  // admin/employee
+  const { data: admin } = useGetResourceAccessChecker({
+    resource: "admin",
+  });
+  const { data: role } = useGetResourceAccessChecker({
+    resource: "role",
+  });
+  // admin/employee
   return (
     <div
       className={`flex flex-col gap-5 mt-10 ${
@@ -40,7 +170,7 @@ export default function NavigationMenuItems() {
           url: "/dashboard-overview",
           label: "Dashboard Overview",
           value: "dashboard-overview",
-          show: true,
+          show: dashboard?.view,
           icon: <MenuIcon />,
           hasSubMenu: false,
           subMenu: [
@@ -59,7 +189,16 @@ export default function NavigationMenuItems() {
           url: "/apartments/view-all",
           label: "Apartments",
           value: "apartments",
-          show: true,
+          show:
+            shortlet?.view ||
+            roomOption?.view ||
+            amenity?.view ||
+            extraOption?.view ||
+            safety?.view ||
+            rule?.view ||
+            building?.view ||
+            locationGroup?.view ||
+            blockDateReason?.view,
           icon: <BuildingIcon />,
           hasSubMenu: false,
           subMenu: [
@@ -78,7 +217,7 @@ export default function NavigationMenuItems() {
           url: "/bookings/overview",
           label: "Bookings",
           value: "bookings",
-          show: true,
+          show: booking?.view,
           icon: <CalendarIcon />,
           hasSubMenu: false,
           subMenu: [
@@ -97,7 +236,7 @@ export default function NavigationMenuItems() {
           url: "/additional-services/99apartment-services",
           label: "Additional Services",
           value: "additional-services",
-          show: true,
+          show: additionaService?.view,
           icon: <AdditionIcon />,
           hasSubMenu: true,
           subMenu: [
@@ -105,7 +244,7 @@ export default function NavigationMenuItems() {
               url: "/additional-services/service-types",
               label: "Service Types",
               value: "service-types",
-              show: true,
+              show: serviceType?.view,
               icon: <ReceiptIcon />,
               id: 1.1,
             },
@@ -116,7 +255,7 @@ export default function NavigationMenuItems() {
           url: "/customers",
           label: "Customers",
           value: "customers",
-          show: true,
+          show: user?.view,
           icon: <UsersIcon />,
           hasSubMenu: false,
           subMenu: [
@@ -135,7 +274,7 @@ export default function NavigationMenuItems() {
           url: "/customer-engagements/ratings-and-reviews",
           label: "Customers Engagement",
           value: "customer-engagements",
-          show: true,
+          show: user?.view,
           icon: <HeadsetIcon />,
           hasSubMenu: false,
           subMenu: [
@@ -154,7 +293,7 @@ export default function NavigationMenuItems() {
           url: "/pricing/overview",
           label: "Pricing",
           value: "pricing",
-          show: true,
+          show: rateList?.view || specialPricing?.view || restriction?.view,
           icon: <ReceiptIcon />,
           hasSubMenu: false,
           subMenu: [
@@ -173,7 +312,7 @@ export default function NavigationMenuItems() {
           url: "/plans-and-promotions/tax-rates",
           label: "Plans & Promotions",
           value: "plans-and-promotions",
-          show: true,
+          show: tax?.view || coupon?.view || offer?.view,
           icon: <PercentageIcon />,
           hasSubMenu: false,
           subMenu: [
@@ -192,7 +331,10 @@ export default function NavigationMenuItems() {
           url: "/requests/maintenance-requests",
           label: "Requests",
           value: "requests",
-          show: true,
+          show:
+            maintenanceReqCategory?.view ||
+            maintenanceReq?.view ||
+            requisitionReq?.view,
           icon: <DoubleDocumentIcon />,
           hasSubMenu: false,
           subMenu: [
@@ -211,7 +353,7 @@ export default function NavigationMenuItems() {
           url: "/calendar/apartment-calendar",
           label: "Calendar",
           value: "calendar",
-          show: true,
+          show: calendar?.view,
           icon: <CalendarIcon />,
           hasSubMenu: false,
           subMenu: [
@@ -230,7 +372,7 @@ export default function NavigationMenuItems() {
           url: "/chat/guest",
           label: "Chat",
           value: "chat",
-          show: true,
+          show: chat?.view,
           icon: <ChatIcon />,
           hasSubMenu: false,
           subMenu: [
@@ -249,7 +391,7 @@ export default function NavigationMenuItems() {
           url: "/invoices/apartment",
           label: "Invoices",
           value: "invoices",
-          show: true,
+          show: invoice?.view,
           icon: <DocumentIcon />,
           hasSubMenu: false,
           subMenu: [
@@ -268,7 +410,10 @@ export default function NavigationMenuItems() {
           url: "/reports/revenue",
           label: "Reports",
           value: "reports",
-          show: true,
+          show:
+            reportDashboard?.view ||
+            revenueReport?.view ||
+            occupancyReport?.view,
           icon: <ClipBoardIcon />,
           hasSubMenu: false,
           subMenu: [
@@ -306,7 +451,7 @@ export default function NavigationMenuItems() {
           url: "/employees/employee-list",
           label: "Employees",
           value: "employees",
-          show: true,
+          show: admin?.view || role?.view,
           icon: <UserGroupIcon />,
           hasSubMenu: false,
           subMenu: [

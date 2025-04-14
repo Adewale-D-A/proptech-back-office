@@ -65,7 +65,7 @@ export default function ResetPassword() {
           email: email,
           otp: otp,
         });
-        navigate(`/change-password/${email}/${otp}`);
+        navigate(`/auth/change-password/${email}/${otp}`);
         dispatch(
           openSnackbar({
             message: "please continue to update your password",
