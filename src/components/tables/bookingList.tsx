@@ -7,6 +7,8 @@ import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import { MenuItem } from "@headlessui/react";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
 
 type props = {
   //   header,
@@ -30,6 +32,7 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [confirming, setConfirming] = useState(false);
+
   const confirmReservation = useCallback(async () => {
     setConfirming(true);
     try {
@@ -49,6 +52,9 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
   }, [id]);
   const { data: booking } = useGetResourceAccessChecker({
     resource: "booking",
+  });
+  const { data: booking_email } = useGetResourceAccessChecker({
+    resource: "booking-email",
   });
   return (
     <table className=" w-full text-xs overflow-x-auto">
@@ -95,43 +101,60 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
               <td>
                 <Status status={request?.status} />
               </td>
-              <td className=" group relative">
-                <span className=" p-2 text-lg">...</span>
-                <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                  <button
-                    type="button"
-                    className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                  >
-                    Resend Email
-                  </button>
-                  {booking?.update && (
-                    <Link
-                      to={`/bookings/booking-details/edit-reservation/${request?.id}`}
-                      className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                    >
-                      Edit Reservation
-                    </Link>
-                  )}
-                  {/* <Link
-                    to={`#`}
-                    className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                  >
-                    View In Front Site
-                  </Link> */}
-                  {/* <button
-                    type="button"
-                    className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                  >
-                    Delete Reservation
-                  </button> */}
-                  <button
-                    type="button"
-                    onClick={() => confirmReservation()}
-                    className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                  >
-                    Set To Be Confirmed
-                  </button>
-                </span>
+              <td>
+                <TableActionDropDown>
+                  <>
+                    {/* {booking_email?.create && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Resend Email
+                        </button>
+                      </MenuItem>
+                    )} */}
+                    {booking?.update && (
+                      <MenuItem>
+                        <Link
+                          to={`/bookings/booking-details/edit-reservation/${request?.id}`}
+                          className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit Reservation
+                        </Link>
+                      </MenuItem>
+                    )}
+                    {/* <MenuItem>
+                      <Link
+                        to={`#`}
+                        className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                      >
+                        View In Front Site
+                      </Link>
+                    </MenuItem> */}
+                    {/* {booking?.delete && (
+                    <MenuItem>
+                      <button
+                        type="button"
+                        className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                      >
+                        Delete Reservation
+                      </button>
+                    </MenuItem>
+                    )} */}
+                    {booking?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => confirmReservation()}
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Set To Be Confirmed
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
               </td>
             </tr>
           );

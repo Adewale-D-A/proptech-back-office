@@ -18,6 +18,7 @@ import { requisitionRequest } from "../../types/apiData/requisition-request";
 import useGetRequestCategories from "../../services-hooks/useGetRequestCategories";
 import ExportToCSV from "../export-to-csv";
 import { maintenanceExpensesExportFormater } from "../../utils/export-formerter-functions";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 // import BinIcon from "../../assets/icons/bin-icon";
 // import DeleteConfirmation from "../infoModal/delete-confirmation";
 // import useAxios from "../../useHooks/useAxios";
@@ -94,6 +95,9 @@ export default function RequisitionRequestTable() {
   //   }
   // }, [selectedId]);
 
+  const { data: requisition_request } = useGetResourceAccessChecker({
+    resource: "requisition-request",
+  });
   return (
     <>
       <div className="w-full flex flex-col gap-5">
@@ -193,18 +197,22 @@ export default function RequisitionRequestTable() {
                           </td>
                           <td>
                             <div className=" flex items-center gap-4">
-                              <button
-                                onClick={() => openForStatusUpdate(item?.id)}
-                                // title="mark as paid"
-                              >
-                                <DoubleCheckIcon className=" size-8" />
-                              </button>
-                              <button
-                                title="edit"
-                                onClick={() => openForEdit(item)}
-                              >
-                                <PenIcon />
-                              </button>
+                              {requisition_request?.update && (
+                                <button
+                                  onClick={() => openForStatusUpdate(item?.id)}
+                                  // title="mark as paid"
+                                >
+                                  <DoubleCheckIcon className=" size-8" />
+                                </button>
+                              )}
+                              {requisition_request?.update && (
+                                <button
+                                  title="edit"
+                                  onClick={() => openForEdit(item)}
+                                >
+                                  <PenIcon />
+                                </button>
+                              )}
                               {/* <button
                               title="delete"
                               onClick={() => handleOpenDelete(item?.id)}

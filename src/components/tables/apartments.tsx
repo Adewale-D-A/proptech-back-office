@@ -14,6 +14,9 @@ import Sort from "../filterAndSort/sort";
 import useGetTopApartmentLists from "../../services-hooks/dashboards/useGetTopApartment";
 import CalculateRate from "../check-availability/calculate-rate";
 import paginatedPageSerializer from "../../utils/page-serializer";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 // import MobileTopApartmentTable from "./mobile/top-apartment";
 
 export default function ApartmentTable({ title }: { title: string }) {
@@ -57,6 +60,12 @@ export default function ApartmentTable({ title }: { title: string }) {
     setOpenReservation(true);
   }, []);
 
+  const { data: apartment } = useGetResourceAccessChecker({
+    resource: "shortlet",
+  });
+  const { data: booking } = useGetResourceAccessChecker({
+    resource: "booking",
+  });
   return (
     <>
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
@@ -105,7 +114,7 @@ export default function ApartmentTable({ title }: { title: string }) {
                         <img
                           src={"/logo_blue.png"}
                           alt={item?.name}
-                          className=" h-10 w-10 rounded aspect-square"
+                          className=" h-10 w-10 rounded aspect-square object-cover"
                         />
                         <span className=" flex flex-col gap-1">
                           <span>{item?.name}</span>
@@ -127,40 +136,56 @@ export default function ApartmentTable({ title }: { title: string }) {
                       <td>
                         <Status status={item?.availability_status} />
                       </td>
-                      <td className=" group relative">
-                        <span className=" p-2 bg-primary/15 rounded-lg">
-                          ...
-                        </span>
-                        <span className="z-10 group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          <Link
-                            to={`/apartments/apartment-details/${item?.id}`}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            View Details
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleOpenQuickReservation(item?.id, item?.name)
-                            }
-                            className="text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Quick Reservation
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleOpenCalculateRate(item?.id)}
-                            className="text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Calculate Rate
-                          </button>
-                          <Link
-                            to={`/apartments/edit-apartment/apartment-details/${item?.id}`}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Edit Apartment
-                          </Link>
-                        </span>
+                      <td>
+                        <TableActionDropDown>
+                          <>
+                            <MenuItem>
+                              <Link
+                                to={`/apartments/apartment-details/${item?.id}`}
+                                className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                              >
+                                View Details
+                              </Link>
+                            </MenuItem>
+                            {booking?.create && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleOpenQuickReservation(
+                                      item?.id,
+                                      item?.name
+                                    )
+                                  }
+                                  className="text-left p-3 px-4 w-full  hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Quick Reservation
+                                </button>
+                              </MenuItem>
+                            )}
+                            {booking?.view && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleOpenCalculateRate(item?.id)
+                                  }
+                                  className="text-left p-3 px-4 w-full  hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Calculate Rate
+                                </button>
+                              </MenuItem>
+                            )}
+                            {apartment?.update && (
+                              <Link
+                                to={`/apartments/edit-apartment/apartment-details/${item?.id}`}
+                                className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                              >
+                                Edit Apartment
+                              </Link>
+                            )}
+                          </>
+                        </TableActionDropDown>
                       </td>
                     </tr>
                   );

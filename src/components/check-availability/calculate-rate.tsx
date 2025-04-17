@@ -56,7 +56,7 @@ export default function CalculateRate({
   );
 
   return (
-    <div className="w-full flex flex-col gap-10">
+    <div className="w-full">
       {rateResult?.base_cost ? (
         <div className="w-full flex flex-col gap-3">
           <span>
@@ -80,7 +80,10 @@ export default function CalculateRate({
           />
         </div>
       ) : (
-        <form className=" flex flex-col gap-5" onSubmit={checkAvailability}>
+        <form
+          className="w-full flex flex-col gap-5"
+          onSubmit={checkAvailability}
+        >
           <div className={" w-full grid grid-cols-1 gap-5"}>
             <DateInput
               inputType="date"

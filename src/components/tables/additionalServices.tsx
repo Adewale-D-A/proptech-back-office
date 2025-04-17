@@ -10,11 +10,13 @@ import {
   removeAdditionalServicesInList,
 } from "../../stores/apiData/additional-services-lists";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
-import MobileAdditionalServicesTable from "./mobile/additionalServises";
 import formatDate from "../../utils/isoDateConverter";
 import TableSearch from "../inputs/search/table-search";
 import useAxios from "../../useHooks/useAxios";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
 export default function AdditionalServiceListTable({
   header,
@@ -77,11 +79,14 @@ export default function AdditionalServiceListTable({
     }
   }, []);
 
-  const deleteModal = useCallback((id: number) => {
-    setDeleteId(String(id));
-    setOpenDeleteConfirmation(true);
-  }, []);
+  // const deleteModal = useCallback((id: number) => {
+  //   setDeleteId(String(id));
+  //   setOpenDeleteConfirmation(true);
+  // }, []);
 
+  const { data: additional_services } = useGetResourceAccessChecker({
+    resource: "additional-service",
+  });
   return (
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
@@ -126,34 +131,43 @@ export default function AdditionalServiceListTable({
                       <td>
                         <Status status={item?.status} />
                       </td>
-                      <td className=" group relative">
-                        <span className=" p-2 bg-primary/15  rounded-lg">
-                          ...
-                        </span>
-                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          <Link
-                            to={`/additional-services/service-details/${item?.id}`}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            View Details
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() => markedAsResolved(item?.id)}
-                            className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Mark As Resolved
-                          </button>
-                          {/* <button
-                            type="button"
-                            onClick={() => {
-                              deleteModal(item?.id);
-                            }}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Delete Service
-                          </button> */}
-                        </span>
+                      <td>
+                        <TableActionDropDown>
+                          <>
+                            <MenuItem>
+                              <Link
+                                to={`/additional-services/service-details/${item?.id}`}
+                                className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                              >
+                                View Details
+                              </Link>
+                            </MenuItem>
+                            {additional_services?.update && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => markedAsResolved(item?.id)}
+                                  className="text-left w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Mark As Resolved
+                                </button>
+                              </MenuItem>
+                            )}
+                            {/* {additional_services?.delete && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    deleteModal(item?.id);
+                                  }}
+                                  className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Delete Service
+                                </button>
+                              </MenuItem>
+                            )} */}
+                          </>
+                        </TableActionDropDown>
                       </td>
                     </tr>
                   );

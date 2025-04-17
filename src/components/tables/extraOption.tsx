@@ -9,6 +9,9 @@ import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { removeExtraOption } from "../../stores/apiData/extra-options";
 import NoResult from "../noResult";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 
 export default function ExtraOptionTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -34,6 +37,9 @@ export default function ExtraOptionTable() {
     }
   }, [selectedId]);
 
+  const { data: extra_option } = useGetResourceAccessChecker({
+    resource: "extra-option",
+  });
   return (
     <>
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
@@ -52,37 +58,44 @@ export default function ExtraOptionTable() {
                 </tr>
               </thead>
               <tbody>
-                {data.map((request) => {
+                {data.map((item) => {
                   return (
-                    <tr key={request?.id} className=" border-b">
-                      <td>{request?.name}</td>
-                      <td>{request?.description}</td>
-                      <td className=" group relative">
-                        <span className=" p-2 bg-primary/15  rounded-lg">
-                          ...
-                        </span>
-                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setSelectedId(String(request?.id));
-                              setExtraOption(true);
-                            }}
-                            className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Edit Extra Option
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setSelectedId(String(request?.id));
-                              setOpenDelete(true);
-                            }}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Delete Extra Option
-                          </button>
-                        </span>
+                    <tr key={item?.id} className=" border-b">
+                      <td>{item?.name}</td>
+                      <td>{item?.description}</td>
+                      <td>
+                        <TableActionDropDown>
+                          <>
+                            {extra_option?.update && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedId(String(item?.id));
+                                    setExtraOption(true);
+                                  }}
+                                  className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Edit Extra Option
+                                </button>
+                              </MenuItem>
+                            )}
+                            {extra_option?.delete && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedId(String(item?.id));
+                                    setOpenDelete(true);
+                                  }}
+                                  className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Delete Extra Option
+                                </button>
+                              </MenuItem>
+                            )}
+                          </>
+                        </TableActionDropDown>
                       </td>
                     </tr>
                   );

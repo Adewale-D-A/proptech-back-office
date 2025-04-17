@@ -9,6 +9,9 @@ import DeleteConfirmation from "../infoModal/delete-confirmation";
 import useAxios from "../../useHooks/useAxios";
 import { removeRestrictionssInList } from "../../stores/apiData/restrictions";
 import TableSearch from "../inputs/search/table-search";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 
 export default function PricingRestrictionsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -54,6 +57,10 @@ export default function PricingRestrictionsTable() {
       setIsDeleting(false);
     }
   }, [selectedId]);
+
+  const { data: restrictions } = useGetResourceAccessChecker({
+    resource: "restriction",
+  });
   return (
     <>
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
@@ -87,25 +94,32 @@ export default function PricingRestrictionsTable() {
                       <td className=" text-lg  min-w-36">
                         {item?.max_no_of_nights}
                       </td>
-                      <td className=" group relative">
-                        <span className=" p-2 text-lg bg-primary/15  rounded-lg">
-                          ...
-                        </span>
-                        <span className="z-10 group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          <Link
-                            to={`/pricing/edit-restriction/${item?.id}`}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Edit
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() => selectForDelete(item?.id)}
-                            className="text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Delete
-                          </button>
-                        </span>
+                      <td>
+                        <TableActionDropDown>
+                          <>
+                            {restrictions?.update && (
+                              <MenuItem>
+                                <Link
+                                  to={`/pricing/edit-restriction/${item?.id}`}
+                                  className="p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Edit
+                                </Link>
+                              </MenuItem>
+                            )}
+                            {restrictions?.delete && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => selectForDelete(item?.id)}
+                                  className="text-left p-3 px-4 w-full hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Delete
+                                </button>
+                              </MenuItem>
+                            )}
+                          </>
+                        </TableActionDropDown>
                       </td>
                     </tr>
                   );

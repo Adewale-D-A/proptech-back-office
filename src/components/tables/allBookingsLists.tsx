@@ -17,6 +17,8 @@ import { BookingFilterPayload } from "../../types/apiData/bookings/booking-filte
 import ExportToCSV from "../export-to-csv";
 import { bookingsExportFormater } from "../../utils/export-formerter-functions";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import { MenuItem } from "@headlessui/react";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
 
 export default function AllBookingsListTable({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
@@ -125,39 +127,49 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
                       <td>
                         <Status status={item?.status} />
                       </td>
-                      <td className=" group relative">
-                        <span className=" p-2 bg-primary/15 rounded-lg">
-                          ...
-                        </span>
-                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          <button
-                            onClick={() => openSummary(item?.id)}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            View Booking
-                          </button>
-                          {booking?.update && (
-                            <Link
-                              to={`/bookings/booking-details/edit-reservation/${item?.id}`}
-                              className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                            >
-                              Edit Booking
-                            </Link>
-                          )}
-                          {/* <Link
-                            to={`/apartment-caledar/${item?.id}`}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Generate Invoice
-                          </Link> */}
-                          {/* <button
-                            type="button"
-                            onClick={() => openDelete(item?.id)}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Delete Booking
-                          </button> */}
-                        </span>
+                      <td>
+                        <TableActionDropDown>
+                          <>
+                            <MenuItem>
+                              <button
+                                onClick={() => openSummary(item?.id)}
+                                className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                              >
+                                View Booking
+                              </button>
+                            </MenuItem>
+                            <MenuItem>
+                              {booking?.update && (
+                                <Link
+                                  to={`/bookings/booking-details/edit-reservation/${item?.id}`}
+                                  className=" w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Edit Booking
+                                </Link>
+                              )}
+                            </MenuItem>
+                            {/* <MenuItem>
+                              <Link
+                                to={`/apartment-caledar/${item?.id}`}
+                                className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                              >
+                                Generate Invoice
+                              </Link>
+                            </MenuItem>
+                            {booking?.delete && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => openDelete(item?.id)}
+                                  className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Delete Booking
+                                </button>
+                              </MenuItem>
+                            )} */}
+                          </>
+                        </TableActionDropDown>
+                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col"></span>
                       </td>
                     </tr>
                   );

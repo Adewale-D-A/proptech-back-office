@@ -13,6 +13,7 @@ import useGetExpenseCategories from "../../services-hooks/useGetExpenseCategorie
 import AddEditExpensesCategories from "../../pages/reports/owners/expense-categories/add-edit-expense-category";
 import PenIcon from "../../assets/icons/pen";
 import BinIcon from "../../assets/icons/bin-icon";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
 export default function ExpenseCategoriesistsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -54,6 +55,9 @@ export default function ExpenseCategoriesistsTable() {
       setIsDeleting(false);
     }
   }, [selectedId]);
+  // const { data: expense_category } = useGetResourceAccessChecker({
+  //   resource: "expense-category",
+  // });
 
   return (
     <>

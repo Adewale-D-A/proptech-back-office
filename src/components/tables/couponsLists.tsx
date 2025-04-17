@@ -14,6 +14,9 @@ import formatDate from "../../utils/isoDateConverter";
 import useAxios from "../../useHooks/useAxios";
 import ModalTemplate from "../modal";
 import AddNewCoupon from "../inputs/plansAndPromotions/coupons";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 
 export default function CouponList({ header }: { header: string[] }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -66,6 +69,9 @@ export default function CouponList({ header }: { header: string[] }) {
     },
     []
   );
+  const { data: coupon } = useGetResourceAccessChecker({
+    resource: "coupon",
+  });
   return (
     <>
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 ">
@@ -106,28 +112,38 @@ export default function CouponList({ header }: { header: string[] }) {
                         <td>{request?.applicable_shortlet_count}</td>
                         <td>{request?.applicable_user_count}</td>
                         <td>{request?.validity}</td>
-                        <td className=" group relative">
-                          <span className=" p-2 text-lg">...</span>
-                          <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                openCouponEditModal(String(request?.id));
-                              }}
-                              className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                            >
-                              Edit Coupon
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                openDeletePrompt(String(request?.id));
-                              }}
-                              className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                            >
-                              Delete Coupon
-                            </button>
-                          </span>
+                        <td>
+                          <TableActionDropDown>
+                            <>
+                              {coupon?.update && (
+                                <MenuItem>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      openCouponEditModal(String(request?.id));
+                                    }}
+                                    className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                                  >
+                                    Edit Coupon
+                                  </button>
+                                </MenuItem>
+                              )}
+
+                              {coupon?.delete && (
+                                <MenuItem>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      openDeletePrompt(String(request?.id));
+                                    }}
+                                    className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                                  >
+                                    Delete Coupon
+                                  </button>
+                                </MenuItem>
+                              )}
+                            </>
+                          </TableActionDropDown>
                         </td>
                       </tr>
                     );

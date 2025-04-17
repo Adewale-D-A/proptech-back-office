@@ -22,6 +22,7 @@ import useGetMaintenanceRequests from "../../services-hooks/useGetMaintenanceReq
 import ExportToCSV from "../export-to-csv";
 import { maintenanceRequestsExportFormater } from "../../utils/export-formerter-functions";
 import useGetRequestCategories from "../../services-hooks/useGetRequestCategories";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 // import DeleteConfirmation from "../infoModal/delete-confirmation";
 // import useAxios from "../../useHooks/useAxios";
 // import { useAppDispatch } from "../../stores/hooks";
@@ -88,6 +89,9 @@ export default function MaintenanceRequestTable() {
   //   }
   // }, [selectedId]);
 
+  const { data: maintenance_requests } = useGetResourceAccessChecker({
+    resource: "maintenance-request",
+  });
   return (
     <>
       <div className="w-full flex flex-col gap-5">
@@ -196,15 +200,17 @@ export default function MaintenanceRequestTable() {
                               >
                                 <EyeIcon />
                               </Link>
+                              {maintenance_requests?.update && (
+                                <button
+                                  title="edit"
+                                  onClick={() =>
+                                    openForEditMaintenanceRequest(item?.id)
+                                  }
+                                >
+                                  <PenIcon />
+                                </button>
+                              )}
 
-                              <button
-                                title="edit"
-                                onClick={() =>
-                                  openForEditMaintenanceRequest(item?.id)
-                                }
-                              >
-                                <PenIcon />
-                              </button>
                               {/* <button
                               title="delete"
                               onClick={() => handleOpenDelete(item?.id)}

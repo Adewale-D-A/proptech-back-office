@@ -1,5 +1,7 @@
 ##### 17.04.2025
 
+> Feature: Tables more action 'click-to-show' addition
+> Feature: More control over who-sees-what actions on table views
 > Fix: Continuation of bug resolution
 > Fix: 16th April Meeting Sync Bug fixes
 

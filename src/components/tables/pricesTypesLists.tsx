@@ -11,6 +11,9 @@ import useGetPriceTypeLists from "../../services-hooks/useGetPriceTypeLists";
 import { removePriceTypeInList } from "../../stores/apiData/price-type-lists";
 import CheckSolidIcon from "../../assets/icons/check-solid";
 import XSolidIcon from "../../assets/icons/x-solid";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
 export default function PriceTypeList({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
@@ -31,6 +34,10 @@ export default function PriceTypeList({ header }: { header: string[] }) {
       setIsDeleting(false);
     }
   }, [selectedId]);
+
+  // const { data: additional_services } = useGetResourceAccessChecker({
+  //   resource: "special-price",
+  // });
   return (
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 ">
@@ -53,47 +60,52 @@ export default function PriceTypeList({ header }: { header: string[] }) {
               </tr>
             </thead>
             <tbody className="">
-              {data.map((request, index) => {
+              {data.map((item, index) => {
                 return (
-                  <tr key={request?.id} className=" border-b">
+                  <tr key={item?.id} className=" border-b">
                     <td>{index + 1}</td>
-                    <td>{request?.name}</td>
-                    <td>{request?.attributes}</td>
-                    <td>{request?.rate}</td>
+                    <td>{item?.name}</td>
+                    <td>{item?.attributes}</td>
+                    <td>{item?.rate}</td>
                     <td>
-                      {request?.isBreakfastIncluded ? (
+                      {item?.isBreakfastIncluded ? (
                         <CheckSolidIcon className=" text-green-500 w-5 h-5" />
                       ) : (
                         <XSolidIcon className=" text-red-500 w-5 h-6" />
                       )}
                     </td>
                     <td>
-                      {request?.isRefundable ? (
+                      {item?.isRefundable ? (
                         <CheckSolidIcon className=" text-green-500 w-5 h-5" />
                       ) : (
                         <XSolidIcon className=" text-red-500 w-5 h-6" />
                       )}
                     </td>
-                    <td className=" group relative">
-                      <span className=" p-2 text-lg">...</span>
-                      <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                        <Link
-                          to={`#/${request?.id}`}
-                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Edit Price
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSelectedId(request?.id);
-                            setOpenDeleteConfirmation(true);
-                          }}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Delete Price
-                        </button>
-                      </span>
+                    <td>
+                      <TableActionDropDown>
+                        <>
+                          <MenuItem>
+                            <Link
+                              to={`#/${item?.id}`}
+                              className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              Edit Price
+                            </Link>
+                          </MenuItem>
+                          <MenuItem>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSelectedId(item?.id);
+                                setOpenDeleteConfirmation(true);
+                              }}
+                              className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              Delete Price
+                            </button>
+                          </MenuItem>
+                        </>
+                      </TableActionDropDown>
                     </td>
                   </tr>
                 );

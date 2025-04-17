@@ -9,6 +9,9 @@ import { removePackageAndOfferInList } from "../../stores/apiData/packages-and-o
 import TableSearch from "../inputs/search/table-search";
 import MobileOfferTable from "./mobile/offers";
 import useAxios from "../../useHooks/useAxios";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 
 export default function PackagesAndOfferList({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
@@ -41,6 +44,10 @@ export default function PackagesAndOfferList({ header }: { header: string[] }) {
       setIsDeleting(false);
     }
   }, [selectedId]);
+
+  const { data: offer } = useGetResourceAccessChecker({
+    resource: "offer",
+  });
   return (
     <>
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 ">
@@ -66,32 +73,41 @@ export default function PackagesAndOfferList({ header }: { header: string[] }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((request) => {
+                  {data.map((item) => {
                     return (
-                      <tr key={request?.id} className=" border-b">
-                        <td>{request?.id}</td>
-                        <td>{request?.name}</td>
-                        <td>{request?.start_date}</td>
-                        <td>{request?.end_date}</td>
-                        <td>{request?.price}</td>
-                        <td>{request?.applicable_shortlet_count}</td>
-                        <td className=" group relative">
-                          <span className=" p-2 text-lg">...</span>
-                          <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                            <Link
-                              to={`/plans-and-promotions/package-and-offer/edit-new-package-and-offer/${request?.id}`}
-                              className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                            >
-                              Edit Offer
-                            </Link>
-                            <button
-                              type="button"
-                              onClick={() => selectForDelete(request?.id)}
-                              className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                            >
-                              Delete Offer
-                            </button>
-                          </span>
+                      <tr key={item?.id} className=" border-b">
+                        <td>{item?.id}</td>
+                        <td>{item?.name}</td>
+                        <td>{item?.start_date}</td>
+                        <td>{item?.end_date}</td>
+                        <td>{item?.price}</td>
+                        <td>{item?.applicable_shortlet_count}</td>
+                        <td>
+                          <TableActionDropDown>
+                            <>
+                              {offer?.update && (
+                                <MenuItem>
+                                  <Link
+                                    to={`/plans-and-promotions/package-and-offer/edit-new-package-and-offer/${item?.id}`}
+                                    className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                                  >
+                                    Edit Offer
+                                  </Link>
+                                </MenuItem>
+                              )}{" "}
+                              {offer?.delete && (
+                                <MenuItem>
+                                  <button
+                                    type="button"
+                                    onClick={() => selectForDelete(item?.id)}
+                                    className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                                  >
+                                    Delete Offer
+                                  </button>
+                                </MenuItem>
+                              )}
+                            </>
+                          </TableActionDropDown>
                         </td>
                       </tr>
                     );
