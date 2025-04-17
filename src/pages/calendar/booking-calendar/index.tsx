@@ -28,26 +28,9 @@ const breadCrumb = [
 
 const today = new Date();
 const todayString = formatDateToString(new Date());
-const nextMonthString = new Date(today?.getFullYear(), today?.getMonth() + 6, 0)
-  ?.toISOString()
-  ?.slice(0, 10);
-
-// const dummyBookedDates = [
-//   "2025-02-01",
-//   "2025-02-06",
-//   "2025-03-12",
-//   "2025-04-13",
-//   "2025-05-21",
-// ] as any;
-// const dummyBlockedDate = [
-//   "2025-01-21",
-//   "2025-03-23",
-//   "2025-04-23",
-//   "2025-02-07",
-//   "2025-05-14",
-//   "2025-06-22",
-//   "2025-02-25",
-// ] as any;
+const nextMonthString = formatDateToString(
+  new Date(today?.getFullYear(), today?.getMonth() + 6, 0)
+);
 
 export default function ApartmentCalendarPage() {
   const dispatch = useAppDispatch();
@@ -68,7 +51,7 @@ export default function ApartmentCalendarPage() {
   // calendar data fetching based on filtered dates
   const { data, isLoading, isFailed, retryFunction, setIsFailed } =
     useGetApartmentCalendar({
-      id: String(apartmentId || ""),
+      id: buildingId ? String(apartmentId || "") : undefined,
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
     });

@@ -81,6 +81,9 @@ export default function DashboardOverview() {
   const { data: dashboard } = useGetResourceAccessChecker({
     resource: "admin-dashboard",
   });
+  const { data: apartment } = useGetResourceAccessChecker({
+    resource: "shortlet",
+  });
   return (
     <section className="w-full flex flex-col items-center">
       {dashboard?.view ? (
@@ -275,7 +278,7 @@ export default function DashboardOverview() {
           </div>
 
           {/* top apartment table */}
-          <ApartmentTable title="Top Apartments" />
+          {apartment?.view && <ApartmentTable title="Top Apartments" />}
         </div>
       ) : (
         <div className=" w-full px-5 flex items-center justify-center bg-primary/15 rounded-lg h-[calc(100vh-300px)]">

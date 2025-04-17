@@ -22,7 +22,7 @@ function Profile() {
   const { user } = useAppSelector((state) => state.userAuthentication.value);
 
   const [firstname, setFirstname] = useState(user?.first_name);
-  const [lastname, setLastname] = useState("");
+  const [lastname, setLastname] = useState(user?.last_name);
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");

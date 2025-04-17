@@ -10,7 +10,6 @@ import { useAppDispatch } from "../../stores/hooks";
 import { removeApartmentInList } from "../../stores/apiData/apartment-lists";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import TableSearch from "../inputs/search/table-search";
-import MobileApartmentTable from "./mobile/apartment";
 import ReceiptIcon from "../../assets/icons/receipt";
 import ModalTemplate from "../modal";
 import CalculateRate from "../check-availability/calculate-rate";
@@ -18,6 +17,8 @@ import useAxios from "../../useHooks/useAxios";
 import ExportToCSV from "../export-to-csv";
 import { apartmentExportFormater } from "../../utils/export-formerter-functions";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 
 export default function ApartmentListsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -25,7 +26,7 @@ export default function ApartmentListsTable() {
   const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("desc");
+  const [sort, setSort] = useState("asc");
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -34,7 +35,7 @@ export default function ApartmentListsTable() {
   const [selectedId, setSelectedId] = useState("");
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllApartmentLists({ page: currentPage, search, sort: sort });
+    useGetAllApartmentLists({ page: currentPage, search, sort });
 
   const handleOpenCalculateRate = useCallback((id: number) => {
     setSelectedId(String(id || ""));
@@ -96,7 +97,7 @@ export default function ApartmentListsTable() {
                 </tr>
               </thead>
               <tbody>
-                {data.map((request, index) => {
+                {data.map((request) => {
                   return (
                     <tr key={request?.id} className=" border-b">
                       <td className=" flex gap-2 items-center min-w-36">
@@ -126,51 +127,50 @@ export default function ApartmentListsTable() {
                       <td>
                         <Status status={request?.availability_status} />
                       </td>
-                      <td className=" group relative">
-                        <span className=" p-2 bg-primary/15  rounded-lg">
-                          ...
-                        </span>
-                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          <Link
-                            to={`/apartments/apartment-details/${request?.id}`}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            View Apartment
-                          </Link>
-                          {shortlet?.update && (
-                            <Link
-                              to={`/apartments/edit-apartment/apartment-details/${request?.id}?redirect=${location?.pathname}`}
-                              className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                            >
-                              Edit Apartment
-                            </Link>
-                          )}
-                          {calendar?.view && (
-                            <Link
-                              to={`/apartments/apartment-caledar/${request?.id}`}
-                              className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                            >
-                              Check Calender
-                            </Link>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => handleOpenCalculateRate(request?.id)}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            View Rate
-                          </button>
-                          {/* <button
-                            type="button"
-                            onClick={() => {
-                              setDeleteId(String(request?.id));
-                              setOpenDeleteConfirmation(true);
-                            }}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Delete Apartment
-                          </button> */}
-                        </span>
+                      <td className=" text-left">
+                        <TableActionDropDown>
+                          <>
+                            <MenuItem>
+                              <Link
+                                to={`/apartments/apartment-details/${request?.id}`}
+                                className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                              >
+                                View Apartment
+                              </Link>
+                            </MenuItem>
+                            {shortlet?.update && (
+                              <MenuItem>
+                                <Link
+                                  to={`/apartments/edit-apartment/apartment-details/${request?.id}?redirect=${location?.pathname}`}
+                                  className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Edit Apartment
+                                </Link>
+                              </MenuItem>
+                            )}
+                            {calendar?.view && (
+                              <MenuItem>
+                                <Link
+                                  to={`/apartments/apartment-caledar/${request?.id}`}
+                                  className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Check Calender
+                                </Link>
+                              </MenuItem>
+                            )}
+                            <MenuItem>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleOpenCalculateRate(request?.id)
+                                }
+                                className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                              >
+                                View Rate
+                              </button>
+                            </MenuItem>
+                          </>
+                        </TableActionDropDown>
                       </td>
                     </tr>
                   );
@@ -210,11 +210,9 @@ export default function ApartmentListsTable() {
         showXicon={true}
         titleIcon={<ReceiptIcon />}
         title="Calculate rate"
-        className=" max-w-md"
+        className=" max-w-lg w-full"
       >
-        <div className="w-full">
-          <CalculateRate apartmentId={selectedId} setIsOpen={setOpenRate} />
-        </div>
+        <CalculateRate apartmentId={selectedId} setIsOpen={setOpenRate} />
       </ModalTemplate>
     </>
   );

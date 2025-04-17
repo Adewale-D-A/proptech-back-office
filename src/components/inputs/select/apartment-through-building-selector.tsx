@@ -1,4 +1,3 @@
-import { useState } from "react";
 import useGetBuildings from "../../../services-hooks/apartment/useGetBuildings";
 import Select from ".";
 
@@ -24,9 +23,7 @@ export default function ApartmentThroughBuildingSelector({
         setValue={setBuildingId}
         id={"building-filter"}
       >
-        <option value={""} disabled>
-          Buildings
-        </option>
+        <option value={""}>All Buildings</option>
         {data?.map((item) => (
           <option key={item?.id} value={`${item?.id}`}>
             {item?.name}
@@ -40,9 +37,7 @@ export default function ApartmentThroughBuildingSelector({
           setValue={setApartmentId}
           id={"apartment-filter"}
         >
-          <option value={""} disabled>
-            Apartments
-          </option>
+          <option value={""}>All Apartments</option>
           {data
             .find((item) => String(item.id) === buildingId)
             ?.shortlets?.map((item) => (

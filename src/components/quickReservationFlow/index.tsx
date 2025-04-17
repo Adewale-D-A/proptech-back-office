@@ -15,7 +15,6 @@ import { apartmentById } from "../../types/apiData/apartment";
 import useAxios from "../../useHooks/useAxios";
 import { addBookingsToList } from "../../stores/apiData/bookings-lists";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-import AssignCustomer from "./assignToCustomer";
 import { useParams, useSearchParams } from "react-router-dom";
 import useGetApartmentById from "../../services-hooks/useGetApartmentById";
 import TextInput from "../inputs/textInput";
@@ -33,6 +32,7 @@ export default function QuickReservationFlow({
   setOpen,
   allowApartmentUpdate = true,
   defaultDateTime,
+  refetchCalendar,
 }: {
   variant?: number;
   apartment_id?: string;
@@ -46,6 +46,7 @@ export default function QuickReservationFlow({
     checkInTime: string;
     checkOutTime: string;
   };
+  refetchCalendar?: () => void;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -178,6 +179,7 @@ export default function QuickReservationFlow({
         const response = await axios.post("/admin/booking", newPayload);
         const added_response = response?.data?.data;
         dispatch(addBookingsToList(added_response));
+        refetchCalendar?.();
         dispatch(
           openSnackbar({
             message: "Apartment successfully booked",
@@ -215,14 +217,15 @@ export default function QuickReservationFlow({
       payment,
       bookingStatus,
       data,
+      refetchCalendar,
     ]
   );
 
-  const clearSeletecApartment = useCallback(() => {
-    if (setSelectedApt) {
-      setSelectedApt({} as any);
-    }
-  }, [setSelectedApt]);
+  // const clearSeletecApartment = useCallback(() => {
+  //   if (setSelectedApt) {
+  //     setSelectedApt({} as any);
+  //   }
+  // }, [setSelectedApt]);
 
   return (
     <div className="w-full">
@@ -309,6 +312,7 @@ export default function QuickReservationFlow({
               )}
               check_in_date={checkInDate}
               check_out_date={checkOutDate}
+              refetchCalendar={refetchCalendar}
             />
           ) : (
             <div
@@ -391,7 +395,7 @@ export default function QuickReservationFlow({
                 value={customerMetaData}
                 setValue={setCustomerMetadata}
                 id="customer-information"
-                isRequired={true}
+                isRequired={false}
                 placeholder="Customer information"
               />
               <LoadingButton

@@ -15,6 +15,9 @@ import useAxios from "../../useHooks/useAxios";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import ExportToCSV from "../export-to-csv";
 import { apartmentInvoiceExportFormater } from "../../utils/export-formerter-functions";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 
 export default function InvoiceListsTable({ header }: { header: string[] }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -79,6 +82,13 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
     }
   }, [selectedId]);
 
+  const { data: invoice } = useGetResourceAccessChecker({
+    resource: "invoice",
+  });
+
+  const { data: booking_email } = useGetResourceAccessChecker({
+    resource: "booking-email",
+  });
   return (
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 ">
@@ -118,41 +128,50 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
                     <td>
                       <Status status={item?.status} />
                     </td>
-                    <td className=" group relative">
-                      <span className=" p-2 text-lg">...</span>
-                      <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                        <Link
-                          to={`/bookings/booking-details/${item?.booking_id}`}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          View Booking
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => selectForDelete(item?.id)}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Delete Invoice
-                        </button>
-                        <Link
-                          to={`#`}
-                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Download Invoice
-                        </Link>
-                        <button
-                          onClick={() => resendInvoice()}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Resend Via E-mail
-                        </button>
-                        <Link
-                          to={`/bookings/booking-details/${item?.booking_id}`}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          View Booking Details
-                        </Link>
-                      </span>
+                    <td>
+                      <TableActionDropDown>
+                        <>
+                          <MenuItem>
+                            <Link
+                              to={`/bookings/booking-details/${item?.booking_id}`}
+                              className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              View Booking
+                            </Link>
+                          </MenuItem>
+                          {invoice?.delete && (
+                            <MenuItem>
+                              <button
+                                type="button"
+                                onClick={() => selectForDelete(item?.id)}
+                                className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                              >
+                                Delete Invoice
+                              </button>
+                            </MenuItem>
+                          )}
+                          {/* {booking_email && (
+                            <MenuItem>
+                              <Link
+                                to={`#`}
+                                className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                              >
+                                Download Invoice
+                              </Link>
+                            </MenuItem>
+                          )} */}
+                          {booking_email?.create && (
+                            <MenuItem>
+                              <button
+                                onClick={() => resendInvoice()}
+                                className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                              >
+                                Resend Via E-mail
+                              </button>
+                            </MenuItem>
+                          )}
+                        </>
+                      </TableActionDropDown>
                     </td>
                   </tr>
                 );

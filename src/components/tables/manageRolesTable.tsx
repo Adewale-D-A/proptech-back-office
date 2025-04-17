@@ -10,6 +10,8 @@ import useGetRoles from "../../services-hooks/useGetRoles";
 import { removeRolesInList } from "../../stores/apiData/roles-lists";
 // import MobileRolesTable from "./mobile/roles";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 
 export default function ManageRoleTableData() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -97,27 +99,32 @@ export default function ManageRoleTableData() {
                       <td className=" text-gray-500  max-w-xs">{index + 1}</td>
                       <td className=" max-w-xs">{request?.name}</td>
                       <td className=" max-w-xs">{request?.guard_name}</td>
-                      <td className=" group relative">
-                        <span className=" p-2 text-lg">...</span>
-                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          {role?.update && (
-                            <Link
-                              to={`/employees/roles/edit/${request?.id}`}
-                              className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                            >
-                              Edit role
-                            </Link>
-                          )}
-                          {role?.delete && (
-                            <button
-                              type="button"
-                              onClick={() => onDeleteClick(request?.id)}
-                              className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                            >
-                              Delete role
-                            </button>
-                          )}
-                        </span>
+                      <td>
+                        <TableActionDropDown>
+                          <>
+                            {role?.update && (
+                              <MenuItem>
+                                <Link
+                                  to={`/employees/roles/edit/${request?.id}`}
+                                  className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Edit role
+                                </Link>
+                              </MenuItem>
+                            )}
+                            {role?.delete && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => onDeleteClick(request?.id)}
+                                  className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Delete role
+                                </button>
+                              </MenuItem>
+                            )}
+                          </>
+                        </TableActionDropDown>
                       </td>
                     </tr>
                   );

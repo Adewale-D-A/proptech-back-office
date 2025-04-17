@@ -13,14 +13,16 @@ export default function useGetAllAdmins({
   page = 1,
   start_date,
   end_date,
-  sort = "desc",
+  sort = "asc",
   search = "",
+  category,
 }: {
   page?: number;
   start_date?: string;
   end_date?: string;
   sort?: "desc" | "asc" | string;
   search?: string;
+  category?: string;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -84,11 +86,11 @@ export default function useGetAllAdmins({
     } catch (error) {
       setIsFailed(true);
     }
-  }, [page, start_date, end_date, sort, search]);
+  }, [page, start_date, end_date, sort, search, category]);
 
   useEffect(() => {
     getAllAdmins();
-  }, [page, start_date, end_date, sort, search]);
+  }, [page, start_date, end_date, sort, search, category]);
 
   return {
     data,

@@ -2,26 +2,26 @@ import { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import {
   addToPaginationHistory,
-  updateRequisitionRequestList,
-} from "../stores/apiData/requisition-requests";
+  updateMaintenanceRequestList,
+} from "../stores/apiData/maintenance-requests";
 import useAxios from "../useHooks/useAxios";
 import { pagination } from "../types/pagination";
 import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
-import sampleRequesitionsData from "../assets/temp-api-mockup-data/requisition-request.json";
-import { updateMaintenanceRequestList } from "../stores/apiData/maintenance-requests";
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetMaintenanceRequests({
   page = 1,
   start_date,
   end_date,
-  sort = "desc",
+  sort = "asc",
   search = "",
+  category_id,
 }: {
   page?: number;
   start_date?: string;
   end_date?: string;
   sort?: "desc" | "asc" | string;
   search?: string;
+  category_id?: string;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -46,6 +46,7 @@ export default function useGetMaintenanceRequests({
           end_date: end_date,
           sort: sort,
           search: search,
+          category_id,
         },
       });
       //check store if this requested data has been saved previously and retirve it
@@ -55,7 +56,7 @@ export default function useGetMaintenanceRequests({
       );
       if (foundPage && !remakeRequest) {
         setPagination(foundPage?.pagination_data);
-        dispatch(updateRequisitionRequestList({ data: foundPage?.data }));
+        dispatch(updateMaintenanceRequestList({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
           `/admin/maintenance-request?${queryString}`
@@ -88,11 +89,11 @@ export default function useGetMaintenanceRequests({
     } finally {
       setIsLoading(false);
     }
-  }, [page, start_date, end_date, sort, search]);
+  }, [page, start_date, end_date, sort, search, category_id]);
 
   useEffect(() => {
     getAllMaintenanceRequests();
-  }, [page, start_date, end_date, sort, search]);
+  }, [page, start_date, end_date, sort, search, category_id]);
 
   return {
     data,

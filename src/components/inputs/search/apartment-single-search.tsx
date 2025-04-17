@@ -56,6 +56,7 @@ export default function ApartmentSingleSearch({
   } = useGetAllApartmentLists({
     page: 1,
     search: keywords,
+    limit: 100,
   });
 
   const handleSelection = useCallback((selected: apartmentById) => {

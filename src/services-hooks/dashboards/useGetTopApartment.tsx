@@ -13,7 +13,7 @@ export default function useGetTopApartmentLists({
   page = 1,
   start_date,
   end_date,
-  sort = "desc",
+  sort = "asc",
 }: {
   page?: number;
   start_date?: string;

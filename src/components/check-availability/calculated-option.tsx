@@ -4,22 +4,25 @@ import NextArrowIcon from "../../assets/icons/next-arrow";
 // import SplitArrowIcon from "../../assets/icons/split-arrow";
 // import { Http2ServerRequest } from "http2";
 import { format, differenceInDays, isValid } from "date-fns";
-import { single_stay, split_stay } from "../../types/apiData/apartment/apt-suggestions";
+import {
+  single_stay,
+  split_stay,
+} from "../../types/apiData/apartment/apt-suggestions";
 
 interface suggestion {
-  single_stay: single_stay,
-  split_stay: split_stay
+  single_stay: single_stay;
+  split_stay: split_stay;
 }
 export default function CalculatedAvailabilityOptions({
   data,
   checkInDate,
   checkOutDate,
-  noOfGuest
+  noOfGuest,
 }: {
   data: suggestion;
   checkInDate: string;
   checkOutDate: string;
-  noOfGuest?: string
+  noOfGuest?: string;
 }) {
   const checkIn = new Date(checkInDate);
   const checkOut = new Date(checkOutDate);
@@ -42,11 +45,18 @@ export default function CalculatedAvailabilityOptions({
             </div>
             <p className=" text-sm text-gray-400">
               {formattedCheckInDate} - {formattedCheckOutDate}, {numberOfNights}{" "}
-              nights , {data?.single_stay?.max_guests} adults
+              nights, {noOfGuest ? `${noOfGuest} adults` : ""}
             </p>
           </div>
           {data?.single_stay ? (
-            <AvailabilityOptionCard data={data} extra_data={{check_in_date: checkInDate, check_out_date: checkOutDate, noOfGuest: noOfGuest}}/>
+            <AvailabilityOptionCard
+              data={data}
+              extra_data={{
+                check_in_date: checkInDate,
+                check_out_date: checkOutDate,
+                noOfGuest: noOfGuest,
+              }}
+            />
           ) : (
             <div className="w-full p-5 bg-gray-200/15 rounded-lg">
               <h4 className=" text-lg font-semibold text-center">

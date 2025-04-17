@@ -6,6 +6,7 @@ import useGetRateListByApartmentId from "../../services-hooks/pricing/useGetRate
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
 export default function PriceRateList({
   apartmentId,
@@ -46,6 +47,9 @@ export default function PriceRateList({
     }
   }, [selectedId]);
 
+  const { data: rate_list } = useGetResourceAccessChecker({
+    resource: "rate-list",
+  });
   return (
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 overflow-auto">
@@ -67,12 +71,14 @@ export default function PriceRateList({
                   <td>{item?.number_of_nights} Nights</td>
                   <td>{item?.price}</td>
                   <td className="">
-                    <button
-                      title="delete"
-                      onClick={() => handleOpenDelete(item?.id)}
-                    >
-                      <BinIcon className=" text-red-500 h-6 w-6" />
-                    </button>
+                    {rate_list?.delete && (
+                      <button
+                        title="delete"
+                        onClick={() => handleOpenDelete(item?.id)}
+                      >
+                        <BinIcon className=" text-red-500 h-6 w-6" />
+                      </button>
+                    )}
                   </td>
                 </tr>
               );

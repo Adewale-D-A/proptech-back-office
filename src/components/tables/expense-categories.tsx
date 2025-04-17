@@ -13,19 +13,21 @@ import useGetExpenseCategories from "../../services-hooks/useGetExpenseCategorie
 import AddEditExpensesCategories from "../../pages/reports/owners/expense-categories/add-edit-expense-category";
 import PenIcon from "../../assets/icons/pen";
 import BinIcon from "../../assets/icons/bin-icon";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
 export default function ExpenseCategoriesistsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetExpenseCategories({ page: currentPage });
-
+  const [sort, setSort] = useState("asc");
   const [selectedId, setSelectedId] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [openEditExpenseCategory, setOpenEditExpenseCategory] = useState(false);
+
+  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
+    useGetExpenseCategories({ page: currentPage, sort });
 
   const openForCreate = useCallback(() => {
     setSelectedId("");
@@ -53,6 +55,9 @@ export default function ExpenseCategoriesistsTable() {
       setIsDeleting(false);
     }
   }, [selectedId]);
+  // const { data: expense_category } = useGetResourceAccessChecker({
+  //   resource: "expense-category",
+  // });
 
   return (
     <>
@@ -70,7 +75,11 @@ export default function ExpenseCategoriesistsTable() {
         </div>
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Expense Categories</h2>
-          <Sort id="room-options" label="Sort List" />{" "}
+          <Sort
+            setSort={setSort}
+            id="expense-category"
+            label="Sort List"
+          />{" "}
         </div>
         {data && data.length > 0 ? (
           <table className=" w-full overflow-x-auto">

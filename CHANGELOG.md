@@ -1,5 +1,13 @@
+##### 17.04.2025
+
+> Feature: Tables more action 'click-to-show' addition
+> Feature: More control over who-sees-what actions on table views
+> Fix: Continuation of bug resolution
+> Fix: 16th April Meeting Sync Bug fixes
+
 ##### 14.04.2025
 
+> Bug fixes: Amenities description not required feature addition
 > Feature: Remove owner shortlet feature update
 > Feature: 'Who sees what' logic completion
 > Fix: Today's meeting highlighted bug fixes

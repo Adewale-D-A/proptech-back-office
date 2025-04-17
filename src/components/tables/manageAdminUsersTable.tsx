@@ -9,6 +9,9 @@ import useGetAllAdmins from "../../services-hooks/useGetAllAdmins";
 import Pagination from "../pagination";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import MobileAdminTable from "./mobile/admins";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 
 export default function ManageAdminUsersTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -65,6 +68,9 @@ export default function ManageAdminUsersTable() {
     setSelectedId(id);
   }, []);
 
+  const { data: admin } = useGetResourceAccessChecker({
+    resource: "admin",
+  });
   return (
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
@@ -103,23 +109,33 @@ export default function ManageAdminUsersTable() {
                       </td>
                       <td className=" max-w-xs">{request?.email}</td>
                       <td className=" max-w-xs">{request?.role_id}</td>
-                      <td className=" group relative">
-                        <span className=" p-2 text-lg">...</span>
-                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          <Link
-                            to={`/admin/edit/${request?.id}`}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Edit admin
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() => onDeleteClick(request?.id)}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Delete admin
-                          </button>
-                        </span>
+                      <td>
+                        <TableActionDropDown>
+                          <>
+                            {admin?.update && (
+                              <MenuItem>
+                                <Link
+                                  to={`/admin/edit/${request?.id}`}
+                                  className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Edit admin
+                                </Link>
+                              </MenuItem>
+                            )}
+                            {admin?.delete && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => onDeleteClick(request?.id)}
+                                  className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Delete admin
+                                </button>
+                              </MenuItem>
+                            )}
+                          </>
+                        </TableActionDropDown>
+                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col"></span>
                       </td>
                     </tr>
                   );
