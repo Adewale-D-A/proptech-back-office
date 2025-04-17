@@ -8,7 +8,7 @@ export default function useGetReservation({
   page = 1,
   start_date,
   end_date,
-  sort = "desc",
+  sort = "asc",
   search = "",
   type,
 }: {

@@ -25,7 +25,7 @@ export default function ApartmentTable({ title }: { title: string }) {
     start_date: string;
     end_date: string;
   }>();
-  const [sort, setSort] = useState("desc");
+  const [sort, setSort] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const [openReservation, setOpenReservation] = useState(false);
   const [openRate, setOpenRate] = useState(false);

@@ -77,9 +77,6 @@ export default function ViewMaintenanceRequest() {
     }
   }, [data]);
 
-  const [selectedId, setSelectedId] = useState("");
-
-  const [submitting, setSubmitting] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   // const [isDeleting, setIsDeleting] = useState(false);
 
@@ -88,8 +85,6 @@ export default function ViewMaintenanceRequest() {
   const [openCloseRequest, setOpenCloseRequest] = useState(false);
   const [openImage, setOpenImage] = useState(false);
   // const [openDelete, setOpenDelete] = useState(false);
-
-  const [approvalStatus, setApprovalStatus] = useState("approved");
 
   // const handleOpenDelete = useCallback((id: number) => {
   // setSelectedId(id)
@@ -187,7 +182,7 @@ export default function ViewMaintenanceRequest() {
         ) : (
           <div className="py-4 flex gap-3">
             <LoadingButton
-              label="Convert to Requisition & Approve"
+              label="Convert to Requisition"
               isLoading={false}
               type="button"
               clickHandler={() => setOpenConvertToRequisition(true)}

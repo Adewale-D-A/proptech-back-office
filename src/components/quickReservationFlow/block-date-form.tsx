@@ -11,10 +11,12 @@ export default function BlockDateForm({
   apt_id,
   check_in_date,
   check_out_date,
+  refetchCalendar,
 }: {
   apt_id: string;
   check_in_date: string;
   check_out_date: string;
+  refetchCalendar?: () => void;
 }) {
   const axios = useAxios({ disableSuccMssg: true, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -48,6 +50,7 @@ export default function BlockDateForm({
         end_date: check_out_date,
         blocked_date_reason_id: blockedReason,
       });
+      refetchCalendar?.();
       dispatch(
         openSnackbar({
           message: "Dates successfully blocked",
@@ -58,7 +61,7 @@ export default function BlockDateForm({
     } finally {
       setSubmitting(false);
     }
-  }, [blockedReason, apt_id, check_in_date, check_out_date]);
+  }, [blockedReason, apt_id, check_in_date, check_out_date, refetchCalendar]);
   return (
     <div className="w-full flex flex-col gap-5">
       <Select

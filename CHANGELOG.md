@@ -1,3 +1,7 @@
+##### 17.04.2025
+
+> Fix: 16th April Meeting Sync Bug fixes
+
 ##### 14.04.2025
 
 > Bug fixes: Amenities description not required feature addition

@@ -13,7 +13,7 @@ export default function useGetRequisitionRequests({
   page = 1,
   start_date,
   end_date,
-  sort = "desc",
+  sort = "asc",
   search = "",
   category = "",
   paid,

@@ -12,7 +12,7 @@ import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
 export default function useGetBlockedReasons({
   page = 1,
   limit = 20,
-  sort = "desc",
+  sort = "asc",
   search = "",
 }: {
   page?: number;

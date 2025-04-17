@@ -10,7 +10,6 @@ import { useAppDispatch } from "../../stores/hooks";
 import { removeApartmentInList } from "../../stores/apiData/apartment-lists";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import TableSearch from "../inputs/search/table-search";
-import MobileApartmentTable from "./mobile/apartment";
 import ReceiptIcon from "../../assets/icons/receipt";
 import ModalTemplate from "../modal";
 import CalculateRate from "../check-availability/calculate-rate";
@@ -25,7 +24,7 @@ export default function ApartmentListsTable() {
   const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("desc");
+  const [sort, setSort] = useState("asc");
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -34,7 +33,7 @@ export default function ApartmentListsTable() {
   const [selectedId, setSelectedId] = useState("");
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllApartmentLists({ page: currentPage, search, sort: sort });
+    useGetAllApartmentLists({ page: currentPage, search, sort });
 
   const handleOpenCalculateRate = useCallback((id: number) => {
     setSelectedId(String(id || ""));

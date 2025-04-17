@@ -108,9 +108,7 @@ export default function RequisitionRequestTable() {
               setValue={setCategory}
               id="categories-filtering"
             >
-              <option value="" disabled>
-                All categories
-              </option>
+              <option value="">All categories</option>
               {categories?.map((item) => (
                 <option key={item?.id} value={String(item?.id || "")}>
                   {item?.name}
@@ -197,7 +195,7 @@ export default function RequisitionRequestTable() {
                             <div className=" flex items-center gap-4">
                               <button
                                 onClick={() => openForStatusUpdate(item?.id)}
-                                title="mark as paid"
+                                // title="mark as paid"
                               >
                                 <DoubleCheckIcon className=" size-8" />
                               </button>

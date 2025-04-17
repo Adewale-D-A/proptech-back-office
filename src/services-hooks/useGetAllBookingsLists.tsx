@@ -13,7 +13,7 @@ export default function useGetAllBookingsLists({
   page = 1,
   start_date,
   end_date,
-  sort = "desc",
+  sort = "asc",
   channel,
   currency,
   room_option,

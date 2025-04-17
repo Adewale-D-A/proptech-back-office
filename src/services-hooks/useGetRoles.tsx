@@ -12,7 +12,7 @@ export default function useGetRoles({
   page = 1,
   start_date,
   end_date,
-  sort = "desc",
+  sort = "asc",
   search = "",
 }: {
   page?: number;

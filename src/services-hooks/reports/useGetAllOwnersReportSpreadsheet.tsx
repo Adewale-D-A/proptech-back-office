@@ -11,7 +11,7 @@ export default function useGetAllOwnersReportSpreadsheet({
   page = 1,
   start_date = getMonthStartEndDates(1)?.start,
   end_date = getMonthStartEndDates(12)?.end,
-  sort = "desc",
+  sort = "asc",
   search = "",
   building_id,
   apartment_id,

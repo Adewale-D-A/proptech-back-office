@@ -110,9 +110,9 @@ export default function ViewEmployee() {
         <div className="grid grid-cols-1 md:grid-cols-4  p-5 ">
           <div>
             <img
-              src="/logo_blue.png"
-              alt=""
-              className="rounded-[12px] w-40 h-40 "
+              src={data?.profile_photo || "/logo_blue.png"}
+              alt={data?.last_name}
+              className="rounded-[12px] w-40 h-40 object-cover"
             />
           </div>
           <div className="flex flex-col text-left gap-4">

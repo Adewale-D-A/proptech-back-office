@@ -37,7 +37,7 @@ export default function RequestCategoriesistsTable() {
 
   const openForDelete = useCallback((id: string) => {
     setSelectedId(id);
-    setOpenEditRequestCategory(true);
+    setOpenDelete(true);
   }, []);
 
   const handleDelete = useCallback(async () => {

@@ -8,7 +8,7 @@ import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetChatList({
   page = 1,
-  sort = "desc",
+  sort = "asc",
   limit = 20,
 }: {
   page?: number;

@@ -4,7 +4,6 @@ import Filter from "../filterAndSort/filter";
 import NoResult from "../noResult";
 import Pagination from "../pagination";
 import formatDate from "../../utils/isoDateConverter";
-import ExportSelect from "../inputs/select/exportSelect";
 import Select from "../inputs/select";
 // import useGetRequisitionRequests from "../../services-hooks/useGetRequisitionRequests";
 // import DoubleCheckIcon from "../../assets/icons/double-check";
@@ -22,6 +21,7 @@ import NewRequest from "../maintenance-requests/newRequest";
 import useGetMaintenanceRequests from "../../services-hooks/useGetMaintenanceRequests";
 import ExportToCSV from "../export-to-csv";
 import { maintenanceRequestsExportFormater } from "../../utils/export-formerter-functions";
+import useGetRequestCategories from "../../services-hooks/useGetRequestCategories";
 // import DeleteConfirmation from "../infoModal/delete-confirmation";
 // import useAxios from "../../useHooks/useAxios";
 // import { useAppDispatch } from "../../stores/hooks";
@@ -31,7 +31,7 @@ export default function MaintenanceRequestTable() {
   // const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
   // const dispatch = useAppDispatch();
 
-  const [filterOption, setFilterOption] = useState("");
+  const [category, setCategory] = useState("");
   const [search, setSearch] = useState("");
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
@@ -43,13 +43,17 @@ export default function MaintenanceRequestTable() {
     useState(false);
   // const [openDelete, setOpenDelete] = useState(false);
   // const [isDeleting, setIsDeleting] = useState(false);
-
+  const { data: categories } = useGetRequestCategories({
+    page: currentPage,
+    limit: 1000,
+  });
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetMaintenanceRequests({
       page: currentPage,
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
       search,
+      category_id: category,
     });
   const handleFiltering = useCallback(
     (start_date: string, end_date: string) => {
@@ -94,13 +98,16 @@ export default function MaintenanceRequestTable() {
           <div className=" flex items-center gap-3 flex-col md:flex-row">
             <Select
               isRequired={true}
-              value={filterOption}
-              setValue={setFilterOption}
+              value={category}
+              setValue={setCategory}
               id="categories-filtering"
             >
-              <option value="" disabled>
-                All categories
-              </option>
+              <option value="">All categories</option>
+              {categories?.map((item) => (
+                <option key={item?.id} value={String(item?.id || "")}>
+                  {item?.name}
+                </option>
+              ))}
             </Select>
             <Filter actionHandler={handleFiltering} />
           </div>
