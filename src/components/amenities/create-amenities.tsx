@@ -119,7 +119,7 @@ export default function AddEditAmenities({
             id="amenity-image"
           />
           <TextAreaInput
-            isRequired
+            isRequired={false}
             placeholder="description"
             id="description"
             setValue={setDescription}

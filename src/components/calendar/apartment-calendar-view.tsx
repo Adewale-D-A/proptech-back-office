@@ -26,7 +26,8 @@ const todayString = new Date()?.toISOString()?.slice(0, 10);
 const nextMonthString = new Date(today?.getFullYear(), today?.getMonth() + 2, 0)
   ?.toISOString()
   ?.slice(0, 10);
-  const defaultDateTime = defaultCheckInDateTime()
+const defaultDateTime = defaultCheckInDateTime();
+
 export default function ApartmentCalendarView() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
@@ -53,8 +54,8 @@ export default function ApartmentCalendarView() {
   const [calendarVewData, setCalendarViewData] = useState<Date[]>([]);
 
   // calendar data fetching based on filtered dates
-  const { data } = useGetApartmentCalendar({
-    id: String(selectedAprt?.id || id  || ""),
+  const { data, retryFunction } = useGetApartmentCalendar({
+    id: String(selectedAprt?.id || id || ""),
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,
   });
@@ -112,7 +113,7 @@ export default function ApartmentCalendarView() {
         checkIn: prev?.checkIn ? prev?.checkIn : toDate,
         checkOut: prev?.checkIn ? toDate : "",
         checkInTime: prev?.checkIn ? defaultDateTime?.check_in_time : "",
-        checkOutTime: prev?.checkIn ? defaultDateTime?.check_out_time: "",
+        checkOutTime: prev?.checkIn ? defaultDateTime?.check_out_time : "",
       };
     });
   }, []);
@@ -131,6 +132,7 @@ export default function ApartmentCalendarView() {
                   apartment_name={selectedAprt?.name || ""}
                   setSelectedApt={setSelectedApt}
                   defaultDateTime={defaultReservationsDateTime}
+                  refetchCalendar={retryFunction}
                 />
               </div>
             </div>

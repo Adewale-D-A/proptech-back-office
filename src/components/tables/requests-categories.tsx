@@ -11,6 +11,9 @@ import AddEditRequestsCategories from "../../pages/requests/requests-categories/
 import { removeRequestCategory } from "../../stores/apiData/requests-categories";
 import PlusIcon from "../../assets/icons/plus";
 import LoadingButton from "../button";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 
 export default function RequestCategoriesistsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -37,7 +40,7 @@ export default function RequestCategoriesistsTable() {
 
   const openForDelete = useCallback((id: string) => {
     setSelectedId(id);
-    setOpenEditRequestCategory(true);
+    setOpenDelete(true);
   }, []);
 
   const handleDelete = useCallback(async () => {
@@ -52,6 +55,9 @@ export default function RequestCategoriesistsTable() {
     }
   }, [selectedId]);
 
+  const { data: maintenance_request_category } = useGetResourceAccessChecker({
+    resource: "maintenance-request-category",
+  });
   return (
     <>
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 ">
@@ -87,24 +93,35 @@ export default function RequestCategoriesistsTable() {
                   return (
                     <tr key={item?.id} className=" border-b">
                       <td>{item?.name}</td>
-                      <td className=" group relative">
-                        <span className=" p-2 text-lg">...</span>
-                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          <button
-                            type="button"
-                            onClick={() => openForEdit(String(item?.id))}
-                            className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => openForDelete(String(item?.id))}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Delete
-                          </button>
-                        </span>
+                      <td>
+                        <TableActionDropDown>
+                          <>
+                            {maintenance_request_category?.update && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => openForEdit(String(item?.id))}
+                                  className=" p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Edit
+                                </button>
+                              </MenuItem>
+                            )}
+                            {maintenance_request_category?.delete && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    openForDelete(String(item?.id))
+                                  }
+                                  className="p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Delete
+                                </button>
+                              </MenuItem>
+                            )}
+                          </>
+                        </TableActionDropDown>
                       </td>
                     </tr>
                   );

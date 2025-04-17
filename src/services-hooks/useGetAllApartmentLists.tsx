@@ -13,14 +13,16 @@ export default function useGetAllApartmentLists({
   page = 1,
   start_date,
   end_date,
-  sort = "desc",
+  sort = "asc",
   search = "",
+  limit = 20,
 }: {
   page?: number;
   start_date?: string;
   end_date?: string;
   sort?: "desc" | "asc" | string;
   search?: string;
+  limit?: number;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -44,6 +46,7 @@ export default function useGetAllApartmentLists({
           end_date: end_date,
           sort: sort,
           search: search,
+          limit,
         },
       });
       //check store if this requested data has been saved previously and retirve it
@@ -86,11 +89,11 @@ export default function useGetAllApartmentLists({
     } finally {
       setIsLoading(false);
     }
-  }, [page, start_date, end_date, sort, search]);
+  }, [page, start_date, end_date, sort, search, limit]);
 
   useEffect(() => {
     getAllApartmentList();
-  }, [page, start_date, end_date, sort, search]);
+  }, [page, start_date, end_date, sort, search, limit]);
 
   return {
     data,

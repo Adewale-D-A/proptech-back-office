@@ -9,11 +9,14 @@ import { apartmentById } from "../../types/apiData/apartment";
 import Select from "../inputs/select";
 import CalculatedAvailabilityOptions from "./calculated-option";
 // import { Http2ServerRequest } from "http2";
-import { single_stay, split_stay } from "../../types/apiData/apartment/apt-suggestions";
+import {
+  single_stay,
+  split_stay,
+} from "../../types/apiData/apartment/apt-suggestions";
 
 interface suggestion {
-  single_stay: single_stay,
-  split_stay: split_stay
+  single_stay: single_stay;
+  split_stay: split_stay;
 }
 export default function CheckAvailability({
   className,
@@ -21,8 +24,6 @@ export default function CheckAvailability({
   className?: string;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
-  const dispatch = useAppDispatch();
-  const [selectedApt, setSelectedApt] = useState<apartmentById>({} as any);
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [guestNo, setGuestNo] = useState("");
@@ -34,35 +35,32 @@ export default function CheckAvailability({
   const checkAvailability = useCallback(
     async (e: SyntheticEvent) => {
       e.preventDefault();
-        setIsChecking(true);
+      setIsChecking(true);
 
-        try {
-          const response = await axios.post(
-            "/admin/shortlet/suggest-shortlets",
-            {
-              // shortlet_id: selectedApt?.id,
-              check_in_date: checkInDate,
-              check_out_date: checkOutDate,
-            }
-          );
-          const availabilityResponse = response?.data?.data?.shortlets || [];
-          setAvailability(availabilityResponse);
-          // console.log(availability);
-          // const isAvailable = response?.data?.data?.is_available;
-          // dispatch(
-          //   openSnackbar({
-          //     message: isAvailable
-          //       ? "Apartment is available"
-          //       : "Apartment is not available for the selected dates",
-          //     isError: !Boolean(isAvailable),
-          //   })
-          // );
-        } catch (error) {
-        } finally {
-          setIsChecking(false);
-        }
+      try {
+        const response = await axios.post("/admin/shortlet/suggest-shortlets", {
+          // shortlet_id: selectedApt?.id,
+          check_in_date: checkInDate,
+          check_out_date: checkOutDate,
+        });
+        const availabilityResponse = response?.data?.data?.shortlets || [];
+        setAvailability(availabilityResponse);
+        // console.log(availability);
+        // const isAvailable = response?.data?.data?.is_available;
+        // dispatch(
+        //   openSnackbar({
+        //     message: isAvailable
+        //       ? "Apartment is available"
+        //       : "Apartment is not available for the selected dates",
+        //     isError: !Boolean(isAvailable),
+        //   })
+        // );
+      } catch (error) {
+      } finally {
+        setIsChecking(false);
+      }
     },
-    [selectedApt, checkInDate, checkOutDate]
+    [checkInDate, checkOutDate]
   );
 
   return (
@@ -95,14 +93,12 @@ export default function CheckAvailability({
           />
 
           <Select
-            isRequired={true}
+            isRequired={false}
             value={guestNo}
             setValue={setGuestNo}
             id="no-of-guests"
           >
-            <option value="" disabled>
-              No of Guests
-            </option>
+            <option value="">No of Guests</option>
             {Array.from({ length: 8 }, (_, index) => (
               <option key={index} value={`${index + 1}`}>
                 {index + 1}

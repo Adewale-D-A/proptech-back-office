@@ -9,6 +9,9 @@ import useGetAmenities from "../../services-hooks/useGetAmenities";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { removeAmenity } from "../../stores/apiData/amenities";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 
 export default function AmenitiesListsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -35,6 +38,9 @@ export default function AmenitiesListsTable() {
     }
   }, [selectedId]);
 
+  const { data: amenity } = useGetResourceAccessChecker({
+    resource: "amenity",
+  });
   return (
     <>
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 ">
@@ -53,45 +59,52 @@ export default function AmenitiesListsTable() {
                 </tr>
               </thead>
               <tbody>
-                {data.map((request, index) => {
+                {data.map((item) => {
                   return (
-                    <tr key={request?.id} className=" border-b">
-                      <td>{request?.name}</td>
+                    <tr key={item?.id} className=" border-b">
+                      <td>{item?.name}</td>
                       <td>
                         <img
-                          src={request?.image}
-                          alt={request?.name}
-                          title={request?.name}
+                          src={item?.image}
+                          alt={item?.name}
+                          title={item?.name}
                           className=" w-10 h-auto"
                         />
                       </td>
-                      <td>{request?.description}</td>
-                      <td className=" group relative">
-                        <span className=" p-2 bg-primary/15  rounded-lg">
-                          ...
-                        </span>
-                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setSelectedId(String(request?.id));
-                              setOpenEditAmenity(true);
-                            }}
-                            className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Edit Amenity
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setSelectedId(String(request?.id));
-                              setOpenDelete(true);
-                            }}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Delete Amenity
-                          </button>
-                        </span>
+                      <td>{item?.description}</td>
+                      <td>
+                        <TableActionDropDown>
+                          <>
+                            {amenity?.update && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedId(String(item?.id));
+                                    setOpenEditAmenity(true);
+                                  }}
+                                  className=" w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Edit Amenity
+                                </button>
+                              </MenuItem>
+                            )}
+                            {amenity?.delete && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedId(String(item?.id));
+                                    setOpenDelete(true);
+                                  }}
+                                  className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Delete Amenity
+                                </button>
+                              </MenuItem>
+                            )}
+                          </>
+                        </TableActionDropDown>
                       </td>
                     </tr>
                   );

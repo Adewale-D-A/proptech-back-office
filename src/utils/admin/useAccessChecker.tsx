@@ -30,8 +30,8 @@ const useGetResourceAccessChecker = ({
             delete: false,
             export: false,
           };
-          const filtered = user?.role?.permissions.filter((item) => {
-            const isValid = item?.name
+          user?.role?.permissions.forEach((item) => {
+            const isValid = item?.slug
               ?.toLowerCase()
               .includes(resource.toLowerCase());
             if (isValid) {
@@ -56,11 +56,7 @@ const useGetResourceAccessChecker = ({
             }
             return isValid;
           });
-          if (filtered.length > 0) {
-            return access as permissions;
-          } else {
-            return access as permissions;
-          }
+          return access as permissions;
         } catch (error) {
           return {
             manage: false,

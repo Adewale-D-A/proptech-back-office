@@ -11,7 +11,7 @@ const breadCrumb = [
     icon: <ClipBoardIcon />,
   },
 ];
-export default function MaintenanceExpenses (){
+export default function MaintenanceExpenses() {
   const dispatch = useAppDispatch();
 
   // update page props on component mount
@@ -28,9 +28,9 @@ export default function MaintenanceExpenses (){
       })
     );
   }, []);
-    return (
-        <div className=" w-full">
-          <MaintenanceExpensesReportListTable/>
-        </div>
-    )
+  return (
+    <div className=" w-full">
+      <MaintenanceExpensesReportListTable />
+    </div>
+  );
 }

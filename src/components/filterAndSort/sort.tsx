@@ -10,7 +10,7 @@ export default function Sort({
   label: string;
   setSort?: Function;
 }) {
-  const [selectSort, setSelectSort] = useState("desc");
+  const [selectSort, setSelectSort] = useState("asc");
   useEffect(() => {
     if (setSort) {
       setSort(selectSort);
@@ -22,8 +22,8 @@ export default function Sort({
         {label}
       </label>
       <Select value={selectSort} setValue={setSelectSort} id={id}>
-        <option value={"desc"}>Desc</option>
         <option value={"asc"}>Asc</option>
+        <option value={"desc"}>Desc</option>
       </Select>
     </div>
   );

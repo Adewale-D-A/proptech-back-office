@@ -8,6 +8,7 @@ import formatDate from "../../utils/isoDateConverter";
 import CustomRating from "../rating";
 import ExportSelect from "../inputs/select/exportSelect";
 import Select from "../inputs/select";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
 export default function RatingsAndReviewsTable() {
   const [filterOption, setFilterOption] = useState("");
@@ -31,6 +32,10 @@ export default function RatingsAndReviewsTable() {
     },
     []
   );
+
+  // const { data: rating } = useGetResourceAccessChecker({
+  //   resource: "",
+  // });
   return (
     <div className="w-full flex flex-col gap-5">
       <div className="w-full flex items-center flex-col md:flex-row justify-between gap-3">

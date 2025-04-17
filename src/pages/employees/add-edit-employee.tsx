@@ -3,7 +3,6 @@ import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
 import { useAppDispatch } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import countries from "../../assets/Countries.json";
-import UserPlusIcon from "../../assets/icons/user-plus";
 import TextInput from "../../components/inputs/textInput";
 import DateInput from "../../components/inputs/dateInput";
 import PhoneInput from "../../components/inputs/phoneInput";
@@ -18,13 +17,16 @@ import useGetAdmin from "../../services-hooks/useGetAdmin";
 import useGetRoles from "../../services-hooks/useGetRoles";
 import purgeEmptyPayload from "../../utils/remove-empty-payload";
 import FileInput from "../../components/inputs/fileInput";
+import { formatDateToString } from "../../utils/isoDateConverter";
 
 export default function AddEditEmployee({
   id,
   setOpen,
+  refetch,
 }: {
   id?: string;
   setOpen: (open: boolean) => void;
+  refetch?: () => void;
 }) {
   const axios = useAxiosMultipart({});
   const dispatch = useAppDispatch();
@@ -65,10 +67,10 @@ export default function AddEditEmployee({
   //   populate field provided id is available denoting update functionality
   useEffect(() => {
     if (id && data?.id) {
-      const toDate = new Date(data?.dob)?.toISOString()?.slice(0, 10);
-      const toDateJoinDate = new Date(data?.join_date)
-        ?.toISOString()
-        ?.slice(0, 10);
+      const toDate = data?.dob ? formatDateToString(new Date(data?.dob)) : "";
+      const toDateJoinDate = data?.join_date
+        ? formatDateToString(new Date(data?.join_date))
+        : "";
       // setEmail(data?.user?.email || "");
       setFirstName(data?.first_name || "");
       setLastName(data?.last_name || "");
@@ -129,6 +131,7 @@ export default function AddEditEmployee({
               isError: false,
             })
           );
+          refetch?.();
         } else {
           const response = await axios.post("/admin/create", newPayload);
           // const { admin } = response?.data?.data;

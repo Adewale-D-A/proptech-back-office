@@ -10,6 +10,9 @@ import Status from "../status";
 import ExportToCSV from "../export-to-csv";
 import { customersExportFormater } from "../../utils/export-formerter-functions";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import MenuIcon from "../../assets/icons/menu";
+import { MenuItem } from "@headlessui/react";
 
 export default function CustomersListTable() {
   const [filterDates, setFilterDates] = useState<{
@@ -99,44 +102,55 @@ export default function CustomersListTable() {
                       />
                     </td>
                     <td>{item?.type}</td>
-                    <td className=" group relative">
-                      <span className=" p-2 text-lg">...</span>
-                      <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                        {/* <Link
-                          to={`#`}
-                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Send Message
-                        </Link> */}
-                        {/* <Link
-                          to={`#`}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Generate Invoice
-                        </Link> */}
-                        <Link
-                          to={`/customers/customer-details/${item?.id}`}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          View Details
-                        </Link>
-                        {user?.update && (
-                          <Link
-                            to={`/customers/edit-customer/customer-details/${item?.id}`}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Edit Customer
-                          </Link>
-                        )}
-                        {item?.type === "owner" && user?.update && (
-                          <Link
-                            to={`/customers/assign-apartment/${item?.id}`}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Assign to Apartment (s)
-                          </Link>
-                        )}
-                      </span>
+                    <td>
+                      <TableActionDropDown>
+                        <>
+                          <MenuItem>
+                            <Link
+                              to={`/customers/customer-details/${item?.id}`}
+                              className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              View Details
+                            </Link>
+                          </MenuItem>
+                          {user?.update && (
+                            <MenuItem>
+                              <Link
+                                to={`/customers/edit-customer/customer-details/${item?.id}`}
+                                className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                              >
+                                Edit Customer
+                              </Link>
+                            </MenuItem>
+                          )}
+                          {item?.type === "owner" && user?.update && (
+                            <MenuItem>
+                              <Link
+                                to={`/customers/assign-apartment/${item?.id}`}
+                                className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                              >
+                                Assign to Apartment (s)
+                              </Link>
+                            </MenuItem>
+                          )}
+                          {/* <MenuItem>
+                            <Link
+                              to={`#`}
+                              className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              Send Message
+                            </Link>
+                          </MenuItem>
+                          <MenuItem>
+                            <Link
+                              to={`#`}
+                              className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                            >
+                              Generate Invoice
+                            </Link>
+                          </MenuItem> */}
+                        </>
+                      </TableActionDropDown>
                     </td>
                   </tr>
                 );

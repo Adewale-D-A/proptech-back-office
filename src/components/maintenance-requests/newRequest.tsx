@@ -29,7 +29,7 @@ import useGetRequestCategories from "../../services-hooks/useGetRequestCategorie
 import purgeEmptyPayload from "../../utils/remove-empty-payload";
 import useAxios from "../../useHooks/useAxios";
 import { requisitionRequest } from "../../types/apiData/requisition-request";
-import formatDate, { formatDateToString } from "../../utils/isoDateConverter";
+import { formatDateToString } from "../../utils/isoDateConverter";
 
 const today = new Date();
 const todayDate = formatDateToString(today);
@@ -60,6 +60,7 @@ export default function AddEditMaintenanceRequest({
   const removedImageIdSet = useAppSelector(
     (state) => state.addEditApartmentInfo.value.data?.removeImages
   );
+  const { user } = useAppSelector((state) => state.userAuthentication.value);
   const [employee, setEmployee] = useState<admin>({} as any);
   const [email, setEmail] = useState("");
   const [apartment, setApartment] = useState<apartmentById>({} as any);
@@ -296,7 +297,10 @@ export default function AddEditMaintenanceRequest({
           setSelected={setEmployee}
           label="Requesting employee"
           defaultId={String(
-            data?.admin_id || existing_fields_dataset?.admin_id || ""
+            data?.admin_id ||
+              existing_fields_dataset?.admin_id ||
+              user?.id ||
+              ""
           )}
         />
       </div>

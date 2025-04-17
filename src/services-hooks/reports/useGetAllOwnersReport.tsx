@@ -10,7 +10,7 @@ export default function useGetAllOwnersReport({
   page = 1,
   start_date,
   end_date,
-  sort = "desc",
+  sort = "asc",
   search = "",
   building_id,
   shortlet_id,

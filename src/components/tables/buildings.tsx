@@ -9,6 +9,9 @@ import { useAppDispatch } from "../../stores/hooks";
 import { removeBuildingInList } from "../../stores/apiData/apartment/buildings";
 import useGetBuildings from "../../services-hooks/apartment/useGetBuildings";
 import AddEditBuildings from "../../pages/apartments/buildings/add-edit-buildings";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 
 export default function BuildingsListsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -35,6 +38,9 @@ export default function BuildingsListsTable() {
     }
   }, [selectedId]);
 
+  const { data: building } = useGetResourceAccessChecker({
+    resource: "building",
+  });
   return (
     <>
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 ">
@@ -53,37 +59,44 @@ export default function BuildingsListsTable() {
                 </tr>
               </thead>
               <tbody>
-                {data.map((request, index) => {
+                {data.map((item) => {
                   return (
-                    <tr key={request?.id} className=" border-b">
-                      <td>{request?.name}</td>
-                      <td>{request?.address}</td>
-                      <td className=" group relative">
-                        <span className=" p-2 bg-primary/15 rounded-lg">
-                          ...
-                        </span>
-                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setSelectedId(String(request?.id));
-                              setOpenEdit(true);
-                            }}
-                            className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Edit
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setSelectedId(String(request?.id));
-                              setOpenDelete(true);
-                            }}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Delete
-                          </button>
-                        </span>
+                    <tr key={item?.id} className=" border-b">
+                      <td>{item?.name}</td>
+                      <td>{item?.address}</td>
+                      <td>
+                        <TableActionDropDown>
+                          <>
+                            {building?.update && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedId(String(item?.id));
+                                    setOpenEdit(true);
+                                  }}
+                                  className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Edit
+                                </button>
+                              </MenuItem>
+                            )}
+                            {building?.delete && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedId(String(item?.id));
+                                    setOpenDelete(true);
+                                  }}
+                                  className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Delete
+                                </button>
+                              </MenuItem>
+                            )}
+                          </>
+                        </TableActionDropDown>
                       </td>
                     </tr>
                   );

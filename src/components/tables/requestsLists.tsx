@@ -17,6 +17,9 @@ import RequestStatusUpdate from "../booking-detail/request-status-update";
 import { requests } from "../../types/apiData/requests";
 import ExportToCSV from "../export-to-csv";
 import { requestsExportFormater } from "../../utils/export-formerter-functions";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 
 export default function RequestsListTable({ header }: { header: string[] }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -73,6 +76,9 @@ export default function RequestsListTable({ header }: { header: string[] }) {
     setSelectedStatus(request?.status);
   }, []);
 
+  const { data: user_request } = useGetResourceAccessChecker({
+    resource: "user-request",
+  });
   return (
     <>
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 overflow-auto">
@@ -128,37 +134,47 @@ export default function RequestsListTable({ header }: { header: string[] }) {
                       <td>
                         <Status status={item?.status} />
                       </td>
-                      <td className=" group relative">
-                        <span className=" p-2 bg-primary/15 rounded-lg">
-                          ...
-                        </span>
-                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                          <Link
-                            to={`/bookings/request-details/${item?.id}`}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            View Details
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              markAsResolved(item);
-                            }}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Mark As Resolved
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setSelectedId(String(item?.id));
-                              setOpenDeleteConfirmation(true);
-                            }}
-                            className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                          >
-                            Delete Request
-                          </button>
-                        </span>
+                      <td>
+                        <TableActionDropDown>
+                          <>
+                            <MenuItem>
+                              {" "}
+                              <Link
+                                to={`/bookings/request-details/${item?.id}`}
+                                className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                              >
+                                View Details
+                              </Link>
+                            </MenuItem>
+                            {user_request?.update && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    markAsResolved(item);
+                                  }}
+                                  className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Mark As Resolved
+                                </button>
+                              </MenuItem>
+                            )}
+                            {user_request?.delete && (
+                              <MenuItem>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedId(String(item?.id));
+                                    setOpenDeleteConfirmation(true);
+                                  }}
+                                  className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                                >
+                                  Delete Request
+                                </button>
+                              </MenuItem>
+                            )}
+                          </>
+                        </TableActionDropDown>
                       </td>
                     </tr>
                   );

@@ -12,6 +12,7 @@ import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import useAxios from "../../useHooks/useAxios";
 import ModalTemplate from "../modal";
 import AddTax from "../tax/addTax";
+import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 
 export default function TaxRateLists({ header }: { header: string[] }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -76,6 +77,10 @@ export default function TaxRateLists({ header }: { header: string[] }) {
       setIsDeleting(false);
     }
   }, [selectedId]);
+
+  // const { data: tax } = useGetResourceAccessChecker({
+  //   resource: "tax",
+  // });
   return (
     <>
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 ">

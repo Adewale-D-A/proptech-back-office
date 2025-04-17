@@ -64,10 +64,10 @@ export default function MaintenanceExpensesReportListTable() {
     []
   );
 
-  const handleOpenDelete = useCallback((id: number) => {
-    setSelectedId(String(id) || "");
-    setOpenDelete(true);
-  }, []);
+  // const handleOpenDelete = useCallback((id: number) => {
+  //   setSelectedId(String(id) || "");
+  //   setOpenDelete(true);
+  // }, []);
 
   const handleDelete = useCallback(async () => {
     setIsDeleting(true);
