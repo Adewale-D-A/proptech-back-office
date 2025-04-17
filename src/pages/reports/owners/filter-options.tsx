@@ -44,9 +44,7 @@ export default function OwnersReportFilterOptions({
           setValue={setCategory}
           id={"category-filter"}
         >
-          <option value={``} disabled>
-            All
-          </option>
+          <option value="">All</option>
           {expenseCategories?.map((item) => (
             <option key={item?.id} value={`${item?.id}`}>
               {item?.name}

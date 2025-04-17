@@ -6,6 +6,7 @@ import {
 } from "../stores/apiData/roles-lists";
 import useAxios from "../useHooks/useAxios";
 import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
+import { pagination } from "../types/pagination";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetRoles({
@@ -14,12 +15,14 @@ export default function useGetRoles({
   end_date,
   sort = "asc",
   search = "",
+  limit = 20,
 }: {
   page?: number;
   start_date?: string;
   end_date?: string;
   sort?: "desc" | "asc" | string;
   search?: string;
+  limit?: number;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -31,14 +34,7 @@ export default function useGetRoles({
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const [pagination, setPagination] = useState<{
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    from: number;
-    to: number;
-  }>({} as any);
+  const [pagination, setPagination] = useState<pagination>({} as any);
 
   const getRoles = useCallback(async () => {
     setIsLoading(true);
@@ -51,6 +47,7 @@ export default function useGetRoles({
           end_date: end_date,
           sort: sort,
           search: search,
+          // limit,
         },
       });
       //check store if this requested data has been saved previously and retirve it
@@ -90,11 +87,11 @@ export default function useGetRoles({
     } catch (error) {
       setIsFailed(true);
     }
-  }, [page, start_date, end_date, sort, search]);
+  }, [page, start_date, end_date, sort, search, limit]);
 
   useEffect(() => {
     getRoles();
-  }, [page, start_date, end_date, sort, search]);
+  }, [page, start_date, end_date, sort, search, limit]);
 
   return {
     data,

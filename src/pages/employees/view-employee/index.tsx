@@ -205,7 +205,11 @@ export default function ViewEmployee() {
         title={`Edit ${data?.first_name}`}
         className=" max-w-[800px] lg:ml-20"
       >
-        <AddEditEmployee id={id} setOpen={setOpenEmployeeModal} />
+        <AddEditEmployee
+          refetch={retryFunction}
+          id={id}
+          setOpen={setOpenEmployeeModal}
+        />
       </ModalTemplate>
     </>
   );

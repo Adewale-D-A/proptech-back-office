@@ -22,6 +22,7 @@ import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import ExportToCSV from "../export-to-csv";
 import { employeesExportFormater } from "../../utils/export-formerter-functions";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import useGetRoles from "../../services-hooks/useGetRoles";
 
 export default function EmployeesLists() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -48,8 +49,10 @@ export default function EmployeesLists() {
       end_date: filterDates?.end_date,
       sort: sort,
       search,
+      category,
     });
 
+  const { data: roles } = useGetRoles({ limit: 1000 });
   const handleFiltering = useCallback(
     (start_date: string, end_date: string) => {
       setFilterDates({ start_date, end_date });
@@ -107,9 +110,12 @@ export default function EmployeesLists() {
               setValue={setCategory}
               id="categories-filtering"
             >
-              <option value="" disabled>
-                All categories
-              </option>
+              <option value="">All categories</option>
+              {roles?.map((item) => (
+                <option key={item?.id} value={String(item?.id || "")}>
+                  {item?.name}
+                </option>
+              ))}
             </Select>
             <Filter actionHandler={handleFiltering} />
           </div>
