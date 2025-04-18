@@ -31,6 +31,7 @@ export default function ApiQueryParamsExtractor({
         keyArray.includes("type") ||
         keyArray.includes("paid") ||
         keyArray.includes("expense_category_id") ||
+        keyArray.includes("role_id") ||
         String(dataset["sort"] || "") === "desc"
         ? true
         : false || Number(dataset["limit"] || 20) > 20

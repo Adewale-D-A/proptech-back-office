@@ -54,7 +54,7 @@ export default function ApartmentCalendarView() {
   const [calendarVewData, setCalendarViewData] = useState<Date[]>([]);
 
   // calendar data fetching based on filtered dates
-  const { data, retryFunction } = useGetApartmentCalendar({
+  const { data, extra, retryFunction } = useGetApartmentCalendar({
     id: String(selectedAprt?.id || id || ""),
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,
@@ -94,7 +94,7 @@ export default function ApartmentCalendarView() {
   }, [filterDates]);
 
   useEffect(() => {
-    if (data?.blocked_dates) {
+    if (data.length > 0) {
       extractCalendarViewData();
     }
   }, [data]);
@@ -159,8 +159,8 @@ export default function ApartmentCalendarView() {
                         <div key={item?.toString()} className=" border-r px-3">
                           <CalendarView
                             date={new Date(item)}
-                            booked={data?.booked_dates || []}
-                            blocked={data?.blocked_dates || []}
+                            booked={extra?.booked || []}
+                            blocked={extra?.blocked || []}
                             onDateClick={handleDateClick}
                           />
                         </div>

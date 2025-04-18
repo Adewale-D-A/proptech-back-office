@@ -175,7 +175,7 @@ export default function EmployeesLists() {
                           </span>
                         </td>
                         <td className=" text-xs font-medium text-[#475467]  min-w-36">
-                          {item?.role_id}
+                          {item?.role?.name}
                         </td>
                         <td>
                           <div className=" flex items-center gap-4">

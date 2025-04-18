@@ -35,7 +35,7 @@ export const addEditApartmentInfo = createSlice({
           rules: [],
           cautionFee: "",
           maxGuest: "",
-          cancellationPolicies: "",
+          cancellationPolicies: [],
         },
       },
     },
@@ -89,7 +89,7 @@ export const addEditApartmentInfo = createSlice({
           rules: [],
           cautionFee: "",
           maxGuest: "",
-          cancellationPolicies: "",
+          cancellationPolicies: [],
         },
       };
     },

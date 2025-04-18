@@ -19,29 +19,15 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
     (state) => state.addEditApartmentInfo.value.data.apartmentFeatures
   );
 
-  const {
-    data: safetyAndSecurityOptions,
-    isLoading,
-    isFailed,
-    setIsFailed,
-    retryFunction,
-    pagination,
-  } = useGetSafetyAndSecurities({ page: 1, limit: 20 });
-  const {
-    data: amenitiesOptions,
-    isLoading: amenitiesLoading,
-    isFailed: amenitiesFailed,
-    setIsFailed: amenitiesSetFailed,
-    retryFunction: amenitiesRetry,
-    pagination: amenitiesPagination,
-  } = useGetAmenities({ page: 1, limit: 20 });
-  const {
-    data: extraOptionsItems,
-    isLoading: extraOptionLoading,
-    isFailed: extraOptionFailed,
-    setIsFailed: extraOptionSetFailed,
-    retryFunction: extraOptionRetry,
-  } = useGetExtraOptions({ page: 1, limit: 20 });
+  const { data: safetyAndSecurityOptions } = useGetSafetyAndSecurities({
+    page: 1,
+    limit: 100,
+  });
+  const { data: amenitiesOptions } = useGetAmenities({ page: 1, limit: 100 });
+  const { data: extraOptionsItems } = useGetExtraOptions({
+    page: 1,
+    limit: 100,
+  });
 
   const [noBaths, setNoBaths] = useState("");
   const [noBeds, setNoBeds] = useState("");

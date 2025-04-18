@@ -70,4 +70,10 @@ export type systemResources =
   | "maintenance-request-category"
   | "maintenance-request"
   | "requisition-request"
-  | "building";
+  | "building"
+  | "referral"
+  | "rating"
+  | "management-fee"
+  | "expense-category"
+  | "owner-report-entry"
+  | "cancelation-policy";

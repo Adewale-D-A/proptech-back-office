@@ -85,7 +85,7 @@ export default function ViewEmployee() {
             </span> */}
             </h2>
             <p className=" text-sm font-normal text-[#667085]">
-              {data?.role_id}
+              {data?.role?.name}
             </p>
           </div>
           <div className="flex gap-4">
@@ -172,7 +172,9 @@ export default function ViewEmployee() {
             </div>
             <div className=" flex flex-col gap-1">
               <h4 className="text-[#98A2B3] font-semibold text-xs">ROLE</h4>
-              <p className=" text-black font-medium text-sm">{data?.role_id}</p>
+              <p className=" text-black font-medium text-sm">
+                {data?.role?.name}
+              </p>
             </div>
             <div className=" flex flex-col gap-1">
               <h4 className="text-[#98A2B3] font-semibold text-xs">SHIFT </h4>

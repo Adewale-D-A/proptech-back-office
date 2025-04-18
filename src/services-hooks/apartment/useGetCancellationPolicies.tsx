@@ -1,28 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../stores/hooks";
+
+import { pagination } from "../../types/pagination";
+import useAxios from "../../useHooks/useAxios";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import {
   addToPaginationHistory,
-  updateAdminsList,
-} from "../stores/apiData/admins-list";
-import useAxios from "../useHooks/useAxios";
-import { pagination } from "../types/pagination";
-import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
+  updateCancellationPolicyList,
+} from "../../stores/apiData/apartment/cancellation-policies";
+import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
 
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetAllAdmins({
+export default function useGetCancellationPolcies({
   page = 1,
-  start_date,
-  end_date,
-  sort = "asc",
   search = "",
-  category,
+  limit = 20,
 }: {
   page?: number;
-  start_date?: string;
-  end_date?: string;
-  sort?: "desc" | "asc" | string;
   search?: string;
-  category?: string;
+  limit?: number;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -30,24 +25,21 @@ export default function useGetAllAdmins({
     status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.allAdminsLists.value);
+  } = useAppSelector((state) => state.cancellationPolicies.value);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const [pagination, setPagination] = useState<pagination>({} as any);
 
-  const getAllAdmins = useCallback(async () => {
+  const getCancellationPolicies = useCallback(async () => {
     setIsLoading(true);
     setIsFailed(false);
     try {
       const { queryString, remakeRequest } = ApiQueryParamsExtractor({
         dataset: {
           page: search ? 1 : page,
-          start_date: start_date,
-          end_date: end_date,
-          sort: sort,
           search: search,
-          role_id: category,
+          limit,
         },
       });
       //check store if this requested data has been saved previously and retirve it
@@ -57,12 +49,14 @@ export default function useGetAllAdmins({
       );
       if (foundPage && !remakeRequest) {
         setPagination(foundPage?.pagination_data);
-        dispatch(updateAdminsList({ data: foundPage?.data }));
+        dispatch(updateCancellationPolicyList({ data: foundPage?.data }));
       } else {
-        const response = await axios.get(`/admin/admins?${queryString}`);
-        const { admins } = response?.data?.data;
+        const response = await axios.get(
+          `/admin/cancellation-policy?${queryString}`
+        );
+        const { cancellation_policy } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
-          admins;
+          cancellation_policy;
         const paginationDataset = {
           current_page,
           last_page,
@@ -72,7 +66,7 @@ export default function useGetAllAdmins({
           to,
           length: data?.length,
         };
-        dispatch(updateAdminsList({ data }));
+        dispatch(updateCancellationPolicyList({ data }));
         if (!remakeRequest) {
           dispatch(
             addToPaginationHistory({
@@ -83,22 +77,23 @@ export default function useGetAllAdmins({
         }
         setPagination(paginationDataset);
       }
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
-  }, [page, start_date, end_date, sort, search, category]);
+  }, [page, search, limit]);
 
   useEffect(() => {
-    getAllAdmins();
-  }, [page, start_date, end_date, sort, search, category]);
+    getCancellationPolicies();
+  }, [page, search, limit]);
 
   return {
     data,
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getAllAdmins,
+    retryFunction: getCancellationPolicies,
     pagination,
   };
 }

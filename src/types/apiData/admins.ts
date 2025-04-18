@@ -1,3 +1,5 @@
+import { roles } from "./roles";
+
 export type admin = {
   id: number;
   first_name: string;
@@ -19,4 +21,5 @@ export type admin = {
   country: string;
   shift_day: string;
   shift_hour: string;
+  role: roles;
 };

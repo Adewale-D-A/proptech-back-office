@@ -176,7 +176,7 @@ export default function MaintenanceRequestTable() {
                                 {item?.admin?.last_name}
                               </span>
                               <span className=" text-xs text-[#475467] font-medium">
-                                Operations
+                                {item?.admin?.role?.name}
                               </span>
                             </span>
                           </td>

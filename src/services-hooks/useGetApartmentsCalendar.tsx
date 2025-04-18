@@ -27,7 +27,9 @@ export default function useGetApartmentsCalendar({
           end_date: end_date,
         },
       });
-      const response = await axios.get(`/admin/calendar/all?${queryString}`);
+      const response = await axios.get(
+        `/admin/calendar/unavailable?${queryString}`
+      );
       const result = response?.data?.data;
       const reformed = ApartmentsCalendarDataTranslator({ dataset: result });
       setData(reformed?.reformed || []);

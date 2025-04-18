@@ -238,7 +238,7 @@ export default function DashboardOverview() {
           </div>
 
           {/* Total  */}
-          <div className="w-full">
+          {/* <div className="w-full">
             <div className=" w-full my-3">
               <h2 className="text-lg font-semibold">Totals</h2>
             </div>
@@ -275,7 +275,7 @@ export default function DashboardOverview() {
                 />
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* top apartment table */}
           {apartment?.view && <ApartmentTable title="Top Apartments" />}

@@ -1,13 +1,13 @@
 export interface reformedApartmentCalendar {
+  id: number;
   name: string;
-  blocked: {
-    date: string;
-    reason: string;
-    attribute: string;
-  }[];
-  booked: {
-    date: string;
-    reason: string;
-    attribute: string;
-  }[];
+  blocked: calendarDates[];
+  booked: calendarDates[];
+}
+
+export interface calendarDates {
+  date: string;
+  reason: string;
+  attribute: string;
+  hex_code: string;
 }

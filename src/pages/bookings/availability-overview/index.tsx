@@ -14,12 +14,7 @@ import ChevronLeftIcon from "../../../assets/icons/chevron-left";
 import ChevronRightIcon from "../../../assets/icons/chevron-right";
 import BuildingIcon from "../../../assets/icons/building";
 import generateCalendarData from "../../../utils/generateCalendarData";
-import { apartmentById } from "../../../types/apiData/apartment";
-import useGetApartmentCalendar from "../../../services-hooks/apartmentCalendar";
 import useGetApartmentsCalendar from "../../../services-hooks/useGetApartmentsCalendar";
-// import useGetAllApartmentLists from "../../../services-hooks/useGetAllApartmentLists";
-// import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
-// import TableSearch from "../../../components/inputs/search/table-search";
 import CalendarAvailabilitySymbol from "../../../components/calender-availability-symbol";
 import ArrowCircleIcon from "../../../assets/icons/arrow-circle";
 import SearchIcon from "../../../assets/icons/search";
@@ -59,7 +54,6 @@ export default function AvailabilityOverview() {
     reformedApartmentCalendar[]
   >([]);
   const [search, setSearch] = useState("");
-  const [selectedApt, setSelectedApt] = useState<apartmentById>({} as any);
   const [month, setMonth] = useState(String(today?.getMonth()));
   const [year, setYear] = useState(String(today?.getFullYear()));
 
@@ -80,47 +74,26 @@ export default function AvailabilityOverview() {
     }[]
   >([]);
 
-  // apartment lists
-  // const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-  //   useGetAllApartmentLists({
-  //     page: 1,
-  //     search: search,
-  //   });
-
-  // calendar data fetching based on filtered dates
-  const { data: calendarDates } = useGetApartmentCalendar({
-    id: String(selectedApt?.id || ""),
-  });
   const { data: data_result } = useGetApartmentsCalendar({
     start_date: "",
     end_date: "",
   });
 
-  // const changeHandler = useCallback(
-  //   (event: { year: number; month: number; day: number }) => {
-  //     const selectedDate = new Date(event.year, event.month, event.day);
-  //     setCurrentDay(selectedDate);
-  //   },
-  //   []
-  // );
   const generateDays = useCallback(() => {
     const daysArray = generateCalendarData({
       selectedDate: currentDay,
-      highlights: [
-        ...calendarDates?.booked_dates,
-        ...calendarDates?.blocked_dates,
-      ],
-      booked: calendarDates?.booked_dates,
-      blocked: calendarDates?.blocked_dates,
+      highlights: [],
+      booked: [],
+      blocked: [],
     });
     setCurrentDays(daysArray);
-  }, [currentDay, calendarDates]);
+  }, [currentDay]);
 
   useEffect(() => {
     setMonth(String(currentDay?.getMonth()));
     setYear(String(currentDay?.getFullYear()));
     generateDays();
-  }, [currentDay, calendarDates]);
+  }, [currentDay]);
 
   const prevMonthHandler = useCallback(() => {
     setCurrentDay(
@@ -308,13 +281,15 @@ export default function AvailabilityOverview() {
                         return (
                           <div
                             key={ind}
-                            className={`${
-                              isBooked
-                                ? "bg-red-500"
-                                : isBlocked
-                                ? " bg-[#293056]"
-                                : "bg-gray-50 "
-                            } min-h-[39px] min-w-[39px]  border rounded-md relative overflow-hidden`}
+                            className={`min-h-[37px] min-w-[37px] m-[1px]  border rounded-md relative overflow-hidden`}
+                            title={isBlocked?.reason}
+                            style={{
+                              backgroundColor: isBlocked
+                                ? isBlocked?.hex_code
+                                : isBooked
+                                ? isBooked?.hex_code
+                                : "#e5e7eb",
+                            }}
                           >
                             {!(isBlocked || isBooked) && (
                               <div className=" absolute top-0 right-0 aspect-square border-l-8 border-l-transparent border-b-8 border-b-transparent border-8 border-green-500"></div>

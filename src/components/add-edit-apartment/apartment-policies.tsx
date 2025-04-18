@@ -14,6 +14,7 @@ import useGetHouseRules from "../../services-hooks/useGetAllRules";
 import Select from "../inputs/select";
 import { requestPayload } from "../../types/apiData/apartment/request-payload";
 import purgeEmptyPayload from "../../utils/remove-empty-payload";
+import useGetCancellationPolcies from "../../services-hooks/apartment/useGetCancellationPolicies";
 
 export default function AddEditApartmentPolicies({
   id,
@@ -31,15 +32,20 @@ export default function AddEditApartmentPolicies({
   const { data: houseRules } = useGetHouseRules({ page: 1, limit: 20 });
 
   const [rules, setRules] = useState<string[]>([]);
-  const [cancellationPolicy, setCancellationPolicy] = useState("");
   const [maxGuest, setMaxGuests] = useState("");
   const [cautionFee, setCautionFee] = useState("");
+  const [cancellation, setCancellation] = useState<string[]>([]);
+
+  const { data: cancellationPolicies } = useGetCancellationPolcies({
+    page: 1,
+    limit: 100,
+  });
   // populate apartment details interface
   useEffect(() => {
     const { rules, cancellationPolicies, maxGuest, cautionFee } =
       storeAptDataset.apartmentPolicy;
+    setCancellation(cancellationPolicies || []);
     setRules(rules || []);
-    setCancellationPolicy(cancellationPolicies || "");
     setMaxGuests(maxGuest || "");
     setCautionFee(cautionFee || "");
   }, []);
@@ -85,7 +91,11 @@ export default function AddEditApartmentPolicies({
         no_of_bathrooms: noBaths,
         max_guests: maxGuest,
         point_of_interest: pointOfInterest,
-        cancellation_policy: cancellationPolicy,
+        cancellation_policy:
+          cancellationPolicies.find(
+            (item) => String(cancellation?.[0] || "") === String(item?.id)
+          )?.name || "",
+        cancellation_policies: cancellation,
         availability_status: availabilityStatus,
         rules: rules,
         amenities: whatToExpect,
@@ -108,14 +118,22 @@ export default function AddEditApartmentPolicies({
           rules,
           cautionFee: cautionFee,
           maxGuest: maxGuest,
-          cancellationPolicies: cancellationPolicy,
+          cancellationPolicies: cancellation,
         })
       );
       try {
         handleSubmit(purgePayloadResult);
       } catch (error) {}
     },
-    [rules, cancellationPolicy, maxGuest, cautionFee, storeAptDataset, id]
+    [
+      rules,
+      cancellation,
+      cancellationPolicies,
+      maxGuest,
+      cautionFee,
+      storeAptDataset,
+      id,
+    ]
   );
 
   return (
@@ -207,7 +225,16 @@ export default function AddEditApartmentPolicies({
           options={cancellationOptions}
           label="Select Cancellation Policies"
         /> */}
-        <Select
+        <MultipleSelect
+          value={cancellation}
+          setValue={setCancellation}
+          options={cancellationPolicies?.map((item) => ({
+            id: String(item?.id),
+            label: item?.name,
+          }))}
+          label="Select Security Options"
+        />
+        {/* <Select
           isRequired={true}
           value={cancellationPolicy}
           setValue={setCancellationPolicy}
@@ -218,7 +245,7 @@ export default function AddEditApartmentPolicies({
           </option>
           <option value="2 days notice">2 days notice</option>
           <option value="7 days notice">7 days notice</option>
-        </Select>
+        </Select> */}
       </div>
 
       {/* submit and cancel buttons */}

@@ -49,5 +49,10 @@ export default function reformResourcePermissions({
           },
         };
   });
+  // console.log(
+  //   reformed.map((item) =>
+  //     item?.resource_name.toLowerCase()?.split(" ")?.join("-")
+  //   )
+  // );
   return reformed;
 }

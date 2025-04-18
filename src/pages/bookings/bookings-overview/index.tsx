@@ -43,12 +43,11 @@ export default function BookingsOverview() {
     []
   );
   // calendar data fetching based on filtered dates
-  const { data } = useGetApartmentCalendar({
+  const { extra } = useGetApartmentCalendar({
     id: String(selectedAprt?.id || ""),
   });
   const { data: visitorCount } = useGetVisitorCount();
   const handleDateClick = useCallback((date: Date) => {}, []);
-
   return (
     <div className=" w-full flex flex-col gap-5 my-5">
       <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
@@ -130,15 +129,13 @@ export default function BookingsOverview() {
               />
             </div>
             <CalendarAvailabilitySymbol />
-            {data.blocked_dates && (
-              <CalendarView
-                date={new Date()}
-                booked={data?.booked_dates || []}
-                blocked={data?.blocked_dates || []}
-                // highlights={[...data?.booked_dates, ...data?.blocked_dates]}
-                onDateClick={handleDateClick}
-              />
-            )}
+            <CalendarView
+              date={new Date()}
+              booked={extra?.booked || []}
+              blocked={extra?.blocked || []}
+              // highlights={[...data?.booked_dates, ...data?.blocked_dates]}
+              onDateClick={handleDateClick}
+            />
           </div>
         </div>
         {/* upcoming reservations */}

@@ -1,3 +1,5 @@
+import { roles } from "./roles";
+
 export interface maintenanceRequest {
   id: number;
   admin_id: number;
@@ -48,6 +50,7 @@ export interface maintenanceRequestsById {
     last_name: string;
     profile_photo: string;
     email: string;
+    role: roles;
   };
   category: {
     id: number;
