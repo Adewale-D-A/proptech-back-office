@@ -48,6 +48,7 @@ import houseRulesData from "./apiData/house-rules";
 import locationGroupings from "./apiData/apartment/location-groupings";
 import blockedDateReasonData from "./apiData/blocked-dates-reason";
 import buildings from "./apiData/apartment/buildings";
+import cancellationPolicies from "./apiData/apartment/cancellation-policies";
 
 import chatListData from "./apiData/chat-list";
 
@@ -135,6 +136,7 @@ export const adminStore = () => {
       lcoationgGrouping: locationGroupings,
       buildings: buildings,
       blockedDateReasons: blockedDateReasonData,
+      cancellationPolicies: cancellationPolicies,
 
       allBookingsLists: bookingsListsData,
       allRequestLists: requestListsData,

@@ -1,3 +1,7 @@
+##### 18.04.2025
+
+> Fixes: Backend resolution updates
+
 ##### 17.04.2025
 
 > Feature: Tables more action 'click-to-show' addition

@@ -193,14 +193,17 @@ export default function ApartmentDetail() {
                     <CautionIcon />
                   </span>
                   <div className=" flex items-center gap-3 flex-wrap">
-                    <span className=" text-gray-600">
-                      {data?.cancellation_policy}
-                    </span>
-                    {/* {data?.cancellationPolicies?.map((item) => (
-                      <span key={item} className=" text-gray-600">
-                        {item},
+                    {data?.cancellation_policies?.length > 0 ? (
+                      data?.cancellation_policies?.map((item) => (
+                        <span key={item?.id} className=" text-gray-600">
+                          {item?.name},
+                        </span>
+                      ))
+                    ) : (
+                      <span className=" text-gray-600">
+                        {data?.cancellation_policy}
                       </span>
-                    ))} */}
+                    )}
                   </div>
                 </div>
               </div>

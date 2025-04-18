@@ -51,8 +51,7 @@ export default function EditApartmentDetails() {
   const storeAptDetails = useAppSelector(
     (state) => state.addEditApartmentInfo.value.data
   );
-  const { data, isLoading, isFailed, setIsFailed, retryFunction } =
-    useGetApartmentById(storeAptDetails?.id === "updated" ? "" : id);
+  useGetApartmentById(storeAptDetails?.id === "updated" ? "" : id);
 
   return (
     <section className="w-full flex flex-col items-center">

@@ -11,10 +11,10 @@ export default function CalendarAvailabilitySymbol() {
         </div>
         <span>Available Date</span>
       </div>
-      <div className=" flex gap-2 items-center">
+      {/* <div className=" flex gap-2 items-center">
         <div className=" h-5 w-5 aspect-square bg-[#53B1FD] rounded-sm relative overflow-hidden"></div>
         <span>Upcoming maintenance</span>
-      </div>
+      </div> */}
 
       <div className=" flex gap-2 items-center">
         <div className=" h-5 w-5 aspect-square bg-[#293056] rounded-sm relative overflow-hidden"></div>

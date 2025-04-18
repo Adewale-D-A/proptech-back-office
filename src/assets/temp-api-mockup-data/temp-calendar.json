@@ -1,0 +1,142 @@
+{
+  "data": [
+    {
+      "shortlet_id": 9,
+      "shortlet_name": "Artist Alley",
+      "booked_dates": [
+        "2025-04-16",
+        "2025-04-17",
+        "2025-04-18",
+        "2025-04-19",
+        "2025-04-21",
+        "2025-04-22",
+        "2025-05-01",
+        "2025-05-02",
+        "2025-05-03",
+        "2025-04-23",
+        "2025-04-24",
+        "2025-04-25",
+        "2025-04-26",
+        "2025-04-27",
+        "2025-04-28",
+        "2025-04-29"
+      ],
+      "blocked_dates": [
+        {
+          "date": "2025-04-20",
+          "reason": "Staff Meeting",
+          "description": "Organisational use",
+          "hex_code": "#000000"
+        },
+        {
+          "date": "2025-04-30",
+          "reason": "Maintenance",
+          "description": "Scheduled Maintenance",
+          "hex_code": "#ADD8E6"
+        },
+        {
+          "date": "2025-05-04",
+          "reason": "Staff Meeting",
+          "description": "Organisational use",
+          "hex_code": "#000000"
+        }
+      ]
+    },
+    {
+      "shortlet_id": 11,
+      "shortlet_name": "Blue Ivy",
+      "booked_dates": [
+        "2025-04-17",
+        "2025-04-18",
+        "2025-04-19",
+        "2025-04-20",
+        "2025-04-21",
+        "2025-04-22"
+      ],
+      "blocked_dates": []
+    },
+    {
+      "shortlet_id": 15,
+      "shortlet_name": "Bungalow",
+      "booked_dates": [
+        "2025-04-17",
+        "2025-04-18",
+        "2025-04-19",
+        "2025-04-20",
+        "2025-04-21",
+        "2025-04-22",
+        "2025-05-02",
+        "2025-05-03",
+        "2025-05-04"
+      ],
+      "blocked_dates": [
+        {
+          "date": "2025-05-01",
+          "reason": "Maintenance",
+          "description": "Scheduled Maintenance",
+          "hex_code": "#ADD8E6"
+        },
+        {
+          "date": "2025-04-23",
+          "reason": "Staff Meeting",
+          "description": "Organisational use",
+          "hex_code": "#000000"
+        },
+        {
+          "date": "2025-05-05",
+          "reason": "Staff Meeting",
+          "description": "Organisational use",
+          "hex_code": "#000000"
+        }
+      ]
+    },
+    {
+      "shortlet_id": 26,
+      "shortlet_name": "Cedar Ridge",
+      "booked_dates": [],
+      "blocked_dates": []
+    },
+    {
+      "shortlet_id": 29,
+      "shortlet_name": "Creekside",
+      "booked_dates": [],
+      "blocked_dates": []
+    },
+    {
+      "shortlet_id": 16,
+      "shortlet_name": "Dreamsville",
+      "booked_dates": [],
+      "blocked_dates": []
+    },
+    {
+      "shortlet_id": 17,
+      "shortlet_name": "Elysian",
+      "booked_dates": [],
+      "blocked_dates": []
+    },
+    {
+      "shortlet_id": 28,
+      "shortlet_name": "Greenville",
+      "booked_dates": [],
+      "blocked_dates": []
+    },
+    {
+      "shortlet_id": 18,
+      "shortlet_name": "Horizon Haven",
+      "booked_dates": [
+        "2025-05-01",
+        "2025-05-02",
+        "2025-05-03",
+        "2025-05-04",
+        "2025-05-05"
+      ],
+      "blocked_dates": []
+    },
+    {
+      "shortlet_id": 27,
+      "shortlet_name": "Island Court",
+      "booked_dates": [],
+      "blocked_dates": []
+    }
+  ]
+}

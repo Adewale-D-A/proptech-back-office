@@ -1,3 +1,11 @@
+import { amenity } from "./amenities";
+import { canecllationPolicy } from "./apartment/cancellation-policy";
+import { locationGrouping } from "./apartment/locationGroupings";
+import { extraOption } from "./extraOption";
+import { houseRule } from "./houseRules";
+import { roomOption } from "./roomOption";
+import { safetyAndSecurity } from "./safetyAndSecurity";
+
 export type apartment = {
   id: number;
   name: string;
@@ -63,22 +71,7 @@ export type apartmentById = {
   latitude: string;
   location_group_id: number;
   average_rating: number;
-  amenities: {
-    id: number;
-    name: string;
-    slug: string;
-    description: string;
-    image: string;
-    ordering_position: number;
-    is_deleted: 0 | 1;
-    deleted_at: string;
-    created_at: string;
-    updated_at: string;
-    pivot: {
-      shortlet_id: number;
-      amenity_id: number;
-    };
-  }[];
+  amenities: amenity[];
   images: {
     id: number;
     shortlet_id: number;
@@ -90,31 +83,8 @@ export type apartmentById = {
     created_at: string;
     updated_at: string;
   }[];
-  rules: {
-    id: number;
-    name: string;
-    slug: string;
-    ordering_position: number;
-    is_deleted: 0 | 1;
-    deleted_at: string;
-    created_at: string;
-    updated_at: string;
-    pivot: {
-      shortlet_id: number;
-      rule_id: number;
-    };
-  }[];
-  room_option: {
-    id: number;
-    name: string;
-    number_of_rooms: number;
-    slug: string;
-    description: string;
-    is_deleted: 0 | 1;
-    deleted_at: string;
-    created_at: string;
-    updated_at: string;
-  };
+  rules: houseRule[];
+  room_option: roomOption;
   extra_option_items: {
     id: number;
     extra_option_id: number;
@@ -130,40 +100,9 @@ export type apartmentById = {
       shortlet_id: number;
       extra_option_item_id: number;
     };
-    extra_option: {
-      id: number;
-      name: string;
-      slug: string;
-      description: string;
-      ordering_position: number;
-      is_deleted: 0 | 1;
-      deleted_at: null;
-      created_at: string;
-      updated_at: string;
-    };
+    extra_option: extraOption;
   }[];
-  safeties: {
-    id: number;
-    name: string;
-    slug: string;
-    description: string;
-    ordering_position: number;
-    is_deleted: 0 | 1;
-    deleted_at: string;
-    created_at: string;
-    updated_at: string;
-    pivot: {
-      shortlet_id: number;
-      safety_id: number;
-    };
-  }[];
-  location_group: {
-    id: number;
-    name: string;
-    is_deleted: 0 | 1;
-    deleted_at: string;
-    deleted_by: string;
-    created_at: string;
-    updated_at: string;
-  };
+  safeties: safetyAndSecurity[];
+  location_group: locationGrouping;
+  cancellation_policies: canecllationPolicy[];
 };

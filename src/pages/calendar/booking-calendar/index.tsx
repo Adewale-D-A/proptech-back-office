@@ -49,7 +49,7 @@ export default function ApartmentCalendarPage() {
   const [calendarVewData, setCalendarViewData] = useState<Date[]>([]);
 
   // calendar data fetching based on filtered dates
-  const { data, isLoading, isFailed, retryFunction, setIsFailed } =
+  const { extra, isLoading, isFailed, retryFunction, setIsFailed } =
     useGetApartmentCalendar({
       id: buildingId ? String(apartmentId || "") : undefined,
       start_date: filterDates?.start_date,
@@ -138,8 +138,8 @@ export default function ApartmentCalendarPage() {
                     <CalendarView
                       key={item?.toString() || index}
                       date={new Date(item || "")}
-                      booked={data?.booked_dates || []}
-                      blocked={data?.blocked_dates || []}
+                      booked={extra?.booked || []}
+                      blocked={extra?.blocked || []}
                       onDateClick={handleDateClick}
                       allowNaviagtor={false}
                     />

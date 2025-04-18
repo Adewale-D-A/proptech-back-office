@@ -20,6 +20,8 @@ import BlockedDatesReasonsIcon from "../../assets/icons/blocked-dates-reasons";
 import AddEditBlockedDatesReason from "../../pages/apartments/block-dates-reason/add-edit-blocked-dates";
 import AddEditBuildings from "../../pages/apartments/buildings/add-edit-buildings";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import ReceiptIcon from "../../assets/icons/receipt";
+import AddEditCancellationPolicy from "../../pages/apartments/cancellation-policy/add-edit";
 
 export default function ApartmentTabWrapper() {
   const { data: shortlet } = useGetResourceAccessChecker({
@@ -48,6 +50,9 @@ export default function ApartmentTabWrapper() {
   });
   const { data: blockDateReason } = useGetResourceAccessChecker({
     resource: "blocked-date-reason",
+  });
+  const { data: canecellationPolicy } = useGetResourceAccessChecker({
+    resource: "cancelation-policy",
   });
   const tabList = [
     {
@@ -113,6 +118,13 @@ export default function ApartmentTabWrapper() {
       url: "/apartments/blocked-dates-reasons",
       hide: !blockDateReason?.view,
     },
+    {
+      id: 10,
+      icon: <ReceiptIcon />,
+      label: "Cancellation Policy",
+      url: "/apartments/cancellation-policies",
+      hide: !canecellationPolicy?.view,
+    },
   ];
   const location = useLocation();
   const [trackTab, setTrackTab] = useState(1);
@@ -122,6 +134,7 @@ export default function ApartmentTabWrapper() {
   const [openAddLocationGroup, setOpenAddLocationGroup] = useState(false);
   const [openBlockedReason, setOpenBlockedReason] = useState(false);
   const [openBuilding, setOpenBuilding] = useState(false);
+  const [openCancelaltionPolicy, setOpenCancellationPolicy] = useState(false);
 
   //   update current tab value based on the current URL
   useEffect(() => {
@@ -206,6 +219,14 @@ export default function ApartmentTabWrapper() {
                 clickHandler={() => setOpenBuilding(true)}
                 startIcon={<PlusIcon />}
               />
+            ) : trackTab === 10 && canecellationPolicy?.create ? (
+              <LoadingButton
+                label="Add Cancellation Policy"
+                isLoading={false}
+                type="button"
+                clickHandler={() => setOpenCancellationPolicy(true)}
+                startIcon={<PlusIcon />}
+              />
             ) : (
               <></>
             )}
@@ -279,6 +300,15 @@ export default function ApartmentTabWrapper() {
         className=" max-w-md"
       >
         <AddEditBuildings setOpen={setOpenBuilding} />
+      </ModalTemplate>
+      <ModalTemplate
+        open={openCancelaltionPolicy}
+        setOpen={setOpenCancellationPolicy}
+        showXicon={true}
+        title="Cancellation Policy"
+        className=" max-w-md"
+      >
+        <AddEditCancellationPolicy setOpen={setOpenCancellationPolicy} />
       </ModalTemplate>
     </>
   );

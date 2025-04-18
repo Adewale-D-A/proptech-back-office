@@ -138,6 +138,7 @@ import OwnersReportSpreadsheet from "./pages/reports/owners/spreadsheet";
 import ExpenseCategoriesListView from "./pages/reports/owners/expense-categories";
 import BuildingsListView from "./pages/apartments/buildings";
 import AssignApartmentToOwner from "./pages/customers/assign-apartment";
+import CancellationPoliciesView from "./pages/apartments/cancellation-policy";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -192,6 +193,10 @@ function App() {
               <Route
                 path="/apartments/buildings"
                 element={<BuildingsListView />}
+              />
+              <Route
+                path="/apartments/cancellation-policies"
+                element={<CancellationPoliciesView />}
               />
             </Route>
 

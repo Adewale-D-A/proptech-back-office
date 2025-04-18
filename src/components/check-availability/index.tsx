@@ -2,22 +2,10 @@ import { SyntheticEvent, useCallback, useState } from "react";
 import LoadingButton from "../button";
 import DateInput from "../inputs/dateInput";
 import useAxios from "../../useHooks/useAxios";
-import { useAppDispatch } from "../../stores/hooks";
-// import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-// import ApartmentSingleSearch from "../inputs/search/apartment-single-search";
-import { apartmentById } from "../../types/apiData/apartment";
 import Select from "../inputs/select";
 import CalculatedAvailabilityOptions from "./calculated-option";
-// import { Http2ServerRequest } from "http2";
-import {
-  single_stay,
-  split_stay,
-} from "../../types/apiData/apartment/apt-suggestions";
+import { apartment_suggestion } from "../../types/apiData/apartment/apt-suggestions";
 
-interface suggestion {
-  single_stay: single_stay;
-  split_stay: split_stay;
-}
 export default function CheckAvailability({
   className,
 }: {
@@ -27,10 +15,13 @@ export default function CheckAvailability({
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [guestNo, setGuestNo] = useState("");
-  // const [location, setLocation] = useState("");
-  const [availability, setAvailability] = useState<suggestion>({} as any);
+  const [availability, setAvailability] = useState<apartment_suggestion>({
+    single_stays: [],
+    split_stays: [],
+  });
 
   const [isChecking, setIsChecking] = useState(false);
+  const [showResult, setShowResult] = useState(false);
 
   const checkAvailability = useCallback(
     async (e: SyntheticEvent) => {
@@ -43,18 +34,12 @@ export default function CheckAvailability({
           check_in_date: checkInDate,
           check_out_date: checkOutDate,
         });
-        const availabilityResponse = response?.data?.data?.shortlets || [];
+        const availabilityResponse = response?.data?.data?.shortlets || {
+          single_stays: [],
+          split_stays: [],
+        };
         setAvailability(availabilityResponse);
-        // console.log(availability);
-        // const isAvailable = response?.data?.data?.is_available;
-        // dispatch(
-        //   openSnackbar({
-        //     message: isAvailable
-        //       ? "Apartment is available"
-        //       : "Apartment is not available for the selected dates",
-        //     isError: !Boolean(isAvailable),
-        //   })
-        // );
+        setShowResult(true);
       } catch (error) {
       } finally {
         setIsChecking(false);
@@ -128,12 +113,14 @@ export default function CheckAvailability({
           disabled={false}
           isLoading={isChecking}
         />
-        <CalculatedAvailabilityOptions
-          data={availability}
-          checkInDate={checkInDate}
-          checkOutDate={checkOutDate}
-          noOfGuest={guestNo}
-        />
+        {showResult && (
+          <CalculatedAvailabilityOptions
+            data={availability}
+            checkInDate={checkInDate}
+            checkOutDate={checkOutDate}
+            noOfGuest={guestNo}
+          />
+        )}
       </form>
     </div>
   );

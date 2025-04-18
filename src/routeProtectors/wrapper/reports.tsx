@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import NavTab from "../../components/tab/nav-tab";
 import ClipBoardIcon from "../../assets/icons/clipboard";
-import PowerIcon from "../../assets/icons/power";
 import BookMarkIcon from "../../assets/icons/book-mark";
 import DollarIcon from "../../assets/icons/dollar";
 import BillIcon from "../../assets/icons/bill";
@@ -22,6 +21,15 @@ export default function ReportsTabWrapper() {
   });
   const { data: booking } = useGetResourceAccessChecker({
     resource: "booking",
+  });
+  const { data: occupancy_report } = useGetResourceAccessChecker({
+    resource: "occupancy-report",
+  });
+  const { data: owner_report } = useGetResourceAccessChecker({
+    resource: "owner-report-entry",
+  });
+  const { data: expense_category } = useGetResourceAccessChecker({
+    resource: "expense-category",
   });
   const tabList = [
     {
@@ -50,7 +58,7 @@ export default function ReportsTabWrapper() {
       icon: <ClipBoardIcon />,
       label: "Occupany Per Time",
       url: "/reports/occupancy-per-time",
-      hide: !reportDashboard?.view,
+      hide: !occupancy_report?.view,
     },
     {
       id: 5,
@@ -71,14 +79,14 @@ export default function ReportsTabWrapper() {
       icon: <BillIcon />,
       label: "Owners Report",
       url: "/reports/owners-report/summary",
-      hide: !reportDashboard?.view,
+      hide: !owner_report?.view,
     },
     {
       id: 9,
       icon: <BillIcon />,
       label: "Expense Category",
       url: "/reports/expense-category",
-      hide: !reportDashboard?.view,
+      hide: !expense_category?.view,
     },
     // {
     //   id: 7,

@@ -4,6 +4,7 @@ import generateCalendarData from "../../utils/generateCalendarData";
 import ChevronLeftIcon from "../../assets/icons/chevron-left";
 import ChevronRightIcon from "../../assets/icons/chevron-right";
 import { dateGeneratorUtilResponse } from "../../types/date-generator-util-response";
+import { calendarDates } from "../../types/apiData/apartment/reformed-apartment-calendar";
 // import NavigatePrevIcon from "../../assets/icons/navigate-prev";
 // import NavigateNextIcon from "../../assets/icons/navigate-next";
 
@@ -24,8 +25,8 @@ export default function CalendarView({
   date?: Date;
   highlights?: Date[];
   notAvailable?: Date[];
-  booked?: Date[];
-  blocked?: Date[];
+  booked?: calendarDates[];
+  blocked?: calendarDates[];
   maintenance?: Date[];
   allowNaviagtor?: boolean;
   onDateClick: (date: Date) => void;
@@ -106,18 +107,28 @@ export default function CalendarView({
         {currentDays.map((item, index) => (
           <button
             type="button"
-            title="days of calendar"
+            title={
+              item?.booked
+                ? item?.booked_reason
+                : item?.blocked
+                ? item?.blocked_reason
+                : "Available"
+            }
             key={index}
-            className={`${item?.selected ? "" : ""} ${
-              item?.currentMonth ? "" : " text-gray-400"
-            }  ${item?.maintenance ? " bg-[#53B1FD] text-white" : ""} ${
-              item?.blocked ? " bg-gray-600 text-red-500" : ""
-            } ${
-              item?.booked ? " bg-red-500 text-white" : ""
-            } aspect-square p-1 bg-gray-200 rounded-md relative overflow-hidden`}
+            className={`${
+              item?.currentMonth ? "" : " opacity-20"
+            } aspect-square p-1 bg-gray-100 rounded-md relative overflow-hidden`}
             onClick={() => changeHandler(item)}
+            style={{
+              backgroundColor: item?.booked
+                ? item?.booked_hex_code
+                : item?.blocked
+                ? item?.blocked_hex_code
+                : "#e5e7eb",
+              color: item?.booked || item?.blocked ? "#FFFFFF" : "#000000",
+            }}
           >
-            <span>{item?.day}</span>
+            <span className="text-shadow">{item?.day}</span>
             {!(item?.booked || item?.maintenance || item?.blocked) && (
               <div className=" absolute top-0 right-0 aspect-square border-l-8 border-l-transparent border-b-8 border-b-transparent border-8 border-green-500"></div>
             )}

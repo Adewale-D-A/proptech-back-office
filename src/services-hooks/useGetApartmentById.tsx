@@ -50,6 +50,7 @@ export default function useGetApartmentById(id?: string) {
         images,
         rules,
         safeties,
+        cancellation_policies,
         city,
         state,
         country,
@@ -85,9 +86,10 @@ export default function useGetApartmentById(id?: string) {
           whatToExpect: amenities?.map((item: { id: number }) =>
             String(item?.id)
           ),
-          extraOptions: extra_option_items?.map((item: { id: number }) =>
-            String(item?.id)
-          ),
+          extraOptions:
+            extra_option_items?.map((item: { id: number }) =>
+              String(item?.id)
+            ) || [],
           pointOfInterest: point_of_interest,
           safetyAndSecurity: safeties?.map((item: { id: number }) =>
             String(item?.id)
@@ -97,10 +99,13 @@ export default function useGetApartmentById(id?: string) {
       );
       dispatch(
         updateApartmentPolicies({
-          rules: rules?.map((item: { id: number }) => String(item?.id)),
+          rules: rules?.map((item: { id: number }) => String(item?.id)) || [],
           cautionFee: caution_fee,
           maxGuest: max_guests,
-          cancellationPolicies: cancellation_policy,
+          cancellationPolicies:
+            cancellation_policies?.map((item: { id: number }) =>
+              String(item?.id)
+            ) || [],
         })
       );
       setData(shortlet);
