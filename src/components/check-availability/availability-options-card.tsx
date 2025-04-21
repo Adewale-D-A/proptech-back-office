@@ -3,7 +3,7 @@ import defaultCheckInDateTime from "../../config/default-check-in-date-time";
 import { apartment_suggestion } from "../../types/apiData/apartment/apt-suggestions";
 // import LoadingButton from "../button";
 import LinkButton from "../button/linkButton";
-import { format, differenceInDays, isValid } from "date-fns";
+import { format, differenceInDays } from "date-fns";
 
 const defaultDateTime = defaultCheckInDateTime();
 export default function AvailabilityOptionCard({
@@ -55,7 +55,7 @@ export default function AvailabilityOptionCard({
           </div>
           <div className=" w-fit">
             <LinkButton
-              url={`/bookings/new-booking?apt_id=${item?.id}&check_in_date=${extra_data?.check_in_date}&check_out_date=${extra_data?.check_out_date}&check_in_time=${defaultDateTime?.check_in_time}&check_out_time=${defaultDateTime?.check_out_time}&no_of_guest=${extra_data?.noOfGuest}`}
+              url={`/bookings/new-booking?apt_id=${item?.id}&check_in_date=${extra_data?.check_in_date}&check_out_date=${extra_data?.check_out_date}&check_in_time=${defaultDateTime?.check_in_time}&check_out_time=${defaultDateTime?.check_out_time}&no_of_guest=${extra_data?.noOfGuest}&type=single_stay_booking`}
               label="Book now"
             />
           </div>

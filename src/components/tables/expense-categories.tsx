@@ -55,23 +55,25 @@ export default function ExpenseCategoriesistsTable() {
       setIsDeleting(false);
     }
   }, [selectedId]);
-  // const { data: expense_category } = useGetResourceAccessChecker({
-  //   resource: "expense-category",
-  // });
+  const { data: owner_report } = useGetResourceAccessChecker({
+    resource: "owner-report-entry",
+  });
 
   return (
     <>
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5 ">
         <div className="w-full flex justify-end">
-          <div>
-            <LoadingButton
-              label="Add Expense Category"
-              isLoading={false}
-              type="button"
-              clickHandler={() => openForCreate()}
-              startIcon={<PlusIcon />}
-            />
-          </div>
+          {owner_report?.create && (
+            <div>
+              <LoadingButton
+                label="Add Expense Category"
+                isLoading={false}
+                type="button"
+                clickHandler={() => openForCreate()}
+                startIcon={<PlusIcon />}
+              />
+            </div>
+          )}
         </div>
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Expense Categories</h2>
@@ -97,18 +99,22 @@ export default function ExpenseCategoriesistsTable() {
                     <td>{item?.name}</td>
                     <td>
                       <div className=" flex items-center gap-4">
-                        <button
-                          title="edit"
-                          onClick={() => openForEdit(String(item?.id))}
-                        >
-                          <PenIcon />
-                        </button>
-                        <button
-                          title="delete"
-                          onClick={() => openForDelete(String(item?.id))}
-                        >
-                          <BinIcon className=" size-6 text-red-500" />
-                        </button>
+                        {owner_report?.update && (
+                          <button
+                            title="edit"
+                            onClick={() => openForEdit(String(item?.id))}
+                          >
+                            <PenIcon />
+                          </button>
+                        )}
+                        {owner_report?.delete && (
+                          <button
+                            title="delete"
+                            onClick={() => openForDelete(String(item?.id))}
+                          >
+                            <BinIcon className=" size-6 text-red-500" />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

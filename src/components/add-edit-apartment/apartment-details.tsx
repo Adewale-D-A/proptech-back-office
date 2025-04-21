@@ -16,12 +16,13 @@ import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import {
   updateApartmentDetails,
   updateApartmentInfoId,
+  clearAllApartmentInfo,
 } from "../../stores/inAppDataInterations/addEditApartmentInfo";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-import LinkButton from "../button/linkButton";
 import useGetRoomOptions from "../../services-hooks/useGetRoomOptions";
 import useGetLocationGroupings from "../../services-hooks/apartment/useGetLocationGroupings";
 import useGetBuildings from "../../services-hooks/apartment/useGetBuildings";
+// import LinkButton from "../button/linkButton";
 
 export default function AddEditApartmentDetails({ id }: { id?: string }) {
   const dispatch = useAppDispatch();
@@ -120,10 +121,18 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
     ]
   );
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetRoomOptions({ page: 1, limit: 20 });
+  const { data } = useGetRoomOptions({ page: 1, limit: 20 });
   const { data: buildings } = useGetBuildings({ page: 1, limit: 100 });
   const { data: location_groups } = useGetLocationGroupings({ page: 1 });
+
+  const cancel = useCallback(() => {
+    dispatch(clearAllApartmentInfo());
+    navigate(
+      searchParams?.get("redirect")
+        ? `${searchParams?.get("redirect")}`
+        : "/apartments/view-all"
+    );
+  }, [searchParams]);
 
   return (
     <form className=" flex flex-col gap-5" onSubmit={addApartmentDetails}>
@@ -298,7 +307,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
       <div className=" w-full flex justify-end mt-10">
         <div className=" flex items-center justify-between gap-4">
           <div className=" w-fit">
-            <LinkButton
+            {/* <LinkButton
               url={
                 searchParams?.get("redirect")
                   ? `${searchParams?.get("redirect")}`
@@ -306,6 +315,13 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
               }
               label="Cancel"
               variant={2}
+            /> */}
+            <LoadingButton
+              label="Cancel"
+              type="button"
+              isLoading={false}
+              variant={2}
+              clickHandler={cancel}
             />
           </div>
           <div className=" w-fit">

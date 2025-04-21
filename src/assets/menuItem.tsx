@@ -84,6 +84,15 @@ export default function NavigationMenuItems() {
   });
   // user/customer
 
+  // customer-engagements
+  const { data: rating } = useGetResourceAccessChecker({
+    resource: "rating",
+  });
+  const { data: referral } = useGetResourceAccessChecker({
+    resource: "referral",
+  });
+  // customer-engagements
+
   // pricing
   const { data: rateList } = useGetResourceAccessChecker({
     resource: "rate-list",
@@ -274,7 +283,7 @@ export default function NavigationMenuItems() {
           url: "/customer-engagements/ratings-and-reviews",
           label: "Customers Engagement",
           value: "customer-engagements",
-          show: user?.view,
+          show: rating?.view || referral?.view,
           icon: <HeadsetIcon />,
           hasSubMenu: false,
           subMenu: [

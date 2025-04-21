@@ -3,7 +3,7 @@ import { useAppDispatch } from "../../../../stores/hooks";
 import { updatePageProperties } from "../../../../stores/appFunctionality/pageProperties";
 import BlockedDatesReasonsIcon from "../../../../assets/icons/blocked-dates-reasons";
 import HeadsetIcon from "../../../../assets/icons/headset";
-import RequestCategoriesistsTable from "../../../../components/tables/requests-categories";
+// import RequestCategoriesistsTable from "../../../../components/tables/requests-categories";
 import ExpenseCategoriesistsTable from "../../../../components/tables/expense-categories";
 
 const breadCrumb = [

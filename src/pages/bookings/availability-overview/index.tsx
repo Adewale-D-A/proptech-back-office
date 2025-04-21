@@ -282,7 +282,11 @@ export default function AvailabilityOverview() {
                           <div
                             key={ind}
                             className={`min-h-[37px] min-w-[37px] m-[1px]  border rounded-md relative overflow-hidden`}
-                            title={isBlocked?.reason}
+                            title={
+                              isBlocked
+                                ? `Date blocked due to: ${isBlocked?.reason}`
+                                : "Date booked"
+                            }
                             style={{
                               backgroundColor: isBlocked
                                 ? isBlocked?.hex_code

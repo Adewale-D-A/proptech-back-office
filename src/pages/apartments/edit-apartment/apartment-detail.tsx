@@ -1,5 +1,5 @@
 import { useLayoutEffect, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import BuildingIcon from "../../../assets/icons/building";
 import { useAppDispatch, useAppSelector } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
@@ -10,6 +10,7 @@ import useGetApartmentById from "../../../services-hooks/useGetApartmentById";
 export default function EditApartmentDetails() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
+  const [searchParams] = useSearchParams();
   const breadCrumb = useMemo(
     () => [
       {
@@ -51,7 +52,13 @@ export default function EditApartmentDetails() {
   const storeAptDetails = useAppSelector(
     (state) => state.addEditApartmentInfo.value.data
   );
-  useGetApartmentById(storeAptDetails?.id === "updated" ? "" : id);
+  useGetApartmentById(
+    searchParams?.get("action") === "rewrite"
+      ? id
+      : storeAptDetails?.id === "updated"
+      ? ""
+      : id
+  );
 
   return (
     <section className="w-full flex flex-col items-center">

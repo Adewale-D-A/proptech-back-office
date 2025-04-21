@@ -1,5 +1,4 @@
 import { ChangeEvent } from "react";
-import CalendarIcon from "../../../assets/icons/calendar";
 import TimeIcon from "../../../assets/icons/time";
 
 interface Props {
@@ -48,7 +47,7 @@ export default function TimeInput({
           value={value}
           onChange={(e: ChangeEvent<HTMLInputElement>) => handleInput(e)}
           type={inputType}
-          className={`w-full date-input disabled:border-gray-300 disabled:text-gray-300 p-3 focus:ring-[#17594F] focus:border-[#17594F]`}
+          className={`w-full date-input bg-transparent disabled:border-gray-300 disabled:text-gray-300 p-3 focus:ring-[#17594F] focus:border-[#17594F]`}
         />
         {!value && (
           <label

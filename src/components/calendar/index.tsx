@@ -111,7 +111,7 @@ export default function CalendarView({
               item?.booked
                 ? item?.booked_reason
                 : item?.blocked
-                ? item?.blocked_reason
+                ? `Date blocked due to: ${item?.blocked_reason}`
                 : "Available"
             }
             key={index}
