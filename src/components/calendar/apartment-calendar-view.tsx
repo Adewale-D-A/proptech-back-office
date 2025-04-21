@@ -28,7 +28,7 @@ const nextMonthString = new Date(today?.getFullYear(), today?.getMonth() + 2, 0)
   ?.slice(0, 10);
 const defaultDateTime = defaultCheckInDateTime();
 
-export default function ApartmentCalendarView() {
+export default function ApartmentCalendarView({ type = 1 }: { type?: 1 | 2 }) {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
@@ -133,6 +133,7 @@ export default function ApartmentCalendarView() {
                   setSelectedApt={setSelectedApt}
                   defaultDateTime={defaultReservationsDateTime}
                   refetchCalendar={retryFunction}
+                  booking_variant={type}
                 />
               </div>
             </div>

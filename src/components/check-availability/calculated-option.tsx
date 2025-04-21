@@ -31,11 +31,14 @@ export default function CalculatedAvailabilityOptions({
           </h4>
         </div>
       )}
-      {/* <SplitStayOptionCard
-        data={data}
-        checkInDate={checkInDate}
-        checkOutDate={checkOutDate}
-      /> */}
+      {data?.split_stays.length > 0 && (
+        <SplitStayOptionCard
+          data={data}
+          checkInDate={checkInDate}
+          checkOutDate={checkOutDate}
+          noOfGuest={noOfGuest}
+        />
+      )}
     </div>
   );
 }

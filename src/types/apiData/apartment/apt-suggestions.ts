@@ -35,33 +35,25 @@ export interface single_stays {
 }
 
 export interface split_stays {
-  id: 1;
-  name: "Shortlet 1";
-  slug: "shortlet_1";
-  description: "Shortlet 1 Description";
-  location: "Shortlet 1 Location";
-  currency: "NGN";
-  price: 100;
-  caution_fee: 10;
-  tax_fee: 5;
-  no_of_bedrooms: 1;
-  no_of_bathrooms: 1;
-  min_guests: null;
-  max_guests: 4;
-  point_of_interest: "Shortlet 1 Point of Interest";
-  cancellation_policy: "Shortlet 1 Cancellation Policy";
-  availability_status: "available";
-  is_deleted: 0;
-  deleted_at: null;
-  created_at: "2024-12-03T14:44:35.000000Z";
-  updated_at: "2024-12-03T14:44:35.000000Z";
-  room_option_id: 1;
-  city: null;
-  state: null;
-  country: null;
-  longitude: null;
-  latitude: null;
-  location_group_id: null;
-  owner_id: null;
-  building_id: null;
+  first_stay: {
+    id: number;
+    name: string;
+    max_guests: number;
+    no_of_bedrooms: number;
+    location_group_id: number;
+    price: number;
+    caution_fee: number;
+    currency: string;
+  };
+  second_stay: {
+    id: number;
+    name: string;
+    max_guests: number;
+    no_of_bedrooms: number;
+    location_group_id: number;
+    price: number;
+    caution_fee: number;
+    currency: string;
+  };
+  transition_date: string;
 }

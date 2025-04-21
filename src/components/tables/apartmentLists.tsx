@@ -141,7 +141,7 @@ export default function ApartmentListsTable() {
                             {shortlet?.update && (
                               <MenuItem>
                                 <Link
-                                  to={`/apartments/edit-apartment/apartment-details/${request?.id}?redirect=${location?.pathname}`}
+                                  to={`/apartments/edit-apartment/apartment-details/${request?.id}?redirect=${location?.pathname}&action=rewrite`}
                                   className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                                 >
                                   Edit Apartment

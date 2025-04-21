@@ -94,8 +94,41 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
       safetyAndSecurity,
       availabilityStatus,
       id,
+      searchParams,
     ]
   );
+
+  const movePrev = useCallback(() => {
+    const payload = {
+      noBeds,
+      noBaths,
+      whatToExpect,
+      pointOfInterest,
+      extraOptions,
+      safetyAndSecurity,
+      availabilityStatus,
+    };
+    dispatch(updateApartmentFeatures(payload));
+    naviagte(
+      id
+        ? `/apartments/edit-apartment/apartment-details/${id}?redirect=${
+            searchParams?.get("redirect") || ""
+          }`
+        : `/apartments/add-apartment/apartment-details?redirect=${
+            searchParams?.get("redirect") || ""
+          }`
+    );
+  }, [
+    searchParams,
+    noBeds,
+    noBaths,
+    whatToExpect,
+    pointOfInterest,
+    extraOptions,
+    safetyAndSecurity,
+    availabilityStatus,
+    id,
+  ]);
 
   return (
     <form className=" flex flex-col gap-5" onSubmit={addApartmentFeatures}>
@@ -251,7 +284,7 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
       <div className=" w-full flex justify-center md:justify-end mt-10">
         <div className=" flex items-center flex-col md:flex-row justify-between gap-4">
           <div className=" w-fit">
-            <LinkButton
+            {/* <LinkButton
               url={
                 id
                   ? `/apartments/edit-apartment/apartment-details/${id}`
@@ -259,6 +292,13 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
               }
               label="Previous Page"
               variant={2}
+            /> */}
+            <LoadingButton
+              label="Previous Page"
+              type="button"
+              isLoading={false}
+              variant={2}
+              clickHandler={movePrev}
             />
           </div>
 

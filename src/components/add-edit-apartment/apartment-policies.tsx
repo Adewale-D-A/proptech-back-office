@@ -15,6 +15,7 @@ import Select from "../inputs/select";
 import { requestPayload } from "../../types/apiData/apartment/request-payload";
 import purgeEmptyPayload from "../../utils/remove-empty-payload";
 import useGetCancellationPolcies from "../../services-hooks/apartment/useGetCancellationPolicies";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function AddEditApartmentPolicies({
   id,
@@ -30,6 +31,8 @@ export default function AddEditApartmentPolicies({
     (state) => state.addEditApartmentInfo.value.data
   );
   const { data: houseRules } = useGetHouseRules({ page: 1, limit: 20 });
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [rules, setRules] = useState<string[]>([]);
   const [maxGuest, setMaxGuests] = useState("");
@@ -135,6 +138,26 @@ export default function AddEditApartmentPolicies({
       id,
     ]
   );
+
+  const movePrev = useCallback(() => {
+    dispatch(
+      updateApartmentPolicies({
+        rules,
+        cautionFee: cautionFee,
+        maxGuest: maxGuest,
+        cancellationPolicies: cancellation,
+      })
+    );
+    navigate(
+      id
+        ? `/apartments/edit-apartment/apartment-features/${id}?redirect=${
+            searchParams?.get("redirect") || ""
+          }`
+        : `/apartments/add-apartment/apartment-features?redirect=${
+            searchParams?.get("redirect") || ""
+          }`
+    );
+  }, [searchParams, rules, cancellation, maxGuest, cautionFee, id]);
 
   return (
     <form
@@ -252,7 +275,7 @@ export default function AddEditApartmentPolicies({
       <div className=" w-full flex justify-center md:justify-end mt-10">
         <div className=" flex items-center flex-col md:flex-row justify-between gap-4">
           <div className=" w-fit">
-            <LinkButton
+            {/* <LinkButton
               url={
                 id
                   ? `/apartments/edit-apartment/apartment-features/${id}`
@@ -260,6 +283,14 @@ export default function AddEditApartmentPolicies({
               }
               label="Previous Page"
               variant={2}
+            /> */}
+
+            <LoadingButton
+              label="Previous Page"
+              type="button"
+              isLoading={false}
+              variant={2}
+              clickHandler={movePrev}
             />
           </div>
 

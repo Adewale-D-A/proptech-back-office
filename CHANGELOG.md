@@ -1,3 +1,7 @@
+##### 21.04.2025
+
+> Split Stay logic and UI placements
+
 ##### 18.04.2025
 
 > Fixes: Backend resolution updates

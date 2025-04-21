@@ -33,6 +33,7 @@ export default function QuickReservationFlow({
   allowApartmentUpdate = true,
   defaultDateTime,
   refetchCalendar,
+  booking_variant = 1,
 }: {
   variant?: number;
   apartment_id?: string;
@@ -47,6 +48,7 @@ export default function QuickReservationFlow({
     checkOutTime: string;
   };
   refetchCalendar?: () => void;
+  booking_variant?: 1 | 2;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -79,11 +81,21 @@ export default function QuickReservationFlow({
 
   // query params auto fill
   useEffect(() => {
-    const checkInDate = searchParams?.get("check_in_date");
-    const checkOutDate = searchParams?.get("check_out_date");
-    const checkInTime = searchParams?.get("check_in_time");
-    const checkOutTime = searchParams?.get("check_out_time");
-    const noOfGuest = searchParams?.get("no_of_guest");
+    const checkInDate = searchParams?.get(
+      booking_variant === 1 ? "check_in_date" : "check_in_date_2"
+    );
+    const checkOutDate = searchParams?.get(
+      booking_variant === 1 ? "check_out_date" : "check_out_date_2"
+    );
+    const checkInTime = searchParams?.get(
+      booking_variant === 1 ? "check_in_time" : "check_in_time_2"
+    );
+    const checkOutTime = searchParams?.get(
+      booking_variant === 1 ? "check_out_time" : "check_out_time_2"
+    );
+    const noOfGuest = searchParams?.get(
+      booking_variant === 1 ? "no_of_guest" : "no_of_guest_2"
+    );
 
     setCheckInDate(checkInDate || "");
     setCheckOutDate(checkOutDate || "");
@@ -252,6 +264,9 @@ export default function QuickReservationFlow({
               placeholder="Search apartment by name"
               selected={apartment}
               setSelected={setApartment}
+              default_apt_query_id={
+                booking_variant === 1 ? "apt_id" : "apt_id_2"
+              }
             />
           ) : (
             <div className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between">

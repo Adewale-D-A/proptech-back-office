@@ -13,12 +13,14 @@ export default function ApartmentSingleSearch({
   setSelected,
   defaultId,
   readOnly,
+  default_apt_query_id = "apt_id",
   label,
 }: {
   placeholder: string;
   selected: apartmentById;
   readOnly?: boolean;
   setSelected: (item: apartmentById) => void;
+  default_apt_query_id?: "apt_id" | "apt_id_2";
   label?: string;
   defaultId?: string;
 }) {
@@ -28,7 +30,7 @@ export default function ApartmentSingleSearch({
   const [searchParams] = useSearchParams();
 
   const { data: apartment_info } = useGetApartmentById(
-    searchParams?.get("apt_id") || defaultId || undefined
+    searchParams?.get(default_apt_query_id) || defaultId || undefined
   );
 
   // logic to close referenced container when clicked outsite the element

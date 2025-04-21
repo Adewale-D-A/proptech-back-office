@@ -32,6 +32,7 @@ export default function Filter({
           required
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
+          className=" bg-transparent"
         />{" "}
         {" - "}
         <input
@@ -40,6 +41,7 @@ export default function Filter({
           required
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
+          className=" bg-transparent"
         />
         <button
           className=" text-primary hover:scale-110 transition-all"

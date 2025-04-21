@@ -44,7 +44,7 @@ export default function DateInput({
           value={value}
           onChange={(e: ChangeEvent<HTMLInputElement>) => handleInput(e)}
           type={inputType}
-          className={`w-full date-input disabled:border-gray-300 disabled:text-gray-300 p-[11px]  focus:ring-[#17594F] focus:border-[#17594F]`}
+          className={`w-full date-input disabled:border-gray-300 bg-transparent disabled:text-gray-300 p-[11px]  focus:ring-[#17594F] focus:border-[#17594F]`}
         />
         {!value && (
           <label
