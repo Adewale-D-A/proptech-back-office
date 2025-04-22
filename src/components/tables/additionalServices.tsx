@@ -17,6 +17,8 @@ import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import ExportToCSV from "../export-to-csv";
+import { additionalServiceExportFormater } from "../../utils/export-formerter-functions";
 
 export default function AdditionalServiceListTable({
   header,
@@ -97,7 +99,11 @@ export default function AdditionalServiceListTable({
               placeholder="Search service name, apartment name..."
             />
           </div>
-          {/* <FilterSearch /> */}
+          <ExportToCSV
+            dataset={data}
+            jsonToCSVReformerter={additionalServiceExportFormater}
+            fileName="additional-services"
+          />
         </div>
         {data && data.length > 0 ? (
           <div className=" w-full overflow-x-auto">

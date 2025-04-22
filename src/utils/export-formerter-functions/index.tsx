@@ -37,6 +37,20 @@ export const bookingsExportFormater = (item: { [key: string]: any }) => {
     ["status", item?.status],
   ];
 };
+
+export const additionalServiceExportFormater = (item: {
+  [key: string]: any;
+}) => {
+  return [
+    ["customer_name", `${item?.user?.first_name} ${item?.user?.last_name}`],
+    ["apartment_name", item?.booking?.shortlet?.name],
+    ["date_of_request", formatDate(item?.created_at)],
+    ["service_type", item?.service_type?.name],
+    ["description", item?.description],
+    ["escalated_status", item?.is_escalated],
+    ["status", item?.status],
+  ];
+};
 export const requestsExportFormater = (item: { [key: string]: any }) => {
   return [
     ["customer_name", `${item?.user?.first_name} ${item?.user?.last_name}`],

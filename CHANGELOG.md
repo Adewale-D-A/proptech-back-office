@@ -1,5 +1,6 @@
 ##### 22.04.2025
 
+> Additional service export function table update
 > Noticed bugs resolution
 > Request table Bugs resolution
 > Booking calendar overview pagination fix
