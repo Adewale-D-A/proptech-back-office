@@ -28,7 +28,7 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
     start_date: string;
     end_date: string;
   }>();
-  const [sort, setSort] = useState("desc");
+  const [sort, setSort] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetAllBookingsLists({

@@ -22,13 +22,13 @@ import { MenuItem } from "@headlessui/react";
 export default function InvoiceListsTable({ header }: { header: string[] }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const [sort, setSort] = useState("desc");
+  const [sort, setSort] = useState("asc");
   const [search, setSearch] = useState("");
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
   }>();
-  // const [sort, setSort] = useState("desc");
+  // const [sort, setSort] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetApartmentInvoiceLists({

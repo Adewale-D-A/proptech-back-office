@@ -34,8 +34,11 @@ export default function ApartmentListsTable() {
   const [openRate, setOpenRate] = useState(false);
   const [selectedId, setSelectedId] = useState("");
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllApartmentLists({ page: currentPage, search, sort });
+  const { data, isLoading, pagination } = useGetAllApartmentLists({
+    page: currentPage,
+    search,
+    sort,
+  });
 
   const handleOpenCalculateRate = useCallback((id: number) => {
     setSelectedId(String(id || ""));

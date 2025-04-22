@@ -31,7 +31,7 @@ export default function AdditionalServiceListTable({
     start_date: string;
     end_date: string;
   }>();
-  const [sort, setSort] = useState("desc");
+  const [sort, setSort] = useState("asc");
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =

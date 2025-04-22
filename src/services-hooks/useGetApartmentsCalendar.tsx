@@ -8,9 +8,11 @@ import { reformedApartmentCalendar } from "../types/apiData/apartment/reformed-a
 export default function useGetApartmentsCalendar({
   start_date,
   end_date,
+  limit = 100,
 }: {
   start_date?: string;
   end_date?: string;
+  limit?: number;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const [data, setData] = useState<reformedApartmentCalendar[]>([]);
@@ -25,6 +27,7 @@ export default function useGetApartmentsCalendar({
         dataset: {
           start_date: start_date,
           end_date: end_date,
+          limit,
         },
       });
       const response = await axios.get(
@@ -38,11 +41,11 @@ export default function useGetApartmentsCalendar({
     } finally {
       setIsLoading(false);
     }
-  }, [start_date, end_date]);
+  }, [start_date, end_date, limit]);
 
   useEffect(() => {
     getApartmentsCalendar();
-  }, [start_date, end_date]);
+  }, [start_date, end_date, limit]);
 
   return {
     data,

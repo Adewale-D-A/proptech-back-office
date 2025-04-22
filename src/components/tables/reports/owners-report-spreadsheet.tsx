@@ -118,15 +118,17 @@ export default function OwnersReportSpreadsheetTableList() {
                 <table className=" w-full">
                   <thead>
                     <tr>
+                      <th>S/N</th>
                       {["Expense", ...monthsAndDays.months].map((head) => (
                         <th key={head}>{head}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {data?.data?.map((item) => {
+                    {data?.data?.map((item, index) => {
                       return (
                         <tr key={item?.expense_name} className=" border-b">
+                          <td>{String(index + 1)}</td>
                           <td>{item?.expense_name}</td>
                           {item?.monthly_total_expenses.map((item) => (
                             <td key={item?.month}>
@@ -154,9 +156,10 @@ export default function OwnersReportSpreadsheetTableList() {
                     })}
                     {/* totals  */}
                     <tr className=" border-b">
-                      <td className=" bg-[#E4E7EC]">Total</td>
+                      <td className=" bg-[#E0F2FE] py-5"></td>
+                      <td className=" bg-[#E0F2FE] py-5">Total</td>
                       {data?.monthlySummaries.map((item, index) => (
-                        <td key={index}>
+                        <td key={index} className=" py-5">
                           {currencyFormat(item?.total_expenses || 0.0)}
                         </td>
                       ))}
@@ -164,9 +167,10 @@ export default function OwnersReportSpreadsheetTableList() {
                     </tr>
                     {/* revenue */}
                     <tr className=" border-b">
-                      <td className=" bg-[#FEF0C7]">Revenue</td>
+                      <td className=" bg-[#FEF0C7] py-5"></td>
+                      <td className=" bg-[#FEF0C7] py-5">Revenue</td>
                       {data?.monthlySummaries.map((item, index) => (
-                        <td key={index}>
+                        <td key={index} className=" py-5">
                           {currencyFormat(item?.revenue || 0.0)}
                         </td>
                       ))}
@@ -174,7 +178,8 @@ export default function OwnersReportSpreadsheetTableList() {
                     </tr>
                     {/* management fee */}
                     <tr className=" border-b">
-                      <td className=" bg-[#FEC7C7]">
+                      <td className=" bg-[#FEC7C7] py-5"></td>
+                      <td className=" bg-[#FEC7C7] py-5">
                         <div className=" flex items-center justify-between gap-2">
                           <span>Management fee </span>
                           <button
@@ -186,7 +191,7 @@ export default function OwnersReportSpreadsheetTableList() {
                         </div>
                       </td>
                       {data?.monthlySummaries.map((item, index) => (
-                        <td key={index}>
+                        <td key={index} className=" py-5">
                           {currencyFormat(item?.management_fee || 0.0)}{" "}
                         </td>
                       ))}
@@ -194,9 +199,10 @@ export default function OwnersReportSpreadsheetTableList() {
                     </tr>
                     {/* profit */}
                     <tr className=" border-b">
-                      <td className="bg-[#D1FADF]">Profit</td>
+                      <td className="bg-[#D1FADF] py-5"></td>
+                      <td className="bg-[#D1FADF] py-5">Profit</td>
                       {data?.monthlySummaries.map((item, index) => (
-                        <td key={index}>
+                        <td key={index} className=" py-5">
                           {currencyFormat(item?.profit || 0.0)}
                         </td>
                       ))}

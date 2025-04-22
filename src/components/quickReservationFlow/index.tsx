@@ -320,7 +320,7 @@ export default function QuickReservationFlow({
             <label htmlFor="close-date">Close room in these dates</label>
             <Switch id="close-date" value={closeRoom} setValue={setCloseRoom} />
           </div>
-          {closeRoom ? (
+          {closeRoom && (
             <BlockDateForm
               apt_id={String(
                 apartment_id || apartment?.id || apartment_info?.id || ""
@@ -329,67 +329,69 @@ export default function QuickReservationFlow({
               check_out_date={checkOutDate}
               refetchCalendar={refetchCalendar}
             />
-          ) : (
-            <div
-              className={`w-full grid ${
-                variant === 1 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1"
-              }  gap-5`}
+          )}
+        </div>
+        {!closeRoom && (
+          <div
+            className={`w-full grid ${
+              variant === 1 ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1"
+            }  gap-5`}
+          >
+            <Select
+              isRequired={true}
+              value={guestNo}
+              setValue={setGuestNo}
+              id="no-of-guests"
             >
-              <Select
-                isRequired={true}
-                value={guestNo}
-                setValue={setGuestNo}
-                id="no-of-guests"
-              >
-                <option value="" disabled>
-                  No of Guests
+              <option value="" disabled>
+                No of Guests
+              </option>
+              {Array.from({ length: 8 }, (_, index) => (
+                <option key={index} value={`${index + 1}`}>
+                  {index + 1}
                 </option>
-                {Array.from({ length: 8 }, (_, index) => (
-                  <option key={index} value={`${index + 1}`}>
-                    {index + 1}
-                  </option>
-                ))}
-              </Select>
+              ))}
+            </Select>
 
-              <Select
-                isRequired={true}
-                value={payment}
-                setValue={setPayment}
-                id="method-of-payment"
+            <Select
+              isRequired={true}
+              value={payment}
+              setValue={setPayment}
+              id="method-of-payment"
+            >
+              <option value="" disabled>
+                Select Method of payment
+              </option>
+              <option value="paystack">Paystack</option>
+            </Select>
+            <Select
+              isRequired={true}
+              value={bookingStatus}
+              setValue={setBookingStatus}
+              id="booking-status"
+            >
+              <option value="" disabled>
+                Select Booking Status
+              </option>
+              <option value="Payment Confirmed">Payment Confirmed</option>
+              <option value="Awaiting Payment">Awaiting Payment</option>
+            </Select>
+            <div className="w-full flex">
+              <label className=" border p-3 rounded-l-md w-full">
+                {data?.first_name
+                  ? `${data?.first_name} ${data?.last_name}`
+                  : "Assign to Customer"}
+              </label>
+              <button
+                type="button"
+                onClick={() => assignCustomer()}
+                title="assign customer"
+                className=" text-primary rounded-r-md border-primary border flex justify-center items-center p-3"
               >
-                <option value="" disabled>
-                  Select Method of payment
-                </option>
-                <option value="paystack">Paystack</option>
-              </Select>
-              <Select
-                isRequired={true}
-                value={bookingStatus}
-                setValue={setBookingStatus}
-                id="booking-status"
-              >
-                <option value="" disabled>
-                  Select Booking Status
-                </option>
-                <option value="Payment Confirmed">Payment Confirmed</option>
-                <option value="Awaiting Payment">Awaiting Payment</option>
-              </Select>
-              <div className="w-full flex">
-                <label className=" border p-3 rounded-l-md w-full">
-                  {data?.first_name
-                    ? `${data?.first_name} ${data?.last_name}`
-                    : "Assign to Customer"}
-                </label>
-                <button
-                  type="button"
-                  onClick={() => assignCustomer()}
-                  title="assign customer"
-                  className=" text-primary rounded-r-md border-primary border flex justify-center items-center p-3"
-                >
-                  <UserPlusIcon />
-                </button>
-              </div>
-              {/* <Select
+                <UserPlusIcon />
+              </button>
+            </div>
+            {/* <Select
               isRequired={true}
               value={rate}
               setValue={setRate}
@@ -397,31 +399,30 @@ export default function QuickReservationFlow({
             >
               <option value="">Select Custom Rate</option>
             </Select> */}
-              <TextInput
-                inputType="email"
-                isRequired={true}
-                value={email}
-                setValue={setEmail}
-                id="customer-email-quick-reservation"
-                placeholder="Customer Email"
-                readonly={data?.email ? true : false}
-              />
-              <TextAreaInput
-                value={customerMetaData}
-                setValue={setCustomerMetadata}
-                id="customer-information"
-                isRequired={false}
-                placeholder="Customer information"
-              />
-              <LoadingButton
-                type="submit"
-                label="Save Bookings"
-                disabled={false}
-                isLoading={isMakingReservation}
-              />
-            </div>
-          )}
-        </div>
+            <TextInput
+              inputType="email"
+              isRequired={true}
+              value={email}
+              setValue={setEmail}
+              id="customer-email-quick-reservation"
+              placeholder="Customer Email"
+              readonly={data?.email ? true : false}
+            />
+            <TextAreaInput
+              value={customerMetaData}
+              setValue={setCustomerMetadata}
+              id="customer-information"
+              isRequired={false}
+              placeholder="Customer information"
+            />
+            <LoadingButton
+              type="submit"
+              label="Save Bookings"
+              disabled={false}
+              isLoading={isMakingReservation}
+            />
+          </div>
+        )}
       </form>
     </div>
   );

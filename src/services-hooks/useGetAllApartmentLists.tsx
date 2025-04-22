@@ -54,7 +54,7 @@ export default function useGetAllApartmentLists({
       const foundPage = store_pagination.find(
         (item) => item?.pagination_data?.current_page === page
       );
-      if (foundPage && !remakeRequest && sort === "desc") {
+      if (foundPage && !remakeRequest) {
         setPagination(foundPage?.pagination_data);
         dispatch(updateApartmentList({ data: foundPage?.data }));
       } else {

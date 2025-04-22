@@ -1,3 +1,9 @@
+##### 22.04.2025
+
+> Noticed bugs resolution
+> Request table Bugs resolution
+> Booking calendar overview pagination fix
+
 ##### 21.04.2025
 
 > Split Stay logic and UI placements
