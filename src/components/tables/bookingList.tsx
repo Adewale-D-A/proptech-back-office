@@ -88,7 +88,7 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
             checkOut: formatDate(data?.check_out_date),
             status: data?.payment_status,
           },
-        ].map((request, index) => {
+        ].map((request) => {
           return (
             <tr key={request?.id} className=" border-b">
               <td>{request?.id}</td>

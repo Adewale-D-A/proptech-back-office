@@ -3,7 +3,6 @@ import TableSearch from "../inputs/search/table-search";
 import Filter from "../filterAndSort/filter";
 import NoResult from "../noResult";
 import Pagination from "../pagination";
-import ExportSelect from "../inputs/select/exportSelect";
 import Select from "../inputs/select";
 import PenIcon from "../../assets/icons/pen";
 import BinIcon from "../../assets/icons/bin-icon";
@@ -23,6 +22,7 @@ import ExportToCSV from "../export-to-csv";
 import { employeesExportFormater } from "../../utils/export-formerter-functions";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import useGetRoles from "../../services-hooks/useGetRoles";
+import Sort from "../filterAndSort/sort";
 
 export default function EmployeesLists() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -39,7 +39,7 @@ export default function EmployeesLists() {
     end_date: string;
   }>();
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("desc");
+  const [sort, setSort] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
@@ -47,7 +47,7 @@ export default function EmployeesLists() {
       page: currentPage,
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
-      sort: sort,
+      sort,
       search,
       category,
     });
@@ -128,12 +128,15 @@ export default function EmployeesLists() {
                 {pagination?.total} total{" "}
               </span>
             </h2>{" "}
-            <div className=" w-fit flex items-center gap-3">
+            <div className=" w-fit flex items-center flex-col md:flex-row gap-3">
               <ExportToCSV
                 dataset={data}
                 jsonToCSVReformerter={employeesExportFormater}
                 fileName="employees-list"
               />
+              <div className="w-fit min-w-28">
+                <Sort id="employee-sort" label="" setSort={setSort} />
+              </div>
               {admin?.create && (
                 <LoadingButton
                   label="New employee"

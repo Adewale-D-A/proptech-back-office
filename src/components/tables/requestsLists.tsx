@@ -138,10 +138,9 @@ export default function RequestsListTable({ header }: { header: string[] }) {
                         <TableActionDropDown>
                           <>
                             <MenuItem>
-                              {" "}
                               <Link
                                 to={`/bookings/request-details/${item?.id}`}
-                                className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                                className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                               >
                                 View Details
                               </Link>
@@ -153,7 +152,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
                                   onClick={() => {
                                     markAsResolved(item);
                                   }}
-                                  className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                                  className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                                 >
                                   Mark As Resolved
                                 </button>
@@ -167,7 +166,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
                                     setSelectedId(String(item?.id));
                                     setOpenDeleteConfirmation(true);
                                   }}
-                                  className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                                  className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                                 >
                                   Delete Request
                                 </button>
