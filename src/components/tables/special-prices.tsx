@@ -26,7 +26,7 @@ export default function SpecialPricesTable() {
     start_date: string;
     end_date: string;
   }>();
-  // const [sort, setSort] = useState("desc");
+  // const [sort, setSort] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, pagination, isLoading } = useGetSpecialPrices({

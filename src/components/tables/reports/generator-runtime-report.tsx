@@ -33,7 +33,7 @@ export default function GeneratorRuntimeReportListTable() {
     end_date: string;
   }>();
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("desc");
+  const [sort, setSort] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetALlGeneratorRuntimeReports({

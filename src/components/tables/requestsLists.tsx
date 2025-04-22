@@ -30,7 +30,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
     start_date: string;
     end_date: string;
   }>();
-  const [sort, setSort] = useState("desc");
+  const [sort, setSort] = useState("asc");
 
   const [openUpdateRequestStatus, setOpenUpdateRequestStatus] = useState(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
