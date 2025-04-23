@@ -12,6 +12,7 @@ import { removeAmenity } from "../../stores/apiData/amenities";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import RenderIcon from "../icon-picker/render-icon";
 
 export default function AmenitiesListsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -64,12 +65,13 @@ export default function AmenitiesListsTable() {
                     <tr key={item?.id} className=" border-b">
                       <td>{item?.name}</td>
                       <td>
-                        <img
+                        <RenderIcon value={item?.icon_name} />
+                        {/* <img
                           src={item?.image}
                           alt={item?.name}
                           title={item?.name}
                           className=" w-10 h-auto"
-                        />
+                        /> */}
                       </td>
                       <td>{item?.description}</td>
                       <td>

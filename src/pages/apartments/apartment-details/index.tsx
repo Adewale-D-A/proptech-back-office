@@ -53,7 +53,7 @@ export default function ApartmentDetail() {
 
   const deleteApartment = useCallback(() => {
     setOpenDeleteConfirmation(false);
-  }, [id]);
+  }, []);
 
   return (
     <>

@@ -1,3 +1,7 @@
+##### 23.04.2025
+
+> Icons setup
+
 ##### 22.04.2025
 
 > Additional service export function table update

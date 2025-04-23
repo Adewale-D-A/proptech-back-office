@@ -19,6 +19,7 @@ import { apartmentExportFormater } from "../../utils/export-formerter-functions"
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import RenderIcon from "../icon-picker/render-icon";
 
 export default function ApartmentListsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -122,7 +123,16 @@ export default function ApartmentListsTable() {
                       <td>
                         <div className=" flex items-center flex-wrap gap-2">
                           {request?.amenities?.map((item) => (
-                            <span key={item?.id}>{item?.name},</span>
+                            <span
+                              key={item?.id}
+                              className=" flex items-center gap-2"
+                            >
+                              <RenderIcon
+                                value={item?.icon_name}
+                                className=" w-4 h-4 text-gray-400"
+                              />{" "}
+                              {item?.name},
+                            </span>
                           ))}
                         </div>
                       </td>

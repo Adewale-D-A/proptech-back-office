@@ -3,6 +3,7 @@ export type amenity = {
   name: string;
   slug: string;
   description: string;
+  icon_name: string;
   image: string;
   ordering_position: number;
   created_at: string;

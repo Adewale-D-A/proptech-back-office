@@ -1,7 +1,7 @@
 import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import TextInput from "../inputs/textInput";
 import LoadingButton from "../button";
-import FileInput from "../inputs/fileInput";
+// import FileInput from "../inputs/fileInput";
 import Select from "../inputs/select";
 import useGetAmenity from "../../services-hooks/useGetAmenity";
 import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
@@ -9,6 +9,8 @@ import { useAppDispatch } from "../../stores/hooks";
 import { addAmenity, replaceAmenity } from "../../stores/apiData/amenities";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import TextAreaInput from "../inputs/textArea";
+import PickIcon from "../icon-picker/pick-icon";
+import { iconPack } from "../icon-picker/icon-library";
 
 export default function AddEditAmenities({
   id,
@@ -29,6 +31,7 @@ export default function AddEditAmenities({
     size: number;
     preview: string;
   }>({} as any);
+  const [iconName, setIconName] = useState("");
   // const [preInstalledCharacters, setPreInstralledCharacters] = useState("");
   // const [fontIconHTML, setFontIconHTML] = useState("");
   // const [room, setRoom] = useState("");
@@ -39,11 +42,12 @@ export default function AddEditAmenities({
   //auto update fields
   useEffect(() => {
     if (id) {
-      const { name, image, ordering_position, description } = data;
+      const { name, image, ordering_position, description, icon_name } = data;
       if (name) {
         setTitle(name);
         setFile({ name, size: 100, preview: image || "" });
         setDescription(description || "");
+        setIconName(icon_name || "");
         // setPreInstralledCharacters(preInstalledCharacters);
         // setFontIconHTML(fontIconHTML);
         // setRoom(room);
@@ -63,8 +67,9 @@ export default function AddEditAmenities({
       const payload = {
         name: title,
         description: description,
-        image: file,
-        ordering_position: ordering,
+        // image: file,
+        icon_name: iconName,
+        // ordering_position: ordering,
       };
       try {
         if (id) {
@@ -96,8 +101,12 @@ export default function AddEditAmenities({
         setIsCreating(false);
       }
     },
-    [title, file, description, ordering, id]
+    [title, iconName, file, description, ordering, id]
   );
+
+  const iconSelected = useCallback((item: iconPack) => {
+    setIconName(item?.value);
+  }, []);
 
   return (
     <div className="w-full">
@@ -111,20 +120,21 @@ export default function AddEditAmenities({
             id="Title"
             placeholder="Enter Title"
           />
-          <FileInput
+          <PickIcon handleSelection={iconSelected} defaultIconName={iconName} />
+          <TextAreaInput
+            isRequired={false}
+            placeholder="Description"
+            id="description"
+            setValue={setDescription}
+            value={description}
+          />
+          {/* <FileInput
             value={file}
             setValue={setFile}
             label="Choose File"
             isRequired={true}
             id="amenity-image"
-          />
-          <TextAreaInput
-            isRequired={false}
-            placeholder="description"
-            id="description"
-            setValue={setDescription}
-            value={description}
-          />
+          /> */}
           {/* <Select
             isRequired={true}
             value={preInstalledCharacters}
@@ -155,7 +165,7 @@ export default function AddEditAmenities({
             </option>
             <option value="1-bedroom">One bedroom</option>
           </Select> */}
-          <Select
+          {/* <Select
             isRequired={true}
             value={ordering}
             setValue={setOrdering}
@@ -169,7 +179,7 @@ export default function AddEditAmenities({
                 {index}
               </option>
             ))}
-          </Select>
+          </Select> */}
         </div>
         <div className=" flex items-center gap-5">
           <LoadingButton
