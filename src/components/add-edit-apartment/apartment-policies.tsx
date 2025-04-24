@@ -184,9 +184,9 @@ export default function AddEditApartmentPolicies({
             type={"text"}
             className=" w-full outline-none"
           />
-          <span className=" bg-gray-200 rounded-md px-3 py-1 whitespace-nowrap">
+          {/* <span className=" bg-gray-200 rounded-md px-3 py-1 whitespace-nowrap">
             Per Night
-          </span>
+          </span> */}
         </div>
       </div>
       {/* apartment max guests */}

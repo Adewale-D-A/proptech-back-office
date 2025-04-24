@@ -114,7 +114,7 @@ export default function BookingsOverview() {
             </h4>
             <div className=" w-fit">
               <LinkButton
-                url="/bookings/new-booking"
+                url={`/bookings/new-booking?apt_id=${selectedAprt?.id || ""}`}
                 label="New Booking"
                 startIcon={<PlusIcon />}
               />

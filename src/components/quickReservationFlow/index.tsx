@@ -363,6 +363,8 @@ export default function QuickReservationFlow({
                 Select Method of payment
               </option>
               <option value="paystack">Paystack</option>
+              <option value="cash">Cash</option>
+              <option value="transfer">Transfer</option>
             </Select>
             <Select
               isRequired={true}

@@ -28,6 +28,8 @@ import DateInput from "../../../components/inputs/dateInput";
 import reservationValidator from "../../../utils/reservation-validator";
 import MultipleSelect from "../../../components/inputs/select/multipleSelect";
 import monthsDays from "../../../assets/days-months.json";
+import { useNavigate } from "react-router-dom";
+import purgeEmptyPayload from "../../../utils/remove-empty-payload";
 const breadCrumb = [
   {
     url: "/pricing/special-prices",
@@ -44,6 +46,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { data } = useGetSpecialPrice({ id });
+  const navigate = useNavigate();
 
   // update page props on component mount
   useLayoutEffect(() => {
@@ -76,7 +79,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
   const [selectedApt, setSelectedApt] = useState<
     { id: string; name: string }[]
   >([]);
-  const [priceType, setPriceType] = useState("percentage ");
+  const [priceType, setPriceType] = useState("percentage");
   const [resuseable, setReusable] = useState(false);
 
   const [isSaving, setIsSaving] = useState(false);
@@ -158,8 +161,8 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
           validity: validity, //temporary or permanent
           is_reusable: resuseable ? "yes" : "no", // yes or no
           applicable_shortlets: selectedApt?.map((item) => item?.id), // required if applicable_to_shortlet is specific
-          price: value, //required if price_type is price
-          percentage: value, //required if price_type is percentage
+          price: priceType === "price" ? value : "", //required if price_type is price
+          percentage: priceType === "percentage" ? value : "", //required if price_type is percentage
         };
 
         const newPayload = Object.fromEntries(
@@ -170,15 +173,19 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
               : true
           )
         );
+        const updatePayload = purgeEmptyPayload({ payload: newPayload });
         if (id) {
-          const putPaload = {
-            name: name,
-            applicable_shortlets: selectedApt?.map((item) => item?.id),
-            price: value,
-          };
-          const response = await axios.put("/admin/special-price", putPaload);
+          // const putPaload = {
+          //   name: name,
+          //   applicable_shortlets: selectedApt?.map((item) => item?.id),
+          //   price: value,
+          // };
+          const response = await axios.put(
+            `/admin/special-price/${id}`,
+            updatePayload
+          );
           const { data, message } = response?.data || {};
-          const response_data = data?.restriction;
+          const response_data = data?.special_price;
           dispatch(replaceSpecialPricesInList(response_data));
           dispatch(
             openSnackbar({
@@ -187,7 +194,10 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
             })
           );
         } else {
-          const response = await axios.post("/admin/special-price", newPayload);
+          const response = await axios.post(
+            "/admin/special-price",
+            updatePayload
+          );
           const { data, message } = response?.data || {};
           const response_data = data?.special_price;
           dispatch(addSpecialPricesToList(response_data));
@@ -198,6 +208,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
             })
           );
         }
+        navigate("/pricing/special-prices");
       } catch (error) {
       } finally {
         setIsSaving(false);

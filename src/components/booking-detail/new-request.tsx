@@ -83,7 +83,9 @@ export default function NewRequest({ setValue }: { setValue: Function }) {
           Select applicable booking apartment
         </option>
         {user_bookings?.map((item) => (
-          <option value={item?.shortlet_id}>{item?.shortlet?.name}</option>
+          <option key={item?.shortlet_id} value={item?.shortlet_id}>
+            {item?.shortlet?.name}
+          </option>
         ))}
       </Select>
       <TextInput
