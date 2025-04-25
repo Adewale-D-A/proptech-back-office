@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
 import Pagination from "../pagination";
 import NoResult from "../noResult";
 import DeleteConfirmation from "../infoModal/delete-confirmation";

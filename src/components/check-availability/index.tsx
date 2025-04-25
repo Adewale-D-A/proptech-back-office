@@ -66,6 +66,7 @@ export default function CheckAvailability({
             id="check-in-date"
             placeholder="Check-in Date"
             label="Check-in Date"
+            allowOnlyFutureDates={true}
           />
           <DateInput
             inputType="date"
@@ -75,6 +76,7 @@ export default function CheckAvailability({
             id="check-out-date"
             placeholder="Check-out Date"
             label="Check-out Date"
+            allowOnlyFutureDates={true}
           />
 
           <Select

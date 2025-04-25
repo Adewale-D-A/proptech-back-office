@@ -4,7 +4,6 @@ import Pagination from "../pagination";
 import { useAppDispatch } from "../../stores/hooks";
 import NoResult from "../noResult";
 import useGetSpecialPrices from "../../services-hooks/pricing/useGetSpecialPrices";
-import MobileSpecialPrices from "./mobile/specialPrices";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import useAxios from "../../useHooks/useAxios";
 import { removeSpecialPricesInList } from "../../stores/apiData/special-prices";
@@ -12,6 +11,7 @@ import TableSearch from "../inputs/search/table-search";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import currencyFormat from "../../utils/currency-formatter";
 
 export default function SpecialPricesTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -77,9 +77,11 @@ export default function SpecialPricesTable() {
             <table className=" w-full">
               <thead>
                 <tr>
-                  {["S/N", "Name", "Price", "Type", "Action"].map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
+                  {["S/N", "Name", "Price/value", "Type", "Action"].map(
+                    (head) => (
+                      <th key={head}>{head}</th>
+                    )
+                  )}
                 </tr>
               </thead>
               <tbody>
@@ -88,8 +90,12 @@ export default function SpecialPricesTable() {
                     <tr key={item?.id} className=" border-b">
                       <td className=" min-w-16">{index + 1}</td>
                       <td className=" min-w-16">{item?.name}</td>
-                      <td className=" text-lg  min-w-36">{`${item?.price}`}</td>
-                      <td className=" text-lg  min-w-36">{`${item?.type}`}</td>
+                      <td className=" text-lg  min-w-36">{`${
+                        item?.price_type === "price"
+                          ? currencyFormat(item?.price)
+                          : `${item?.percentage}%`
+                      }`}</td>
+                      <td className=" text-lg  min-w-36">{`${item?.price_type}`}</td>
 
                       <td>
                         <TableActionDropDown>

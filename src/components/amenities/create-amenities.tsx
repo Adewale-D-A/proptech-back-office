@@ -2,15 +2,16 @@ import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import TextInput from "../inputs/textInput";
 import LoadingButton from "../button";
 // import FileInput from "../inputs/fileInput";
-import Select from "../inputs/select";
+// import Select from "../inputs/select";
+// import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
 import useGetAmenity from "../../services-hooks/useGetAmenity";
-import useAxiosMultipart from "../../useHooks/useAxiosMultipart";
 import { useAppDispatch } from "../../stores/hooks";
 import { addAmenity, replaceAmenity } from "../../stores/apiData/amenities";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import TextAreaInput from "../inputs/textArea";
 import PickIcon from "../icon-picker/pick-icon";
 import { iconPack } from "../icon-picker/icon-library";
+import useAxios from "../../useHooks/useAxios";
 
 export default function AddEditAmenities({
   id,
@@ -19,7 +20,7 @@ export default function AddEditAmenities({
   id?: string;
   setOpen: Function;
 }) {
-  const axios = useAxiosMultipart({
+  const axios = useAxios({
     disableSuccMssg: false,
     disableErrMssg: false,
   });
@@ -42,12 +43,12 @@ export default function AddEditAmenities({
   //auto update fields
   useEffect(() => {
     if (id) {
-      const { name, image, ordering_position, description, icon_name } = data;
+      const { name, image, ordering_position, description } = data;
       if (name) {
         setTitle(name);
         setFile({ name, size: 100, preview: image || "" });
         setDescription(description || "");
-        setIconName(icon_name || "");
+        setIconName(image || "");
         // setPreInstralledCharacters(preInstalledCharacters);
         // setFontIconHTML(fontIconHTML);
         // setRoom(room);
@@ -67,8 +68,8 @@ export default function AddEditAmenities({
       const payload = {
         name: title,
         description: description,
-        // image: file,
-        icon_name: iconName,
+        image: iconName,
+        // icon_name: iconName,
         // ordering_position: ordering,
       };
       try {

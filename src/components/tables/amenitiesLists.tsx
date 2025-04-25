@@ -65,7 +65,7 @@ export default function AmenitiesListsTable() {
                     <tr key={item?.id} className=" border-b">
                       <td>{item?.name}</td>
                       <td>
-                        <RenderIcon value={item?.icon_name} />
+                        <RenderIcon value={item?.image} />
                         {/* <img
                           src={item?.image}
                           alt={item?.name}

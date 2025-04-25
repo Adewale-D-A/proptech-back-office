@@ -1,3 +1,4 @@
+import { bookingsById } from "./bookings";
 import { customersById } from "./customers";
 
 export type requests = {
@@ -17,6 +18,7 @@ export type requests = {
     name: string;
   };
   user: customersById;
+  booking: bookingsById;
 };
 export type requestLists = {
   id: string;

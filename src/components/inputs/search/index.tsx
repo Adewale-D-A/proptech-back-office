@@ -11,6 +11,11 @@ import useGetAllCustomersLists from "../../../services-hooks/useGetAllCustomersL
 import LoaderIcon from "../../../assets/icons/loader";
 import useGetAllApartmentLists from "../../../services-hooks/useGetAllApartmentLists";
 import useGetLocationGroupings from "../../../services-hooks/apartment/useGetLocationGroupings";
+import {
+  addRemovableImages,
+  addRemovableImages2,
+} from "../../../stores/inAppDataInterations/addEditApartmentInfo";
+import { useAppDispatch } from "../../../stores/hooks";
 
 export default function Search({
   id,
@@ -19,6 +24,7 @@ export default function Search({
   setValue,
   multipleSelect,
   updatelist,
+  defaultValues,
 }: {
   id: string;
   placeholder: string;
@@ -26,8 +32,10 @@ export default function Search({
   setValue?: Function;
   multipleSelect?: boolean;
   updatelist?: (item: { id: string; name: string }[]) => void;
+  defaultValues?: { id: string; name: string }[];
 }) {
   // states
+  const dispatch = useAppDispatch();
   const [keywords, setKeywords] = useState("");
   const [filteredResult, setFilteredResult] = useState<any>([]);
 
@@ -37,38 +45,17 @@ export default function Search({
   const [selected, setSelected] = useState(null);
 
   // customers list
-  const {
-    data: customers,
-    isLoading,
-    isFailed,
-    setIsFailed,
-    retryFunction,
-    pagination,
-  } = useGetAllCustomersLists({
+  const { data: customers, isLoading } = useGetAllCustomersLists({
     page: 1,
     search: componentId === "customer" ? keywords : "",
   });
   // location group
-  const {
-    data: location_data,
-    isLoading: location_loading,
-    isFailed: location_failed,
-    setIsFailed: location_set_failed,
-    retryFunction: location_retry,
-    pagination: location_pagination,
-  } = useGetLocationGroupings({
+  const { data: location_data } = useGetLocationGroupings({
     page: 1,
     search: componentId === "location-group" ? keywords : "",
   });
   // apartment lists
-  const {
-    data: apartments,
-    isLoading: apt_loading,
-    isFailed: apt_failed,
-    setIsFailed: apt_setFailed,
-    retryFunction: apt_retry,
-    pagination: apt_pagination,
-  } = useGetAllApartmentLists({
+  const { data: apartments, isLoading: apt_loading } = useGetAllApartmentLists({
     page: 1,
     search: componentId === "apartment" ? keywords : "",
   });
@@ -84,17 +71,19 @@ export default function Search({
     );
   }, [componentId, customers, apartments, location_data]);
 
+  // always update list when state change
   useEffect(() => {
-    if (updatelist) {
-      updatelist(selectedList);
-    }
+    updatelist?.(selectedList);
   }, [selectedList]);
+
+  // always update list when state change
+  useEffect(() => {
+    setSelectedList?.(defaultValues || []);
+  }, [defaultValues]);
 
   const onSelected = useCallback((item: any) => {
     setSelected(item);
-    if (setValue) {
-      setValue(item);
-    }
+    setValue?.(item);
     if (componentId === "apartment") {
       setKeywords(item ? `${item?.name}` : "");
       addToList(item);
@@ -115,13 +104,28 @@ export default function Search({
 
   const addToList = useCallback((item: { id: string; name: string }) => {
     if (item?.id) {
-      setSelectedList((prev) => [...prev, item]);
+      setSelectedList((prev) => {
+        const found = prev.find((val) => String(val.id) === String(item?.id));
+        if (found) {
+          return prev;
+        }
+        return [...prev, item];
+      });
+      setKeywords("");
     }
   }, []);
+
   const removeFromList = useCallback((id: string) => {
     setSelectedList((prev) => {
-      return prev.filter((item) => item?.id !== id);
+      return prev.filter((item) => String(item?.id) !== String(id));
     });
+    if (id) {
+      if (componentId === "customer") {
+        dispatch(addRemovableImages2({ id: id }));
+      } else {
+        dispatch(addRemovableImages({ id: id }));
+      }
+    }
   }, []);
 
   return (
@@ -135,10 +139,14 @@ export default function Search({
           {selectedList.map((item) => (
             <span
               key={item?.id}
-              className=" p-2 bg-primary/20 text-primary flex items-center gap-1"
+              className=" p-2 bg-primary text-white flex items-center gap-1 rounded-md"
             >
               {item?.name}
-              <button onClick={() => removeFromList(item?.id)}>
+              <button
+                type="button"
+                onClick={() => removeFromList(item?.id)}
+                className=" text-white hover:text-red-500 hover:scale-125 transition-all"
+              >
                 <CancelIcon />
               </button>
             </span>
@@ -147,7 +155,7 @@ export default function Search({
       )}
       <label
         htmlFor={id}
-        className=" p-1 flex items-center gap-2 border-gray-700 border rounded-lg text-sm"
+        className=" p-1 px-3 flex items-center gap-2 border-gray-700 border rounded-lg text-sm"
       >
         {isLoading || apt_loading ? (
           <LoaderIcon className=" animate-spin size-6" />

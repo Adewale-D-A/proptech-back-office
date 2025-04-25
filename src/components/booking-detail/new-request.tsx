@@ -1,7 +1,7 @@
 import { SyntheticEvent, useCallback, useState } from "react";
 import Select from "../inputs/select";
 import LoadingButton from "../button";
-import Search from "../inputs/search";
+// import Search from "../inputs/search";
 import TextAreaInput from "../inputs/textArea";
 import { useAppDispatch } from "../../stores/hooks";
 import { addRequestsToList } from "../../stores/apiData/requests-lists";
@@ -41,7 +41,21 @@ export default function NewRequest({ setValue }: { setValue: Function }) {
           };
           const response = await axios.post("/admin/user-request", payload);
           const { data, messsage } = response?.data || {};
-          dispatch(addRequestsToList(data));
+          dispatch(
+            addRequestsToList({
+              ...data,
+              user: {
+                first_name: seletedCustomer?.first_name,
+                last_name: seletedCustomer?.last_name,
+              },
+              shortlet: {
+                name:
+                  user_bookings?.find(
+                    (item) => String(item?.shortlet_id) == String(apartmentId)
+                  )?.shortlet?.name || "",
+              },
+            })
+          );
           dispatch(
             openSnackbar({
               message: messsage || "User request created succefully",

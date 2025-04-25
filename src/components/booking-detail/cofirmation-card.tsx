@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { customersById } from "../../types/apiData/customers";
 import Status from "../status";
 
@@ -18,7 +19,12 @@ export default function ConfirmationCard({ data }: { data: customersById }) {
         </div>
       </div>
       <div className=" flex flex-col gap-1 items-end">
-        <h6 className=" font-semibold">ID Number: ***</h6>
+        <Link
+          to={`/customers/customer-details/${data?.id}`}
+          className=" font-semibold"
+        >
+          ID Number: {data?.id}
+        </Link>
         <Status status="Confirmed" />
       </div>
     </div>
