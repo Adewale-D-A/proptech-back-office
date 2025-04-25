@@ -50,11 +50,9 @@ export default function ModalTemplate({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel
-                className={`w-full ${
-                  className ? className : "max-w-screen-sm"
-                }  transform overflow-hidden fit  rounded-lg bg-white p-4 text-left align-middle shadow-xl transition-all`}
+                className={`w-full transform overflow-hidden fit  rounded-lg bg-white p-4 text-left align-middle shadow-xl transition-all`}
               >
-                <div className="flex flex-col gap-3 justify-center items-center">
+                <div className="w-full xl:min-w-[700px] flex flex-col gap-3 justify-center items-center">
                   {showXicon && (
                     <div className="flex justify-between w-full items-center mb-8">
                       <h4 className=" font-bold text-[#101828] text-lg flex items-center gap-2">

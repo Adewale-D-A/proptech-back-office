@@ -101,7 +101,7 @@ export default function PickIcon({
           />
         </button>
         {!isMenuDocked && (
-          <div className="w-full p-2 border z-10 absolute top-14 left-0 bg-gray-50 flex flex-col gap-2">
+          <div className="w-full p-2 border z-10 absolute h-40  overflow-y-auto top-14 left-0 bg-gray-50 flex flex-col gap-2">
             <input
               id="search-icons"
               placeholder={placeholder || "Search icon"}

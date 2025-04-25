@@ -96,7 +96,7 @@ export default function ChatHistory({
               variant={variant}
             />
           </div>
-          <div className="w-full min-h-96 p-3 flex flex-col gap-4">
+          <div className="w-full max-h-96 h-full overflow-y-auto p-3 flex flex-col gap-4">
             {data?.map((item) => (
               <MessageItemIdentifier key={item?.id} messageItem={item} />
             ))}

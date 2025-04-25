@@ -134,7 +134,9 @@ export default function AddEditAdditionalService({
           Select applicable active booking
         </option>
         {user_bookings?.map((item) => (
-          <option value={item?.id}>{item?.shortlet?.name}</option>
+          <option key={item?.id} value={item?.id}>
+            {item?.shortlet?.name}
+          </option>
         ))}
       </Select>
       <Select
@@ -147,7 +149,9 @@ export default function AddEditAdditionalService({
           Select applicable service type
         </option>
         {service_types?.map((item) => (
-          <option value={item?.id}>{item?.name}</option>
+          <option key={item?.id} value={item?.id}>
+            {item?.name}
+          </option>
         ))}
       </Select>
 

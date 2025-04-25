@@ -78,7 +78,9 @@ export default function Search({
 
   // always update list when state change
   useEffect(() => {
-    setSelectedList?.(defaultValues || []);
+    setSelectedList?.(
+      defaultValues?.constructor === Array ? defaultValues : []
+    );
   }, [defaultValues]);
 
   const onSelected = useCallback((item: any) => {

@@ -9,6 +9,8 @@ import CustomRating from "../rating";
 import ExportSelect from "../inputs/select/exportSelect";
 import Select from "../inputs/select";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import ExportToCSV from "../export-to-csv";
+import { ratingsExportFormater } from "../../utils/export-formerter-functions";
 
 export default function RatingsAndReviewsTable() {
   const [filterOption, setFilterOption] = useState("");
@@ -47,11 +49,9 @@ export default function RatingsAndReviewsTable() {
             isRequired={true}
             value={filterOption}
             setValue={setFilterOption}
-            id="reviews-rating-filter-1"
+            id="reviews-rating-filter"
           >
-            <option value="" disabled>
-              All questions
-            </option>
+            <option value="">All questions</option>
           </Select>
           <Filter actionHandler={handleFiltering} />
         </div>
@@ -60,7 +60,11 @@ export default function RatingsAndReviewsTable() {
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Ratings & Reviews</h2>
           <div className=" w-fit">
-            <ExportSelect id="ratings-and-reviews" />
+            <ExportToCSV
+              dataset={data}
+              jsonToCSVReformerter={ratingsExportFormater}
+              fileName="rating-and-reviews"
+            />
           </div>
         </div>
         <div className="block px-5">

@@ -236,7 +236,7 @@ export default function EmployeesLists() {
         setOpen={setOpenEmployeeModal}
         showXicon={true}
         title={selectedId ? "Edit" : "Add new employee"}
-        className=" max-w-[800px] lg:ml-20"
+        // className=" max-w-[800px] lg:ml-20"
       >
         <AddEditEmployee id={selectedId} setOpen={setOpenEmployeeModal} />
       </ModalTemplate>

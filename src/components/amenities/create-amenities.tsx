@@ -111,7 +111,7 @@ export default function AddEditAmenities({
 
   return (
     <div className="w-full">
-      <form className=" flex flex-col gap-10" onSubmit={saveAmenity}>
+      <form className="w-full flex flex-col gap-10" onSubmit={saveAmenity}>
         <div className=" w-full grid grid-cols-1 gap-5">
           <TextInput
             inputType="text"

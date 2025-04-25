@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
   SyntheticEvent,
   useCallback,
@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import PercentageBadgeIcon from "../../../../assets/icons/percentage-badge";
-import { useAppDispatch } from "../../../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../stores/hooks";
 import { updatePageProperties } from "../../../../stores/appFunctionality/pageProperties";
 import LoadingButton from "../../../../components/button";
 import DateInput from "../../../../components/inputs/dateInput";
@@ -25,10 +25,14 @@ import {
 import { openSnackbar } from "../../../../stores/appFunctionality/snackbar";
 import useAxiosMultipart from "../../../../useHooks/useAxiosMultipart";
 import useGetOffer from "../../../../services-hooks/userGetOffer";
+import { formatDateToString } from "../../../../utils/isoDateConverter";
+import purgeEmptyPayload from "../../../../utils/remove-empty-payload";
+import { clearRemovableIdStore } from "../../../../stores/inAppDataInterations/addEditApartmentInfo";
+import LinkButton from "../../../../components/button/linkButton";
 
 const breadCrumb = [
   {
-    url: "/plans-and-promotions/tax-rates",
+    url: "/plans-and-promotions/packages-and-offers",
     label: "Plans & Promotions",
     icon: <PercentageBadgeIcon />,
   },
@@ -44,13 +48,14 @@ export default function AddNewPackageAndOffer() {
     disableSuccMssg: false,
     disableErrMssg: false,
   });
-  const naviagte = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction } = useGetOffer(
-    {
-      id,
-    }
+  const { data } = useGetOffer({
+    id,
+  });
+  const removedAptIdSet = useAppSelector(
+    (state) => state.addEditApartmentInfo.value.data?.removeImages
   );
 
   // update page props on component mount
@@ -116,8 +121,8 @@ export default function AddNewPackageAndOffer() {
         conditions,
         benefits,
       } = data;
-      const startDateValue = new Date(start_date)?.toISOString()?.slice(0, 10);
-      const endDateValue = new Date(end_date)?.toISOString()?.slice(0, 10);
+      const startDateValue = formatDateToString(new Date(start_date));
+      const endDateValue = formatDateToString(new Date(end_date));
 
       setName(name);
       setDescription(description);
@@ -127,18 +132,19 @@ export default function AddNewPackageAndOffer() {
       setValidityEndDate(endDateValue);
       setIsAllRooms(applicable_to === "all" ? true : false);
 
-      setMinNights(String(minimum_number_of_nights));
-      setMaxNights(String(maximum_number_of_nights));
-      setType(type);
+      setMinNights(String(minimum_number_of_nights || ""));
+      setMaxNights(String(maximum_number_of_nights || ""));
+      setType(type || "");
       setCost(String(price) || "");
       setPercentage(String(percentage) || "");
       setConditions(conditions);
       setBenefits(benefits);
     }
   }, [data]);
-  const saveAndClose = useCallback(() => {
-    naviagte("/plans-and-promotions/tax-rates");
-  }, []);
+
+  // const saveAndClose = useCallback(() => {
+  //   navigate("/plans-and-promotions/packages-and-offers");
+  // }, []);
 
   const handleSubmit = useCallback(
     async (e: SyntheticEvent) => {
@@ -160,6 +166,7 @@ export default function AddNewPackageAndOffer() {
         short_description: shortDescription,
         conditions: conditions,
         benefits: benefits,
+        remove_shortlets: removedAptIdSet,
       };
       // conditionally filter payload based on the offer parameters
       const newPayload = Object.fromEntries(
@@ -171,16 +178,19 @@ export default function AddNewPackageAndOffer() {
             : true
         )
       );
+      const updatedPayload = purgeEmptyPayload({ payload: newPayload });
       try {
         if (id) {
+          delete updatedPayload?.start_date;
+          delete updatedPayload?.end_date;
           const response = await axios.post(
             `/admin/offer/update/${id}`,
-            newPayload
+            updatedPayload
           );
           const dataset = response?.data?.data;
           dispatch(replacePackageAndOfferInList(dataset));
         } else {
-          const response = await axios.post("/admin/offer", newPayload);
+          const response = await axios.post("/admin/offer", updatedPayload);
           const dataset = response?.data?.data;
           dispatch(addPackageAndOfferToList(dataset));
         }
@@ -192,6 +202,8 @@ export default function AddNewPackageAndOffer() {
             isError: false,
           })
         );
+        dispatch(clearRemovableIdStore());
+        navigate("/plans-and-promotions/packages-and-offers");
       } catch (error) {
       } finally {
         setIsSubmitting(false);
@@ -214,6 +226,7 @@ export default function AddNewPackageAndOffer() {
       shortDescription,
       conditions,
       benefits,
+      removedAptIdSet,
     ]
   );
   return (
@@ -225,12 +238,17 @@ export default function AddNewPackageAndOffer() {
         <div className="w-full flex gap-4 justify-between border-b py-4">
           <h3 className="font-semibold text-xl">Add New Package/Offer</h3>
           <div className=" flex items-center gap-3">
-            <LoadingButton
+            {/* <LoadingButton
               type="button"
               isLoading={false}
               label="Close"
               variant={2}
               clickHandler={() => saveAndClose()}
+            /> */}
+            <LinkButton
+              url="/plans-and-promotions/packages-and-offers"
+              label="Close"
+              variant={2}
             />
             <LoadingButton
               type="submit"
@@ -268,6 +286,7 @@ export default function AddNewPackageAndOffer() {
                 id="validity-start-date"
                 placeholder="Validity Start Date"
                 label="Check-in Date"
+                readonly={Boolean(id)}
               />
               <DateInput
                 inputType="date"
@@ -277,6 +296,7 @@ export default function AddNewPackageAndOffer() {
                 id="validity-end-date"
                 placeholder="Validity End Date"
                 label="Check-in Date"
+                readonly={Boolean(id)}
               />
               {/* <CheckboxInput
                 value={excludeDates}
@@ -290,6 +310,7 @@ export default function AddNewPackageAndOffer() {
                 id="search-apartments"
                 multipleSelect={true}
                 updatelist={setSelectedApartments}
+                defaultValues={data?.applicable_shortlets}
               />
               <CheckboxInput
                 value={isAllRoomss}

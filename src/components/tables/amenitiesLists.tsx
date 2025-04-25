@@ -138,7 +138,7 @@ export default function AmenitiesListsTable() {
         setOpen={setOpenEditAmenity}
         showXicon={true}
         title="Edit Amenity"
-        className=" max-w-md"
+        className=""
       >
         <AddEditAmenities setOpen={setOpenEditAmenity} id={selectedId} />
       </ModalTemplate>

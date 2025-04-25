@@ -53,9 +53,9 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
   const { data: booking } = useGetResourceAccessChecker({
     resource: "booking",
   });
-  const { data: booking_email } = useGetResourceAccessChecker({
-    resource: "booking-email",
-  });
+  // const { data: booking_email } = useGetResourceAccessChecker({
+  //   resource: "booking-email",
+  // });
   return (
     <table className=" w-full text-xs overflow-x-auto">
       <thead className="">
@@ -78,7 +78,7 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
       <tbody className="">
         {[
           {
-            id: data?.id,
+            id: data?.user_id,
             customerName: `${data?.user?.first_name} ${data?.user?.last_name}`,
             apartnmentName: data?.shortlet?.name,
             bookingDate: formatDate(data?.created_at),
@@ -88,9 +88,9 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
             checkOut: formatDate(data?.check_out_date),
             status: data?.payment_status,
           },
-        ].map((request) => {
+        ].map((request, index) => {
           return (
-            <tr key={request?.id} className=" border-b">
+            <tr key={request?.id || index} className=" border-b">
               <td>{request?.id}</td>
               <td>{request?.customerName}</td>
               <td>{request?.bookingDate}</td>
@@ -104,16 +104,6 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
               <td>
                 <TableActionDropDown>
                   <>
-                    {/* {booking_email?.create && (
-                      <MenuItem>
-                        <button
-                          type="button"
-                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Resend Email
-                        </button>
-                      </MenuItem>
-                    )} */}
                     {booking?.update && (
                       <MenuItem>
                         <Link
@@ -124,6 +114,27 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
                         </Link>
                       </MenuItem>
                     )}
+                    {booking?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => confirmReservation()}
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Set To Be Confirmed
+                        </button>
+                      </MenuItem>
+                    )}
+                    {/* {booking_email?.create && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Resend Email
+                        </button>
+                      </MenuItem>
+                    )} */}
                     {/* <MenuItem>
                       <Link
                         to={`#`}
@@ -142,17 +153,6 @@ export default function BookingByIdList({ data }: { data: bookingsById }) {
                       </button>
                     </MenuItem>
                     )} */}
-                    {booking?.update && (
-                      <MenuItem>
-                        <button
-                          type="button"
-                          onClick={() => confirmReservation()}
-                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Set To Be Confirmed
-                        </button>
-                      </MenuItem>
-                    )}
                   </>
                 </TableActionDropDown>
               </td>
