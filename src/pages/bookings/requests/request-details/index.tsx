@@ -9,6 +9,7 @@ import RequestInformation from "../../../../components/booking-detail/request-in
 import useGetRequest from "../../../../services-hooks/useGetRequest";
 import useGetApartmentById from "../../../../services-hooks/useGetApartmentById";
 import useGetCustomerById from "../../../../services-hooks/useGetCustomerById";
+import formatDate from "../../../../utils/isoDateConverter";
 // import useGetBookingsByUserId from "../../../../services-hooks/bookings/bookingsByUserId";
 
 const breadCrumb = [
@@ -81,12 +82,16 @@ export default function RequestDetailsById() {
 
                 <div className=" flex items-start justify-between gap-4 pb-2 border-b">
                   <span className=" text-gray-500">Check-in Date</span>
-                  <span className="">***</span>
+                  <span className="">
+                    {formatDate(data?.booking?.check_in_date)}
+                  </span>
                 </div>
 
                 <div className=" flex items-start justify-between gap-4 pb-2 border-b">
                   <span className="text-gray-500">Check-out Date</span>
-                  <span className="">***</span>
+                  <span className="">
+                    {formatDate(data?.booking?.check_out_date)}
+                  </span>
                 </div>
                 <div className=" flex items-start justify-between gap-4 pb-2">
                   <span className="">Total Amount</span>

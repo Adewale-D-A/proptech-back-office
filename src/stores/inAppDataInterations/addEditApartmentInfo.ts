@@ -7,6 +7,7 @@ export const addEditApartmentInfo = createSlice({
       data: {
         id: "",
         removeImages: [] as number[],
+        removeImages2: [] as number[],
         apartmentDetails: {
           building_id: "",
           name: "",
@@ -57,10 +58,15 @@ export const addEditApartmentInfo = createSlice({
       const curremtState = state.value.data.removeImages;
       state.value.data.removeImages = [...curremtState, action?.payload?.id];
     },
+    addRemovableImages2: (state, action) => {
+      const curremtState = state.value.data.removeImages2;
+      state.value.data.removeImages2 = [...curremtState, action?.payload?.id];
+    },
     clearAllApartmentInfo: (state) => {
       state.value.data = {
         id: "",
         removeImages: [],
+        removeImages2: [],
         apartmentDetails: {
           building_id: "",
           name: "",
@@ -93,6 +99,12 @@ export const addEditApartmentInfo = createSlice({
         },
       };
     },
+    clearRemovableIdStore: (state) => {
+      state.value.data.removeImages = [];
+    },
+    clearRemovableIdStore2: (state) => {
+      state.value.data.removeImages = [];
+    },
   },
 });
 
@@ -102,7 +114,10 @@ export const {
   updateApartmentFeatures,
   updateApartmentPolicies,
   addRemovableImages,
+  addRemovableImages2,
   clearAllApartmentInfo,
+  clearRemovableIdStore,
+  clearRemovableIdStore2,
 } = addEditApartmentInfo.actions;
 
 export default addEditApartmentInfo.reducer;

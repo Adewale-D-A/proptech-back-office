@@ -1,5 +1,15 @@
+##### 25.04.2025
+
+> Backend bugs resolutions integrations and adjustments
+> Final stage bug resolution
+
+##### 23.04.2025
+
+> Icons setup
+
 ##### 22.04.2025
 
+> Additional service export function table update
 > Noticed bugs resolution
 > Request table Bugs resolution
 > Booking calendar overview pagination fix

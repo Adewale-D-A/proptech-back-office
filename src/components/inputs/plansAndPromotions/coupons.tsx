@@ -2,7 +2,7 @@ import { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import TextInput from "../textInput";
 import LoadingButton from "../../button";
 import Select from "../select";
-import { useAppDispatch } from "../../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../../stores/hooks";
 import {
   addCouponsToList,
   replaceCouponsInList,
@@ -12,6 +12,12 @@ import DateInput from "../dateInput";
 import useAxios from "../../../useHooks/useAxios";
 import useGetCoupon from "../../../services-hooks/useGetCoupon";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import { formatDateToString } from "../../../utils/isoDateConverter";
+import purgeEmptyPayload from "../../../utils/remove-empty-payload";
+import {
+  clearRemovableIdStore,
+  clearRemovableIdStore2,
+} from "../../../stores/inAppDataInterations/addEditApartmentInfo";
 
 export default function AddNewCoupon({
   setOpen,
@@ -23,8 +29,13 @@ export default function AddNewCoupon({
   const dispatch = useAppDispatch();
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction } =
-    useGetCoupon({ id });
+  const { data } = useGetCoupon({ id });
+  const removedAptIdSet = useAppSelector(
+    (state) => state.addEditApartmentInfo.value.data?.removeImages
+  );
+  const removedUsersIdSet = useAppSelector(
+    (state) => state.addEditApartmentInfo.value.data?.removeImages2
+  );
 
   const [code, setCode] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -64,8 +75,8 @@ export default function AddNewCoupon({
         minimum_amount,
         maximum_amount,
       } = data;
-      const startDateValue = new Date(start_date)?.toISOString()?.slice(0, 10);
-      const endDateValue = new Date(end_date)?.toISOString()?.slice(0, 10);
+      const startDateValue = formatDateToString(new Date(start_date));
+      const endDateValue = formatDateToString(new Date(end_date));
       // console.log(startDateValue);
       setCode(code);
       setStartDate(startDateValue);
@@ -75,10 +86,10 @@ export default function AddNewCoupon({
       setType(type);
       setValidity(validity);
       setIsReusable(is_reusable === 1 ? "yes" : "no");
-      setPrice(String(price));
-      setPercentage(String(percentage));
-      setMinAmount(String(minimum_amount));
-      setMaxAmount(String(maximum_amount));
+      setPrice(String(price || ""));
+      setPercentage(String(percentage || ""));
+      setMinAmount(String(minimum_amount || ""));
+      setMaxAmount(String(maximum_amount || ""));
     }
   }, [id, data]);
 
@@ -111,6 +122,8 @@ export default function AddNewCoupon({
         percentage: percentage, //required if type is percentage
         minimum_amount: minAmount,
         maximum_amount: maxAmount,
+        remove_shortlets: removedAptIdSet,
+        remove_users: removedUsersIdSet,
       };
 
       // conditionally filter payload based on the coupon parameters
@@ -127,28 +140,47 @@ export default function AddNewCoupon({
       );
 
       // put request payload reform
-      const putPayload = {
-        applicable_to_user: userApplicability, // all or specific
-        applicable_users: assignCustomers?.map((item) => item?.id),
-      };
-      const putNewPayload = Object.fromEntries(
-        Object.entries(putPayload).filter(([key]) =>
-          key === "applicable_users" && userApplicability === "all"
-            ? false
-            : true
-        )
-      );
+      // const putPayload = {
+      //   applicable_to_user: userApplicability, // all or specific
+      //   applicable_users: assignCustomers?.map((item) => item?.id),
+      // };
+      // const putNewPayload = Object.fromEntries(
+      //   Object.entries(putPayload).filter(([key]) =>
+      //     key === "applicable_users" && userApplicability === "all"
+      //       ? false
+      //       : true
+      //   )
+      // );
 
+      const updatedPayload = purgeEmptyPayload({ payload: newPayload });
       try {
         let response;
         if (id) {
-          response = await axios.put(`/admin/coupon/${id}`, putNewPayload);
+          delete updatedPayload?.start_date;
+          delete updatedPayload?.end_date;
+          response = await axios.put(`/admin/coupon/${id}`, updatedPayload);
           const dataset = response?.data?.data;
-          dispatch(replaceCouponsInList(dataset));
+          dispatch(
+            replaceCouponsInList({
+              ...dataset,
+              applicable_shortlet_count:
+                updatedPayload?.applicable_shortlets?.length || "All",
+              applicable_user_count:
+                updatedPayload?.applicable_users?.length || "All",
+            })
+          );
         } else {
-          response = await axios.post("/admin/coupon", newPayload);
+          response = await axios.post("/admin/coupon", updatedPayload);
           const dataset = response?.data?.data;
-          dispatch(addCouponsToList(dataset));
+          dispatch(
+            addCouponsToList({
+              ...dataset,
+              applicable_shortlet_count:
+                updatedPayload?.applicable_shortlets?.length || "All",
+              applicable_user_count:
+                updatedPayload?.applicable_users?.length || "All",
+            })
+          );
         }
         setOpen(false);
         dispatch(
@@ -159,6 +191,8 @@ export default function AddNewCoupon({
             isError: false,
           })
         );
+        dispatch(clearRemovableIdStore());
+        dispatch(clearRemovableIdStore2());
       } catch (error) {
       } finally {
         setIsSubmitting(false);
@@ -180,6 +214,8 @@ export default function AddNewCoupon({
       percentage,
       minAmount,
       maxAmount,
+      removedAptIdSet,
+      removedUsersIdSet,
     ]
   );
 
@@ -220,6 +256,7 @@ export default function AddNewCoupon({
             placeholder="Start date"
             label="Start date"
             readonly={Boolean(id)}
+            allowOnlyFutureDates={true}
           />
           <DateInput
             inputType="date"
@@ -230,6 +267,7 @@ export default function AddNewCoupon({
             placeholder="End date"
             label="End date"
             readonly={Boolean(id)}
+            allowOnlyFutureDates={true}
           />
         </div>
         {/* apartment select */}
@@ -238,7 +276,7 @@ export default function AddNewCoupon({
           value={apartmentApplicability}
           setValue={setApartmentApplicability}
           id="apartment-applicability"
-          readOnly={Boolean(id)}
+          // readOnly={Boolean(id)}
         >
           <option value="" disabled>
             Apartment
@@ -246,13 +284,14 @@ export default function AddNewCoupon({
           <option value="all">All apartments</option>
           <option value="specific">Specific apartments</option>
         </Select>
-        {apartmentApplicability === "specific" && !Boolean(id) && (
+        {apartmentApplicability === "specific" && (
           <Search
             componentId="apartment"
             placeholder="Assign to apartments"
             id="search-apartments"
             multipleSelect={true}
             updatelist={setAssignedApartments}
+            defaultValues={data?.applicable_shortlets}
           />
         )}
         {/* user selection */}
@@ -275,6 +314,7 @@ export default function AddNewCoupon({
             placeholder="Assign to customer"
             id="search-customer"
             updatelist={setAssignedCustomers}
+            defaultValues={data?.applicable_users}
           />
         )}
         <div className=" grid grid-cols-1  md:grid-cols-2 gap-3">
@@ -284,7 +324,7 @@ export default function AddNewCoupon({
             value={type}
             setValue={setType}
             id="coupon-type"
-            readOnly={Boolean(id)}
+            // readOnly={Boolean(id)}
           >
             <option value="" disabled>
               Select Coupon Type
@@ -300,7 +340,7 @@ export default function AddNewCoupon({
               setValue={setPrice}
               id="coupon-price"
               placeholder={"Enter price"}
-              readonly={Boolean(id)}
+              // readonly={Boolean(id)}
             />
           )}
           {type === "percentage" && (
@@ -311,7 +351,7 @@ export default function AddNewCoupon({
               setValue={setPercentage}
               id="coupon-percentage"
               placeholder={"Enter percentage"}
-              readonly={Boolean(id)}
+              // readonly={Boolean(id)}
             />
           )}
         </div>
@@ -323,7 +363,7 @@ export default function AddNewCoupon({
             value={validity}
             setValue={setValidity}
             id="validity"
-            readOnly={Boolean(id)}
+            // readOnly={Boolean(id)}
           >
             <option value="" disabled>
               Validity
@@ -336,7 +376,7 @@ export default function AddNewCoupon({
             value={isReusable}
             setValue={setIsReusable}
             id="is-reusable"
-            readOnly={Boolean(id)}
+            // readOnly={Boolean(id)}
           >
             <option value="" disabled>
               Reusable
@@ -355,7 +395,7 @@ export default function AddNewCoupon({
             setValue={setMinAmount}
             id="minimum-amount"
             placeholder={"Minimum amount"}
-            readonly={Boolean(id)}
+            // readonly={Boolean(id)}
           />
 
           <TextInput
@@ -365,7 +405,7 @@ export default function AddNewCoupon({
             setValue={setMaxAmount}
             id="maximum-amount"
             placeholder={"Maximum amount"}
-            readonly={Boolean(id)}
+            // readonly={Boolean(id)}
           />
         </div>
       </div>

@@ -14,7 +14,7 @@ export type specialPrices = {
   type: string;
   price_type: string;
   applicable_to_shortlet: string;
-  applicable_shortlets: string;
+  applicable_shortlets: [{ id: string; name: string }];
   is_deleted: number;
   deleted_at: string;
   deleted_by: string;

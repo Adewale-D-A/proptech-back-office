@@ -10,6 +10,7 @@ import NextArrowIcon from "../assets/icons/next-arrow";
 import NavigatePrevIcon from "../assets/icons/navigate-prev";
 import signOut from "../utils/auth/signOut";
 import PreviousArrowIcon from "../assets/icons/previous-arrow";
+import { ArrowUpRight } from "lucide-react";
 
 //full view
 function FullMenuView() {
@@ -43,29 +44,44 @@ function FullMenuView() {
     >
       {/* nav items section */}
       <div className=" flex flex-col gap-5">
-        <div className="w-full justify-between md:justify-center flex items-center gap-2 p-2 md:p-5">
-          <div className="flex items-center justify-center  gap-2 ">
-            <Link
-              to={"/dashboard-overview"}
-              className="flex items-center justify-center h-8 w-8 aspect-square rounded-full overflow-hidden"
-            >
-              <img src="/logo512.png" alt="avatar" className="w-full h-auto" />
-            </Link>
-            <div className={`text-center ${fullView ? "block" : "hidden"}`}>
-              <h5 className=" font-extrabold text-xl">99Apartments</h5>
+        <div>
+          <div className="w-full justify-between md:justify-center flex items-center gap-2 p-2 md:p-5">
+            <div className="flex items-center justify-center  gap-2 ">
+              <Link
+                to={"/dashboard-overview"}
+                className="flex items-center justify-center h-8 w-8 aspect-square rounded-full overflow-hidden"
+              >
+                <img
+                  src="/logo512.png"
+                  alt="avatar"
+                  className="w-full h-auto"
+                />
+              </Link>
+              <div className={`text-center ${fullView ? "block" : "hidden"}`}>
+                <h5 className=" font-extrabold text-xl">99Apartments</h5>
+              </div>
             </div>
-          </div>
 
-          {fullView && (
-            <button
-              type="button"
-              title="toggle-bar"
-              onClick={() => toggleMenu()}
-              className=" block md:hidden"
+            {fullView && (
+              <button
+                type="button"
+                title="toggle-bar"
+                onClick={() => toggleMenu()}
+                className=" block md:hidden"
+              >
+                <PreviousArrowIcon />
+              </button>
+            )}
+          </div>
+          <div className=" flex justify-center">
+            <a
+              href={process.env.REACT_APP_WEBSITE_URL || "#"}
+              target="_blank"
+              className=" flex items-center gap-2 text-white border border-white p-1 py-2 rounded-lg hover:border-green-400 transition-all hover:text-green-500 hover:scale-110"
             >
-              <PreviousArrowIcon />
-            </button>
-          )}
+              {fullView && <span>Website</span>} <ArrowUpRight />
+            </a>
+          </div>
         </div>
         <NavigationMenuItems />
       </div>

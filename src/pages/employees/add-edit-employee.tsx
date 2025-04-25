@@ -54,13 +54,7 @@ export default function AddEditEmployee({
   const [loading, setLoading] = useState(false);
 
   const { data } = useGetAdmin({ id });
-  const {
-    data: roleData,
-    isLoading,
-    isFailed,
-    setIsFailed,
-    retryFunction,
-  } = useGetRoles({
+  const { data: roleData } = useGetRoles({
     page: 1,
   });
 
@@ -169,125 +163,126 @@ export default function AddEditEmployee({
   );
 
   return (
-    <form onSubmit={handleSubmit} className="w-full">
-      <div className="w-full mb-6">
-        <h2 className="uppercase text-[#98A2B3] font-bold text-sm mb-6">
-          Personal details
-        </h2>
-        <div className="flex gap-7 items-center">
-          <FileInput
-            value={photo}
-            setValue={setPhoto}
-            label="Profile Image"
-            isRequired={false}
-            id="profile-image"
-          />
-          {/* <p className="font-medium text-sm text-[#344054]">Profile image</p>
+    <div className=" max-w-96 lg:max-w-screen-sm">
+      <form onSubmit={handleSubmit} className="">
+        <div className="w-full mb-6">
+          <h2 className="uppercase text-[#98A2B3] font-bold text-sm mb-6">
+            Personal details
+          </h2>
+          <div className="flex gap-7 items-center">
+            <FileInput
+              value={photo}
+              setValue={setPhoto}
+              label="Profile Image"
+              isRequired={false}
+              id="profile-image"
+            />
+            {/* <p className="font-medium text-sm text-[#344054]">Profile image</p>
           <div className="relative">
             <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
               <UserPlusIcon />
             </div>
           </div> */}
+          </div>
         </div>
-      </div>
-      <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
-        <TextInput
-          id="first_name"
-          placeholder="John"
-          isRequired={true}
-          value={firstName}
-          setValue={setFirstName}
-          inputType="text"
-          label="First name"
-        />
-        <TextInput
-          id="last_name"
-          placeholder="Doe"
-          isRequired={true}
-          value={lastName}
-          setValue={setLastName}
-          inputType="text"
-          label="Last name"
-        />
-        <TextInput
-          id="email"
-          placeholder="example@example.com"
-          isRequired={true}
-          value={email}
-          setValue={setEmail}
-          inputType="email"
-          label="Email address"
-          readonly={Boolean(id)}
-        />
-        <DateInput
-          inputType="date"
-          isRequired={false}
-          value={dob}
-          setValue={setDob}
-          id="date-of-birth"
-          placeholder="01/01/2001"
-          label="Date of birth"
-          staticLabel="Date of birth"
-        />
-
-        <PhoneInput
-          isRequired={true}
-          number={phoneNumber}
-          setNumber={setPhoneNumber}
-          coutryCode={countryCode}
-          setCountryCode={setCountryCode}
-          id="phone-number"
-          label="Phone number"
-        />
-        <Select
-          isRequired={false}
-          value={country}
-          setValue={setCountry}
-          id="country"
-          label="Country"
-        >
-          <option value="" disabled>
-            Country
-          </option>
-          {countries.map((country) => (
-            <option key={country.code} value={`${country?.name}`}>
-              {`${country?.flag} - ${country?.name}`}
-            </option>
-          ))}
-        </Select>
-
-        <TextInput
-          id="state"
-          placeholder="Lagos"
-          isRequired={true}
-          value={state}
-          setValue={setState}
-          inputType="text"
-          label="State"
-        />
-        <AddressAutocompleteInput
-          label="Full Address"
-          placeholder="Type address"
-          value={address}
-          setValue={setAddress}
-        />
-      </div>
-      <div className="w-full pt-6">
-        <h2 className="uppercase text-[#98A2B3] font-bold text-sm mb-6">
-          Employee information
-        </h2>
-        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-3 items-end">
+          <TextInput
+            id="first_name"
+            placeholder="John"
+            isRequired={true}
+            value={firstName}
+            setValue={setFirstName}
+            inputType="text"
+            label="First name"
+          />
+          <TextInput
+            id="last_name"
+            placeholder="Doe"
+            isRequired={true}
+            value={lastName}
+            setValue={setLastName}
+            inputType="text"
+            label="Last name"
+          />
+          <TextInput
+            id="email"
+            placeholder="example@example.com"
+            isRequired={true}
+            value={email}
+            setValue={setEmail}
+            inputType="email"
+            label="Email address"
+            readonly={Boolean(id)}
+          />
           <DateInput
             inputType="date"
             isRequired={false}
-            value={joinDate}
-            setValue={setJoinDate}
-            id="join-date"
+            value={dob}
+            setValue={setDob}
+            id="date-of-birth"
             placeholder="01/01/2001"
-            label=""
-            staticLabel="Join date"
+            label="Date of birth"
+            staticLabel="Date of birth"
           />
-          {/* <Select
+
+          <PhoneInput
+            isRequired={true}
+            number={phoneNumber}
+            setNumber={setPhoneNumber}
+            coutryCode={countryCode}
+            setCountryCode={setCountryCode}
+            id="phone-number"
+            label="Phone number"
+          />
+          <Select
+            isRequired={false}
+            value={country}
+            setValue={setCountry}
+            id="country"
+            label="Country"
+          >
+            <option value="" disabled>
+              Country
+            </option>
+            {countries.map((country) => (
+              <option key={country.code} value={`${country?.name}`}>
+                {`${country?.flag} - ${country?.name}`}
+              </option>
+            ))}
+          </Select>
+
+          <TextInput
+            id="state"
+            placeholder="Lagos"
+            isRequired={true}
+            value={state}
+            setValue={setState}
+            inputType="text"
+            label="State"
+          />
+          <AddressAutocompleteInput
+            label="Full Address"
+            placeholder="Type address"
+            value={address}
+            setValue={setAddress}
+          />
+        </div>
+        <div className="w-full pt-6">
+          <h2 className="uppercase text-[#98A2B3] font-bold text-sm mb-6">
+            Employee information
+          </h2>
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-3 items-end">
+            <DateInput
+              inputType="date"
+              isRequired={false}
+              value={joinDate}
+              setValue={setJoinDate}
+              id="join-date"
+              placeholder="01/01/2001"
+              label=""
+              staticLabel="Join date"
+            />
+            {/* <Select
             isRequired={true}
             value={shiftDays}
             setValue={setShiftDays}
@@ -306,7 +301,7 @@ export default function AddEditEmployee({
           >
             <option value="" disabled></option>
           </Select> */}
-          {/* <Select
+            {/* <Select
             isRequired={true}
             value={department}
             setValue={setDepartment}
@@ -316,23 +311,23 @@ export default function AddEditEmployee({
             <option value="" disabled></option>
           </Select> */}
 
-          <Select
-            isRequired={true}
-            value={role}
-            setValue={setRole}
-            id="employee-role"
-            label="Employee Role"
-          >
-            <option value="" disabled>
-              Select role
-            </option>
-            {roleData?.map((item) => (
-              <option key={item?.id} value={`${item?.id}`}>
-                {item?.name}
+            <Select
+              isRequired={true}
+              value={role}
+              setValue={setRole}
+              id="employee-role"
+              label="Employee Role"
+            >
+              <option value="" disabled>
+                Select role
               </option>
-            ))}
-          </Select>
-          {/* <Select
+              {roleData?.map((item) => (
+                <option key={item?.id} value={`${item?.id}`}>
+                  {item?.name}
+                </option>
+              ))}
+            </Select>
+            {/* <Select
             isRequired={true}
             value={status}
             setValue={setStatus}
@@ -341,25 +336,26 @@ export default function AddEditEmployee({
           >
             <option value="" disabled></option>
           </Select> */}
-        </div>
-        <div className=" flex items-center gap-5 mt-10">
-          <LoadingButton
-            type="button"
-            label="Cancel"
-            variant={2}
-            disabled={false}
-            isLoading={false}
-            clickHandler={() => setOpen(false)}
-          />
+          </div>
+          <div className=" flex items-center gap-5 mt-10">
+            <LoadingButton
+              type="button"
+              label="Cancel"
+              variant={2}
+              disabled={false}
+              isLoading={false}
+              clickHandler={() => setOpen(false)}
+            />
 
-          <LoadingButton
-            type="submit"
-            label={id ? "Update" : "Create"}
-            disabled={false}
-            isLoading={loading}
-          />
+            <LoadingButton
+              type="submit"
+              label={id ? "Update" : "Create"}
+              disabled={false}
+              isLoading={loading}
+            />
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 }

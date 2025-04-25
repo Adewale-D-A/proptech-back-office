@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { specialPrices } from "../../types/apiData/specialPrices";
+import { pagination } from "../../types/pagination";
 
 export const specialPricesList = createSlice({
   name: "special prices",
@@ -7,14 +8,7 @@ export const specialPricesList = createSlice({
     value: {
       status: false,
       pagination: [] as {
-        pagination_data: {
-          current_page: number;
-          last_page: number;
-          per_page: number;
-          total: number;
-          from: number;
-          to: number;
-        };
+        pagination_data: pagination;
         data: specialPrices[];
       }[],
       data: [] as specialPrices[],

@@ -19,6 +19,7 @@ import { apartmentExportFormater } from "../../utils/export-formerter-functions"
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import RenderIcon from "../icon-picker/render-icon";
 
 export default function ApartmentListsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -100,42 +101,51 @@ export default function ApartmentListsTable() {
                 </tr>
               </thead>
               <tbody>
-                {data.map((request) => {
+                {data.map((item) => {
                   return (
-                    <tr key={request?.id} className=" border-b">
+                    <tr key={item?.id} className=" border-b">
                       <td className=" flex gap-2 items-center min-w-36">
                         <img
                           src={"/logo_blue.png"}
-                          alt={request?.name}
+                          alt={item?.name}
                           className=" h-10 w-10 rounded aspect-square"
                         />
                         <span className=" flex flex-col gap-1">
-                          <span>{request?.name}</span>
+                          <span>{item?.name}</span>
                           <span className=" text-xs text-gray-500 flex items-center gap-1">
                             <LocationPinIcon className=" h-3 w-3" />
-                            {request?.location}
+                            {item?.location}
                           </span>
                         </span>
                       </td>
-                      <td>{request?.max_guests} Guests</td>
-                      <td>{request?.room_option?.name}</td>
+                      <td>{item?.max_guests} Guests</td>
+                      <td>{item?.room_option?.name}</td>
                       <td>
                         <div className=" flex items-center flex-wrap gap-2">
-                          {request?.amenities?.map((item) => (
-                            <span key={item?.id}>{item?.name},</span>
+                          {item?.amenities?.map((item) => (
+                            <span
+                              key={item?.id}
+                              className=" flex items-center gap-2"
+                            >
+                              <RenderIcon
+                                value={item?.image}
+                                className=" w-4 h-4 text-gray-400"
+                              />{" "}
+                              {item?.name},
+                            </span>
                           ))}
                         </div>
                       </td>
                       {/* <td>**</td> */}
                       <td>
-                        <Status status={request?.availability_status} />
+                        <Status status={item?.availability_status} />
                       </td>
                       <td className=" text-left">
                         <TableActionDropDown>
                           <>
                             <MenuItem>
                               <Link
-                                to={`/apartments/apartment-details/${request?.id}`}
+                                to={`/apartments/apartment-details/${item?.id}`}
                                 className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                               >
                                 View Apartment
@@ -144,7 +154,7 @@ export default function ApartmentListsTable() {
                             {shortlet?.update && (
                               <MenuItem>
                                 <Link
-                                  to={`/apartments/edit-apartment/apartment-details/${request?.id}?redirect=${location?.pathname}&action=rewrite`}
+                                  to={`/apartments/edit-apartment/apartment-details/${item?.id}?redirect=${location?.pathname}&action=rewrite`}
                                   className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                                 >
                                   Edit Apartment
@@ -154,7 +164,7 @@ export default function ApartmentListsTable() {
                             {calendar?.view && (
                               <MenuItem>
                                 <Link
-                                  to={`/apartments/apartment-caledar/${request?.id}`}
+                                  to={`/apartments/apartment-caledar/${item?.id}?apt_id=${item?.id}`}
                                   className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                                 >
                                   Check Calender
@@ -165,7 +175,7 @@ export default function ApartmentListsTable() {
                               <button
                                 type="button"
                                 onClick={() =>
-                                  handleOpenCalculateRate(request?.id)
+                                  handleOpenCalculateRate(item?.id)
                                 }
                                 className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                               >

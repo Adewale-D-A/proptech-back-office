@@ -1,4 +1,5 @@
 import { ChangeEvent } from "react";
+import { formatDateToString } from "../../../utils/isoDateConverter";
 
 interface Props {
   value: string;
@@ -10,8 +11,10 @@ interface Props {
   placeholder: string;
   readonly?: boolean;
   staticLabel?: string;
+  allowOnlyFutureDates?: boolean;
 }
 
+const today = formatDateToString(new Date());
 export default function DateInput({
   value,
   setValue,
@@ -22,6 +25,7 @@ export default function DateInput({
   readonly,
   placeholder,
   staticLabel,
+  allowOnlyFutureDates,
 }: Props) {
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -38,6 +42,7 @@ export default function DateInput({
       <div className="w-full relative group border rounded-lg bg-gray-200/15">
         <input
           id={id}
+          min={allowOnlyFutureDates ? today : ""}
           readOnly={readonly}
           disabled={readonly}
           placeholder={placeholder}

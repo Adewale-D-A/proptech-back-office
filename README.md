@@ -48,11 +48,7 @@ run **npm install** (to install all the dependencies)
 step 2:
 run **npm start** (start application on port:3000)
 
-[LIVE API](https://web-app-web-back-office.vercel.app/)
-
 [STAGING FRONTEND](https://staging-backoffice.the99apartments.com/)
-
-[LIVE WEB](https://web-app-web-back-office.vercel.app/)
 
 [MIME TYPES](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types)
 

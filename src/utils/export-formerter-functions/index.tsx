@@ -37,6 +37,20 @@ export const bookingsExportFormater = (item: { [key: string]: any }) => {
     ["status", item?.status],
   ];
 };
+
+export const additionalServiceExportFormater = (item: {
+  [key: string]: any;
+}) => {
+  return [
+    ["customer_name", `${item?.user?.first_name} ${item?.user?.last_name}`],
+    ["apartment_name", item?.booking?.shortlet?.name],
+    ["date_of_request", formatDate(item?.created_at)],
+    ["service_type", item?.service_type?.name],
+    ["description", item?.description],
+    ["escalated_status", item?.is_escalated],
+    ["status", item?.status],
+  ];
+};
 export const requestsExportFormater = (item: { [key: string]: any }) => {
   return [
     ["customer_name", `${item?.user?.first_name} ${item?.user?.last_name}`],
@@ -95,6 +109,30 @@ export const employeesExportFormater = (item: { [key: string]: any }) => {
     ["employee_last_name", item?.last_name],
     ["employee_email", item?.email],
     ["employee_role", item?.role_id],
+  ];
+};
+
+export const ratingsExportFormater = (item: { [key: string]: any }) => {
+  return [
+    ["customer_name", `${item?.user?.first_name} ${item?.user?.last_name}`],
+    ["email", item?.user?.email],
+    ["question", item?.question],
+    ["date", item?.created_at],
+    ["rating", item?.rating],
+  ];
+};
+
+export const referalsExportFormater = (item: { [key: string]: any }) => {
+  return [
+    ["referrer_details", `${item?.user?.first_name} ${item?.user?.last_name}`],
+    ["email", item?.user?.email],
+    [
+      "referred_details",
+      `${item?.referred_user?.first_name} ${item?.referred_user?.last_name}`,
+    ],
+    ["referred_email_details", item?.referred_user?.email],
+    ["date", item?.created_at],
+    ["referral_code", item?.referral_code],
   ];
 };
 // REPORTS

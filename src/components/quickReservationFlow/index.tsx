@@ -287,6 +287,7 @@ export default function QuickReservationFlow({
             id="check-in-date"
             placeholder="Check-in Date"
             label="Check-in Date"
+            allowOnlyFutureDates={true}
           />
           <TimeInput
             inputType="time"
@@ -305,6 +306,7 @@ export default function QuickReservationFlow({
             id="check-out-date"
             placeholder="Check-out Date"
             label="Check-out Date"
+            allowOnlyFutureDates={true}
           />
           <TimeInput
             inputType="time"
@@ -363,6 +365,8 @@ export default function QuickReservationFlow({
                 Select Method of payment
               </option>
               <option value="paystack">Paystack</option>
+              <option value="cash">Cash</option>
+              <option value="transfer">Transfer</option>
             </Select>
             <Select
               isRequired={true}

@@ -12,6 +12,8 @@ import DeleteConfirmation from "../infoModal/delete-confirmation";
 import { useAppDispatch } from "../../stores/hooks";
 import { removeReferralsInList } from "../../stores/apiData/reeferrals";
 import useAxios from "../../useHooks/useAxios";
+import ExportToCSV from "../export-to-csv";
+import { referalsExportFormater } from "../../utils/export-formerter-functions";
 
 export default function ReferralsTable() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -72,9 +74,7 @@ export default function ReferralsTable() {
               setValue={setFilterOption}
               id="reviews-rating-filter-1"
             >
-              <option value="" disabled>
-                All referrals
-              </option>
+              <option value="">All referrals</option>
             </Select>
             <Filter actionHandler={handleFiltering} />
           </div>
@@ -83,7 +83,11 @@ export default function ReferralsTable() {
           <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
             <h2 className="text-xl font-semibold">Referrals</h2>
             <div className=" w-fit">
-              <ExportSelect id="ratings-and-reviews" />
+              <ExportToCSV
+                dataset={data}
+                jsonToCSVReformerter={referalsExportFormater}
+                fileName="referrals"
+              />
             </div>
           </div>
           <div className="block px-5">

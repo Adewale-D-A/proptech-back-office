@@ -10,6 +10,7 @@ import { replaceApartmentInList } from "../../../stores/apiData/apartment-lists"
 import { requestPayload } from "../../../types/apiData/apartment/request-payload";
 import useAxiosMultipart from "../../../useHooks/useAxiosMultipart";
 import purgeEmptyPayload from "../../../utils/remove-empty-payload";
+import { clearRemovableIdStore } from "../../../stores/inAppDataInterations/addEditApartmentInfo";
 
 export default function EditApartmentPolicies() {
   const { id } = useParams();
@@ -108,6 +109,7 @@ export default function EditApartmentPolicies() {
             ) || [{ id: "", name: "" }],
           })
         );
+        dispatch(clearRemovableIdStore());
       } catch (error) {
       } finally {
         setIsSubmitting(false);

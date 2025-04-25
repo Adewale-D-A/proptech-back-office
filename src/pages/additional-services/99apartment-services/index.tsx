@@ -3,7 +3,6 @@ import { useLayoutEffect, useState } from "react";
 import AdditionIcon from "../../../assets/icons/addtion";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
-import ExportSelect from "../../../components/inputs/select/exportSelect";
 import PlusIcon from "../../../assets/icons/plus";
 import AdditionalServiceListTable from "../../../components/tables/additionalServices";
 import LoadingButton from "../../../components/button";
@@ -43,7 +42,7 @@ export default function AptAdditionalServicesList() {
           <div className=" w-full flex justify-between">
             <h2 className="text-xl font-semibold"> All Service List</h2>
             <div className=" flex items-center flex-col md:flex-row gap-4">
-              <ExportSelect id="customers" />
+              {/* <ExportSelect id="customers" /> */}
               <LoadingButton
                 clickHandler={() => setOpenNewRequest(true)}
                 isLoading={false}

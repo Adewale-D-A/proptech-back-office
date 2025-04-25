@@ -5,7 +5,7 @@ import {
   useLayoutEffect,
   useState,
 } from "react";
-import { useAppDispatch } from "../../../stores/hooks";
+import { useAppDispatch, useAppSelector } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import ReceiptIcon from "../../../assets/icons/receipt";
 import Select from "../../../components/inputs/select";
@@ -13,7 +13,8 @@ import TextInput from "../../../components/inputs/textInput";
 import TimeIcon from "../../../assets/icons/time";
 import Switch from "../../../components/switch";
 import LoadingButton from "../../../components/button";
-import WeekdaysSelect from "../../../components/inputs/select/weekdaysSelect";
+// import WeekdaysSelect from "../../../components/inputs/select/weekdaysSelect";
+// import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import {
   addSpecialPricesToList,
@@ -23,11 +24,14 @@ import useAxios from "../../../useHooks/useAxios";
 import useGetSpecialPrice from "../../../services-hooks/pricing/useSpecialPrice";
 import LinkButton from "../../../components/button/linkButton";
 import Search from "../../../components/inputs/search";
-import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
 import DateInput from "../../../components/inputs/dateInput";
 import reservationValidator from "../../../utils/reservation-validator";
 import MultipleSelect from "../../../components/inputs/select/multipleSelect";
 import monthsDays from "../../../assets/days-months.json";
+import { useNavigate } from "react-router-dom";
+import purgeEmptyPayload from "../../../utils/remove-empty-payload";
+import { formatDateToString } from "../../../utils/isoDateConverter";
+import { clearRemovableIdStore } from "../../../stores/inAppDataInterations/addEditApartmentInfo";
 const breadCrumb = [
   {
     url: "/pricing/special-prices",
@@ -44,6 +48,10 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const { data } = useGetSpecialPrice({ id });
+  const navigate = useNavigate();
+  const removedAptIdSet = useAppSelector(
+    (state) => state.addEditApartmentInfo.value.data?.removeImages
+  );
 
   // update page props on component mount
   useLayoutEffect(() => {
@@ -76,7 +84,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
   const [selectedApt, setSelectedApt] = useState<
     { id: string; name: string }[]
   >([]);
-  const [priceType, setPriceType] = useState("percentage ");
+  const [priceType, setPriceType] = useState("percentage");
   const [resuseable, setReusable] = useState(false);
 
   const [isSaving, setIsSaving] = useState(false);
@@ -99,13 +107,10 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
         round_to_integer,
         applicable_to_shortlet,
         price_type,
+        // applicable_shortlets,
       } = data;
-      const new_check_in_date = new Date(check_in_date)
-        ?.toISOString()
-        ?.slice(0, 10);
-      const new_check_out_date = new Date(check_out_date)
-        ?.toISOString()
-        ?.slice(0, 10);
+      const new_check_in_date = formatDateToString(new Date(check_in_date));
+      const new_check_out_date = formatDateToString(new Date(check_out_date));
       setName(name || "");
       setCheckIn(new_check_in_date || "");
       setCheckOut(new_check_out_date || "");
@@ -158,8 +163,9 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
           validity: validity, //temporary or permanent
           is_reusable: resuseable ? "yes" : "no", // yes or no
           applicable_shortlets: selectedApt?.map((item) => item?.id), // required if applicable_to_shortlet is specific
-          price: value, //required if price_type is price
-          percentage: value, //required if price_type is percentage
+          price: priceType === "price" ? value : "", //required if price_type is price
+          percentage: priceType === "percentage" ? value : "", //required if price_type is percentage,
+          remove_shortlets: removedAptIdSet,
         };
 
         const newPayload = Object.fromEntries(
@@ -170,16 +176,19 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
               : true
           )
         );
+        const updatePayload = purgeEmptyPayload({ payload: newPayload });
         if (id) {
-          const putPaload = {
-            name: name,
-            applicable_shortlets: selectedApt?.map((item) => item?.id),
-            price: value,
-          };
-          const response = await axios.put("/admin/special-price", putPaload);
+          // const putPaload = {
+          //   name: name,
+          //   applicable_shortlets: selectedApt?.map((item) => item?.id),
+          //   price: value,
+          // };
+          const response = await axios.put(
+            `/admin/special-price/${id}`,
+            updatePayload
+          );
           const { data, message } = response?.data || {};
-          const response_data = data?.restriction;
-          dispatch(replaceSpecialPricesInList(response_data));
+          dispatch(replaceSpecialPricesInList(data));
           dispatch(
             openSnackbar({
               message: message || "Special Prices successfully updated",
@@ -187,10 +196,13 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
             })
           );
         } else {
-          const response = await axios.post("/admin/special-price", newPayload);
+          const response = await axios.post(
+            "/admin/special-price",
+            updatePayload
+          );
           const { data, message } = response?.data || {};
-          const response_data = data?.special_price;
-          dispatch(addSpecialPricesToList(response_data));
+          const result = data?.special_price;
+          dispatch(addSpecialPricesToList(result));
           dispatch(
             openSnackbar({
               message: message || "Special Prices successfully created",
@@ -198,6 +210,8 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
             })
           );
         }
+        dispatch(clearRemovableIdStore());
+        navigate("/pricing/special-prices");
       } catch (error) {
       } finally {
         setIsSaving(false);
@@ -220,6 +234,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
       selectedApt,
       value,
       resuseable,
+      removedAptIdSet,
     ]
   );
 
@@ -250,6 +265,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                   id="check-in-date"
                   placeholder="Check-in Date"
                   label="Check-in Date"
+                  // allowOnlyFutureDates={true}
                 />
               </div>
               <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
@@ -268,6 +284,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                   id="check-out-date"
                   placeholder="Check-out Date"
                   label="Check-out Date"
+                  // allowOnlyFutureDates={true}
                 />
               </div>
               {/* select */}
@@ -461,6 +478,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                       placeholder="Apartment name..."
                       updatelist={setSelectedApt}
                       multipleSelect={true}
+                      defaultValues={data?.applicable_shortlets}
                     />
                   )}
                 </div>
