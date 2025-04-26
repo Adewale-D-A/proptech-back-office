@@ -60,7 +60,7 @@ export default function RequestInformation({
         {addCost && (
           <div className=" w-full flex items-center justify-between gap-5">
             <span className=" text-gray-500">Cost of Service</span>
-            <span className=" font-semibold">***</span>
+            <span className=" font-semibold">---</span>
           </div>
         )}
       </div>

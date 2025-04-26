@@ -220,7 +220,7 @@ export default function ApartmentDetail() {
                     </div>
                     <div className=" flex items-center gap-3">
                       <VehicleIcon />
-                      <span className=" ">***</span>
+                      <span className=" ">---</span>
                     </div>
                   </div>
                   {/* {[
