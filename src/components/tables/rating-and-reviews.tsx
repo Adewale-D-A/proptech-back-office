@@ -6,9 +6,7 @@ import Pagination from "../pagination";
 import useGetRatingsAndReviews from "../../services-hooks/useGetRatingsAndReviews";
 import formatDate from "../../utils/isoDateConverter";
 import CustomRating from "../rating";
-import ExportSelect from "../inputs/select/exportSelect";
 import Select from "../inputs/select";
-import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import ExportToCSV from "../export-to-csv";
 import { ratingsExportFormater } from "../../utils/export-formerter-functions";
 

@@ -114,7 +114,7 @@ export default function RevenueReportTable() {
                       <td>{formatDate(item?.date)}</td>
                       <td>{item?.rooms_sold}</td>
                       <td>{item?.nights_booked}</td>
-                      <td>***</td>
+                      <td> </td>
                       <td>{item?.occupancy_rate}</td>
                       <td>{item?.ibe_revenue}</td>
                       <td>{item?.ota_revenue}</td>

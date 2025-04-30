@@ -141,8 +141,8 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Apartment Name</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            The official or marketed name of the apartment for display on the
+            listing.
           </p>
         </div>
         <TextInput
@@ -159,8 +159,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Building</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            The name of the building where the apartment is located.
           </p>
         </div>
         <Select
@@ -184,8 +183,8 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Room Options</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            A summary of available room types and configurations (e.g., studio,
+            1Bedroom, 2Bedroom).
           </p>
         </div>
         <Select
@@ -209,8 +208,8 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Apartment Image</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            High-quality visuals representing the interior and/or exterior of
+            the apartment.
           </p>
         </div>
         <MultipleFileInput
@@ -226,8 +225,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Apartment Price</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            The total rental cost per night, exclusive of service charges.
           </p>
         </div>
         <div className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between">
@@ -250,8 +248,8 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Apartment Location Group</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            A broader category or region grouping used to organize listings
+            (e.g., Lekki, Yaba, Ikeja).
           </p>
         </div>
         <Select
@@ -275,8 +273,7 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Apartment Location</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            The specific address or neighborhood of the apartment.
           </p>
         </div>
         <AddressAutocompleteInput
@@ -290,8 +287,8 @@ export default function AddEditApartmentDetails({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">About Location</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            A short description highlighting the characteristics and features of
+            the apartment
           </p>
         </div>
         <TextAreaInput

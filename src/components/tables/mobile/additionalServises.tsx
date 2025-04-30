@@ -33,7 +33,7 @@ export default function MobileAdditionalServicesTable({
                         open ? "rotate-90 transform" : "rotate-0"
                       } text-black`}
                     />
-                    <p className="">***</p>
+                    <p className="">---</p>
                   </div>
                   <Status status={item?.status} />
                 </Disclosure.Button>

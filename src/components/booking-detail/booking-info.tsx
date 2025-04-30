@@ -15,7 +15,7 @@ export default function BookingInfo({ data }: { data: bookingsById }) {
           {
             id: 2,
             header: "VAT-ID",
-            value: "****",
+            value: "---",
           },
           {
             id: 3,

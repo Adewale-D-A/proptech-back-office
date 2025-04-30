@@ -17,10 +17,12 @@ export default function AddEditRequisitionRequest({
   id,
   setOpen,
   requisitionItem,
+  refetch,
 }: {
   id?: string;
   setOpen: (open: boolean) => void;
   requisitionItem: requisitionRequest;
+  refetch?: (val?: boolean) => void;
 }) {
   const axiosMultipart = useAxiosMultipart({});
   const dispatch = useAppDispatch();
@@ -86,12 +88,13 @@ export default function AddEditRequisitionRequest({
           );
         }
         // setOpen(false);
+        refetch?.(true);
       } catch (error) {
       } finally {
         setIsSubmitting(false);
       }
     },
-    [id, requisitionItem]
+    [id, requisitionItem, refetch]
   );
 
   return (

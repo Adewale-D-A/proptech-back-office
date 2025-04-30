@@ -166,7 +166,7 @@ export default function OccupancyRankingReportTable() {
                             <td>{formatDate(request?.date)}</td>
                             <td>{request?.rooms_sold}</td>
                             <td>{request?.nights_booked}</td>
-                            <td>***</td>
+                            <td> </td>
                             <td>{request?.occupancy_rate}</td>
                             <td>{request?.ibe_revenue}</td>
                             <td>{request?.ota_revenue}</td>

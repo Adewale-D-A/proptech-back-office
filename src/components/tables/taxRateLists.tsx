@@ -108,7 +108,7 @@ export default function TaxRateLists({ header }: { header: string[] }) {
                         {formatDate(request?.created_at)}{" "}
                         {formatTime(request?.created_at)}
                       </td>
-                      <td>***</td>
+                      <td></td>
                       {/* <td className=" group relative">
                       <span className=" p-2 text-lg">...</span>
                       <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
