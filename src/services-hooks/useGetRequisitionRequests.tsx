@@ -38,62 +38,65 @@ export default function useGetRequisitionRequests({
 
   const [pagination, setPagination] = useState<pagination>({} as any);
 
-  const getAllRequisitionRequests = useCallback(async () => {
-    setIsLoading(true);
-    setIsFailed(false);
-    try {
-      const { queryString, remakeRequest } = ApiQueryParamsExtractor({
-        dataset: {
-          page: search ? 1 : page,
-          start_date: start_date,
-          end_date: end_date,
-          sort: sort,
-          search: search,
-          category_id: category,
-          paid,
-        },
-      });
-      //check store if this requested data has been saved previously and retirve it
-      //if not, make a new request and save into store
-      const foundPage = store_pagination.find(
-        (item) => item?.pagination_data?.current_page === page
-      );
-      if (foundPage && !remakeRequest) {
-        setPagination(foundPage?.pagination_data);
-        dispatch(updateRequisitionRequestList({ data: foundPage?.data }));
-      } else {
-        const response = await axios.get(
-          `/admin/requisition-request?${queryString}`
+  const getAllRequisitionRequests = useCallback(
+    async (skipCache?: boolean) => {
+      setIsLoading(true);
+      setIsFailed(false);
+      try {
+        const { queryString, remakeRequest } = ApiQueryParamsExtractor({
+          dataset: {
+            page: search ? 1 : page,
+            start_date: start_date,
+            end_date: end_date,
+            sort: sort,
+            search: search,
+            category_id: category,
+            paid,
+          },
+        });
+        //check store if this requested data has been saved previously and retirve it
+        //if not, make a new request and save into store
+        const foundPage = store_pagination.find(
+          (item) => item?.pagination_data?.current_page === page
         );
-        const { requisition_request } = response?.data?.data;
-        const { data, current_page, last_page, per_page, total, from, to } =
-          requisition_request;
-        const paginationDataset = {
-          current_page,
-          last_page,
-          per_page,
-          total,
-          from,
-          to,
-          length: data?.length,
-        };
-        dispatch(updateRequisitionRequestList({ data }));
-        if (!remakeRequest) {
-          dispatch(
-            addToPaginationHistory({
-              pagination_data: paginationDataset,
-              data: data,
-            })
+        if (foundPage && !remakeRequest && !skipCache) {
+          setPagination(foundPage?.pagination_data);
+          dispatch(updateRequisitionRequestList({ data: foundPage?.data }));
+        } else {
+          const response = await axios.get(
+            `/admin/requisition-request?${queryString}`
           );
+          const { requisition_request } = response?.data?.data;
+          const { data, current_page, last_page, per_page, total, from, to } =
+            requisition_request;
+          const paginationDataset = {
+            current_page,
+            last_page,
+            per_page,
+            total,
+            from,
+            to,
+            length: data?.length,
+          };
+          dispatch(updateRequisitionRequestList({ data }));
+          if (!remakeRequest) {
+            dispatch(
+              addToPaginationHistory({
+                pagination_data: paginationDataset,
+                data: data,
+              })
+            );
+          }
+          setPagination(paginationDataset);
         }
-        setPagination(paginationDataset);
+      } catch (error) {
+        setIsFailed(true);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      setIsFailed(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [page, start_date, end_date, sort, search, category, paid]);
+    },
+    [page, start_date, end_date, sort, search, category, paid]
+  );
 
   useEffect(() => {
     getAllRequisitionRequests();

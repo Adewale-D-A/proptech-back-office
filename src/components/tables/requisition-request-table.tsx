@@ -50,7 +50,7 @@ export default function RequisitionRequestTable() {
     page: currentPage,
     limit: 1000,
   });
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
+  const { data, isLoading, retryFunction, pagination } =
     useGetRequisitionRequests({
       page: currentPage,
       start_date: filterDates?.start_date,
@@ -260,6 +260,7 @@ export default function RequisitionRequestTable() {
           requisitionItem={requisitionItem}
           id={String(requisitionItem?.id || "")}
           setOpen={setOpenRequest}
+          refetch={retryFunction}
         />
       </ModalTemplate>
       <ModalTemplate

@@ -110,7 +110,7 @@ export default function AvailabilityOverview() {
   const handleDateMonthChange = useCallback(
     (e: SyntheticEvent) => {
       e.preventDefault();
-      const filteredDate = new Date(Number(year), Number(month) + 1, 1);
+      const filteredDate = new Date(Number(year), Number(month), 1);
       setCurrentDay(filteredDate);
     },
     [month, year]

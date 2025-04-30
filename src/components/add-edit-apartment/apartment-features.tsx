@@ -137,8 +137,7 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Number of Bathroom</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            Total number of bathrooms available in the apartment.
           </p>
         </div>
         <Select
@@ -162,8 +161,7 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Number of Bedroom</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            Total number of designated sleeping rooms within the apartment.
           </p>
         </div>
         <Select
@@ -187,8 +185,8 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">What to Expect</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            A brief guide to the experience, comforts, and unique aspects guests
+            can anticipate.
           </p>
         </div>
         <MultipleSelect
@@ -206,8 +204,8 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Extra Options</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            Additional services or amenities available, such as housekeeping,
+            parking, or pet access.
           </p>
         </div>
         <MultipleSelect
@@ -225,8 +223,8 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Point of Interest</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            Nearby landmarks, attractions, or facilities that enhance the
+            apartment's location value.
           </p>
         </div>
         <TextInput
@@ -243,8 +241,8 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Select Security Options</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            Available safety features such as surveillance, smart locks, gated
+            access, or security personnel.
           </p>
         </div>
         <MultipleSelect
@@ -262,8 +260,8 @@ export default function AddEditApartmentFeatures({ id }: { id?: string }) {
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Availability Status</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            Current rental status, indicating whether the apartment is
+            available, on hold, or under maintenance.
           </p>
         </div>
         <Select

@@ -252,10 +252,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
               <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
                 <div className=" max-w-md">
                   <h6 className=" text-lg font-semibold">Check-In</h6>
-                  <p className=" text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quae labore.
-                  </p>
+                  <p className=" text-gray-500">Start date of pricing.</p>
                 </div>
                 <DateInput
                   inputType="date"
@@ -271,10 +268,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
               <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
                 <div className=" max-w-md">
                   <h6 className=" text-lg font-semibold">Check-Out</h6>
-                  <p className=" text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quae labore.
-                  </p>
+                  <p className=" text-gray-500">End date of pricing.</p>
                 </div>
                 <DateInput
                   inputType="date"
@@ -291,10 +285,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
               <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-5 items-end">
                 <div className=" max-w-md">
                   <h6 className=" text-lg font-semibold">Weekdays</h6>
-                  <p className=" text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quae labore.
-                  </p>
+                  <p className=" text-gray-500">Number of days applicable.</p>
                 </div>
                 <MultipleSelect
                   value={days}
@@ -316,8 +307,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                 <div className=" max-w-md">
                   <h6 className=" text-lg font-semibold">Special Price Name</h6>
                   <p className=" text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quae labore.
+                    The official or marketed name of the price.
                   </p>
                 </div>
                 <TextInput
@@ -331,7 +321,13 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
               </div>
 
               <div className=" w-full flex justify-between items-center gap-3">
-                <h6 className=" text-lg">Tied to the Year</h6>
+                <div className=" max-w-md">
+                  <h6 className=" text-lg">Tied to the Year</h6>
+                  <p className=" text-gray-500">
+                    If disabled, the pricing rule will be applied on the
+                    selected range of dates regardless of the year.
+                  </p>
+                </div>
                 <Switch
                   id="tied-to-year"
                   value={isYearly}
@@ -339,9 +335,15 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                 />
               </div>
               <div className=" w-full flex justify-between items-center gap-3">
-                <h6 className=" text-lg">
-                  Check-in Date must be after the beginning of season
-                </h6>
+                <div className=" max-w-md">
+                  <h6 className=" text-lg">
+                    Check-in Date must be after the beginning of season
+                  </h6>
+                  <p className=" text-gray-500">
+                    If enabled, the rule will be applied only if the check-in
+                    date for the stay is included in the range of dates.
+                  </p>
+                </div>
                 <Switch
                   id="seasonal-checkin"
                   value={seasonCheckin}
@@ -349,7 +351,13 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                 />
               </div>
               <div className=" w-full flex justify-between items-center gap-3">
-                <h6 className=" text-lg">Promotion</h6>
+                <div className=" max-w-md">
+                  <h6 className=" text-lg">Promotion</h6>
+                  <p className=" text-gray-500">
+                    Make this pricing rule a "Promotion" to display it in the
+                    front-end booking process (Slashed price/Sale).
+                  </p>
+                </div>
                 <Switch
                   id="promotion"
                   value={promotion}
@@ -361,8 +369,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                 <div className=" max-w-md">
                   <h6 className=" text-lg font-semibold">Type</h6>
                   <p className=" text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quae labore.
+                    Is it an additional charge or a discount.
                   </p>
                 </div>
                 <Select
@@ -382,8 +389,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                 <div className=" max-w-md">
                   <h6 className=" text-lg font-semibold">Type of Price</h6>
                   <p className=" text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quae labore.
+                    Is it an additional charge or a discount.
                   </p>
                 </div>
                 <Select
@@ -405,8 +411,9 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                     {priceType === "price" ? "Price" : "Percentage"}
                   </h6>
                   <p className=" text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quae labore.
+                    {priceType === "price"
+                      ? "Fixed price value"
+                      : "Percentage value (0 - 100)"}
                   </p>
                 </div>
                 <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -437,8 +444,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                 <div className=" max-w-md">
                   <h6 className=" text-lg font-semibold">Round To Integer</h6>
                   <p className=" text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quae labore.
+                    Should the final value be rounded up or rounded down.
                   </p>
                 </div>
                 <Switch
@@ -454,8 +460,7 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                     Applicable Shortlet
                   </h6>
                   <p className=" text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Quae labore.
+                    Select all the apartments applicable.
                   </p>
                 </div>
                 <div className=" flex flex-col gap-3">
@@ -485,7 +490,12 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
               </div>
 
               <div className=" w-full flex justify-between items-center gap-3">
-                <h6 className=" text-lg">Is resuable</h6>
+                <div className=" max-w-md">
+                  <h6 className=" text-lg">Is resuable</h6>
+                  <p className=" text-gray-500">
+                    Is this a one-time use or is it reusable.
+                  </p>
+                </div>
                 <Switch
                   id="reusable"
                   value={resuseable}

@@ -169,8 +169,8 @@ export default function AddEditApartmentPolicies({
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Caution Fee</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            Refundable security deposit required to cover potential damages or
+            policy violations.
           </p>
         </div>
         <div className="w-full p-3 rounded-lg border  bg-gray-200/15 flex justify-between">
@@ -194,8 +194,7 @@ export default function AddEditApartmentPolicies({
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Maximum Number of Guest</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            The upper limit of occupants allowed during the stay.
           </p>
         </div>
         <Select
@@ -219,8 +218,8 @@ export default function AddEditApartmentPolicies({
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Apartment Rules</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            Guidelines and restrictions governing guest behavior, property use,
+            and noise levels.
           </p>
         </div>
         <MultipleSelect
@@ -238,8 +237,8 @@ export default function AddEditApartmentPolicies({
         <div className=" max-w-md">
           <h6 className=" text-lg font-semibold">Cancellation Policies</h6>
           <p className=" text-gray-500">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae
-            labore.
+            Terms defining the refund and notice period required for booking
+            cancellations.
           </p>
         </div>
         {/* <MultipleSelect
