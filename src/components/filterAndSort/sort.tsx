@@ -5,12 +5,14 @@ export default function Sort({
   id,
   label,
   setSort,
+  defaultValue = "asc",
 }: {
   id: string;
   label: string;
+  defaultValue?: "asc" | "desc";
   setSort?: Function;
 }) {
-  const [selectSort, setSelectSort] = useState("asc");
+  const [selectSort, setSelectSort] = useState(defaultValue || "asc");
   useEffect(() => {
     if (setSort) {
       setSort(selectSort);

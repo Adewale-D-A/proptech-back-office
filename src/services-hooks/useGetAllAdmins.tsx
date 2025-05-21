@@ -13,7 +13,7 @@ export default function useGetAllAdmins({
   page = 1,
   start_date,
   end_date,
-  sort = "asc",
+  sort = "desc",
   search = "",
   category,
 }: {
@@ -49,6 +49,7 @@ export default function useGetAllAdmins({
           search: search,
           role_id: category,
         },
+        sortRefetchKeyword: "asc",
       });
       //check store if this requested data has been saved previously and retirve it
       //if not, make a new request and save into store

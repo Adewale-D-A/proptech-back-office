@@ -1,3 +1,9 @@
+##### 21.05.2025
+
+> Updates: Maintenance request, users request, requisition request, bookings, owners report summary sorting order updated to Descending by default
+> Update: Special prices type options updated
+> Fix: Owner's report summary default month updated to current month
+
 ##### 30.04.2025
 
 > Dummy Texts replacements

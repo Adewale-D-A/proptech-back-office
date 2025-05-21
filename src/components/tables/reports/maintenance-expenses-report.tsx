@@ -31,7 +31,7 @@ export default function MaintenanceExpensesReportListTable() {
     end_date: string;
   }>();
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("asc");
+  const [sort, setSort] = useState("desc");
   const [category, setCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   // const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
@@ -90,7 +90,12 @@ export default function MaintenanceExpensesReportListTable() {
           <div className=" flex items-center gap-2 flex-col md:flex-row">
             <Filter actionHandler={handleCustomersFiltering} />
             <div className=" w-fit min-w-40">
-              <Sort setSort={setSort} id="sort-by" label="Sort by" />
+              <Sort
+                setSort={setSort}
+                id="sort-by"
+                defaultValue="desc"
+                label="Sort by"
+              />
             </div>
             <Select
               isRequired={true}

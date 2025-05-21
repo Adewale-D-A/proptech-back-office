@@ -13,7 +13,7 @@ export default function useGetAllBookingsLists({
   page = 1,
   start_date,
   end_date,
-  sort = "asc",
+  sort = "desc",
   channel,
   currency,
   room_option,
@@ -51,7 +51,7 @@ export default function useGetAllBookingsLists({
           page: search ? 1 : page,
           start_date: start_date,
           end_date: end_date,
-          sort: sort,
+          sort,
           channel: channel,
           currency: currency,
           room_option: room_option,
@@ -59,6 +59,7 @@ export default function useGetAllBookingsLists({
           status: status,
           search: search,
         },
+        sortRefetchKeyword: "asc",
       });
       //check store if this requested data has been saved previously and retirve it
       //if not, make a new request and save into store

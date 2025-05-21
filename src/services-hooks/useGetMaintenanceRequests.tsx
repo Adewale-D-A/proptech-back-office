@@ -12,7 +12,7 @@ export default function useGetMaintenanceRequests({
   page = 1,
   start_date,
   end_date,
-  sort = "asc",
+  sort = "desc",
   search = "",
   category_id,
 }: {
@@ -48,6 +48,7 @@ export default function useGetMaintenanceRequests({
           search: search,
           category_id,
         },
+        sortRefetchKeyword: "asc",
       });
       //check store if this requested data has been saved previously and retirve it
       //if not, make a new request and save into store

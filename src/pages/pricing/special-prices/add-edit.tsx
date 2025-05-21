@@ -381,7 +381,8 @@ export default function AddEditSpecialPrices({ id }: { id?: string }) {
                   <option value="" disabled>
                     Select
                   </option>
-                  <option value="regular">Regular</option>
+                  <option value="additional-charge">Additional Charge</option>
+                  <option value="discount">Discount</option>
                 </Select>
               </div>
 

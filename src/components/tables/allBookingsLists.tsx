@@ -10,7 +10,6 @@ import { removeBookingsInList } from "../../stores/apiData/bookings-lists";
 import ModalTemplate from "../modal";
 import BookingDetailSummary from "../booking-detail";
 import formatDate from "../../utils/isoDateConverter";
-import MobileBookingsTable from "./mobile/bookings";
 import TableSearch from "../inputs/search/table-search";
 import BookingsFilterSearch from "../filterAndSort/bookings-filter";
 import { BookingFilterPayload } from "../../types/apiData/bookings/booking-filter-options";
@@ -19,6 +18,7 @@ import { bookingsExportFormater } from "../../utils/export-formerter-functions";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import { MenuItem } from "@headlessui/react";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
+import Sort from "../filterAndSort/sort";
 
 export default function AllBookingsListTable({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
@@ -28,7 +28,7 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
     start_date: string;
     end_date: string;
   }>();
-  const [sort, setSort] = useState("asc");
+  const [sort, setSort] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetAllBookingsLists({
@@ -79,6 +79,12 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
               placeholder="Search name, type, location..."
             />
           </div>
+          <Sort
+            setSort={setSort}
+            id="sort-by"
+            label="Sort by"
+            defaultValue="desc"
+          />
           <BookingsFilterSearch setData={setFilter} />
           <ExportToCSV
             dataset={data}

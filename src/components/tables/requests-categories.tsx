@@ -19,9 +19,12 @@ export default function RequestCategoriesistsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
+  const [sort, setSort] = useState("asc");
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetRequestCategories({ page: currentPage });
+  const { data, isLoading, pagination } = useGetRequestCategories({
+    page: currentPage,
+    sort,
+  });
 
   const [selectedId, setSelectedId] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
@@ -76,7 +79,9 @@ export default function RequestCategoriesistsTable() {
           <h2 className="text-xl font-semibold">
             Maintenance Requests Categories
           </h2>
-          <Sort id="room-options" label="Sort List" />{" "}
+          <div className=" min-w-40">
+            <Sort setSort={setSort} id="sort-by" label="Sort by" />
+          </div>
         </div>
         {data && data.length > 0 ? (
           <div className=" w-full overflow-x-auto">

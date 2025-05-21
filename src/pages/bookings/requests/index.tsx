@@ -4,7 +4,6 @@ import { useLayoutEffect, useState } from "react";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import CalendarIcon from "../../../assets/icons/calendar";
 import PlusIcon from "../../../assets/icons/plus";
-import ExportSelect from "../../../components/inputs/select/exportSelect";
 import RequestsListTable from "../../../components/tables/requestsLists";
 import ModalTemplate from "../../../components/modal";
 import NewRequest from "../../../components/booking-detail/new-request";
