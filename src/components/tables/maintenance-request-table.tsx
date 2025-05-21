@@ -23,6 +23,7 @@ import ExportToCSV from "../export-to-csv";
 import { maintenanceRequestsExportFormater } from "../../utils/export-formerter-functions";
 import useGetRequestCategories from "../../services-hooks/useGetRequestCategories";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import Sort from "../filterAndSort/sort";
 // import DeleteConfirmation from "../infoModal/delete-confirmation";
 // import useAxios from "../../useHooks/useAxios";
 // import { useAppDispatch } from "../../stores/hooks";
@@ -38,6 +39,7 @@ export default function MaintenanceRequestTable() {
     start_date: string;
     end_date: string;
   }>();
+  const [sort, setSort] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedId, setSelectedId] = useState("");
   const [openMaintenanceRequestEdit, setOpenMaintenanceRequestEdit] =
@@ -48,14 +50,14 @@ export default function MaintenanceRequestTable() {
     page: currentPage,
     limit: 1000,
   });
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetMaintenanceRequests({
-      page: currentPage,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      search,
-      category_id: category,
-    });
+  const { data, isLoading, pagination } = useGetMaintenanceRequests({
+    page: currentPage,
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    search,
+    sort,
+    category_id: category,
+  });
   const handleFiltering = useCallback(
     (start_date: string, end_date: string) => {
       setFilterDates({ start_date, end_date });
@@ -112,7 +114,15 @@ export default function MaintenanceRequestTable() {
                   {item?.name}
                 </option>
               ))}
-            </Select>
+            </Select>{" "}
+            <div className=" min-w-40">
+              <Sort
+                setSort={setSort}
+                id="sort-by"
+                label="Sort by"
+                defaultValue="desc"
+              />
+            </div>
             <Filter actionHandler={handleFiltering} />
           </div>
         </div>

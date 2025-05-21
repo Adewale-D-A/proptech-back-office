@@ -18,7 +18,7 @@ export default function BookingsReportListTable() {
   }>();
   const [filter, setFilter] = useState<BookingFilterPayload>();
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("asc");
+  const [sort, setSort] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetAllBookingsLists({

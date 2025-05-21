@@ -19,6 +19,7 @@ import useGetRequestCategories from "../../services-hooks/useGetRequestCategorie
 import ExportToCSV from "../export-to-csv";
 import { maintenanceExpensesExportFormater } from "../../utils/export-formerter-functions";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import Sort from "../filterAndSort/sort";
 // import BinIcon from "../../assets/icons/bin-icon";
 // import DeleteConfirmation from "../infoModal/delete-confirmation";
 // import useAxios from "../../useHooks/useAxios";
@@ -35,6 +36,7 @@ export default function RequisitionRequestTable() {
     start_date: string;
     end_date: string;
   }>();
+  const [sort, setSort] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedId, setSelectedId] = useState("");
   const [requisitionItem, setRequistionItem] = useState<requisitionRequest>(
@@ -56,6 +58,7 @@ export default function RequisitionRequestTable() {
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
       search,
+      sort,
       category,
     });
   const handleFiltering = useCallback(
@@ -119,6 +122,14 @@ export default function RequisitionRequestTable() {
                 </option>
               ))}
             </Select>
+            <div className=" min-w-40">
+              <Sort
+                setSort={setSort}
+                id="sort-by"
+                label="Sort by"
+                defaultValue="desc"
+              />
+            </div>
             <Filter actionHandler={handleFiltering} />
           </div>
         </div>

@@ -10,7 +10,7 @@ export default function MonthsCarousel({
 }: {
   setFilterDate: (dates: { start_date: string; end_date: string }) => void;
 }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(today?.getMonth() || 0);
 
   // productsArray next function
   const showNext = useCallback(() => {

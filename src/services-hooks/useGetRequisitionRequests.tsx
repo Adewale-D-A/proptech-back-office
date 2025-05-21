@@ -13,7 +13,7 @@ export default function useGetRequisitionRequests({
   page = 1,
   start_date,
   end_date,
-  sort = "asc",
+  sort = "desc",
   search = "",
   category = "",
   paid,
@@ -48,11 +48,12 @@ export default function useGetRequisitionRequests({
             page: search ? 1 : page,
             start_date: start_date,
             end_date: end_date,
-            sort: sort,
+            sort,
             search: search,
             category_id: category,
             paid,
           },
+          sortRefetchKeyword: "asc",
         });
         //check store if this requested data has been saved previously and retirve it
         //if not, make a new request and save into store

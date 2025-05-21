@@ -17,6 +17,7 @@ import OwnersReportFilterOptions from "../../../pages/reports/owners/filter-opti
 import ExportToCSV from "../../export-to-csv";
 import { ownersReportExportFormater } from "../../../utils/export-formerter-functions";
 import currencyFormat from "../../../utils/currency-formatter";
+import Sort from "../../filterAndSort/sort";
 
 export default function OwnersReportSummaryTableList() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -27,6 +28,7 @@ export default function OwnersReportSummaryTableList() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [sort, setSort] = useState("desc");
   const [apartmentId, setApartmentId] = useState("");
   const [buildingId, setBuildingId] = useState("");
   const [category, setCategory] = useState("");
@@ -38,6 +40,7 @@ export default function OwnersReportSummaryTableList() {
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetAllOwnersReport({
       page: currentPage,
+      sort,
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
       shortlet_id: String(apartmentId || ""),
@@ -90,6 +93,14 @@ export default function OwnersReportSummaryTableList() {
                 <MonthsCarousel setFilterDate={setFilterDates} />
               </div>
               <div className=" flex items-center gap-2">
+                <div className="w-fit min-w-28">
+                  <Sort
+                    id="owners-summary-sort"
+                    label=""
+                    defaultValue="desc"
+                    setSort={setSort}
+                  />
+                </div>
                 <ExportToCSV
                   dataset={data}
                   jsonToCSVReformerter={ownersReportExportFormater}

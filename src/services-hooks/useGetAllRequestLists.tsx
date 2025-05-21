@@ -13,7 +13,7 @@ export default function useGetAllRequestLists({
   page = 1,
   start_date,
   end_date,
-  sort = "asc",
+  sort = "desc",
   search = "",
   limit = 20,
 }: {
@@ -44,10 +44,11 @@ export default function useGetAllRequestLists({
           page: search ? 1 : page,
           start_date: start_date,
           end_date: end_date,
-          sort: sort,
+          sort,
           search: search,
           limit,
         },
+        sortRefetchKeyword: "asc",
       });
       //check store if this requested data has been saved previously and retirve it
       //if not, make a new request and save into store
@@ -58,7 +59,7 @@ export default function useGetAllRequestLists({
         setPagination(foundPage?.pagination_data);
         dispatch(updateRequestsLists({ data: foundPage?.data }));
       } else {
-        const response = await axios.get(`admin/user-request?${queryString}`);
+        const response = await axios.get(`/admin/user-request?${queryString}`);
         const { user_requests } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
           user_requests;

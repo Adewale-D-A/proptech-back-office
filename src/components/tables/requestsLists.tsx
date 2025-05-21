@@ -30,7 +30,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
     start_date: string;
     end_date: string;
   }>();
-  const [sort, setSort] = useState("asc");
+  const [sort, setSort] = useState("desc");
 
   const [openUpdateRequestStatus, setOpenUpdateRequestStatus] = useState(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
@@ -39,14 +39,13 @@ export default function RequestsListTable({ header }: { header: string[] }) {
   const [selectedStatus, setSelectedStatus] = useState("");
 
   //fetch request data
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllRequestLists({
-      page: currentPage,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      sort: sort,
-      search,
-    });
+  const { data, isLoading, pagination } = useGetAllRequestLists({
+    page: currentPage,
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    sort,
+    search,
+  });
 
   // update filtering options
   const handleCustomersFiltering = useCallback(
@@ -91,7 +90,12 @@ export default function RequestsListTable({ header }: { header: string[] }) {
           </div>
           <div className=" flex items-center gap-2 flex-col md:flex-row">
             <Filter actionHandler={handleCustomersFiltering} />
-            <Sort setSort={setSort} id="sort-by" label="Sort by" />
+            <Sort
+              setSort={setSort}
+              id="sort-by"
+              label="Sort by"
+              defaultValue="desc"
+            />
             <ExportToCSV
               dataset={data}
               jsonToCSVReformerter={requestsExportFormater}

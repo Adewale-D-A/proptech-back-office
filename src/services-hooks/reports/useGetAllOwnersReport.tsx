@@ -10,7 +10,7 @@ export default function useGetAllOwnersReport({
   page = 1,
   start_date,
   end_date,
-  sort = "asc",
+  sort = "desc",
   search = "",
   building_id,
   shortlet_id,
@@ -46,12 +46,14 @@ export default function useGetAllOwnersReport({
       const { queryString, remakeRequest } = ApiQueryParamsExtractor({
         dataset: {
           page: page,
+          sort,
           start_date: start_date,
           end_date: end_date,
           building_id,
           shortlet_id,
           expense_category_id,
         },
+        sortRefetchKeyword: "asc",
       });
       const response = await axios.get(`/admin/owner-report?${queryString}`);
       const { owner_reports } = response?.data?.data;

@@ -1,7 +1,9 @@
 export default function ApiQueryParamsExtractor({
   dataset,
+  sortRefetchKeyword = "desc",
 }: {
   dataset: { [key: string]: string | number | undefined };
+  sortRefetchKeyword?: "asc" | "desc";
 }) {
   try {
     let concateString = "";
@@ -32,7 +34,7 @@ export default function ApiQueryParamsExtractor({
         keyArray.includes("paid") ||
         keyArray.includes("expense_category_id") ||
         keyArray.includes("role_id") ||
-        String(dataset["sort"] || "") === "desc"
+        String(dataset["sort"] || "") === sortRefetchKeyword
         ? true
         : false || Number(dataset["limit"] || 20) > 20
         ? true

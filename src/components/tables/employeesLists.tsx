@@ -39,7 +39,7 @@ export default function EmployeesLists() {
     end_date: string;
   }>();
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("asc");
+  const [sort, setSort] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
@@ -135,7 +135,12 @@ export default function EmployeesLists() {
                 fileName="employees-list"
               />
               <div className="w-fit min-w-28">
-                <Sort id="employee-sort" label="" setSort={setSort} />
+                <Sort
+                  id="employee-sort"
+                  label=""
+                  defaultValue="desc"
+                  setSort={setSort}
+                />
               </div>
               {admin?.create && (
                 <LoadingButton
