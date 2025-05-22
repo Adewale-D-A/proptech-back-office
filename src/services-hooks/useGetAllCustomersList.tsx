@@ -62,7 +62,7 @@ export default function useGetAllCustomersLists({
         setPagination(foundPage?.pagination_data);
         dispatch(updateCustomersList({ data: foundPage?.data }));
       } else {
-        const response = await axios.get(`/admin/user/all??${queryString}`);
+        const response = await axios.get(`/admin/user/all?${queryString}`);
         const { users } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
           users;
