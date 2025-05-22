@@ -13,7 +13,7 @@ export default function useGetDailyOccupancy({
   page = 1,
   start_date,
   end_date,
-  sort = "asc",
+  sort = "desc",
   search = "",
 }: {
   page?: number;
@@ -46,6 +46,7 @@ export default function useGetDailyOccupancy({
           sort: sort,
           search: search,
         },
+        sortRefetchKeyword: "asc",
       });
       //check store if this requested data has been saved previously and retirve it
       //if not, make a new request and save into store
