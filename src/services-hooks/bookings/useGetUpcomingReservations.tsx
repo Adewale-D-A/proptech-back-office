@@ -43,10 +43,10 @@ export default function useGetUpcomingReservation({
           page: search ? 1 : page,
           start_date: start_date,
           end_date: end_date,
-          sort: sort,
+          sort: "asc",
           search: search,
         },
-        sortRefetchKeyword: "asc",
+        sortRefetchKeyword: "desc",
       });
       //check store if this requested data has been saved previously and retirve it
       //if not, make a new request and save into store

@@ -58,7 +58,7 @@ export default function useGetLatestReservation({
         dispatch(updateLatestReservationList({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          `/admin/booking/latest-reservation??${queryString}`
+          `/admin/booking/latest-reservation?${queryString}`
         );
         const { bookings } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =

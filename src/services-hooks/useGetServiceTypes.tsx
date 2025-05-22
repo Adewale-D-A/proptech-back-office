@@ -56,7 +56,7 @@ export default function useGetServiceTypes({
         setPagination(foundPage?.pagination_data);
         dispatch(updateServiceTypes({ data: foundPage?.data }));
       } else {
-        const response = await axios.get(`/admin/service-type??${queryString}`);
+        const response = await axios.get(`/admin/service-type?${queryString}`);
         const { serviceTypes } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
           serviceTypes;

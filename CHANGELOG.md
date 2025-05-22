@@ -1,6 +1,7 @@
 ##### 22.05.2025
 
-> Upodate: Bookings overview reservations query orders changed to descending by default
+> Updated: Bookings overview reservations data sorting arrangments adjustments
+> Update: Bookings overview reservations query orders changed to descending by default
 > Bug fix: Customers list pagination bug fixed
 > Updated: Dashboard analytics request breakdown url updated
 

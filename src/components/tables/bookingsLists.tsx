@@ -55,11 +55,15 @@ export default function BookingsListTable({
           <table className=" w-full">
             <thead className="">
               <tr>
-                {["ID", "Customer Name", "Rooms", "Check-in", "Status"].map(
-                  (head) => (
-                    <th key={head}>{head}</th>
-                  )
-                )}
+                {[
+                  "ID",
+                  "Customer Name",
+                  "Rooms",
+                  type === "departing" ? "Check-out" : "Check-in",
+                  "Status",
+                ].map((head) => (
+                  <th key={head}>{head}</th>
+                ))}
               </tr>
             </thead>
             <tbody className="">
@@ -78,7 +82,11 @@ export default function BookingsListTable({
                       {request?.user?.first_name} {request?.user?.last_name}
                     </td>
                     <td>{request?.shortlet?.name}</td>
-                    <td>{formatDate(request?.check_in_date)}</td>
+                    <td>
+                      {type === "departing"
+                        ? formatDate(request?.check_out_date)
+                        : formatDate(request?.check_in_date)}
+                    </td>
                     {variant === "action" ? (
                       <td>
                         <Link
