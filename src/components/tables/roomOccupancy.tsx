@@ -11,7 +11,7 @@ export default function RoomOccupancyListTable({}: {}) {
     start_date: string;
     end_date: string;
   }>();
-  const [sort, setSort] = useState("asc");
+  const [sort, setSort] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, pagination, isLoading, isFailed, setIsFailed, retryFunction } =
@@ -19,7 +19,7 @@ export default function RoomOccupancyListTable({}: {}) {
       page: currentPage,
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
-      sort: sort,
+      sort,
     });
 
   return (

@@ -52,8 +52,6 @@ run **npm start** (start application on port:3000)
 
 [MIME TYPES](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types)
 
-[LIVE WEB](https://web-app-web-back-office.vercel.app/)
-
 [backend main api doc](https://documenter.getpostman.com/view/36930652/2sAXjNXAMk)
 
 [FIGMA File](https://www.figma.com/design/foJk9S0rCJImkVXY0EgxId/proptech?node-id=4400-64&node-type=&t=ZI2UUvFyHO0J3pWZ-0)
