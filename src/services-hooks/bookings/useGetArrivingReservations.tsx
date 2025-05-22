@@ -43,10 +43,10 @@ export default function useGetArrivingReservation({
           page: search ? 1 : page,
           start_date: start_date,
           end_date: end_date,
-          sort: sort,
+          sort: "asc",
           search: search,
         },
-        sortRefetchKeyword: "asc",
+        sortRefetchKeyword: "desc",
       });
       //check store if this requested data has been saved previously and retirve it
       //if not, make a new request and save into store
@@ -58,7 +58,7 @@ export default function useGetArrivingReservation({
         dispatch(updateArrivingReservationList({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          `/admin/booking/arriving-reservation??${queryString}`
+          `/admin/booking/arriving-reservation?${queryString}`
         );
         const { bookings } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =

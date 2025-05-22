@@ -58,7 +58,7 @@ export default function useGetDailyOccupancy({
         dispatch(updateDailyOccupancyList({ data: foundPage?.data }));
       } else {
         const response = await axios.get(
-          `/admin/booking/daily-room-occupancy??${queryString}`
+          `/admin/booking/daily-room-occupancy?${queryString}`
         );
         const { bookings } = response?.data?.data;
         const { data, current_page, last_page, per_page, total, from, to } =
