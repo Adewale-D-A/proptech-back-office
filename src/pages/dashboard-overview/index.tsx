@@ -114,7 +114,10 @@ export default function DashboardOverview() {
                 label: "Additional Requests",
                 value: `${data?.no_of_additional_request} Requests`,
                 theme: "text-[#017EFF] bg-[#017EFF]/20",
-                url: { src: "/bookings/requests", label: "View Requests" },
+                url: {
+                  src: "/additional-services/99apartment-services",
+                  label: "View Requests",
+                },
               },
               {
                 id: 4,

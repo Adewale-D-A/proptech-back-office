@@ -1,3 +1,8 @@
+##### 22.05.2025
+
+> Bug fix: Customers list pagination bug fixed
+> Updated: Dashboard analytics request breakdown url updated
+
 ##### 21.05.2025
 
 > Updates: Maintenance request, users request, requisition request, bookings, owners report summary sorting order updated to Descending by default
