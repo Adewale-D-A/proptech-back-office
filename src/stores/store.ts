@@ -87,6 +87,8 @@ import restrictionsList from "./apiData/restrictions";
 import specialPricesList from "./apiData/special-prices";
 // service types
 import serviceTypeData from "./apiData/service-types";
+// banks
+import banks from "./apiData/banks";
 
 export const adminStore = () => {
   return configureStore({
@@ -107,6 +109,8 @@ export const adminStore = () => {
       userAuthentication: userAuthentication,
 
       // api data
+      // banks
+      banks: banks,
       // dashboard
       serviceBreakdown: serviceBreakdownData,
       salesAnalytics: salesAnalyticsData,

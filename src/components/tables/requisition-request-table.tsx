@@ -69,6 +69,7 @@ export default function RequisitionRequestTable() {
   );
   const openForNewRequest = useCallback(() => {
     setSelectedId("");
+    setRequistionItem({} as any);
     setOpenRequest(true);
   }, []);
 

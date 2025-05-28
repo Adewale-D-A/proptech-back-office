@@ -1,3 +1,7 @@
+##### 28.05.2025
+
+> Feature: Banks list selection and verification added
+
 ##### 22.05.2025
 
 > Updated: Bookings overview reservations data sorting arrangments adjustments
