@@ -1,3 +1,7 @@
+##### 31.05.2025
+
+> Feature: Condensed pagination support added
+
 ##### 28.05.2025
 
 > Feature: Banks list selection and verification added
