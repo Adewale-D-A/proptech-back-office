@@ -3,6 +3,7 @@ import LoaderIcon from "../../assets/icons/loader";
 import { pagination } from "../../types/pagination";
 import NavigateNextIcon from "../../assets/icons/navigate-next";
 import NavigatePrevIcon from "../../assets/icons/navigate-prev";
+import getPagination from "../../utils/get-pagination";
 
 export default function Pagination({
   pagination,
@@ -15,6 +16,7 @@ export default function Pagination({
   isLoading: boolean;
   label?: string;
 }) {
+  const result = getPagination(pagination?.current_page, pagination?.last_page);
   // productsArray next function
   const showNextproductsArray = useCallback(() => {
     if (pagination?.total >= pagination?.current_page * pagination?.per_page) {
@@ -52,18 +54,19 @@ export default function Pagination({
           )}
         </button>
         <div className="flex gap-2 flex-wrap justify-between md:justify-center">
-          {Array.from({ length: pagination?.last_page }, (_, index) => (
+          {result.map((page, index) => (
             <button
               key={index}
               type="button"
+              disabled={page === "..."}
               onClick={() => setCurrentPage(index + 1)}
               className={` border min-h-4 min-w-4 aspect-square flex items-center justify-center rounded-full p-3 hover:border-primary transition-all cursor-pointer ${
-                index + 1 === pagination?.current_page
+                page === pagination?.current_page
                   ? "border-primary bg-primary text-white "
                   : ""
               }}`}
             >
-              {index + 1}
+              {page}
             </button>
           ))}
         </div>

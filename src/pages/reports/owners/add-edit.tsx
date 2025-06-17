@@ -142,13 +142,13 @@ export default function AddEditOwnersReport({
       />
       <div className="w-full items-end grid grid-cols-1 md:grid-cols-2 gap-3">
         <Select
-          label="Expense"
+          label="Expense Category"
           value={expenseId}
           setValue={setExpenseId}
           id={"expense-select"}
         >
           <option value={``} disabled>
-            Expense
+            Expense Category
           </option>
           {expenseCategories?.map((item) => (
             <option key={item?.id} value={`${item?.id}`}>

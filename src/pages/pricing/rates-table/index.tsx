@@ -1,4 +1,10 @@
-import { SyntheticEvent, useCallback, useLayoutEffect, useState } from "react";
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import { useAppDispatch } from "../../../stores/hooks";
 import { updatePageProperties } from "../../../stores/appFunctionality/pageProperties";
 import ReceiptIcon from "../../../assets/icons/receipt";
@@ -9,7 +15,6 @@ import LoadingButton from "../../../components/button";
 import TextInput from "../../../components/inputs/textInput";
 import PriceRateList from "../../../components/tables/pricingRateLists";
 import { apartmentById } from "../../../types/apiData/apartment";
-import Search from "../../../components/inputs/search";
 import useAxios from "../../../useHooks/useAxios";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import ApartmentSingleSearch from "../../../components/inputs/search/apartment-single-search";
@@ -57,7 +62,7 @@ export default function RateTable() {
       e.preventDefault();
       setIsSubmitting(true);
       try {
-        const response = await axios.post(`/admin/rate-list`, {
+        await axios.post(`/admin/rate-list`, {
           shortlet_id: selectedAprt?.id,
           from: from,
           to: to,
@@ -105,7 +110,7 @@ export default function RateTable() {
                       {selectedAprt?.name}
                     </h4>
                   </div>
-                  <div className=" text-sm text-gray-500 flex items-center gap-3">
+                  <div className=" text-sm text-gray-500 flex items-center gap-3 flex-wrap">
                     <span className="flex items-center gap-1">
                       <LocationPinIcon className=" h-4 w-4" />{" "}
                       {selectedAprt?.location}
@@ -140,21 +145,32 @@ export default function RateTable() {
                 <h6 className="text-md font-semibold border-t py-3">
                   Add Rates Per Night
                 </h6>{" "}
+                {/* default standard rate */}
+                <div className="font-bold text-primary italic p-2 rounded-lg bg-primary/20">
+                  <p>
+                    Standard Rate: {selectedAprt?.currency}{" "}
+                    {selectedAprt?.price}
+                  </p>
+                </div>
                 <TextInput
                   inputType="number"
                   isRequired={true}
                   value={rate}
                   setValue={setRate}
                   id="standate-rate"
-                  placeholder="Enter Standard Rate"
+                  placeholder="Enter Custom Rate"
                 />
+                {/* default standard caution fee rate */}
+                <div className="font-bold text-primary italic p-2 rounded-lg bg-primary/20">
+                  <p>Standard Caution Fee: {selectedAprt?.caution_fee}</p>
+                </div>
                 <TextInput
                   inputType="number"
                   isRequired={true}
                   value={cautionFee}
                   setValue={setCautionFee}
                   id="caution-fee"
-                  placeholder="Enter Caution Fee"
+                  placeholder="Enter Custom Caution Fee"
                 />
                 <LoadingButton
                   label="Insert"
