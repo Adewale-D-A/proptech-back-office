@@ -19,6 +19,7 @@ import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import { MenuItem } from "@headlessui/react";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import Sort from "../filterAndSort/sort";
+import { BadgeCheck, CheckCheck } from "lucide-react";
 
 export default function AllBookingsListTable({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
@@ -115,7 +116,14 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
                         </Link>
                       </td>
                       <td>
-                        {item?.user?.first_name} {item?.user?.last_name}
+                        <Link
+                          to={`/customers/customer-details/${item?.user?.id}`}
+                          className=" underline italic flex items-center gap-2 hover:font-bold transition-all"
+                        >
+                          <span>
+                            {item?.user?.first_name} {item?.user?.last_name}
+                          </span>{" "}
+                        </Link>
                       </td>
                       <td>{item?.shortlet?.name}</td>
                       <td>{formatDate(item?.created_at)}</td>

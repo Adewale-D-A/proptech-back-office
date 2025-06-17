@@ -7,7 +7,7 @@ export default function ConfirmationCard({ data }: { data: customersById }) {
     <div className=" flex items-center justify-between">
       <div className=" flex items-center gap-3">
         <img
-          src="/logo_blue.png"
+          src={data?.profile_photo || "/logo_blue.png"}
           alt="image"
           className=" rounded-full h-8 w-8 object-cover aspect-square"
         />
@@ -25,7 +25,12 @@ export default function ConfirmationCard({ data }: { data: customersById }) {
         >
           ID Number: {data?.id}
         </Link>
-        <Status status="Confirmed" />
+        <Status
+          status="identity"
+          booleanVal={data?.identity_verified}
+          falsyMessage="Unverified"
+          truthyMessage="Verified"
+        />
       </div>
     </div>
   );

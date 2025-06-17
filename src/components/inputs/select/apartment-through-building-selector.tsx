@@ -15,6 +15,7 @@ export default function ApartmentThroughBuildingSelector({
   withLabel?: boolean;
 }) {
   const { data } = useGetBuildings({ page: 1 });
+
   return (
     <div className="w-full flex items-end gap-3 flex-col md:flex-row">
       <Select

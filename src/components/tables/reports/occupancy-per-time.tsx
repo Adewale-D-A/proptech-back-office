@@ -16,6 +16,7 @@ import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
 import ExportToCSV from "../../export-to-csv";
 import { occupancyPerTimeReportExportFormater } from "../../../utils/export-formerter-functions";
+import ApartmentThroughBuildingSelector from "../../inputs/select/apartment-through-building-selector";
 
 export default function OccupancyPerTimeReportTable() {
   const dispatch = useAppDispatch();
@@ -23,29 +24,22 @@ export default function OccupancyPerTimeReportTable() {
     start_date: string;
     end_date: string;
   }>();
+  const [apartmentId, setApartmentId] = useState("");
+  const [buildingId, setBuildingId] = useState("");
   const [apartment, setApartment] = useState<apartmentById>({} as any);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
+  const { data, isLoading, retryFunction, pagination } =
     useGetOccupancyPerTimeReport({
       page: currentPage,
-      apartmentId: String(apartment?.id || ""),
+      apartmentId: buildingId && apartmentId ? String(apartmentId) : "",
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
     });
 
   const handleLoadData = useCallback(() => {
-    if (apartment?.id) {
-      retryFunction();
-    } else {
-      dispatch(
-        openSnackbar({
-          message: "Please select an apartment to view its reports",
-          isError: true,
-        })
-      );
-    }
-  }, [apartment?.id]);
+    retryFunction();
+  }, [apartmentId]);
 
   const handleCustomersFiltering = useCallback(
     (start_date: string, end_date: string) => {
@@ -54,11 +48,11 @@ export default function OccupancyPerTimeReportTable() {
     []
   );
 
-  const { data: reportSummary } = useGetReportSummary({
-    apartmentId: String(apartment?.id || ""),
-    start_date: filterDates?.start_date,
-    end_date: filterDates?.end_date,
-  });
+  // const { data: reportSummary } = useGetReportSummary({
+  //   apartmentId: String(apartmentId || ""),
+  //   start_date: filterDates?.start_date,
+  //   end_date: filterDates?.end_date,
+  // });
 
   return (
     <div className="w-full flex flex-col gap-5">
@@ -70,11 +64,15 @@ export default function OccupancyPerTimeReportTable() {
           <TimeRangeSelector />
         </div>
 
-        <ApartmentSingleSearch
-          placeholder="Apartment name..."
-          selected={apartment}
-          setSelected={setApartment}
-        />
+        <div className="w-full max-w-screen-md flex items-center flex-col md:flex-row gap-2">
+          <ApartmentThroughBuildingSelector
+            setApartmentId={setApartmentId}
+            apartmentId={apartmentId}
+            buildingId={buildingId}
+            setBuildingId={setBuildingId}
+            withLabel={false}
+          />
+        </div>
         <div className=" flex items-center gap-4">
           <LoadingButton
             label="Load data"
