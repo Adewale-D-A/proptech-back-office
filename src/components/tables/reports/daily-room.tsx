@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import { apartmentById } from "../../../types/apiData/apartment";
 import Filter from "../../filterAndSort/filter";
 import Select from "../../inputs/select";
 import LoadingButton from "../../button";
@@ -9,11 +8,9 @@ import Pagination from "../../pagination";
 import formatDate from "../../../utils/isoDateConverter";
 import useGetRevenueReport from "../../../services-hooks/reports/revenue";
 import useGetReportSummary from "../../../services-hooks/reports/report-summary";
-import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
-import { useAppDispatch } from "../../../stores/hooks";
-import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import ExportToCSV from "../../export-to-csv";
 import { revenueReportExportFormater } from "../../../utils/export-formerter-functions";
+import ApartmentThroughBuildingSelector from "../../inputs/select/apartment-through-building-selector";
 
 export default function DailyRoomReportTable() {
   const [type, setType] = useState("");
@@ -22,34 +19,26 @@ export default function DailyRoomReportTable() {
     start_date: string;
     end_date: string;
   }>();
-  const dispatch = useAppDispatch();
-  const [apartment, setApartment] = useState<apartmentById>({} as any);
+
+  const [apartmentId, setApartmentId] = useState("");
+  const [buildingId, setBuildingId] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
     useGetRevenueReport({
       page: currentPage,
-      apartmentId: String(apartment?.id || ""),
+      apartmentId: buildingId && apartmentId ? String(apartmentId) : "",
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
       group: "day",
     });
 
   const handleLoadData = useCallback(() => {
-    if (apartment?.id) {
-      retryFunction();
-    } else {
-      dispatch(
-        openSnackbar({
-          message: "Please select an apartment to view its reports",
-          isError: true,
-        })
-      );
-    }
-  }, [apartment?.id]);
+    retryFunction();
+  }, [apartmentId]);
 
   const { data: reportSummary } = useGetReportSummary({
-    apartmentId: String(apartment?.id || ""),
+    apartmentId: String(apartmentId || ""),
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,
   });
@@ -67,7 +56,7 @@ export default function DailyRoomReportTable() {
         <div>
           <Filter actionHandler={handleCustomersFiltering} />
         </div>
-        <div>
+        <div className=" flex min-w-max items-center gap-2">
           <Select
             isRequired={true}
             value={type}
@@ -79,12 +68,16 @@ export default function DailyRoomReportTable() {
             <option value="arriving">Arriving</option>
             <option value="departing">Departing</option>
           </Select>
+        </div>{" "}
+        <div className="w-full max-w-screen-md flex items-center flex-col md:flex-row gap-2">
+          <ApartmentThroughBuildingSelector
+            setApartmentId={setApartmentId}
+            apartmentId={apartmentId}
+            buildingId={buildingId}
+            setBuildingId={setBuildingId}
+            withLabel={false}
+          />
         </div>
-        <ApartmentSingleSearch
-          placeholder="Apartment name..."
-          selected={apartment}
-          setSelected={setApartment}
-        />
         <div className=" flex items-center gap-4">
           <LoadingButton
             label="Load data"

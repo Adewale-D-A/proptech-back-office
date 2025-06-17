@@ -11,7 +11,6 @@ import ExportToCSV from "../export-to-csv";
 import { customersExportFormater } from "../../utils/export-formerter-functions";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
-import MenuIcon from "../../assets/icons/menu";
 import { MenuItem } from "@headlessui/react";
 
 export default function CustomersListTable() {

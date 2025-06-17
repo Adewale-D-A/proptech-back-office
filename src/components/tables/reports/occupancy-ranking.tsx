@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 import Filter from "../../filterAndSort/filter";
-import { apartmentById } from "../../../types/apiData/apartment";
 import Select from "../../inputs/select";
 import LoadingButton from "../../button";
 import { revenueReportList } from "../../../types/apiData/reports";
@@ -15,47 +14,36 @@ import ChartIcon from "../../../assets/icons/chart";
 import formatDate from "../../../utils/isoDateConverter";
 import useGetRevenueReport from "../../../services-hooks/reports/revenue";
 import useGetReportSummary from "../../../services-hooks/reports/report-summary";
-import { useAppDispatch } from "../../../stores/hooks";
-import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
-import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
 import ExportToCSV from "../../export-to-csv";
 import { revenueReportExportFormater } from "../../../utils/export-formerter-functions";
+import ApartmentThroughBuildingSelector from "../../inputs/select/apartment-through-building-selector";
 
 export default function OccupancyRankingReportTable() {
   const [group, setGroup] = useState("");
   const [viewType, setViewType] = useState("sheet");
 
-  const dispatch = useAppDispatch();
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
   }>();
-  const [apartment, setApartment] = useState<apartmentById>({} as any);
+  const [apartmentId, setApartmentId] = useState("");
+  const [buildingId, setBuildingId] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetRevenueReport({
-      page: currentPage,
-      apartmentId: String(apartment?.id || ""),
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      group: group,
-    });
+  const { data, isLoading, retryFunction, pagination } = useGetRevenueReport({
+    page: currentPage,
+    apartmentId: buildingId && apartmentId ? String(apartmentId) : "",
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    group: group,
+  });
 
   const handleLoadData = useCallback(() => {
-    if (apartment?.id) {
-      retryFunction();
-    } else {
-      dispatch(
-        openSnackbar({
-          message: "Please select an apartment to view its reports",
-          isError: true,
-        })
-      );
-    }
-  }, [apartment?.id]);
+    retryFunction();
+  }, [apartmentId]);
+
   const { data: reportSummary } = useGetReportSummary({
-    apartmentId: String(apartment?.id || ""),
+    apartmentId: buildingId && apartmentId ? String(apartmentId) : "",
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,
   });
@@ -75,28 +63,30 @@ export default function OccupancyRankingReportTable() {
             <div>
               <Filter actionHandler={handleCustomersFiltering} />
             </div>
-            <div className=" flex items-center gap-2">
-              <div>
-                <Select
-                  isRequired={true}
-                  value={group}
-                  setValue={setGroup}
-                  id="group-by"
-                >
-                  <option value="" disabled>
-                    Group by
-                  </option>
-                  <option value="month">Month</option>
-                  <option value="week">Week</option>
-                  <option value="day">Day</option>
-                </Select>
-              </div>
+            <div className=" flex min-w-max items-center gap-2">
+              <Select
+                isRequired={true}
+                value={group}
+                setValue={setGroup}
+                id="group-by"
+              >
+                <option value="" disabled>
+                  Group by
+                </option>
+                <option value="month">Month</option>
+                <option value="week">Week</option>
+                <option value="day">Day</option>
+              </Select>
             </div>
-            <ApartmentSingleSearch
-              placeholder="Apartment name..."
-              selected={apartment}
-              setSelected={setApartment}
-            />
+            <div className="w-full max-w-screen-md flex items-center flex-col md:flex-row gap-2">
+              <ApartmentThroughBuildingSelector
+                setApartmentId={setApartmentId}
+                apartmentId={apartmentId}
+                buildingId={buildingId}
+                setBuildingId={setBuildingId}
+                withLabel={false}
+              />
+            </div>
             <div className=" flex items-center gap-4">
               <LoadingButton
                 label="Load data"

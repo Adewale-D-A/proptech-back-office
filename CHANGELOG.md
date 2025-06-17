@@ -1,5 +1,7 @@
 ##### 17.06.2025
 
+> Update: Reports building to apartment drill downs addition
+> Update: Bookings user verification status addition
 > Update: Rates table standard rates updates
 > Update: Owner's report entry catgeory label update
 
