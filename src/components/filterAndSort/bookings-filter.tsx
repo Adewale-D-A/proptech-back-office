@@ -4,6 +4,8 @@ import ModalTemplate from "../modal";
 import Select from "../inputs/select";
 import LoadingButton from "../button";
 import { BookingFilterPayload } from "../../types/apiData/bookings/booking-filter-options";
+import paymentOptions from "../../config/payment-options.json";
+import salesChannels from "../../config/sales-channels.json";
 
 export default function BookingsFilterSearch({
   setData,
@@ -11,6 +13,7 @@ export default function BookingsFilterSearch({
   setData: (payload: BookingFilterPayload) => void;
 }) {
   const [channel, setChannel] = useState("");
+  const [userVerification, setUserVerification] = useState("");
   const [currency, setCurrency] = useState("");
   const [category, setCategory] = useState("");
   const [name, setName] = useState("");
@@ -32,6 +35,7 @@ export default function BookingsFilterSearch({
           room_option: category,
           payment_method: payment,
           status,
+          user_verification: userVerification,
         };
         setData(payload);
         setOpen(false);
@@ -40,7 +44,7 @@ export default function BookingsFilterSearch({
         setIsSearching(false);
       }
     },
-    [channel, currency, category, payment, status]
+    [channel, currency, category, payment, status, userVerification]
   );
 
   const clearFilter = useCallback(() => {
@@ -85,13 +89,7 @@ export default function BookingsFilterSearch({
               isRequired: false,
               value: channel,
               setValue: setChannel,
-              options: [
-                {
-                  id: 1,
-                  label: "Website",
-                  value: "website",
-                },
-              ],
+              options: salesChannels,
             },
             {
               id: 2,
@@ -148,42 +146,26 @@ export default function BookingsFilterSearch({
               isRequired: false,
               value: payment,
               setValue: setPayment,
+              options: paymentOptions,
+            },
+            {
+              id: 7,
+              name: "filter-by-user-verification",
+              defaultLabel: "Filter by User Verification",
+              isRequired: false,
+              value: userVerification,
+              setValue: setUserVerification,
               options: [
                 {
                   id: 1,
-                  label: "Paystack",
-                  value: "paystack",
+                  label: "Verified",
+                  value: "yes",
                 },
                 {
                   id: 2,
-                  label: "Stripe",
-                  value: "stripe",
+                  label: "Unverified",
+                  value: "no",
                 },
-                {
-                  id: 3,
-                  label: "Website",
-                  value: "website",
-                },
-                {
-                  id: 4,
-                  label: "Admin",
-                  value: "admin",
-                },
-                // {
-                //   id: 1,
-                //   label: "Bank Transfer",
-                //   value: "bank-transfer",
-                // },
-                // {
-                //   id: 2,
-                //   label: "Flutterwave",
-                //   value: "fluttewave",
-                // },
-                // {
-                //   id: 3,
-                //   label: "Stripe",
-                //   value: "stripe",
-                // },
               ],
             },
             {

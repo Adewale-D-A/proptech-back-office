@@ -4,4 +4,5 @@ export interface BookingFilterPayload {
   room_option: string;
   payment_method: string;
   status: string;
+  user_verification?: string;
 }

@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "label": "Paystack",
+    "value": "paystack"
+  },
+  {
+    "id": 2,
+    "label": "Cash",
+    "value": "cash"
+  },
+  {
+    "id": 3,
+    "label": "Transfer",
+    "value": "transfer"
+  }
+]

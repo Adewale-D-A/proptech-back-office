@@ -1,3 +1,7 @@
+##### 21.06.2025
+
+> Update: Phase II requirements updates (development in progress)
+
 ##### 17.06.2025
 
 > Update: Reports building to apartment drill downs addition

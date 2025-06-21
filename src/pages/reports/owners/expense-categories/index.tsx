@@ -4,7 +4,8 @@ import { updatePageProperties } from "../../../../stores/appFunctionality/pagePr
 import BlockedDatesReasonsIcon from "../../../../assets/icons/blocked-dates-reasons";
 import HeadsetIcon from "../../../../assets/icons/headset";
 // import RequestCategoriesistsTable from "../../../../components/tables/requests-categories";
-import ExpenseCategoriesistsTable from "../../../../components/tables/expense-categories";
+// import ExpenseCategoriesistsTable from "../../../../components/tables/expense-categories";
+import RequestCategoriesistsTable from "../../../../components/tables/requests-categories";
 
 const breadCrumb = [
   {
@@ -37,7 +38,8 @@ export default function ExpenseCategoriesListView() {
 
   return (
     <div className="w-full">
-      <ExpenseCategoriesistsTable />
+      {/* <ExpenseCategoriesistsTable /> */}
+      <RequestCategoriesistsTable />
     </div>
   );
 }

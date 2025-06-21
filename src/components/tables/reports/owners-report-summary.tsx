@@ -37,15 +37,14 @@ export default function OwnersReportSummaryTableList() {
     end_date: string;
   }>();
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllOwnersReport({
-      page: currentPage,
-      sort,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      shortlet_id: String(apartmentId || ""),
-      expense_category_id: category,
-    });
+  const { data, isLoading, pagination } = useGetAllOwnersReport({
+    page: currentPage,
+    sort,
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    shortlet_id: String(apartmentId || ""),
+    expense_category_id: category,
+  });
 
   const openForNewRequest = useCallback(() => {
     setSelectedId("");

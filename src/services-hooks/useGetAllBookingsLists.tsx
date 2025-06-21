@@ -18,6 +18,7 @@ export default function useGetAllBookingsLists({
   currency,
   room_option,
   payment_method,
+  user_verification,
   status,
   search = "",
 }: {
@@ -27,6 +28,7 @@ export default function useGetAllBookingsLists({
   sort?: "desc" | "asc" | string;
   channel?: string;
   currency?: string;
+  user_verification?: string;
   room_option?: string;
   payment_method?: string;
   status?: string;
@@ -55,6 +57,7 @@ export default function useGetAllBookingsLists({
           channel: channel,
           currency: currency,
           room_option: room_option,
+          verified: user_verification,
           payment_method: payment_method,
           status: status,
           search: search,
@@ -110,6 +113,7 @@ export default function useGetAllBookingsLists({
     payment_method,
     status,
     search,
+    user_verification,
   ]);
 
   useEffect(() => {
@@ -125,6 +129,7 @@ export default function useGetAllBookingsLists({
     payment_method,
     status,
     search,
+    user_verification,
   ]);
 
   return {

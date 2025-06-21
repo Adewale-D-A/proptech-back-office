@@ -22,6 +22,7 @@ import reservationValidator from "../../utils/reservation-validator";
 import ApartmentSingleSearch from "../inputs/search/apartment-single-search";
 import defaultCheckInDateTime from "../../config/default-check-in-date-time";
 import BlockDateForm from "./block-date-form";
+import paymentOptions from "../../config/payment-options.json";
 
 const defaultBookingData = defaultCheckInDateTime();
 export default function QuickReservationFlow({
@@ -364,9 +365,11 @@ export default function QuickReservationFlow({
               <option value="" disabled>
                 Select Method of payment
               </option>
-              <option value="paystack">Paystack</option>
-              <option value="cash">Cash</option>
-              <option value="transfer">Transfer</option>
+              {paymentOptions.map((item) => (
+                <option key={item?.id} value={item?.value}>
+                  {item?.label}
+                </option>
+              ))}
             </Select>
             <Select
               isRequired={true}

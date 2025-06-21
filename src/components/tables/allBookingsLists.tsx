@@ -19,7 +19,6 @@ import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import { MenuItem } from "@headlessui/react";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import Sort from "../filterAndSort/sort";
-import { BadgeCheck, CheckCheck } from "lucide-react";
 
 export default function AllBookingsListTable({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
@@ -31,15 +30,14 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
   }>();
   const [sort, setSort] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllBookingsLists({
-      page: currentPage,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      sort: sort,
-      search,
-      ...filter,
-    });
+  const { data, isLoading, pagination } = useGetAllBookingsLists({
+    page: currentPage,
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    sort: sort,
+    search,
+    ...filter,
+  });
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [openBookingDetailSummary, setOpenBookingDetailSummary] =
@@ -52,10 +50,10 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
     setOpenBookingDetailSummary(true);
   }, []);
 
-  const openDelete = useCallback((id: number) => {
-    setSelectedId(String(id));
-    setOpenDeleteConfirmation(true);
-  }, []);
+  // const openDelete = useCallback((id: number) => {
+  //   setSelectedId(String(id));
+  //   setOpenDeleteConfirmation(true);
+  // }, []);
 
   const deleteBooking = useCallback(() => {
     setIsDeleting(true);
