@@ -6,12 +6,16 @@ import LoadingButton from "../button";
 import { BookingFilterPayload } from "../../types/apiData/bookings/booking-filter-options";
 import paymentOptions from "../../config/payment-options.json";
 import salesChannels from "../../config/sales-channels.json";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 export default function BookingsFilterSearch({
   setData,
 }: {
   setData: (payload: BookingFilterPayload) => void;
 }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const [channel, setChannel] = useState("");
   const [userVerification, setUserVerification] = useState("");
   const [currency, setCurrency] = useState("");
@@ -38,6 +42,18 @@ export default function BookingsFilterSearch({
           user_verification: userVerification,
         };
         setData(payload);
+        let queries: { [key: string]: string } = {};
+        searchParams.forEach((value, key) => {
+          queries[key] = value;
+        });
+        const params = new URLSearchParams(queries);
+        params.set("channel", channel);
+        params.set("currency", currency);
+        params.set("room_option", category);
+        params.set("payment_method", payment);
+        params.set("status", status);
+        params.set("user_verification", userVerification);
+        navigate(location.pathname + "?" + params.toString());
         setOpen(false);
       } catch (error) {
       } finally {

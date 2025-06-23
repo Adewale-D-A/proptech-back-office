@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import useAxios from "../../useHooks/useAxios";
-import { pagination } from "../../types/pagination";
 import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
 
 export default function useGetReportSummary({
@@ -22,8 +21,6 @@ export default function useGetReportSummary({
     total_nights_booked: number;
   }>({} as any);
   const [isFailed, setIsFailed] = useState(false);
-
-  const [pagination, setPagination] = useState<pagination>({} as any);
 
   const getReportSummary = useCallback(async () => {
     setIsLoading(true);

@@ -10,14 +10,17 @@ export default function useGetAdmin({ id }: { id?: string }) {
   const [isFailed, setIsFailed] = useState(false);
 
   const getAdmin = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/admins/${id}`);
       const { admin } = response?.data?.data;
       setData(admin);
       setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

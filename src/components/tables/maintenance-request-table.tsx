@@ -1,8 +1,6 @@
 import { useCallback, useState } from "react";
 import TableSearch from "../inputs/search/table-search";
 import Filter from "../filterAndSort/filter";
-import NoResult from "../noResult";
-import Pagination from "../pagination";
 import formatDate from "../../utils/isoDateConverter";
 import Select from "../inputs/select";
 // import useGetRequisitionRequests from "../../services-hooks/useGetRequisitionRequests";
@@ -24,6 +22,9 @@ import { maintenanceRequestsExportFormater } from "../../utils/export-formerter-
 import useGetRequestCategories from "../../services-hooks/useGetRequestCategories";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import Sort from "../filterAndSort/sort";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import { maintenanceRequestsById } from "../../types/apiData/maintenance-request";
+import TableTemplate from "./table-template";
 // import DeleteConfirmation from "../infoModal/delete-confirmation";
 // import useAxios from "../../useHooks/useAxios";
 // import { useAppDispatch } from "../../stores/hooks";
@@ -34,28 +35,32 @@ export default function MaintenanceRequestTable() {
   // const dispatch = useAppDispatch();
 
   const [category, setCategory] = useState("");
-  const [search, setSearch] = useState("");
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
   }>();
-  const [sort, setSort] = useState("desc");
-  const [currentPage, setCurrentPage] = useState(1);
   const [selectedId, setSelectedId] = useState("");
   const [openMaintenanceRequestEdit, setOpenMaintenanceRequestEdit] =
     useState(false);
   // const [openDelete, setOpenDelete] = useState(false);
   // const [isDeleting, setIsDeleting] = useState(false);
   const { data: categories } = useGetRequestCategories({
-    page: currentPage,
+    page: 1,
     limit: 1000,
   });
+  const [{ page, size, sort, search }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "desc",
+    search: "",
+  });
   const { data, isLoading, pagination } = useGetMaintenanceRequests({
-    page: currentPage,
+    page,
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,
     search,
     sort,
+    limit: size,
     category_id: category,
   });
   const handleFiltering = useCallback(
@@ -99,7 +104,7 @@ export default function MaintenanceRequestTable() {
       <div className="w-full flex flex-col gap-5">
         <div className="w-full flex items-center flex-col md:flex-row justify-between gap-3">
           <div className=" w-[320px]">
-            <TableSearch setValue={setSearch} placeholder="Search..." />
+            <TableSearch placeholder="Search..." />
           </div>
           <div className=" flex items-center gap-3 flex-col md:flex-row">
             <Select
@@ -116,12 +121,7 @@ export default function MaintenanceRequestTable() {
               ))}
             </Select>{" "}
             <div className=" min-w-40">
-              <Sort
-                setSort={setSort}
-                id="sort-by"
-                label="Sort by"
-                defaultValue="desc"
-              />
+              <Sort id="sort-by" label="Sort by" defaultValue="desc" />
             </div>
             <Filter actionHandler={handleFiltering} />
           </div>
@@ -150,100 +150,97 @@ export default function MaintenanceRequestTable() {
               />
             </div>
           </div>
-          <div className="block">
-            {data && data.length > 0 ? (
-              <div className=" w-full overflow-x-auto">
-                <table className=" w-full">
-                  <thead>
-                    <tr>
-                      {[
-                        "Requesting employee",
-                        "Apartment",
-                        "Category",
-                        "Request date",
-                        "Status",
-                        "Action",
-                      ].map((head) => (
-                        <th key={head}>{head}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.map((item) => {
-                      return (
-                        <tr key={item?.id} className=" border-b">
-                          <td className=" flex gap-2 items-center min-w-36">
-                            <img
-                              src={
-                                item?.admin?.profile_photo || "/logo_blue.png"
-                              }
-                              alt={item?.admin?.first_name}
-                              className=" h-10 w-10 rounded aspect-square"
-                            />
-                            <span className=" flex flex-col gap-1">
-                              <span className=" text-xs font-medium text-[#101828]">
-                                {item?.admin?.first_name}{" "}
-                                {item?.admin?.last_name}
-                              </span>
-                              <span className=" text-xs text-[#475467] font-medium">
-                                {item?.admin?.role?.name}
-                              </span>
-                            </span>
-                          </td>
-                          <td className=" text-xs font-medium text-[#475467]  min-w-36">
-                            {item?.shortlet?.name}
-                          </td>
-                          <td className="text-xs font-medium text-[#475467] ">
-                            {item?.category?.name}
-                          </td>
 
-                          <td className="text-xs font-medium text-[#475467] ">
-                            {formatDate(item?.request_date)}
-                          </td>
-                          <td className="">
-                            <Status status={item?.status} />
-                          </td>
-                          <td>
-                            <div className=" flex items-center gap-4">
-                              <Link
-                                to={`/requests/maintenance-requests/view-maintenance/${item?.id}`}
-                              >
-                                <EyeIcon />
-                              </Link>
-                              {maintenance_requests?.update && (
-                                <button
-                                  title="edit"
-                                  onClick={() =>
-                                    openForEditMaintenanceRequest(item?.id)
-                                  }
-                                >
-                                  <PenIcon />
-                                </button>
-                              )}
+          <TableTemplate
+            data={data}
+            isLoading={isLoading}
+            columns={[
+              {
+                header: "Requesting Employee",
+                key: "requesting_employee",
+                showColumnSort: true,
+                render: (row: maintenanceRequestsById) => (
+                  <div className=" flex gap-2 items-center min-w-36">
+                    <img
+                      src={row?.admin?.profile_photo || "/logo_blue.png"}
+                      alt={row?.admin?.first_name}
+                      className=" h-10 w-10 rounded aspect-square"
+                    />
+                    <span className=" flex flex-col gap-1">
+                      <span className=" text-xs font-medium text-[#101828]">
+                        {row?.admin?.first_name} {row?.admin?.last_name}
+                      </span>
+                      <span className=" text-xs text-[#475467] font-medium">
+                        {row?.admin?.role?.name}
+                      </span>
+                    </span>
+                  </div>
+                ),
+              },
+              {
+                header: "Apartment",
+                key: "apartmnet",
+                showColumnSort: true,
+                render: (row: maintenanceRequestsById) => (
+                  <span>{row?.shortlet?.name}</span>
+                ),
+              },
+              {
+                header: "Category",
+                key: "category",
+                showColumnSort: true,
+                render: (row: maintenanceRequestsById) => (
+                  <span>{row?.category?.name}</span>
+                ),
+              },
 
-                              {/* <button
+              {
+                header: "Request Date",
+                key: "request_date",
+                showColumnSort: true,
+                render: (row: maintenanceRequestsById) => (
+                  <span>{formatDate(row?.request_date)}</span>
+                ),
+              },
+              {
+                header: "Status",
+                key: "status",
+                showColumnSort: true,
+                render: (row: maintenanceRequestsById) => (
+                  <Status status={row?.status} />
+                ),
+              },
+              {
+                header: "Action",
+                key: "action",
+                render: (row: maintenanceRequestsById) => (
+                  <div className=" flex items-center gap-4">
+                    <Link
+                      to={`/requests/maintenance-requests/view-maintenance/${row?.id}`}
+                    >
+                      <EyeIcon />
+                    </Link>
+                    {maintenance_requests?.update && (
+                      <button
+                        title="edit"
+                        onClick={() => openForEditMaintenanceRequest(row?.id)}
+                      >
+                        <PenIcon />
+                      </button>
+                    )}
+
+                    {/* <button
                               title="delete"
-                              onClick={() => handleOpenDelete(item?.id)}
+                              onClick={() => handleOpenDelete(row?.id)}
                             >
                               <BinIcon className=" size-6 text-red-500" />
                             </button> */}
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <NoResult />
-            )}
-          </div>
-          <Pagination
+                  </div>
+                ),
+              },
+            ]}
+            showPaginator={true}
             pagination={pagination}
-            setCurrentPage={setCurrentPage}
-            isLoading={isLoading}
-            label="Maintenance requests"
           />
         </div>
       </div>

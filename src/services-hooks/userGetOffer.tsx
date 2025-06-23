@@ -10,14 +10,16 @@ export default function useGetOffer({ id }: { id?: string }) {
   const [isFailed, setIsFailed] = useState(false);
 
   const getOffer = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/offer/${id}`);
       const { offer } = response?.data?.data;
       setData(offer);
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

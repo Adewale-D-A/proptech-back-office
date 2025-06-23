@@ -38,7 +38,7 @@ export default function useGetAllOwnersReportSpreadsheet({
     try {
       //check store if this requested data has been saved previously and retirve it
       //if not, make a new request and save into store
-      const { queryString, remakeRequest } = ApiQueryParamsExtractor({
+      const { queryString } = ApiQueryParamsExtractor({
         dataset: {
           page: page,
           start_date: start_date

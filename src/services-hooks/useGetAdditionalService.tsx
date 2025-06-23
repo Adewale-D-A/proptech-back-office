@@ -12,13 +12,15 @@ export default function useGetAdditionalServiceById(id?: string) {
 
   const getAdditionalService = useCallback(async () => {
     setIsLoading(true);
+    setIsFailed(false);
     try {
       const response = await axios.get(`/admin/additional-service/${id}`);
       const data = response?.data?.data;
       setData(data);
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

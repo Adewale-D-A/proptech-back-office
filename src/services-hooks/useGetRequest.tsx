@@ -10,14 +10,16 @@ export default function useGetRequest({ id }: { id?: string }) {
   const [isFailed, setIsFailed] = useState(false);
 
   const getRequest = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/user-request/${id}`);
       const result = response?.data?.data;
       setData(result);
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

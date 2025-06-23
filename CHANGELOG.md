@@ -1,3 +1,11 @@
+##### 23.06.2025
+
+> Updates: Manual table replacements with table component
+> Feature: Store caching with key (more performant option)
+> Feature: Table components addition
+> Feature: Sort table column feature addition
+> Feature: URL query parameter feature addition
+
 ##### 21.06.2025
 
 > Update: Phase II requirements updates (development in progress)

@@ -26,7 +26,7 @@ export default function useGetOccupancyPerTimeReport({
     setIsLoading(true);
     setIsFailed(false);
     try {
-      const { queryString, remakeRequest } = ApiQueryParamsExtractor({
+      const { queryString } = ApiQueryParamsExtractor({
         dataset: {
           page: page,
           start_date: start_date,

@@ -1,8 +1,6 @@
 import { useCallback, useState } from "react";
 import TableSearch from "../inputs/search/table-search";
 import Filter from "../filterAndSort/filter";
-import NoResult from "../noResult";
-import Pagination from "../pagination";
 import Select from "../inputs/select";
 import PenIcon from "../../assets/icons/pen";
 import BinIcon from "../../assets/icons/bin-icon";
@@ -23,6 +21,9 @@ import { employeesExportFormater } from "../../utils/export-formerter-functions"
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import useGetRoles from "../../services-hooks/useGetRoles";
 import Sort from "../filterAndSort/sort";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import { admin } from "../../types/apiData/admins";
+import TableTemplate from "./table-template";
 
 export default function EmployeesLists() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -38,19 +39,22 @@ export default function EmployeesLists() {
     start_date: string;
     end_date: string;
   }>();
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("desc");
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllAdmins({
-      page: currentPage,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      sort,
-      search,
-      category,
-    });
+  const [{ page, size, sort, search }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+    search: "",
+  });
+  const { data, isLoading, pagination } = useGetAllAdmins({
+    page,
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    sort,
+    search,
+    category,
+    limit: size,
+  });
 
   const { data: roles } = useGetRoles({ limit: 1000 });
   const handleFiltering = useCallback(
@@ -101,7 +105,7 @@ export default function EmployeesLists() {
       <div className="w-full flex flex-col gap-5">
         <div className="w-full flex items-center flex-col md:flex-row justify-between gap-3">
           <div className=" w-[320px]">
-            <TableSearch setValue={setSearch} placeholder="Search..." />
+            <TableSearch placeholder="Search..." />
           </div>
           <div className=" flex items-center gap-3 flex-col md:flex-row">
             <Select
@@ -135,12 +139,7 @@ export default function EmployeesLists() {
                 fileName="employees-list"
               />
               <div className="w-fit min-w-28">
-                <Sort
-                  id="employee-sort"
-                  label=""
-                  defaultValue="desc"
-                  setSort={setSort}
-                />
+                <Sort id="employee-sort" label="" defaultValue="desc" />
               </div>
               {admin?.create && (
                 <LoadingButton
@@ -153,76 +152,66 @@ export default function EmployeesLists() {
               )}
             </div>
           </div>
-          {data && data.length > 0 ? (
-            <div className=" w-full overflow-x-auto">
-              <table className=" w-full">
-                <thead>
-                  <tr>
-                    {["Employee", "Role", "Action"].map((head) => (
-                      <th key={head}>{head}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((item) => {
-                    return (
-                      <tr key={item?.id} className=" border-b">
-                        <td className=" flex gap-2 items-center min-w-36">
-                          <img
-                            src={item?.profile_photo || "/logo_blue.png"}
-                            alt={item?.first_name}
-                            className=" h-10 w-10 rounded aspect-square"
-                          />
-                          <span className=" flex flex-col gap-1">
-                            <span className=" text-xs font-medium text-[#101828]">
-                              {item?.first_name} {item?.last_name}
-                            </span>
-                            <span className=" text-xs text-[#475467] font-medium">
-                              {item?.email}
-                            </span>
-                          </span>
-                        </td>
-                        <td className=" text-xs font-medium text-[#475467]  min-w-36">
-                          {item?.role?.name}
-                        </td>
-                        <td>
-                          <div className=" flex items-center gap-4">
-                            <Link to={`/employees/view-employee/${item?.id}`}>
-                              <EyeIcon />
-                            </Link>
-
-                            {admin?.update && (
-                              <button
-                                title="edit"
-                                onClick={() => openForEdit(item?.id)}
-                              >
-                                <PenIcon />
-                              </button>
-                            )}
-                            {admin?.delete && (
-                              <button
-                                title="delete"
-                                onClick={() => handleOpenDelete(item?.id)}
-                              >
-                                <BinIcon className=" size-6 text-red-500" />
-                              </button>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <NoResult />
-          )}
-          <Pagination
-            pagination={pagination}
-            setCurrentPage={setCurrentPage}
+          <TableTemplate
+            data={data}
             isLoading={isLoading}
-            label="Employee list"
+            columns={[
+              {
+                header: "Employee",
+                key: "employee",
+                showColumnSort: true,
+                render: (row: admin) => (
+                  <div className=" flex gap-2 items-center min-w-36">
+                    <img
+                      src={row?.profile_photo || "/logo_blue.png"}
+                      alt={row?.first_name}
+                      className=" h-10 w-10 rounded aspect-square"
+                    />
+                    <span className=" flex flex-col gap-1">
+                      <span className=" text-xs font-medium text-[#101828]">
+                        {row?.first_name} {row?.last_name}
+                      </span>
+                      <span className=" text-xs text-[#475467] font-medium">
+                        {row?.email}
+                      </span>
+                    </span>
+                  </div>
+                ),
+              },
+              {
+                header: "Role",
+                key: "role",
+                showColumnSort: true,
+                render: (row: admin) => <span>{row?.role?.name}</span>,
+              },
+              {
+                header: "Action",
+                key: "action",
+                render: (row: admin) => (
+                  <div className=" flex items-center gap-4">
+                    <Link to={`/employees/view-employee/${row?.id}`}>
+                      <EyeIcon />
+                    </Link>
+
+                    {admin?.update && (
+                      <button title="edit" onClick={() => openForEdit(row?.id)}>
+                        <PenIcon />
+                      </button>
+                    )}
+                    {admin?.delete && (
+                      <button
+                        title="delete"
+                        onClick={() => handleOpenDelete(row?.id)}
+                      >
+                        <BinIcon className=" size-6 text-red-500" />
+                      </button>
+                    )}
+                  </div>
+                ),
+              },
+            ]}
+            showPaginator={true}
+            pagination={pagination}
           />
         </div>
       </div>

@@ -10,14 +10,16 @@ export default function useGetRoomOption({ id }: { id?: string }) {
   const [isFailed, setIsFailed] = useState(false);
 
   const getRoomOption = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/room-option/${id}`);
       const { roomOption } = response?.data?.data;
       setData(roomOption);
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

@@ -10,14 +10,17 @@ export default function useGetTaxRate({ id }: { id?: string }) {
   const [isFailed, setIsFailed] = useState(false);
 
   const getTaxRate = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/tax/${id}`);
       const result = response?.data?.data;
       setData(result);
       setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

@@ -10,6 +10,7 @@ export const additionalServiceListData = createSlice({
       pagination: [] as {
         pagination_data: pagination;
         data: additionalService[];
+        key: string;
       }[],
       data: [] as additionalService[],
     },
@@ -29,6 +30,7 @@ export const additionalServiceListData = createSlice({
           return {
             pagination_data: item?.pagination_data,
             data: [...item.data, action?.payload],
+            key: item?.key,
           };
         } else {
           return item;
@@ -38,9 +40,7 @@ export const additionalServiceListData = createSlice({
     },
     addToPaginationHistory: (state, action) => {
       const found = state.value?.pagination?.find(
-        (item) =>
-          item?.pagination_data?.current_page ===
-          action?.payload?.pagination_data?.current_page
+        (item) => item?.key === action?.payload?.key
       );
       if (!found) {
         state.value.pagination = [
@@ -48,6 +48,7 @@ export const additionalServiceListData = createSlice({
           {
             pagination_data: action?.payload?.pagination_data,
             data: action?.payload?.data,
+            key: action?.payload?.key,
           },
         ];
       }
@@ -71,6 +72,7 @@ export const additionalServiceListData = createSlice({
         return {
           pagination_data: { ...item.pagination_data },
           data: sencondFilter,
+          key: item?.key,
         };
       });
       state.value.pagination = removed;
@@ -98,10 +100,11 @@ export const additionalServiceListData = createSlice({
         return {
           pagination_data: { ...item.pagination_data },
           data: sencondFilter,
+          key: item?.key,
         };
       });
       state.value.pagination = replacedItem;
-    },    
+    },
     markAdditionalServiceItemAsResolved: (state, action) => {
       const { id, status } = action?.payload;
       const currentArray = state.value.data;
@@ -109,7 +112,10 @@ export const additionalServiceListData = createSlice({
         (v: { id: number }) => String(v.id) === String(id)
       );
       if (currentIndex >= 0) {
-        currentArray.splice(currentIndex, 1, {...currentArray[currentIndex], status});
+        currentArray.splice(currentIndex, 1, {
+          ...currentArray[currentIndex],
+          status,
+        });
         state.value.data = currentArray;
       }
       //REPLACE pagination data
@@ -125,6 +131,7 @@ export const additionalServiceListData = createSlice({
         return {
           pagination_data: { ...item.pagination_data },
           data: sencondFilter,
+          key: item?.key,
         };
       });
       state.value.pagination = replacedItem;

@@ -22,6 +22,7 @@ export default function useGetCustomerById(id?: string) {
 
   const getCustomer = useCallback(async () => {
     setIsLoading(true);
+    setIsFailed(false);
     try {
       const response = await axios.get(`/admin/user/${id}`);
       const { user } = response?.data?.data;
@@ -126,10 +127,10 @@ export default function useGetCustomerById(id?: string) {
           apply_commission_on: apply_commission_on,
         })
       );
-
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

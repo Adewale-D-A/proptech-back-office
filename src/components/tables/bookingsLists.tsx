@@ -1,11 +1,12 @@
 import { ReactNode, useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import Pagination from "../pagination";
 import Status from "../status";
 import Filter from "../filterAndSort/filter";
 import formatDate from "../../utils/isoDateConverter";
 import useGetReservation from "../../services-hooks/bookings/userGetReservation";
-import NoResult from "../noResult";
+import TableTemplate from "./table-template";
+import { reservations } from "../../types/apiData/bookings/reservation";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
 
 export default function BookingsListTable({
   variant,
@@ -22,17 +23,22 @@ export default function BookingsListTable({
     start_date: string;
     end_date: string;
   }>();
-  const [sort, setSort] = useState("desc");
   const [currentPage, setCurrentPage] = useState(1);
+  const [limit, setLimit] = useState(20);
+  const [{ page, size, sort }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+  });
 
-  const { data, pagination, isLoading, isFailed, setIsFailed, retryFunction } =
-    useGetReservation({
-      page: currentPage,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      sort,
-      type,
-    });
+  const { data, pagination, isLoading } = useGetReservation({
+    page: currentPage,
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    sort,
+    type,
+    limit,
+  });
 
   const handleSalesFiltering = useCallback(
     (start_date: string, end_date: string) => {
@@ -50,74 +56,72 @@ export default function BookingsListTable({
           <Filter actionHandler={handleSalesFiltering} />
         </div>
       </div>
-      {data && data.length > 0 ? (
-        <div className=" w-full overflow-x-auto">
-          <table className=" w-full">
-            <thead className="">
-              <tr>
-                {[
-                  "ID",
-                  "Customer Name",
-                  "Rooms",
-                  type === "departing" ? "Check-out" : "Check-in",
-                  "Status",
-                ].map((head) => (
-                  <th key={head}>{head}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="">
-              {data.map((request) => {
-                return (
-                  <tr key={request?.id} className=" border-b">
-                    <td>
-                      <Link
-                        to={`/bookings/booking-details/edit-reservation/${request?.id}`}
-                        className=" rounded-full p-2 border border-primary"
-                      >
-                        {request?.id}
-                      </Link>
-                    </td>
-                    <td>
-                      {request?.user?.first_name} {request?.user?.last_name}
-                    </td>
-                    <td>{request?.shortlet?.name}</td>
-                    <td>
-                      {type === "departing"
-                        ? formatDate(request?.check_out_date)
-                        : formatDate(request?.check_in_date)}
-                    </td>
-                    {variant === "action" ? (
-                      <td>
-                        <Link
-                          to={`/bookings/booking-details/edit-reservation/${request?.id}`}
-                          className=" text-primary"
-                        >
-                          View Details
-                        </Link>
-                      </td>
-                    ) : (
-                      <td>
-                        <Status status={request?.status} />
-                      </td>
-                    )}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <NoResult />
-      )}
-      {/* <div className="w-full block md:hidden">
-        <MobileReservationsTable data={data} variant={variant} />
-      </div> */}
-      <Pagination
-        pagination={pagination}
-        setCurrentPage={setCurrentPage}
+      <TableTemplate
+        data={data}
         isLoading={isLoading}
-        label="Reservations"
+        columns={[
+          {
+            header: "ID",
+            key: "name",
+            showColumnSort: true,
+            render: (row: reservations) => (
+              <Link
+                to={`/bookings/booking-details/edit-reservation/${row?.id}`}
+                className=" rounded-full p-2 border border-primary"
+              >
+                {row?.id}
+              </Link>
+            ),
+          },
+          {
+            header: "Customer Name",
+            key: "name",
+            showColumnSort: true,
+            render: (row: reservations) => (
+              <span>
+                {row?.user?.first_name} {row?.user?.last_name}
+              </span>
+            ),
+          },
+          {
+            header: "Rooms",
+            key: "name",
+            showColumnSort: true,
+            render: (row: reservations) => <span>{row?.shortlet?.name}</span>,
+          },
+          {
+            header: type === "departing" ? "Check-out" : "Check-in",
+            key: "name",
+            showColumnSort: true,
+            render: (row: reservations) => (
+              <span>
+                {type === "departing"
+                  ? formatDate(row?.check_out_date)
+                  : formatDate(row?.check_in_date)}
+              </span>
+            ),
+          },
+          {
+            header: variant === "action" ? "Action" : "Status",
+            key: "name",
+            showColumnSort: true,
+            render:
+              variant === "action"
+                ? (row: reservations) => (
+                    <Link
+                      to={`/bookings/booking-details/edit-reservation/${row?.id}`}
+                      className=" text-primary"
+                    >
+                      View Details
+                    </Link>
+                  )
+                : (row: reservations) => <Status status={row?.status} />,
+          },
+        ]}
+        showPaginator={true}
+        pagination={pagination}
+        onCurrentPageChange={setCurrentPage}
+        onPageSizeChange={setLimit}
       />
     </div>
   );

@@ -17,6 +17,7 @@ export default function useGetRequisitionRequests({
   search = "",
   category = "",
   paid,
+  limit = 20,
 }: {
   page?: number;
   start_date?: string;
@@ -25,42 +26,44 @@ export default function useGetRequisitionRequests({
   search?: string;
   category?: string;
   paid?: "yes" | "no" | "";
+  limit?: number;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const {
-    status,
-    data,
-    pagination: store_pagination,
-  } = useAppSelector((state) => state.requisitionRequestsList?.value);
+  const { data, pagination: store_pagination } = useAppSelector(
+    (state) => state.requisitionRequestsList?.value
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const [pagination, setPagination] = useState<pagination>({} as any);
 
   const getAllRequisitionRequests = useCallback(
-    async (skipCache?: boolean) => {
+    async (skipCache?: boolean, limitless?: number) => {
       setIsLoading(true);
       setIsFailed(false);
       try {
+        const queryDataset = {
+          page: Number(page),
+          start_date: start_date,
+          end_date: end_date,
+          sort,
+          search: search,
+          category_id: category,
+          paid,
+          limit: limitless ? 1000 : Number(limit),
+        };
+        const queryKey = JSON.stringify(queryDataset);
         const { queryString, remakeRequest } = ApiQueryParamsExtractor({
-          dataset: {
-            page: search ? 1 : page,
-            start_date: start_date,
-            end_date: end_date,
-            sort,
-            search: search,
-            category_id: category,
-            paid,
-          },
+          dataset: queryDataset,
           sortRefetchKeyword: "asc",
         });
         //check store if this requested data has been saved previously and retirve it
         //if not, make a new request and save into store
         const foundPage = store_pagination.find(
-          (item) => item?.pagination_data?.current_page === page
+          (item) => item?.key === queryKey
         );
-        if (foundPage && !remakeRequest && !skipCache) {
+        if (foundPage) {
           setPagination(foundPage?.pagination_data);
           dispatch(updateRequisitionRequestList({ data: foundPage?.data }));
         } else {
@@ -80,14 +83,13 @@ export default function useGetRequisitionRequests({
             length: data?.length,
           };
           dispatch(updateRequisitionRequestList({ data }));
-          if (!remakeRequest) {
-            dispatch(
-              addToPaginationHistory({
-                pagination_data: paginationDataset,
-                data: data,
-              })
-            );
-          }
+          dispatch(
+            addToPaginationHistory({
+              pagination_data: paginationDataset,
+              data: data,
+              key: queryKey,
+            })
+          );
           setPagination(paginationDataset);
         }
       } catch (error) {
@@ -96,12 +98,12 @@ export default function useGetRequisitionRequests({
         setIsLoading(false);
       }
     },
-    [page, start_date, end_date, sort, search, category, paid]
+    [page, start_date, end_date, sort, search, category, paid, limit]
   );
 
   useEffect(() => {
     getAllRequisitionRequests();
-  }, [page, start_date, end_date, sort, search, category, paid]);
+  }, [page, start_date, end_date, sort, search, category, paid, limit]);
 
   return {
     data,

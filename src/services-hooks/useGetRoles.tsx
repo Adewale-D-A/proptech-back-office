@@ -26,68 +26,70 @@ export default function useGetRoles({
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const {
-    status,
-    data,
-    pagination: store_pagination,
-  } = useAppSelector((state) => state.allRolesLists.value);
+  const { data, pagination: store_pagination } = useAppSelector(
+    (state) => state.allRolesLists.value
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const [pagination, setPagination] = useState<pagination>({} as any);
 
-  const getRoles = useCallback(async () => {
-    setIsLoading(true);
-    setIsFailed(false);
-    try {
-      const { queryString, remakeRequest } = ApiQueryParamsExtractor({
-        dataset: {
+  const getRoles = useCallback(
+    async (skipCache?: boolean, limitless?: number) => {
+      setIsLoading(true);
+      setIsFailed(false);
+      try {
+        const queryDataset = {
           page: search ? 1 : page,
           start_date: start_date,
           end_date: end_date,
           sort: sort,
           search: search,
-          // limit,
-        },
-      });
-      //check store if this requested data has been saved previously and retirve it
-      //if not, make a new request and save into store
-      const foundPage = store_pagination.find(
-        (item) => item?.pagination_data?.current_page === page
-      );
-      if (foundPage && !remakeRequest) {
-        setPagination(foundPage?.pagination_data);
-        dispatch(updateRolesList({ data: foundPage?.data }));
-      } else {
-        const response = await axios.get(`/admin/roles?${queryString}}`);
-        const { roles } = response?.data?.data;
-        const { data, current_page, last_page, per_page, total, from, to } =
-          roles;
-        const paginationDataset = {
-          current_page,
-          last_page,
-          per_page,
-          total,
-          from,
-          to,
-          length: data?.length,
+          // limit: limitless ? 1000 : Number(limit),
         };
-        dispatch(updateRolesList({ data }));
-        if (!remakeRequest) {
+        const queryKey = JSON.stringify(queryDataset);
+        const { queryString } = ApiQueryParamsExtractor({
+          dataset: queryDataset,
+        });
+        //check store if this requested data has been saved previously and retirve it
+        //if not, make a new request and save into store
+        const foundPage = store_pagination.find(
+          (item) => item?.key === queryKey
+        );
+        if (foundPage) {
+          setPagination(foundPage?.pagination_data);
+          dispatch(updateRolesList({ data: foundPage?.data }));
+        } else {
+          const response = await axios.get(`/admin/roles?${queryString}}`);
+          const { roles } = response?.data?.data;
+          const { data, current_page, last_page, per_page, total, from, to } =
+            roles;
+          const paginationDataset = {
+            current_page,
+            last_page,
+            per_page,
+            total,
+            from,
+            to,
+            length: data?.length,
+          };
+          dispatch(updateRolesList({ data }));
           dispatch(
             addToPaginationHistory({
               pagination_data: paginationDataset,
               data: data,
+              key: queryKey,
             })
           );
+          setPagination(paginationDataset);
         }
-        setPagination(paginationDataset);
+        setIsLoading(false);
+      } catch (error) {
+        setIsFailed(true);
       }
-      setIsLoading(false);
-    } catch (error) {
-      setIsFailed(true);
-    }
-  }, [page, start_date, end_date, sort, search, limit]);
+    },
+    [page, start_date, end_date, sort, search, limit]
+  );
 
   useEffect(() => {
     getRoles();

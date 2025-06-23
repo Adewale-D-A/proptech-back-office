@@ -10,6 +10,7 @@ export const maintenanceExpensesReports = createSlice({
       pagination: [] as {
         pagination_data: pagination;
         data: maintenanceExpensesReport[];
+        key: string;
       }[],
       data: [] as maintenanceExpensesReport[],
     },
@@ -21,9 +22,7 @@ export const maintenanceExpensesReports = createSlice({
     },
     addToPaginationHistory: (state, action) => {
       const found = state.value?.pagination?.find(
-        (item) =>
-          item?.pagination_data?.current_page ===
-          action?.payload?.pagination_data?.current_page
+        (item) => item?.key === action?.payload?.key
       );
       if (!found) {
         state.value.pagination = [
@@ -31,6 +30,7 @@ export const maintenanceExpensesReports = createSlice({
           {
             pagination_data: action?.payload?.pagination_data,
             data: action?.payload?.data,
+            key: action?.payload?.key,
           },
         ];
       }
@@ -54,6 +54,7 @@ export const maintenanceExpensesReports = createSlice({
         return {
           pagination_data: { ...item.pagination_data },
           data: sencondFilter,
+          key: action?.payload?.key,
         };
       });
       state.value.pagination = removed;
@@ -81,6 +82,7 @@ export const maintenanceExpensesReports = createSlice({
         return {
           pagination_data: { ...item.pagination_data },
           data: sencondFilter,
+          key: item?.key,
         };
       });
       state.value.pagination = replacedItem;
@@ -96,8 +98,8 @@ export const {
   updateMaintenanceExpensesReport,
   addToPaginationHistory,
   clearMaintenanceExpensesReport,
-  removeMaintenanceExpensesInList, 
-  replaceMaintenanceExpensesInList
+  removeMaintenanceExpensesInList,
+  replaceMaintenanceExpensesInList,
 } = maintenanceExpensesReports.actions;
 
 export default maintenanceExpensesReports.reducer;

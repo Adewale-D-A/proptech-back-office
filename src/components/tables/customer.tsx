@@ -1,7 +1,5 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import Pagination from "../pagination";
-import NoResult from "../noResult";
 import Filter from "../filterAndSort/filter";
 import Sort from "../filterAndSort/sort";
 import useGetAllCustomersLists from "../../services-hooks/useGetAllCustomersList";
@@ -12,23 +10,30 @@ import { customersExportFormater } from "../../utils/export-formerter-functions"
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
+import { customersById } from "../../types/apiData/customers";
 
 export default function CustomersListTable() {
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
   }>();
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("asc");
-  const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllCustomersLists({
-      page: currentPage,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      sort: sort,
-      search,
-    });
+
+  const [{ search, page, size, sort }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    search: "",
+    sort: "asc",
+  });
+  const { data, isLoading, pagination } = useGetAllCustomersLists({
+    page,
+    limit: size,
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    sort,
+    search,
+  });
   const handleCustomersFiltering = useCallback(
     (start_date: string, end_date: string) => {
       setFilterDates({ start_date, end_date });
@@ -50,89 +55,113 @@ export default function CustomersListTable() {
       <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
         <h2 className="text-xl font-semibold">Customers Lists</h2>
         <div className=" max-w-md">
-          <TableSearch
-            setValue={setSearch}
-            placeholder="First name, last name, email, phone number..."
-          />
+          <TableSearch placeholder="First name, last name, email, phone number..." />
         </div>
         <div className=" flex items-center gap-2 flex-col md:flex-row">
           <Filter actionHandler={handleCustomersFiltering} />
-          <Sort setSort={setSort} id="sort-by" label="Sort by" />{" "}
+          <Sort id="sort-by" label="Sort by" />{" "}
         </div>
       </div>
-      {data && data.length > 0 ? (
-        <div className=" w-full overflow-x-auto">
-          <table className=" w-full">
-            <thead>
-              <tr>
-                {[
-                  "ID",
-                  "First Name",
-                  "Last Name",
-                  "Phone Number",
-                  "Total Booking",
-                  "Identity Verified",
-                  "User type",
-                  "Action",
-                ].map((head) => (
-                  <th key={head}>{head}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item) => {
-                return (
-                  <tr key={item?.id} className=" border-b">
-                    <td>
-                      <span className=" rounded-full p-2 border border-primary">
-                        {item?.id}
-                      </span>
-                    </td>
-                    <td>{item?.first_name}</td>
-                    <td>{item?.last_name}</td>
-                    <td>{item?.phone}</td>
-                    <td>{item?.total_bookings}</td>
-                    <td>
-                      <Status
-                        status="identity"
-                        booleanVal={item?.identity_verified}
-                        falsyMessage="Unverified"
-                        truthyMessage="Verified"
-                      />
-                    </td>
-                    <td>{item?.type}</td>
-                    <td>
-                      <TableActionDropDown>
-                        <>
-                          <MenuItem>
-                            <Link
-                              to={`/customers/customer-details/${item?.id}`}
-                              className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                            >
-                              View Details
-                            </Link>
-                          </MenuItem>
-                          {user?.update && (
-                            <MenuItem>
-                              <Link
-                                to={`/customers/edit-customer/customer-details/${item?.id}`}
-                                className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                              >
-                                Edit Customer
-                              </Link>
-                            </MenuItem>
-                          )}
-                          {item?.type === "owner" && user?.update && (
-                            <MenuItem>
-                              <Link
-                                to={`/customers/assign-apartment/${item?.id}`}
-                                className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                              >
-                                Assign to Apartment (s)
-                              </Link>
-                            </MenuItem>
-                          )}
-                          {/* <MenuItem>
+
+      <TableTemplate
+        data={data}
+        isLoading={isLoading}
+        columns={[
+          {
+            header: "ID",
+            key: "id",
+            showColumnSort: true,
+            render: (row: customersById) => (
+              <span className=" rounded-full p-2 border border-primary text-sm">
+                {row?.id}
+              </span>
+            ),
+          },
+          {
+            header: "First Name",
+            key: "first_name",
+            showColumnSort: true,
+            render: (row: customersById) => (
+              <span className="text-sm">{row?.first_name}</span>
+            ),
+          },
+          {
+            header: "Last Name",
+            key: "last_name",
+            showColumnSort: true,
+            render: (row: customersById) => (
+              <span className="text-sm">{row?.last_name}</span>
+            ),
+          },
+          {
+            header: "Phone Number",
+            key: "phone_number",
+            render: (row: customersById) => (
+              <span className="text-sm">{row?.phone}</span>
+            ),
+          },
+          {
+            header: "Total Booking",
+            key: "total_bookings",
+            showColumnSort: true,
+            render: (row: customersById) => (
+              <span className="text-sm">{row?.total_bookings}</span>
+            ),
+          },
+          {
+            header: "Identity Verified",
+            key: "identity_verified",
+            showColumnSort: true,
+            render: (row: customersById) => (
+              <Status
+                status="identity"
+                booleanVal={row?.identity_verified}
+                falsyMessage="Unverified"
+                truthyMessage="Verified"
+              />
+            ),
+          },
+          {
+            header: "User Type",
+            key: "usertype",
+            showColumnSort: true,
+            render: (row: customersById) => <span>{row?.type}</span>,
+          },
+          {
+            header: "Action",
+            key: "action",
+            render: (row: customersById) => (
+              <TableActionDropDown>
+                <>
+                  <MenuItem>
+                    <Link
+                      to={`/customers/customer-details/${row?.id}`}
+                      className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg text-sm"
+                    >
+                      View Details
+                    </Link>
+                  </MenuItem>
+                  {user?.update && (
+                    <MenuItem>
+                      <Link
+                        to={`/customers/edit-customer/customer-details/${row?.id}`}
+                        className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg text-sm"
+                      >
+                        Edit Customer
+                      </Link>
+                    </MenuItem>
+                  )}
+                  {row?.type === "owner" && user?.update && (
+                    <MenuItem>
+                      <Link
+                        to={`/customers/assign-apartment/${row?.id}`}
+                        className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg text-sm"
+                      >
+                        Assign to Apartment (s)
+                      </Link>
+                    </MenuItem>
+                  )}
+                  {/* <MenuItem>
                             <Link
                               to={`#`}
                               className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
@@ -148,23 +177,13 @@ export default function CustomersListTable() {
                               Generate Invoice
                             </Link>
                           </MenuItem> */}
-                        </>
-                      </TableActionDropDown>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <NoResult />
-      )}
-      <Pagination
+                </>
+              </TableActionDropDown>
+            ),
+          },
+        ]}
+        showPaginator={true}
         pagination={pagination}
-        setCurrentPage={setCurrentPage}
-        isLoading={isLoading}
-        label="customers"
       />
     </div>
   );

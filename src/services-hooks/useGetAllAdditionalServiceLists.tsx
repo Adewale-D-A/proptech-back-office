@@ -15,12 +15,14 @@ export default function useGetAllAdditionalServiceLists({
   end_date,
   sort = "asc",
   search = "",
+  limit = 20,
 }: {
   page?: number;
   start_date?: string;
   end_date?: string;
   sort?: "desc" | "asc" | string;
   search?: string;
+  limit?: number;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -34,64 +36,69 @@ export default function useGetAllAdditionalServiceLists({
 
   const [pagination, setPagination] = useState<pagination>({} as any);
 
-  const getAllAdditionalService = useCallback(async () => {
-    setIsLoading(true);
-    setIsFailed(false);
-    try {
-      const { queryString, remakeRequest } = ApiQueryParamsExtractor({
-        dataset: {
-          page: search ? 1 : page,
+  const getAllAdditionalService = useCallback(
+    async (skipCache?: boolean, limitless?: number) => {
+      setIsLoading(true);
+      setIsFailed(false);
+      try {
+        const queryDataset = {
+          page: Number(page),
           start_date: start_date,
           end_date: end_date,
           sort: sort,
           search: search,
-        },
-      });
-      //check store if this requested data has been saved previously and retirve it
-      //if not, make a new request and save into store
-      const foundPage = store_pagination.find(
-        (item) => item?.pagination_data?.current_page === page
-      );
-      if (foundPage && !remakeRequest) {
-        setPagination(foundPage?.pagination_data);
-        dispatch(updateAdditionalServicesList({ data: foundPage?.data }));
-      } else {
-        const response = await axios.get(
-          `/admin/additional-service?${queryString}`
-        );
-        const { additional_service } = response?.data?.data;
-        const { data, current_page, last_page, per_page, total, from, to } =
-          additional_service;
-        const paginationDataset = {
-          current_page,
-          last_page,
-          per_page,
-          total,
-          from,
-          to,
-          length: data?.length,
+          limit: limitless ? 1000 : Number(limit),
         };
-        dispatch(updateAdditionalServicesList({ data }));
-        if (!remakeRequest) {
+        const queryKey = JSON.stringify(queryDataset);
+        const { queryString } = ApiQueryParamsExtractor({
+          dataset: queryDataset,
+        });
+        //check store if this requested data has been saved previously and retirve it
+        //if not, make a new request and save into store
+        const foundPage = store_pagination.find(
+          (item) => item?.key === queryKey
+        );
+        if (foundPage) {
+          setPagination(foundPage?.pagination_data);
+          dispatch(updateAdditionalServicesList({ data: foundPage?.data }));
+        } else {
+          const response = await axios.get(
+            `/admin/additional-service?${queryString}`
+          );
+          const { additional_service } = response?.data?.data;
+          const { data, current_page, last_page, per_page, total, from, to } =
+            additional_service;
+          const paginationDataset = {
+            current_page,
+            last_page,
+            per_page,
+            total,
+            from,
+            to,
+            length: data?.length,
+          };
+          dispatch(updateAdditionalServicesList({ data }));
           dispatch(
             addToPaginationHistory({
               pagination_data: paginationDataset,
               data: data,
+              key: queryKey,
             })
           );
+          setPagination(paginationDataset);
         }
-        setPagination(paginationDataset);
+      } catch (error) {
+        setIsFailed(true);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      setIsFailed(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [page, start_date, end_date, sort, search]);
+    },
+    [page, start_date, end_date, sort, search, limit]
+  );
 
   useEffect(() => {
     getAllAdditionalService();
-  }, [page, start_date, end_date, sort, search]);
+  }, [page, start_date, end_date, sort, search, limit]);
 
   return {
     data,

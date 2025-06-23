@@ -10,14 +10,16 @@ export default function useGetServiceType({ id }: { id?: string }) {
   const [isFailed, setIsFailed] = useState(false);
 
   const serviceType = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/service-type/${id}`);
       const { serviceType } = response?.data?.data;
       setData(serviceType);
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

@@ -1,9 +1,7 @@
-import Pagination from "../pagination";
 import { useCallback, useState } from "react";
 import Sort from "../filterAndSort/sort";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import ModalTemplate from "../modal";
-import NoResult from "../noResult";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { removeExpenseategory } from "../../stores/apiData/expense-categories";
@@ -14,20 +12,28 @@ import AddEditExpensesCategories from "../../pages/reports/owners/expense-catego
 import PenIcon from "../../assets/icons/pen";
 import BinIcon from "../../assets/icons/bin-icon";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import { requestCategories } from "../../types/apiData/request-categories";
+import TableTemplate from "./table-template";
 
 export default function ExpenseCategoriesistsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [sort, setSort] = useState("asc");
   const [selectedId, setSelectedId] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [openEditExpenseCategory, setOpenEditExpenseCategory] = useState(false);
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetExpenseCategories({ page: currentPage, sort });
+  const [{ page, size, sort }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+  });
+  const { data, isLoading, pagination } = useGetExpenseCategories({
+    page,
+    sort,
+    limit: size,
+  });
 
   const openForCreate = useCallback(() => {
     setSelectedId("");
@@ -77,59 +83,45 @@ export default function ExpenseCategoriesistsTable() {
         </div>
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Expense Categories</h2>
-          <Sort
-            setSort={setSort}
-            id="expense-category"
-            label="Sort List"
-          />{" "}
+          <Sort id="expense-category" label="Sort List" />{" "}
         </div>
-        {data && data.length > 0 ? (
-          <table className=" w-full overflow-x-auto">
-            <thead className="">
-              <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                {["Name", "Action"].map((head) => (
-                  <th key={head}>{head}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="">
-              {data.map((item, index) => {
-                return (
-                  <tr key={item?.id} className=" border-b">
-                    <td>{item?.name}</td>
-                    <td>
-                      <div className=" flex items-center gap-4">
-                        {owner_report?.update && (
-                          <button
-                            title="edit"
-                            onClick={() => openForEdit(String(item?.id))}
-                          >
-                            <PenIcon />
-                          </button>
-                        )}
-                        {owner_report?.delete && (
-                          <button
-                            title="delete"
-                            onClick={() => openForDelete(String(item?.id))}
-                          >
-                            <BinIcon className=" size-6 text-red-500" />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="expense category"
+          columns={[
+            {
+              header: "Name",
+              key: "name",
+              showColumnSort: true,
+              render: (row: requestCategories) => <span>{row?.name}</span>,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: requestCategories) => (
+                <div className=" flex items-center gap-4">
+                  {owner_report?.update && (
+                    <button
+                      title="edit"
+                      onClick={() => openForEdit(String(row?.id))}
+                    >
+                      <PenIcon />
+                    </button>
+                  )}
+                  {owner_report?.delete && (
+                    <button
+                      title="delete"
+                      onClick={() => openForDelete(String(row?.id))}
+                    >
+                      <BinIcon className=" size-6 text-red-500" />
+                    </button>
+                  )}
+                </div>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
       <DeleteConfirmation

@@ -10,6 +10,7 @@ export const bookingsReportReports = createSlice({
       pagination: [] as {
         pagination_data: pagination;
         data: bookingsReport[];
+        key: string;
       }[],
       data: [] as bookingsReport[],
     },
@@ -21,9 +22,7 @@ export const bookingsReportReports = createSlice({
     },
     addToPaginationHistory: (state, action) => {
       const found = state.value?.pagination?.find(
-        (item) =>
-          item?.pagination_data?.current_page ===
-          action?.payload?.pagination_data?.current_page
+        (item) => item?.key === action?.payload?.key
       );
       if (!found) {
         state.value.pagination = [
@@ -31,6 +30,7 @@ export const bookingsReportReports = createSlice({
           {
             pagination_data: action?.payload?.pagination_data,
             data: action?.payload?.data,
+            key: action?.payload?.key,
           },
         ];
       }
@@ -54,6 +54,7 @@ export const bookingsReportReports = createSlice({
         return {
           pagination_data: { ...item.pagination_data },
           data: sencondFilter,
+          key: action?.payload?.key,
         };
       });
       state.value.pagination = removed;
@@ -81,6 +82,7 @@ export const bookingsReportReports = createSlice({
         return {
           pagination_data: { ...item.pagination_data },
           data: sencondFilter,
+          key: item?.key,
         };
       });
       state.value.pagination = replacedItem;
@@ -96,8 +98,8 @@ export const {
   updateBookingsReport,
   addToPaginationHistory,
   clearBookingsReport,
-  removeBookingsInList, 
-  replaceBookingsInList
+  removeBookingsInList,
+  replaceBookingsInList,
 } = bookingsReportReports.actions;
 
 export default bookingsReportReports.reducer;

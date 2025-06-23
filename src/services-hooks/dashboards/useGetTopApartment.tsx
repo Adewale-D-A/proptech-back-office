@@ -14,81 +14,86 @@ export default function useGetTopApartmentLists({
   start_date,
   end_date,
   sort = "asc",
+  limit = 20,
 }: {
   page?: number;
   start_date?: string;
   end_date?: string;
   sort?: "desc" | "asc" | string;
+  limit?: number;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const {
-    status,
-    data,
-    pagination: store_pagination,
-  } = useAppSelector((state) => state.topAparmentLists.value);
+  const { data, pagination: store_pagination } = useAppSelector(
+    (state) => state.topAparmentLists.value
+  );
 
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
   const [pagination, setPagination] = useState<pagination>({} as any);
 
-  const getTopApartmentList = useCallback(async () => {
-    setIsFailed(false);
-    setIsLoading(true);
-    try {
-      const { queryString, remakeRequest } = ApiQueryParamsExtractor({
-        dataset: {
-          page,
+  const getTopApartmentList = useCallback(
+    async (skipCache?: boolean, limitless?: number) => {
+      setIsFailed(false);
+      setIsLoading(true);
+      try {
+        const queryDataset = {
+          page: Number(page),
           start_date: start_date,
           end_date: end_date,
           sort: sort,
-        },
-      });
-      //check store if this requested data has been saved previously and retirve it
-      //if not, make a new request and save into store
-      const foundPage = store_pagination.find(
-        (item) => item?.pagination_data?.current_page === page
-      );
-      if (foundPage && !remakeRequest) {
-        setPagination(foundPage?.pagination_data);
-        dispatch(updateTopApartmentList({ data: foundPage?.data }));
-      } else {
-        const response = await axios.get(
-          `/admin/dashboard/top-shortlets?${queryString}`
-        );
-        const responseData = response?.data?.data;
-        const { data, current_page, last_page, per_page, total, from, to } =
-          responseData;
-        const paginationDataset = {
-          current_page,
-          last_page,
-          per_page,
-          total,
-          from,
-          to,
-          length: data?.length,
+          limit: limitless ? 1000 : Number(limit),
         };
-        dispatch(updateTopApartmentList({ data }));
-        if (!remakeRequest) {
+        const queryKey = JSON.stringify(queryDataset);
+        const { queryString } = ApiQueryParamsExtractor({
+          dataset: queryDataset,
+        });
+        //check store if this requested data has been saved previously and retirve it
+        //if not, make a new request and save into store
+        const foundPage = store_pagination.find(
+          (item) => item?.key === queryKey
+        );
+        if (foundPage) {
+          setPagination(foundPage?.pagination_data);
+          dispatch(updateTopApartmentList({ data: foundPage?.data }));
+        } else {
+          const response = await axios.get(
+            `/admin/dashboard/top-shortlets?${queryString}`
+          );
+          const responseData = response?.data?.data;
+          const { data, current_page, last_page, per_page, total, from, to } =
+            responseData;
+          const paginationDataset = {
+            current_page,
+            last_page,
+            per_page,
+            total,
+            from,
+            to,
+            length: data?.length,
+          };
+          dispatch(updateTopApartmentList({ data }));
           dispatch(
             addToPaginationHistory({
               pagination_data: paginationDataset,
               data: data,
+              key: queryKey,
             })
           );
+          setPagination(paginationDataset);
         }
-        setPagination(paginationDataset);
+      } catch (error) {
+        setIsFailed(true);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      setIsFailed(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [page, start_date, end_date, sort]);
+    },
+    [page, start_date, end_date, sort, limit]
+  );
 
   useEffect(() => {
     getTopApartmentList();
-  }, [page, start_date, end_date, sort]);
+  }, [page, start_date, end_date, sort, limit]);
 
   return {
     data,

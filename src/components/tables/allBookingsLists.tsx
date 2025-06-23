@@ -1,7 +1,5 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import Pagination from "../pagination";
-import NoResult from "../noResult";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import Status from "../status";
 import useGetAllBookingsLists from "../../services-hooks/useGetAllBookingsLists";
@@ -19,24 +17,57 @@ import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import { MenuItem } from "@headlessui/react";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import Sort from "../filterAndSort/sort";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
+import { bookingsById } from "../../types/apiData/bookings";
 
 export default function AllBookingsListTable({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
-  const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<BookingFilterPayload>();
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
   }>();
-  const [sort, setSort] = useState("desc");
-  const [currentPage, setCurrentPage] = useState(1);
+
+  const [
+    {
+      search,
+      page,
+      size,
+      sort,
+      channel,
+      currency,
+      room_option,
+      payment_method,
+      status,
+      user_verification,
+    },
+  ] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    search: "",
+    sort: "asc",
+    channel: "",
+    currency: "",
+    room_option: "",
+    payment_method: "",
+    status: "",
+    user_verification: "",
+  });
+
   const { data, isLoading, pagination } = useGetAllBookingsLists({
-    page: currentPage,
+    page,
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,
-    sort: sort,
+    sort,
     search,
-    ...filter,
+    limit: size,
+    channel,
+    currency,
+    room_option,
+    payment_method,
+    status,
+    user_verification,
   });
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
@@ -73,17 +104,9 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 ">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <div className=" max-w-md">
-            <TableSearch
-              setValue={setSearch}
-              placeholder="Search name, type, location..."
-            />
+            <TableSearch placeholder="Search name, type, location..." />
           </div>
-          <Sort
-            setSort={setSort}
-            id="sort-by"
-            label="Sort by"
-            defaultValue="desc"
-          />
+          <Sort id="sort-by" label="Sort by" defaultValue="desc" />
           <BookingsFilterSearch setData={setFilter} />
           <ExportToCSV
             dataset={data}
@@ -91,78 +114,120 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
             fileName="bookings-list"
           />
         </div>
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {header.map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item) => {
-                  return (
-                    <tr key={item?.id} className=" border-b">
-                      <td>
+        <TableTemplate
+          data={data}
+          isLoading={isLoading}
+          columns={[
+            {
+              header: "ID",
+              key: "id",
+              showColumnSort: true,
+              render: (row: bookingsById) => (
+                <Link
+                  to={`/bookings/booking-details/edit-reservation/${row?.id}`}
+                  className=" rounded-full p-2 border border-primary"
+                >
+                  {row?.id}
+                </Link>
+              ),
+            },
+            {
+              header: "Customer Name",
+              key: "customer_name",
+              showColumnSort: true,
+              render: (row: bookingsById) => (
+                <Link
+                  to={`/customers/customer-details/${row?.user?.id}`}
+                  className=" underline italic flex items-center gap-2 hover:font-bold transition-all"
+                >
+                  <span>
+                    {row?.user?.first_name} {row?.user?.last_name}
+                  </span>{" "}
+                </Link>
+              ),
+            },
+            {
+              header: "Apartment Name",
+              key: "apartment_name",
+              showColumnSort: true,
+              render: (row: bookingsById) => <span>{row?.shortlet?.name}</span>,
+            },
+            {
+              header: "Date of Booking",
+              key: "booking_date",
+              showColumnSort: true,
+              render: (row: bookingsById) => (
+                <span>{formatDate(row?.created_at)}</span>
+              ),
+            },
+            {
+              header: "Amount",
+              key: "amount",
+              showColumnSort: true,
+              render: (row: bookingsById) => (
+                <span>
+                  {row?.currency} {row?.total_price}
+                </span>
+              ),
+            },
+            {
+              header: "Exchange Rate",
+              key: "exchange_rate",
+              render: (row: bookingsById) => <span>{row?.exchange_rate}</span>,
+            },
+            {
+              header: "Check-in Date",
+              key: "check_in_date",
+              showColumnSort: true,
+              render: (row: bookingsById) => (
+                <span>
+                  {formatDate(row?.check_in_date)} {row?.check_in_time}
+                </span>
+              ),
+            },
+            {
+              header: "Check-out Date",
+              key: "check_out_date",
+              showColumnSort: true,
+              render: (row: bookingsById) => (
+                <span>
+                  {formatDate(row?.check_out_date)} {row?.check_out_time}
+                </span>
+              ),
+            },
+            {
+              header: "Status",
+              key: "status",
+              showColumnSort: true,
+              render: (row: bookingsById) => <Status status={row?.status} />,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: bookingsById) => (
+                <TableActionDropDown>
+                  <>
+                    <MenuItem>
+                      <button
+                        onClick={() => openSummary(row?.id)}
+                        className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                      >
+                        View Booking
+                      </button>
+                    </MenuItem>
+                    <MenuItem>
+                      {booking?.update && (
                         <Link
-                          to={`/bookings/booking-details/edit-reservation/${item?.id}`}
-                          className=" rounded-full p-2 border border-primary"
+                          to={`/bookings/booking-details/edit-reservation/${row?.id}`}
+                          className=" w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                         >
-                          {item?.id}
+                          Edit Booking
                         </Link>
-                      </td>
-                      <td>
-                        <Link
-                          to={`/customers/customer-details/${item?.user?.id}`}
-                          className=" underline italic flex items-center gap-2 hover:font-bold transition-all"
-                        >
-                          <span>
-                            {item?.user?.first_name} {item?.user?.last_name}
-                          </span>{" "}
-                        </Link>
-                      </td>
-                      <td>{item?.shortlet?.name}</td>
-                      <td>{formatDate(item?.created_at)}</td>
-                      <td>
-                        {item?.currency} {item?.total_price}
-                      </td>
-                      <td>{item?.exchange_rate}</td>
-                      <td>
-                        {formatDate(item?.check_in_date)} {item?.check_in_time}
-                      </td>
-                      <td>
-                        {formatDate(item?.check_out_date)}{" "}
-                        {item?.check_out_time}
-                      </td>
-                      <td>
-                        <Status status={item?.status} />
-                      </td>
-                      <td>
-                        <TableActionDropDown>
-                          <>
-                            <MenuItem>
-                              <button
-                                onClick={() => openSummary(item?.id)}
-                                className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                              >
-                                View Booking
-                              </button>
-                            </MenuItem>
-                            <MenuItem>
-                              {booking?.update && (
-                                <Link
-                                  to={`/bookings/booking-details/edit-reservation/${item?.id}`}
-                                  className=" w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Edit Booking
-                                </Link>
-                              )}
-                            </MenuItem>
-                            {/* <MenuItem>
+                      )}
+                    </MenuItem>
+                    {/* <MenuItem>
                               <Link
-                                to={`/apartment-caledar/${item?.id}`}
+                                to={`/apartment-caledar/${row?.id}`}
                                 className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                               >
                                 Generate Invoice
@@ -172,38 +237,20 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
                               <MenuItem>
                                 <button
                                   type="button"
-                                  onClick={() => openDelete(item?.id)}
+                                  onClick={() => openDelete(row?.id)}
                                   className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
                                 >
                                   Delete Booking
                                 </button>
                               </MenuItem>
                             )} */}
-                          </>
-                        </TableActionDropDown>
-                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col"></span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        {/* <div className="w-full block md:hidden">
-          <MobileBookingsTable
-            data={data}
-            openDelete={openDelete}
-            openSummary={openSummary}
-          />
-        </div> */}
-        <Pagination
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
           pagination={pagination}
-          setCurrentPage={setCurrentPage}
-          isLoading={isLoading}
-          label="bookings"
         />
       </div>
       <DeleteConfirmation

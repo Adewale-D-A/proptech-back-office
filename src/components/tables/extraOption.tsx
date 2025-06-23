@@ -1,4 +1,3 @@
-import Pagination from "../pagination";
 import { useCallback, useState } from "react";
 import Sort from "../filterAndSort/sort";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
@@ -8,18 +7,26 @@ import useGetExtraOptions from "../../services-hooks/useGetExtraOptions";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { removeExtraOption } from "../../stores/apiData/extra-options";
-import NoResult from "../noResult";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
+import { extraOption } from "../../types/apiData/extraOption";
 
 export default function ExtraOptionTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetExtraOptions({ page: currentPage });
+  const [{ page, size, sort }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+  });
+  const { data, isLoading, pagination } = useGetExtraOptions({
+    page,
+    limit: size,
+    sort,
+  });
   const [selectedId, setSelectedId] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
   const [editExtraOption, setExtraOption] = useState(false);
@@ -47,70 +54,64 @@ export default function ExtraOptionTable() {
           <h2 className="text-xl font-semibold">Extra Option List</h2>
           <Sort id="extra-options" label="Sort List" />{" "}
         </div>
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {["Name of Option", "Description", "Action"].map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item) => {
-                  return (
-                    <tr key={item?.id} className=" border-b">
-                      <td>{item?.name}</td>
-                      <td>{item?.description}</td>
-                      <td>
-                        <TableActionDropDown>
-                          <>
-                            {extra_option?.update && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedId(String(item?.id));
-                                    setExtraOption(true);
-                                  }}
-                                  className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Edit Extra Option
-                                </button>
-                              </MenuItem>
-                            )}
-                            {extra_option?.delete && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedId(String(item?.id));
-                                    setOpenDelete(true);
-                                  }}
-                                  className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Delete Extra Option
-                                </button>
-                              </MenuItem>
-                            )}
-                          </>
-                        </TableActionDropDown>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="Exra Options"
+          columns={[
+            {
+              header: "Name of Option",
+              key: "name",
+              showColumnSort: true,
+              render: (row: extraOption) => <span>{row?.name}</span>,
+            },
+            {
+              header: "Description",
+              key: "name",
+              showColumnSort: true,
+              render: (row: extraOption) => <span>{row?.description}</span>,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: extraOption) => (
+                <TableActionDropDown>
+                  <>
+                    {extra_option?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedId(String(row?.id));
+                            setExtraOption(true);
+                          }}
+                          className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit Extra Option
+                        </button>
+                      </MenuItem>
+                    )}
+                    {extra_option?.delete && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedId(String(row?.id));
+                            setOpenDelete(true);
+                          }}
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete Extra Option
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
       <DeleteConfirmation

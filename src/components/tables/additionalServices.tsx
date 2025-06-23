@@ -1,7 +1,5 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import Pagination from "../pagination";
-import NoResult from "../noResult";
 import useGetAllAdditionalServiceLists from "../../services-hooks/useGetAllAdditionalServiceLists";
 import Status from "../status";
 import { useAppDispatch } from "../../stores/hooks";
@@ -19,6 +17,9 @@ import { MenuItem } from "@headlessui/react";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import ExportToCSV from "../export-to-csv";
 import { additionalServiceExportFormater } from "../../utils/export-formerter-functions";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
+import { additionalService } from "../../types/apiData/additionalServices";
 
 export default function AdditionalServiceListTable({
   header,
@@ -28,22 +29,18 @@ export default function AdditionalServiceListTable({
   const dispatch = useAppDispatch();
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
 
-  const [confirming, setConfirming] = useState(false);
-  const [filterDates, setFilterDates] = useState<{
-    start_date: string;
-    end_date: string;
-  }>();
-  const [sort, setSort] = useState("asc");
-  const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllAdditionalServiceLists({
-      page: currentPage,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      sort: sort,
-      search,
-    });
+  const [{ search, page, size, sort }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    search: "",
+    sort: "asc",
+  });
+  const { data, isLoading, pagination } = useGetAllAdditionalServiceLists({
+    page,
+    sort,
+    search,
+    limit: size,
+  });
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -61,7 +58,6 @@ export default function AdditionalServiceListTable({
   }, [deleteId]);
 
   const markedAsResolved = useCallback(async (id: number) => {
-    setConfirming(true);
     try {
       const response = await axios.put(
         `/admin/additional-service/mark-resolved/${id}`
@@ -75,10 +71,7 @@ export default function AdditionalServiceListTable({
           isError: false,
         })
       );
-    } catch (error) {
-    } finally {
-      setConfirming(false);
-    }
+    } catch (error) {}
   }, []);
 
   // const deleteModal = useCallback((id: number) => {
@@ -94,10 +87,7 @@ export default function AdditionalServiceListTable({
       <div className="w-full rounded-lg border p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <div className=" max-w-md">
-            <TableSearch
-              setValue={setSearch}
-              placeholder="Search service name, apartment name..."
-            />
+            <TableSearch placeholder="Search service name, apartment name..." />
           </div>
           <ExportToCSV
             dataset={data}
@@ -105,61 +95,99 @@ export default function AdditionalServiceListTable({
             fileName="additional-services"
           />
         </div>
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {header.map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data?.map((item) => {
-                  return (
-                    <tr key={item?.id} className=" border-b">
-                      <td>
-                        {item?.user?.first_name} {item?.user?.last_name}
-                      </td>
-                      <td>{item?.booking?.shortlet?.name}</td>
-                      <td>{formatDate(item?.created_at)}</td>
-                      <td>{item?.service_type?.name}</td>
-                      <td>{item?.description}</td>
-                      <td>
-                        <Status
-                          status="additional-service-escalte"
-                          booleanVal={Boolean(item?.is_escalated)}
-                          falsyMessage="Not Escalated"
-                          truthyMessage="Escalated"
-                        />
-                      </td>
-                      <td>
-                        <Status status={item?.status} />
-                      </td>
-                      <td>
-                        <TableActionDropDown>
-                          <>
-                            <MenuItem>
-                              <Link
-                                to={`/additional-services/service-details/${item?.id}`}
-                                className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                              >
-                                View Details
-                              </Link>
-                            </MenuItem>
-                            {additional_services?.update && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => markedAsResolved(item?.id)}
-                                  className="text-left w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Mark As Resolved
-                                </button>
-                              </MenuItem>
-                            )}
-                            {/* {additional_services?.delete && (
+        <TableTemplate
+          data={data}
+          isLoading={isLoading}
+          columns={[
+            {
+              header: "Customer Name",
+              key: "customer_name",
+              showColumnSort: true,
+              render: (row: additionalService) => (
+                <span>
+                  {row?.user?.first_name} {row?.user?.last_name}
+                </span>
+              ),
+            },
+            {
+              header: "Apartment Name",
+              key: "apartment_name",
+              showColumnSort: true,
+              render: (row: additionalService) => (
+                <span>{row?.booking?.shortlet?.name} Guests</span>
+              ),
+            },
+            {
+              header: "Date of Request",
+              key: "date_of_request",
+              showColumnSort: true,
+              render: (row: additionalService) => (
+                <span>{formatDate(row?.created_at)}</span>
+              ),
+            },
+            {
+              header: "Service Type",
+              key: "service_type",
+              showColumnSort: true,
+              render: (row: additionalService) => (
+                <span>{row?.service_type?.name}</span>
+              ),
+            },
+            {
+              header: "Description",
+              key: "description",
+              showColumnSort: true,
+              render: (row: additionalService) => (
+                <span>{row?.description}</span>
+              ),
+            },
+            {
+              header: "Escalated Status",
+              key: "escalated_status",
+              showColumnSort: true,
+              render: (row: additionalService) => (
+                <Status
+                  status="additional-service-escalte"
+                  booleanVal={Boolean(row?.is_escalated)}
+                  falsyMessage="Not Escalated"
+                  truthyMessage="Escalated"
+                />
+              ),
+            },
+            {
+              header: "Status",
+              key: "status",
+              showColumnSort: true,
+              render: (row: additionalService) => (
+                <Status status={row?.status} />
+              ),
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: additionalService) => (
+                <TableActionDropDown>
+                  <>
+                    <MenuItem>
+                      <Link
+                        to={`/additional-services/service-details/${row?.id}`}
+                        className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                      >
+                        View Details
+                      </Link>
+                    </MenuItem>
+                    {additional_services?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => markedAsResolved(row?.id)}
+                          className="text-left w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Mark As Resolved
+                        </button>
+                      </MenuItem>
+                    )}
+                    {/* {additional_services?.delete && (
                               <MenuItem>
                                 <button
                                   type="button"
@@ -172,29 +200,13 @@ export default function AdditionalServiceListTable({
                                 </button>
                               </MenuItem>
                             )} */}
-                          </>
-                        </TableActionDropDown>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        {/* <div className="w-full block md:hidden">
-          <MobileAdditionalServicesTable
-            data={data}
-            deleteFunction={deleteModal}
-          />
-        </div> */}
-        <Pagination
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
           pagination={pagination}
-          setCurrentPage={setCurrentPage}
-          isLoading={isLoading}
-          label="items"
         />
       </div>
 

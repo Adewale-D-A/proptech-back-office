@@ -2,10 +2,8 @@ import { Link, useLocation } from "react-router-dom";
 import { useCallback, useState } from "react";
 import Status from "../status";
 import LocationPinIcon from "../../assets/icons/location";
-import Pagination from "../pagination";
 import Sort from "../filterAndSort/sort";
 import useGetAllApartmentLists from "../../services-hooks/useGetAllApartmentLists";
-import NoResult from "../noResult";
 import { useAppDispatch } from "../../stores/hooks";
 import { removeApartmentInList } from "../../stores/apiData/apartment-lists";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
@@ -20,14 +18,15 @@ import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
 import RenderIcon from "../icon-picker/render-icon";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
+import { apartment, apartmentById } from "../../types/apiData/apartment";
 
 export default function ApartmentListsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("asc");
+  // const [search, setSearch] = useState("");
 
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -35,8 +34,15 @@ export default function ApartmentListsTable() {
   const [openRate, setOpenRate] = useState(false);
   const [selectedId, setSelectedId] = useState("");
 
+  const [{ search, page, size, sort }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    search: "",
+    sort: "asc",
+  });
   const { data, isLoading, pagination } = useGetAllApartmentLists({
-    page: currentPage,
+    page,
+    limit: size,
     search,
     sort,
   });
@@ -70,141 +76,129 @@ export default function ApartmentListsTable() {
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Apartment List</h2>
           <div className=" max-w-md">
-            <TableSearch
-              setValue={setSearch}
-              placeholder="Apartment name, type, location..."
-            />
+            <TableSearch placeholder="Apartment name, type, location..." />
           </div>
-          <Sort setSort={setSort} id="sort-by" label="Sort by" />
+          <Sort id="sort-by" label="Sort by" />
           <ExportToCSV
             dataset={data}
             jsonToCSVReformerter={apartmentExportFormater}
             fileName="apartment-list"
           />
         </div>
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {[
-                    "Apartment Name",
-                    "No of Guests",
-                    "Category",
-                    "Characteristics",
-                    // "Units",
-                    "Status",
-                    "Action",
-                  ].map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item) => {
-                  return (
-                    <tr key={item?.id} className=" border-b">
-                      <td className=" flex gap-2 items-center min-w-36">
-                        <img
-                          src={"/logo_blue.png"}
-                          alt={item?.name}
-                          className=" h-10 w-10 rounded aspect-square"
-                        />
-                        <span className=" flex flex-col gap-1">
-                          <span>{item?.name}</span>
-                          <span className=" text-xs text-gray-500 flex items-center gap-1">
-                            <LocationPinIcon className=" h-3 w-3" />
-                            {item?.location}
-                          </span>
-                        </span>
-                      </td>
-                      <td>{item?.max_guests} Guests</td>
-                      <td>{item?.room_option?.name}</td>
-                      <td>
-                        <div className=" flex items-center flex-wrap gap-2">
-                          {item?.amenities?.map((item) => (
-                            <span
-                              key={item?.id}
-                              className=" flex items-center gap-2"
-                            >
-                              <RenderIcon
-                                value={item?.image}
-                                className=" w-4 h-4 text-gray-400"
-                              />{" "}
-                              {item?.name},
-                            </span>
-                          ))}
-                        </div>
-                      </td>
-                      {/* <td>**</td> */}
-                      <td>
-                        <Status status={item?.availability_status} />
-                      </td>
-                      <td className=" text-left">
-                        <TableActionDropDown>
-                          <>
-                            <MenuItem>
-                              <Link
-                                to={`/apartments/apartment-details/${item?.id}`}
-                                className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                              >
-                                View Apartment
-                              </Link>
-                            </MenuItem>
-                            {shortlet?.update && (
-                              <MenuItem>
-                                <Link
-                                  to={`/apartments/edit-apartment/apartment-details/${item?.id}?redirect=${location?.pathname}&action=rewrite`}
-                                  className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Edit Apartment
-                                </Link>
-                              </MenuItem>
-                            )}
-                            {calendar?.view && (
-                              <MenuItem>
-                                <Link
-                                  to={`/apartments/apartment-caledar/${item?.id}?apt_id=${item?.id}`}
-                                  className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Check Calender
-                                </Link>
-                              </MenuItem>
-                            )}
-                            <MenuItem>
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  handleOpenCalculateRate(item?.id)
-                                }
-                                className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                              >
-                                View Rate
-                              </button>
-                            </MenuItem>
-                          </>
-                        </TableActionDropDown>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        {/* <div className="w-full block md:hidden">
-          <MobileApartmentTable
-            data={data}
-            handleOpenCalculateRate={handleOpenCalculateRate}
-          />
-        </div> */}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="Apartment"
+          columns={[
+            {
+              header: "Apartment Name",
+              key: "name",
+              showColumnSort: true,
+              render: (row: apartment) => (
+                <div className=" flex gap-2 items-center min-w-36">
+                  <img
+                    src={"/logo_blue.png"}
+                    alt={row?.name}
+                    className=" h-7 w-7 rounded aspect-square"
+                  />
+                  <span className=" flex flex-col gap-1 text-sm">
+                    <span>{row?.name}</span>
+                    <span className=" text-xs text-gray-500 flex items-center gap-1">
+                      <LocationPinIcon className=" h-3 w-3" />
+                      {row?.location}
+                    </span>
+                  </span>
+                </div>
+              ),
+            },
+            {
+              header: "No of Guests",
+              key: "no_guests",
+              showColumnSort: true,
+              render: (row: apartment) => <span>{row?.max_guests} Guests</span>,
+            },
+            {
+              header: "Category",
+              key: "category",
+              showColumnSort: true,
+              render: (row: apartmentById) => (
+                <span>{row?.room_option?.name}</span>
+              ),
+            },
+            {
+              header: "Characteristics",
+              key: "characteristics",
+              render: (row: apartmentById) => (
+                <div className=" flex items-center flex-wrap gap-2">
+                  {row?.amenities?.map((item) => (
+                    <span key={item?.id} className=" flex items-center gap-2">
+                      <RenderIcon
+                        value={item?.image}
+                        className=" w-4 h-4 text-gray-400"
+                      />{" "}
+                      {item?.name},
+                    </span>
+                  ))}
+                </div>
+              ),
+            },
+            {
+              header: "Status",
+              key: "status",
+              showColumnSort: true,
+              render: (row: apartment) => (
+                <Status status={row?.availability_status} />
+              ),
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: apartment) => (
+                <TableActionDropDown>
+                  <>
+                    <MenuItem>
+                      <Link
+                        to={`/apartments/apartment-details/${row?.id}`}
+                        className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                      >
+                        View Apartment
+                      </Link>
+                    </MenuItem>
+                    {shortlet?.update && (
+                      <MenuItem>
+                        <Link
+                          to={`/apartments/edit-apartment/apartment-details/${row?.id}?redirect=${location?.pathname}&action=rewrite`}
+                          className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit Apartment
+                        </Link>
+                      </MenuItem>
+                    )}
+                    {calendar?.view && (
+                      <MenuItem>
+                        <Link
+                          to={`/apartments/apartment-caledar/${row?.id}?apt_id=${row?.id}`}
+                          className="w-full p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Check Calender
+                        </Link>
+                      </MenuItem>
+                    )}
+                    <MenuItem>
+                      <button
+                        type="button"
+                        onClick={() => handleOpenCalculateRate(row?.id)}
+                        className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                      >
+                        View Rate
+                      </button>
+                    </MenuItem>
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
         <DeleteConfirmation
           confirmationHandler={deleteApartment}

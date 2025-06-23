@@ -10,14 +10,17 @@ export default function useGetAmenity({ id }: { id?: string }) {
   const [isFailed, setIsFailed] = useState(false);
 
   const getAmenity = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/amenity/${id}`);
       const { amenity } = response?.data?.data;
       setData(amenity);
       setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

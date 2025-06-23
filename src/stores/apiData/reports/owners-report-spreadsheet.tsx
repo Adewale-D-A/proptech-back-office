@@ -10,6 +10,7 @@ export const ownersReportsSpreadsheetData = createSlice({
       pagination: [] as {
         pagination_data: pagination;
         data: ownerReportSpreadsheet;
+        key: string;
       }[],
       data: {} as ownerReportSpreadsheet,
     },
@@ -21,9 +22,7 @@ export const ownersReportsSpreadsheetData = createSlice({
     },
     addToPaginationHistory: (state, action) => {
       const found = state.value?.pagination?.find(
-        (item) =>
-          item?.pagination_data?.current_page ===
-          action?.payload?.pagination_data?.current_page
+        (item) => item?.key === action?.payload?.key
       );
       if (!found) {
         state.value.pagination = [
@@ -31,6 +30,7 @@ export const ownersReportsSpreadsheetData = createSlice({
           {
             pagination_data: action?.payload?.pagination_data,
             data: action?.payload?.data,
+            key: action?.payload?.key,
           },
         ];
       }

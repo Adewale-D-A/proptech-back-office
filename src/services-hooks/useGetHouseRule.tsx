@@ -10,14 +10,16 @@ export default function useGetHouseRule({ id }: { id?: string }) {
   const [isFailed, setIsFailed] = useState(false);
 
   const getHouseRule = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/rule/${id}`);
       const { rule } = response?.data?.data;
       setData(rule);
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 
