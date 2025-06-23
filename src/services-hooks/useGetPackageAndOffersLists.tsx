@@ -13,10 +13,12 @@ export default function useGetAllPackagesAndOffers({
   page = 1,
   search = "",
   limit = 20,
+  sort = "asc",
 }: {
   page?: number;
   search?: string;
   limit?: number;
+  sort?: "asc" | "desc" | string;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -37,6 +39,7 @@ export default function useGetAllPackagesAndOffers({
           page: Number(page),
           search: search,
           limit: limitless ? 1000 : Number(limit),
+          sort,
         };
         const queryKey = JSON.stringify(queryDataset);
         const { queryString } = ApiQueryParamsExtractor({
@@ -81,12 +84,12 @@ export default function useGetAllPackagesAndOffers({
         setIsLoading(false);
       }
     },
-    [page, search, limit]
+    [page, search, limit, sort]
   );
 
   useEffect(() => {
     getPackageAndOffersLists();
-  }, [page, search, limit]);
+  }, [page, search, limit, sort]);
 
   return {
     data,

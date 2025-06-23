@@ -1,7 +1,5 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import Pagination from "../pagination";
-import NoResult from "../noResult";
 import Search from "../inputs/search";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import { useAppDispatch } from "../../stores/hooks";
@@ -13,13 +11,23 @@ import CheckSolidIcon from "../../assets/icons/check-solid";
 import XSolidIcon from "../../assets/icons/x-solid";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
-import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import { priceTypes } from "../../types/apiData/priceTypes";
+import TableTemplate from "./table-template";
 
 export default function PriceTypeList({ header }: { header: string[] }) {
   const dispatch = useAppDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetPriceTypeLists({ page: currentPage });
+
+  const [{ page, size, sort }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+  });
+  const { data, isLoading, pagination } = useGetPriceTypeLists({
+    page,
+    sort,
+    limit: size,
+  });
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedId, setSelectedId] = useState("1");
@@ -50,83 +58,96 @@ export default function PriceTypeList({ header }: { header: string[] }) {
           <Filter />
           <Sort id="sort-tax-rate" label="Sort by" />
         </div>
-        {data && data.length > 0 ? (
-          <table className=" w-full text-xs overflow-x-auto">
-            <thead className="">
-              <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                {header.map((head) => (
-                  <th key={head}>{head}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="">
-              {data.map((item, index) => {
-                return (
-                  <tr key={item?.id} className=" border-b">
-                    <td>{index + 1}</td>
-                    <td>{item?.name}</td>
-                    <td>{item?.attributes}</td>
-                    <td>{item?.rate}</td>
-                    <td>
-                      {item?.isBreakfastIncluded ? (
-                        <CheckSolidIcon className=" text-green-500 w-5 h-5" />
-                      ) : (
-                        <XSolidIcon className=" text-red-500 w-5 h-6" />
-                      )}
-                    </td>
-                    <td>
-                      {item?.isRefundable ? (
-                        <CheckSolidIcon className=" text-green-500 w-5 h-5" />
-                      ) : (
-                        <XSolidIcon className=" text-red-500 w-5 h-6" />
-                      )}
-                    </td>
-                    <td>
-                      <TableActionDropDown>
-                        <>
-                          <MenuItem>
-                            <Link
-                              to={`#/${item?.id}`}
-                              className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                            >
-                              Edit Price
-                            </Link>
-                          </MenuItem>
-                          <MenuItem>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setSelectedId(item?.id);
-                                setOpenDeleteConfirmation(true);
-                              }}
-                              className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                            >
-                              Delete Price
-                            </button>
-                          </MenuItem>
-                        </>
-                      </TableActionDropDown>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={{
-            current_page: 1,
-            last_page: 2,
-            per_page: 20,
-            total: 24,
-            from: 1,
-            to: 1,
-          }}
-          setCurrentPage={setCurrentPage}
-          isLoading={false}
-          label="Price Lists"
+        <TableTemplate
+          data={data}
+          isLoading={isLoading}
+          columns={[
+            {
+              header: "Price Name",
+              key: "name",
+              render: (row: priceTypes) => <span>{row?.name}</span>,
+            },
+            {
+              header: "Price Attributes",
+              key: "price_attributes",
+              showColumnSort: true,
+              render: (row: priceTypes) => <span>{row?.attributes}</span>,
+            },
+            {
+              header: "Tax Rates",
+              key: "tax_rates",
+              showColumnSort: true,
+              render: (row: priceTypes) => <span>{row?.rate}</span>,
+            },
+            {
+              header: "Restrictions",
+              key: "restrictions",
+              showColumnSort: true,
+              render: (row: priceTypes) => (
+                <span>
+                  {row?.isBreakfastIncluded ? (
+                    <CheckSolidIcon className=" text-green-500 w-5 h-5" />
+                  ) : (
+                    <XSolidIcon className=" text-red-500 w-5 h-6" />
+                  )}
+                </span>
+              ),
+            },
+            {
+              header: "Breakfast Included",
+              key: "breakfast_included",
+              showColumnSort: true,
+              render: (row: priceTypes) => (
+                <span>
+                  {row?.isRefundable ? (
+                    <CheckSolidIcon className=" text-green-500 w-5 h-5" />
+                  ) : (
+                    <XSolidIcon className=" text-red-500 w-5 h-6" />
+                  )}
+                </span>
+              ),
+            },
+            // {
+            //   header: "Refundable",
+            //   key: "refundable",
+            //   showColumnSort: true,
+            //   render: (row: priceTypes) => (
+            //     <span>{row?.applicable_shortlet_count}</span>
+            //   ),
+            // },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: priceTypes) => (
+                <TableActionDropDown>
+                  <>
+                    <MenuItem>
+                      <Link
+                        to={`#/${row?.id}`}
+                        className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                      >
+                        Edit Price
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedId(row?.id);
+                          setOpenDeleteConfirmation(true);
+                        }}
+                        className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                      >
+                        Delete Price
+                      </button>
+                    </MenuItem>
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
       <DeleteConfirmation

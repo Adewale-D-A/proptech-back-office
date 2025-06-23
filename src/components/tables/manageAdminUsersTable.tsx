@@ -1,17 +1,18 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import NoResult from "../noResult";
 import useAxios from "../../useHooks/useAxios";
 import { removeAdminsInList } from "../../stores/apiData/admins-list";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import useGetAllAdmins from "../../services-hooks/useGetAllAdmins";
-import Pagination from "../pagination";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
-import MobileAdminTable from "./mobile/admins";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import { admin } from "../../types/apiData/admins";
+import TableTemplate from "./table-template";
+import paginatedPageSerializer from "../../utils/page-serializer";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
 
 export default function ManageAdminUsersTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -25,17 +26,22 @@ export default function ManageAdminUsersTable() {
     start_date: string;
     end_date: string;
   }>();
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("asc");
-  const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllAdmins({
-      page: currentPage,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      sort: sort,
-      search,
-    });
+
+  const [{ page, size, sort, search }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+    search: "",
+  });
+
+  const { data, isLoading, pagination } = useGetAllAdmins({
+    page,
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    sort,
+    search,
+    limit: size,
+  });
   const handleCustomersFiltering = useCallback(
     (start_date: string, end_date: string) => {
       setFilterDates({ start_date, end_date });
@@ -87,73 +93,80 @@ export default function ManageAdminUsersTable() {
             <Sort setSort={setSort} id="sort-by" label="Sort by" />
           </div> */}
         </div>
-        <div className="hidden md:block px-5">
-          {data?.length > 0 ? (
-            <table className=" w-full py-10 border rounded-md">
-              <thead>
-                <tr className=" text-left bg-gray-200/15 text-gray-500">
-                  <th>S/N</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody className="">
-                {data.map((request, index) => {
-                  return (
-                    <tr key={request?.id} className=" border-b">
-                      <td className=" text-gray-500  max-w-xs">{index + 1}</td>
-                      <td className=" max-w-xs">
-                        {request?.first_name} {request?.last_name}
-                      </td>
-                      <td className=" max-w-xs">{request?.email}</td>
-                      <td className=" max-w-xs">{request?.role_id}</td>
-                      <td>
-                        <TableActionDropDown>
-                          <>
-                            {admin?.update && (
-                              <MenuItem>
-                                <Link
-                                  to={`/admin/edit/${request?.id}`}
-                                  className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Edit admin
-                                </Link>
-                              </MenuItem>
-                            )}
-                            {admin?.delete && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => onDeleteClick(request?.id)}
-                                  className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Delete admin
-                                </button>
-                              </MenuItem>
-                            )}
-                          </>
-                        </TableActionDropDown>
-                        <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col"></span>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          ) : (
-            <NoResult title="No Result" message="No data found for this page" />
-          )}
-        </div>
-        <div className="w-full block md:hidden">
-          <MobileAdminTable data={data} onDeleteClick={onDeleteClick} />
-        </div>
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="admins"
+          columns={[
+            {
+              header: "S/N",
+              key: "sn",
+              render: (row: admin, index) => (
+                <span>
+                  {paginatedPageSerializer({
+                    currentPage: pagination?.current_page,
+                    pageSize: pagination?.per_page,
+                    index: index || 0,
+                  })}
+                </span>
+              ),
+            },
+            {
+              header: "Name",
+              key: "name",
+              showColumnSort: true,
+              render: (row: admin) => (
+                <span>
+                  {row?.first_name} {row?.last_name}
+                </span>
+              ),
+            },
+            {
+              header: "Email",
+              key: "email",
+              render: (row: admin) => <span>{row?.email}</span>,
+            },
+
+            {
+              header: "Role",
+              key: "role",
+              showColumnSort: true,
+              render: (row: admin) => <span>{row?.role_id}</span>,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: admin) => (
+                <TableActionDropDown>
+                  <>
+                    {admin?.update && (
+                      <MenuItem>
+                        <Link
+                          to={`/admin/edit/${row?.id}`}
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit admin
+                        </Link>
+                      </MenuItem>
+                    )}
+                    {admin?.delete && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => onDeleteClick(row?.id)}
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete admin
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
 
