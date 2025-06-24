@@ -1,7 +1,5 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import Pagination from "../pagination";
-import NoResult from "../noResult";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import Status from "../status";
 import { useAppDispatch } from "../../stores/hooks";
@@ -20,17 +18,16 @@ import { requestsExportFormater } from "../../utils/export-formerter-functions";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
 
 export default function RequestsListTable({ header }: { header: string[] }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
   }>();
-  const [sort, setSort] = useState("desc");
 
   const [openUpdateRequestStatus, setOpenUpdateRequestStatus] = useState(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
@@ -38,13 +35,20 @@ export default function RequestsListTable({ header }: { header: string[] }) {
   const [selectedId, setSelectedId] = useState("1");
   const [selectedStatus, setSelectedStatus] = useState("");
 
+  const [{ page, size, sort, search }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+    search: "",
+  });
   //fetch request data
   const { data, isLoading, pagination } = useGetAllRequestLists({
-    page: currentPage,
+    page,
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,
     sort,
     search,
+    limit: size,
   });
 
   // update filtering options
@@ -83,19 +87,11 @@ export default function RequestsListTable({ header }: { header: string[] }) {
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 overflow-auto">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <div>
-            <TableSearch
-              setValue={setSearch}
-              placeholder="Apartment name, type, location..."
-            />
+            <TableSearch placeholder="Apartment name, type, location..." />
           </div>
           <div className=" flex items-center gap-2 flex-col md:flex-row">
             <Filter actionHandler={handleCustomersFiltering} />
-            <Sort
-              setSort={setSort}
-              id="sort-by"
-              label="Sort by"
-              defaultValue="desc"
-            />
+            <Sort id="sort-by" label="Sort by" defaultValue="desc" />
             <ExportToCSV
               dataset={data}
               jsonToCSVReformerter={requestsExportFormater}
@@ -103,96 +99,117 @@ export default function RequestsListTable({ header }: { header: string[] }) {
             />
           </div>
         </div>
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {header.map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item) => {
-                  return (
-                    <tr key={item?.id} className=" border-b">
-                      <td>
-                        {item?.user?.first_name} {item?.user?.last_name}
-                      </td>
-                      <td>{item?.shortlet?.name}</td>
-                      <td>
-                        {formatDate(item?.created_at)}{" "}
-                        {formatTime(item?.created_at)}
-                      </td>
-                      <td>{item?.subject}</td>
-                      <td>{item?.description}</td>
-                      <td>
-                        <Status
-                          status="additional-service-escalte"
-                          booleanVal={Boolean(item?.is_escalated)}
-                          falsyMessage="Not Escalated"
-                          truthyMessage="Escalated"
-                        />
-                      </td>
-                      <td>
-                        <Status status={item?.status} />
-                      </td>
-                      <td>
-                        <TableActionDropDown>
-                          <>
-                            <MenuItem>
-                              <Link
-                                to={`/bookings/request-details/${item?.id}`}
-                                className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                              >
-                                View Details
-                              </Link>
-                            </MenuItem>
-                            {user_request?.update && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    markAsResolved(item);
-                                  }}
-                                  className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Mark As Resolved
-                                </button>
-                              </MenuItem>
-                            )}
-                            {user_request?.delete && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedId(String(item?.id));
-                                    setOpenDeleteConfirmation(true);
-                                  }}
-                                  className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Delete Request
-                                </button>
-                              </MenuItem>
-                            )}
-                          </>
-                        </TableActionDropDown>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="requests"
+          columns={[
+            {
+              header: "Customer Name",
+              key: "customer_name",
+              showColumnSort: true,
+              render: (row: requests) => (
+                <span>
+                  {row?.user?.first_name} {row?.user?.last_name}
+                </span>
+              ),
+            },
+            {
+              header: "Apartment Name",
+              key: "apartment_name",
+              showColumnSort: true,
+              render: (row: requests) => <span>{row?.shortlet?.name}</span>,
+            },
+            {
+              header: "Date of Request",
+              key: "date_of_request",
+              showColumnSort: true,
+              render: (row: requests) => (
+                <span>
+                  {formatDate(row?.created_at)} {formatTime(row?.created_at)}
+                </span>
+              ),
+            },
+
+            {
+              header: "Request Type",
+              key: "request_type",
+              showColumnSort: true,
+              render: (row: requests) => <span>{row?.subject}</span>,
+            },
+            {
+              header: "Description",
+              showColumnSort: true,
+              key: "description",
+              render: (row: requests) => <span>{row?.description}</span>,
+            },
+            {
+              header: "Escalated Status",
+              key: "escalated_status",
+              showColumnSort: true,
+              render: (row: requests) => (
+                <Status
+                  status="additional-service-escalte"
+                  booleanVal={Boolean(row?.is_escalated)}
+                  falsyMessage="Not Escalated"
+                  truthyMessage="Escalated"
+                />
+              ),
+            },
+            {
+              header: "Status",
+              key: "status",
+              showColumnSort: true,
+              render: (row: requests) => <Status status={row?.status} />,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: requests) => (
+                <TableActionDropDown>
+                  <>
+                    <MenuItem>
+                      <Link
+                        to={`/bookings/request-details/${row?.id}`}
+                        className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                      >
+                        View Details
+                      </Link>
+                    </MenuItem>
+                    {user_request?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            markAsResolved(row);
+                          }}
+                          className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Mark As Resolved
+                        </button>
+                      </MenuItem>
+                    )}
+                    {user_request?.delete && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedId(String(row?.id));
+                            setOpenDeleteConfirmation(true);
+                          }}
+                          className="w-full text-left p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete Request
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
       <DeleteConfirmation

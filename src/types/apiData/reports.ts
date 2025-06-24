@@ -14,18 +14,31 @@ export type revenueReportList = {
   ota_revenue: number;
   taxes: number;
   caution_fee: number;
+  revenue: number;
+};
+
+export type occupancyRankingReportList = {
+  "YEAR(created_at)": number;
+  date: string;
+  rooms_sold: number;
+  nights_booked: number;
+  nights_available: number;
+  occupancy_rate: number;
+  revenue: number;
 };
 
 export type dailyRoomReportList = {
-  id: string;
+  date: string;
+  shortlet_id: number;
+  shortlet_name: string;
   type: string;
-  apartment: string;
-  customer: string;
-  guest: string;
-  rate: string;
-  meal: string;
+  occupant_name: string;
+  number_of_guests: number;
   channel: string;
-  checkIn: string;
+  number_of_days: number;
+  notes: string;
+  check_in_date: string;
+  check_out_date: string;
 };
 
 export type occupancyTimeReportList = {
@@ -34,7 +47,7 @@ export type occupancyTimeReportList = {
   shortlet_name: string;
   occupancy_status: string;
   occupant_name: string;
-  number_of_guests: string;
+  number_of_guests: number;
   check_in_date: string;
   check_out_date: string;
 };

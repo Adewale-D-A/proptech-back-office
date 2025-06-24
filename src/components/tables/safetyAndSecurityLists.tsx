@@ -1,25 +1,33 @@
-import Pagination from "../pagination";
 import { useCallback, useState } from "react";
 import Sort from "../filterAndSort/sort";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import ModalTemplate from "../modal";
 import AddEdit from "../amenities/addEdit";
 import useGetSafetyAndSecurity from "../../services-hooks/useGetSafetyAndSecurities";
-import NoResult from "../noResult";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { removeSafetyAndSecurity } from "../../stores/apiData/safety-and-security";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
+import { safetyAndSecurity } from "../../types/apiData/safetyAndSecurity";
 
 export default function SafetyAndSecurityList() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetSafetyAndSecurity({ page: currentPage });
+  const [{ page, size, sort }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+  });
+  const { data, isLoading, pagination } = useGetSafetyAndSecurity({
+    page,
+    limit: size,
+    sort,
+  });
 
   const [selectedId, setSelectedId] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
@@ -48,70 +56,65 @@ export default function SafetyAndSecurityList() {
           <h2 className="text-xl font-semibold">Safety and Security List</h2>
           <Sort id="extra-options" label="Sort List" />{" "}
         </div>
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {["Title", "Description", "Action"].map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="">
-                {data.map((request) => {
-                  return (
-                    <tr key={request?.id} className=" border-b">
-                      <td>{request?.name}</td>
-                      <td>{request?.description}</td>
-                      <td>
-                        <TableActionDropDown>
-                          <>
-                            {safety?.update && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedId(String(request?.id));
-                                    setEditSafetyAndSecurity(true);
-                                  }}
-                                  className=" p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Edit
-                                </button>
-                              </MenuItem>
-                            )}
-                            {safety?.delete && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedId(String(request?.id));
-                                    setOpenDelete(true);
-                                  }}
-                                  className="p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Delete
-                                </button>
-                              </MenuItem>
-                            )}
-                          </>
-                        </TableActionDropDown>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="Safety & Security"
+          columns={[
+            {
+              header: "Category Name",
+              key: "category",
+              showColumnSort: true,
+              render: (row: safetyAndSecurity) => <span>{row?.name}</span>,
+            },
+            {
+              header: "Description",
+              key: "description",
+              showColumnSort: true,
+              render: (row: safetyAndSecurity) => (
+                <span>{row?.description}</span>
+              ),
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: safetyAndSecurity) => (
+                <TableActionDropDown>
+                  <>
+                    {safety?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedId(String(row?.id));
+                            setEditSafetyAndSecurity(true);
+                          }}
+                          className=" p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit
+                        </button>
+                      </MenuItem>
+                    )}
+                    {safety?.delete && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedId(String(row?.id));
+                            setOpenDelete(true);
+                          }}
+                          className="p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
       <DeleteConfirmation

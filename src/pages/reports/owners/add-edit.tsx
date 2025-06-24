@@ -13,9 +13,10 @@ import DateInput from "../../../components/inputs/dateInput";
 import Select from "../../../components/inputs/select";
 import TextInput from "../../../components/inputs/textInput";
 import purgeEmptyPayload from "../../../utils/remove-empty-payload";
-import useGetExpenseCategories from "../../../services-hooks/useGetExpenseCategories";
+// import useGetExpenseCategories from "../../../services-hooks/useGetExpenseCategories";
 import ApartmentThroughBuildingSelector from "../../../components/inputs/select/apartment-through-building-selector";
 import { formatDateToString } from "../../../utils/isoDateConverter";
+import useGetRequestCategories from "../../../services-hooks/useGetRequestCategories";
 
 export default function AddEditOwnersReport({
   id,
@@ -38,7 +39,10 @@ export default function AddEditOwnersReport({
   const [loading, setLoading] = useState(false);
 
   const { data } = useGetOwnerReportById({ id });
-  const { data: expenseCategories } = useGetExpenseCategories({ page: 1 });
+  const { data: expenseCategories } = useGetRequestCategories({
+    page: 1,
+    limit: 200,
+  });
 
   //   populate field provided id is available denoting update functionality
   useEffect(() => {

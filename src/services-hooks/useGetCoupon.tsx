@@ -10,14 +10,17 @@ export default function useGetCoupon({ id }: { id?: string }) {
   const [isFailed, setIsFailed] = useState(false);
 
   const getCoupon = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/coupon/${id}`);
       const { coupon } = response?.data?.data;
       setData(coupon);
       setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

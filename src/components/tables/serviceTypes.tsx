@@ -1,4 +1,3 @@
-import Pagination from "../pagination";
 import { useCallback, useState } from "react";
 import Sort from "../filterAndSort/sort";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
@@ -14,6 +13,9 @@ import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
+import { serviceType } from "../../types/apiData/serviceTypes";
 
 export default function ServiceTypeTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -22,17 +24,21 @@ export default function ServiceTypeTable() {
     start_date: string;
     end_date: string;
   }>();
-  const [sort, setSort] = useState("asc");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [search, setSearch] = useState("");
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetServiceTypes({
-      page: currentPage,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      sort: sort,
-      search,
-    });
+
+  const [{ page, size, sort, search }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+    search: "",
+  });
+  const { data, isLoading, pagination } = useGetServiceTypes({
+    page,
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    sort,
+    search,
+    limit: size,
+  });
   const [selectedId, setSelectedId] = useState("");
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -82,73 +88,76 @@ export default function ServiceTypeTable() {
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Service Types</h2>
           <div>
-            <TableSearch
-              setValue={setSearch}
-              placeholder="First name, last name, email, phone number..."
-            />
+            <TableSearch placeholder="First name, last name, email, phone number..." />
           </div>
           <div className=" flex items-center gap-3 text-sm text-gray-500 flex-col md:flex-row">
             <Filter actionHandler={handleSalesFiltering} />
-            <Sort setSort={setSort} id={"service-types"} label={"Sort by:"} />
+            <Sort id={"service-types"} label={"Sort by:"} />
           </div>
         </div>
-        <div className=" w-full overflow-x-auto">
-          <table className=" w-full">
-            <thead>
-              <tr>
-                {["Name", "Price", "Description", "Action"].map((head) => (
-                  <th key={head}>{head}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item) => {
-                return (
-                  <tr key={item?.id} className=" border-b">
-                    <td>{item?.name}</td>
-                    <td>
-                      {item?.currency} {item?.price}
-                    </td>
-                    <td>{item?.description}</td>
-                    <td>
-                      <TableActionDropDown>
-                        <>
-                          {service_type?.update && (
-                            <MenuItem>
-                              <button
-                                type="button"
-                                onClick={() => handleOpeEdit(item?.id)}
-                                className=" p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
-                              >
-                                Edit
-                              </button>
-                            </MenuItem>
-                          )}
-                          {service_type?.update && (
-                            <MenuItem>
-                              <button
-                                type="button"
-                                onClick={() => handleOpenDelete(item?.id)}
-                                className="p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
-                              >
-                                Delete
-                              </button>
-                            </MenuItem>
-                          )}
-                        </>
-                      </TableActionDropDown>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="service types"
+          columns={[
+            {
+              header: "Name",
+              key: "name",
+              showColumnSort: true,
+              render: (row: serviceType) => <span>{row?.name}</span>,
+            },
+            {
+              header: "Price",
+              key: "price",
+              showColumnSort: true,
+              render: (row: serviceType) => (
+                <span>
+                  {" "}
+                  {row?.currency} {row?.price}
+                </span>
+              ),
+            },
+            {
+              header: "Description",
+              key: "description",
+              showColumnSort: true,
+              render: (row: serviceType) => <span>{row?.description}</span>,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: serviceType) => (
+                <TableActionDropDown>
+                  <>
+                    {service_type?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => handleOpeEdit(row?.id)}
+                          className=" p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit
+                        </button>
+                      </MenuItem>
+                    )}
+                    {service_type?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => handleOpenDelete(row?.id)}
+                          className="p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
       <DeleteConfirmation

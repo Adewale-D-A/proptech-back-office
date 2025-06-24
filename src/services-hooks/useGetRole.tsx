@@ -10,14 +10,16 @@ export default function useGetRole({ id }: { id?: string }) {
   const [isFailed, setIsFailed] = useState(false);
 
   const getRole = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/roles/${id}`);
       const { role } = response?.data?.data;
       setData(role);
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

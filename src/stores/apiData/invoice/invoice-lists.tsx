@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { invoice } from "../../../types/apiData/invoice";
+import { pagination } from "../../../types/pagination";
 
 export const invoiceListsData = createSlice({
   name: "all invoice",
@@ -7,15 +8,9 @@ export const invoiceListsData = createSlice({
     value: {
       status: false,
       pagination: [] as {
-        pagination_data: {
-          current_page: number;
-          last_page: number;
-          per_page: number;
-          total: number;
-          from: number;
-          to: number;
-        };
+        pagination_data: pagination;
         data: invoice[];
+        key: string;
       }[],
       data: [] as invoice[],
     },
@@ -35,6 +30,7 @@ export const invoiceListsData = createSlice({
           return {
             pagination_data: item?.pagination_data,
             data: [...item.data, action?.payload],
+            key: item?.key,
           };
         } else {
           return item;
@@ -44,9 +40,7 @@ export const invoiceListsData = createSlice({
     },
     addToPaginationHistory: (state, action) => {
       const found = state.value?.pagination?.find(
-        (item) =>
-          item?.pagination_data?.current_page ===
-          action?.payload?.pagination_data?.current_page
+        (item) => item?.key === action?.payload?.key
       );
       if (!found) {
         state.value.pagination = [
@@ -54,6 +48,7 @@ export const invoiceListsData = createSlice({
           {
             pagination_data: action?.payload?.pagination_data,
             data: action?.payload?.data,
+            key: action?.payload?.key,
           },
         ];
       }
@@ -77,6 +72,7 @@ export const invoiceListsData = createSlice({
         return {
           pagination_data: { ...item.pagination_data },
           data: sencondFilter,
+          key: item?.key,
         };
       });
       state.value.pagination = removed;
@@ -104,6 +100,7 @@ export const invoiceListsData = createSlice({
         return {
           pagination_data: { ...item.pagination_data },
           data: sencondFilter,
+          key: item?.key,
         };
       });
       state.value.pagination = replacedItem;

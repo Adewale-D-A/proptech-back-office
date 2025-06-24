@@ -1,6 +1,4 @@
 import { useCallback, useState } from "react";
-import Pagination from "../pagination";
-import NoResult from "../noResult";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import { useAppDispatch } from "../../stores/hooks";
 import Filter from "../filterAndSort/filter";
@@ -8,7 +6,6 @@ import Sort from "../filterAndSort/sort";
 import useGetAllCoupons from "../../services-hooks/useGetCouponLists";
 import { removeCouponsInList } from "../../stores/apiData/coupons-lists";
 import TableSearch from "../inputs/search/table-search";
-import MobileCouponTable from "./mobile/coupons";
 import formatDate from "../../utils/isoDateConverter";
 import useAxios from "../../useHooks/useAxios";
 import ModalTemplate from "../modal";
@@ -16,6 +13,9 @@ import AddNewCoupon from "../inputs/plansAndPromotions/coupons";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
+import { coupons } from "../../types/apiData/coupons";
 
 export default function CouponList({ header }: { header: string[] }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -24,17 +24,21 @@ export default function CouponList({ header }: { header: string[] }) {
     start_date: string;
     end_date: string;
   }>();
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("asc");
-  const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllCoupons({
-      page: currentPage,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      sort: sort,
-      search,
-    });
+
+  const [{ page, size, sort, search }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+    search: "",
+  });
+  const { data, isLoading, pagination } = useGetAllCoupons({
+    page,
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    sort,
+    search,
+    limit: size,
+  });
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedId, setSelectedId] = useState("");
@@ -77,95 +81,98 @@ export default function CouponList({ header }: { header: string[] }) {
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Coupon List</h2>
           <div className=" max-w-md">
-            <TableSearch
-              setValue={setSearch}
-              placeholder="First name, last name, email, phone number..."
-            />
+            <TableSearch placeholder="First name, last name, email, phone number..." />
           </div>
           <div className=" flex items-center gap-2 flex-col md:flex-row">
             <Filter actionHandler={handleCustomersFiltering} />
-            <Sort setSort={setSort} id="sort-by" label="Sort by" />
+            <Sort id="sort-by" label="Sort by" />
           </div>
         </div>
-        <div className="hidden md:block px-5">
-          {data && data.length > 0 ? (
-            <div className=" w-full overflow-x-auto">
-              <table className=" w-full">
-                <thead>
-                  <tr>
-                    {header.map((head) => (
-                      <th key={head}>{head}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((request) => {
-                    return (
-                      <tr key={request?.id} className=" border-b">
-                        <td>{request?.code}</td>
-                        <td>{request?.type}</td>
-                        <td>
-                          {formatDate(request?.start_date)} -{" "}
-                          {formatDate(request?.end_date)}
-                        </td>
-                        <td>{request?.applicable_shortlet_count}</td>
-                        <td>{request?.applicable_user_count}</td>
-                        <td>{request?.validity}</td>
-                        <td>
-                          <TableActionDropDown>
-                            <>
-                              {coupon?.update && (
-                                <MenuItem>
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      openCouponEditModal(String(request?.id));
-                                    }}
-                                    className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                                  >
-                                    Edit Coupon
-                                  </button>
-                                </MenuItem>
-                              )}
 
-                              {coupon?.delete && (
-                                <MenuItem>
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      openDeletePrompt(String(request?.id));
-                                    }}
-                                    className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                                  >
-                                    Delete Coupon
-                                  </button>
-                                </MenuItem>
-                              )}
-                            </>
-                          </TableActionDropDown>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <NoResult />
-          )}
-        </div>
-        <div className="w-full block md:hidden">
-          <MobileCouponTable
-            data={data}
-            deleteCoupon={openDeletePrompt}
-            editCoupon={openCouponEditModal}
-          />
-        </div>
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="Coupon Lists"
+          columns={[
+            {
+              header: "Coupon Code",
+              key: "coupon_code",
+              render: (row: coupons) => <span>{row?.code}</span>,
+            },
+            {
+              header: "Coupon Type",
+              key: "coupon_type",
+              showColumnSort: true,
+              render: (row: coupons) => <span>{row?.type}</span>,
+            },
+            {
+              header: "Validity Dates",
+              key: "validity_dates",
+              showColumnSort: true,
+              render: (row: coupons) => (
+                <span>
+                  {formatDate(row?.start_date)} - {formatDate(row?.end_date)}
+                </span>
+              ),
+            },
+            {
+              header: "Number of Apartments",
+              key: "number_of_apartments",
+              render: (row: coupons) => (
+                <span>{row?.applicable_shortlet_count}</span>
+              ),
+            },
+            {
+              header: "Number of Users",
+              key: "number_of_users",
+              render: (row: coupons) => (
+                <span>{row?.applicable_user_count}</span>
+              ),
+            },
+            {
+              header: "Validity",
+              key: "validity",
+              render: (row: coupons) => <span>{row?.validity}</span>,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: coupons) => (
+                <TableActionDropDown>
+                  <>
+                    {coupon?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            openCouponEditModal(String(row?.id));
+                          }}
+                          className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit Coupon
+                        </button>
+                      </MenuItem>
+                    )}
+
+                    {coupon?.delete && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            openDeletePrompt(String(row?.id));
+                          }}
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete Coupon
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
       <DeleteConfirmation

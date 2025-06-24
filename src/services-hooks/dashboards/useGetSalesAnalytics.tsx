@@ -37,6 +37,7 @@ export default function useGetSalesAnalytics({
 
   const getSalesAnalytics = useCallback(async () => {
     setIsLoading(true);
+    setIsFailed(false);
     const currentYear = new Date().getFullYear();
     try {
       const response = await axios.get(
@@ -53,9 +54,10 @@ export default function useGetSalesAnalytics({
       });
       dispatch(updateSalesAnalytics(sales));
       dispatch(updateMonthlyStatistsics(endResult));
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [start_date, end_date]);
 

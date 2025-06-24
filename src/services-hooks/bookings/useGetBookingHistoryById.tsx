@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { bookingHistory, bookingsById } from "../../types/apiData/bookings";
+import { bookingHistory } from "../../types/apiData/bookings";
 import useAxios from "../../useHooks/useAxios";
 
 //axios instace interceptor for access token integration and refresh tokens

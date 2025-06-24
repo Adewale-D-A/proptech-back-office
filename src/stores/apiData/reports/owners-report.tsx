@@ -1,9 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { pagination } from "../../../types/pagination";
-import {
-  ownerReportSummaries,
-  ownersReport,
-} from "../../../types/apiData/reports";
+import { ownersReport } from "../../../types/apiData/reports";
 
 export const ownersReportsData = createSlice({
   name: "owners-reports",
@@ -13,6 +10,7 @@ export const ownersReportsData = createSlice({
       pagination: [] as {
         pagination_data: pagination;
         data: ownersReport[];
+        key: string;
       }[],
       data: [] as ownersReport[],
     },
@@ -32,6 +30,7 @@ export const ownersReportsData = createSlice({
           return {
             pagination_data: item?.pagination_data,
             data: [...item.data, action?.payload],
+            key: item?.key,
           };
         } else {
           return item;
@@ -42,9 +41,7 @@ export const ownersReportsData = createSlice({
 
     addToPaginationHistory: (state, action) => {
       const found = state.value?.pagination?.find(
-        (item) =>
-          item?.pagination_data?.current_page ===
-          action?.payload?.pagination_data?.current_page
+        (item) => item?.key === action?.payload?.key
       );
       if (!found) {
         state.value.pagination = [
@@ -52,6 +49,7 @@ export const ownersReportsData = createSlice({
           {
             pagination_data: action?.payload?.pagination_data,
             data: action?.payload?.data,
+            key: action?.payload?.key,
           },
         ];
       }
@@ -75,6 +73,7 @@ export const ownersReportsData = createSlice({
         return {
           pagination_data: { ...item.pagination_data },
           data: sencondFilter,
+          key: item?.key,
         };
       });
       state.value.pagination = removed;
@@ -102,6 +101,7 @@ export const ownersReportsData = createSlice({
         return {
           pagination_data: { ...item.pagination_data },
           data: sencondFilter,
+          key: item?.key,
         };
       });
       state.value.pagination = replacedItem;

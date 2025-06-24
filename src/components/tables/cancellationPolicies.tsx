@@ -1,12 +1,10 @@
 import { useCallback, useState } from "react";
-import Pagination from "../pagination";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import ModalTemplate from "../modal";
 import TableSearch from "../inputs/search/table-search";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-import NoResult from "../noResult";
 import paginatedPageSerializer from "../../utils/page-serializer";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
@@ -14,15 +12,26 @@ import { MenuItem } from "@headlessui/react";
 import useGetCancellationPolcies from "../../services-hooks/apartment/useGetCancellationPolicies";
 import AddEditCancellationPolicy from "../../pages/apartments/cancellation-policy/add-edit";
 import { removeCancellationPolicyInList } from "../../stores/apiData/apartment/cancellation-policies";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
+import { canecllationPolicy } from "../../types/apiData/apartment/cancellation-policy";
 
 export default function CancellationPoliciesTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [search, setSearch] = useState("");
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetCancellationPolcies({ page: currentPage, search });
+  const [{ page, size, sort, search }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+    search: "",
+  });
+  const { data, isLoading, pagination } = useGetCancellationPolcies({
+    page,
+    search,
+    sort,
+    limit: size,
+  });
 
   const [selectedId, setSelectedId] = useState("");
   const [openEdit, setOpenEdit] = useState(false);
@@ -66,73 +75,67 @@ export default function CancellationPoliciesTable() {
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Cancellation Policies</h2>
           <div className=" max-w-md">
-            <TableSearch setValue={setSearch} placeholder="Search..." />
+            <TableSearch placeholder="Search..." />
           </div>
         </div>
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full overflow-x-auto">
-              <thead>
-                <tr>
-                  {["S/N", "Name", "Action"].map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => {
-                  return (
-                    <tr key={item?.id} className=" border-b">
-                      <td>
-                        {paginatedPageSerializer({
-                          currentPage: pagination?.current_page,
-                          pageSize: pagination?.per_page,
-                          index,
-                        })}
-                      </td>
-                      <td>{item?.name}</td>
-                      <td>
-                        <TableActionDropDown>
-                          <>
-                            {cancellation_policy?.update && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => handleOpeEdit(item?.id)}
-                                  className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Edit
-                                </button>
-                              </MenuItem>
-                            )}
-                            {cancellation_policy?.update && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => handleOpenDelete(item?.id)}
-                                  className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Delete
-                                </button>
-                              </MenuItem>
-                            )}
-                          </>
-                        </TableActionDropDown>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="cancellation policy"
+          columns={[
+            {
+              header: "S/N",
+              key: "sn",
+              render: (row: canecllationPolicy, index) => (
+                <span>
+                  {paginatedPageSerializer({
+                    currentPage: pagination?.current_page,
+                    pageSize: pagination?.per_page,
+                    index: index || 0,
+                  })}
+                </span>
+              ),
+            },
+            {
+              header: "Name",
+              key: "name",
+              showColumnSort: true,
+              render: (row: canecllationPolicy) => <span>{row?.name}</span>,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: canecllationPolicy) => (
+                <TableActionDropDown>
+                  <>
+                    {cancellation_policy?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => handleOpeEdit(row?.id)}
+                          className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit
+                        </button>
+                      </MenuItem>
+                    )}
+                    {cancellation_policy?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => handleOpenDelete(row?.id)}
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
       <DeleteConfirmation

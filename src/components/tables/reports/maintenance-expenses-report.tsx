@@ -1,23 +1,20 @@
 import { useCallback, useState } from "react";
-import Pagination from "../../pagination";
-import NoResult from "../../noResult";
 import Filter from "../../filterAndSort/filter";
 import Sort from "../../filterAndSort/sort";
 import TableSearch from "../../inputs/search/table-search";
 import Status from "../../status";
-// import ExportSelect from "../../inputs/select/exportSelect";
-// import BinIcon from "../../../assets/icons/bin-icon";
-// import useGetAllMaintenanceExpenses from "../../../services-hooks/reports/useGetAllMaintenanceExpenses";
 import { useAppDispatch } from "../../../stores/hooks";
 import useAxios from "../../../useHooks/useAxios";
 import DeleteConfirmation from "../../infoModal/delete-confirmation";
 import { removeMaintenanceExpensesInList } from "../../../stores/apiData/reports/maintenenace-expenses";
-// import useGetRequisitionRequest from "../../../services-hooks/userGetRequisitionRequest";
 import useGetRequisitionRequests from "../../../services-hooks/useGetRequisitionRequests";
 import ExportToCSV from "../../export-to-csv";
 import { maintenanceExpensesExportFormater } from "../../../utils/export-formerter-functions";
 import useGetRequestCategories from "../../../services-hooks/useGetRequestCategories";
 import Select from "../../inputs/select";
+import useExtractUrlParams from "../../../useHooks/extract-url-query-params";
+import TableTemplate from "../table-template";
+import { requisitionRequest } from "../../../types/apiData/requisition-request";
 
 export default function MaintenanceExpensesReportListTable() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -30,10 +27,7 @@ export default function MaintenanceExpensesReportListTable() {
     start_date: string;
     end_date: string;
   }>();
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("desc");
   const [category, setCategory] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
   // const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
   //   useGetAllMaintenanceExpenses({
   //     page: currentPage,
@@ -44,19 +38,26 @@ export default function MaintenanceExpensesReportListTable() {
   //   });
 
   const { data: categories } = useGetRequestCategories({
-    page: currentPage,
+    page: 1,
     limit: 1000,
   });
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetRequisitionRequests({
-      page: currentPage,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      search,
-      sort,
-      category,
-      paid: "yes",
-    });
+
+  const [{ page, size, sort, search }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "desc",
+    search: "",
+  });
+  const { data, isLoading, pagination } = useGetRequisitionRequests({
+    page,
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    search,
+    sort,
+    category,
+    paid: "yes",
+    limit: size,
+  });
   const handleCustomersFiltering = useCallback(
     (start_date: string, end_date: string) => {
       setFilterDates({ start_date, end_date });
@@ -85,17 +86,12 @@ export default function MaintenanceExpensesReportListTable() {
       <div className=" w-full flex flex-col gap-3">
         <div className="w-full flex justify-between gap-4 flex-col md:flex-row">
           <div className=" max-w-md">
-            <TableSearch setValue={setSearch} placeholder="Search..." />
+            <TableSearch placeholder="Search..." />
           </div>
           <div className=" flex items-center gap-2 flex-col md:flex-row">
             <Filter actionHandler={handleCustomersFiltering} />
             <div className=" w-fit min-w-40">
-              <Sort
-                setSort={setSort}
-                id="sort-by"
-                defaultValue="desc"
-                label="Sort by"
-              />
+              <Sort id="sort-by" defaultValue="desc" label="Sort by" />
             </div>
             <Select
               isRequired={true}
@@ -126,68 +122,67 @@ export default function MaintenanceExpensesReportListTable() {
               fileName="maintenance-expenses-list"
             />
           </div>
-          {data && data.length > 0 ? (
-            <div className=" w-full overflow-x-auto">
-              <table className=" w-full">
-                <thead>
-                  <tr>
-                    {[
-                      "ID",
-                      "Payment date",
-                      "Apartment",
-                      "Category",
-                      "Item",
-                      // "Description of work",
-                      "Total amount",
-                      "Status",
-                      // "Action",
-                    ].map((head) => (
-                      <th key={head}>{head}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="">
-                  {data.map((item) => {
-                    return (
-                      <tr key={item?.id} className=" border-b">
-                        <td>
-                          <span className=" rounded-full p-2 border border-primary">
-                            {item?.id}
-                          </span>
-                        </td>
-                        <td>{item?.date_paid}</td>
-                        <td>{item?.shortlet?.name}</td>
-                        <td>{item?.category?.name}</td>
-                        {/* <td>{item?.item}</td> */}
-                        <td>{item?.item}</td>
-                        <td>{item?.amount}</td>
-                        <td>
-                          <Status status={item?.status} />
-                        </td>
-                        {/* <td>
-                          <div className=" flex items-center gap-4">
-                            <button
-                              title="delete"
-                              onClick={() => handleOpenDelete(item?.id)}
-                            >
-                              <BinIcon className=" size-6 text-red-500" />
-                            </button>
-                          </div>
-                        </td> */}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <NoResult />
-          )}
-          <Pagination
-            pagination={pagination}
-            setCurrentPage={setCurrentPage}
+          <TableTemplate
+            data={data}
             isLoading={isLoading}
-            label="maintenance expenses"
+            columns={[
+              {
+                header: "ID",
+                key: "date",
+                showColumnSort: true,
+                render: (row: requisitionRequest) => (
+                  <span className=" rounded-full p-2 border border-primary">
+                    {row?.id}
+                  </span>
+                ),
+              },
+              {
+                header: "Payment Date",
+                key: "payment_date",
+                showColumnSort: true,
+                render: (row: requisitionRequest) => (
+                  <span>{row?.date_paid}</span>
+                ),
+              },
+              {
+                header: "Apartment",
+                key: "apartment",
+                showColumnSort: true,
+                render: (row: requisitionRequest) => (
+                  <span>{row?.shortlet?.name}</span>
+                ),
+              },
+              {
+                header: "Category",
+                key: "category",
+                showColumnSort: true,
+                render: (row: requisitionRequest) => (
+                  <span>{row?.category?.name}</span>
+                ),
+              },
+              {
+                header: "Item",
+                key: "item",
+                showColumnSort: true,
+                render: (row: requisitionRequest) => <span>{row?.item}</span>,
+              },
+              {
+                header: "Total amount",
+                key: "total_amount",
+                showColumnSort: true,
+                render: (row: requisitionRequest) => <span>{row?.amount}</span>,
+              },
+              {
+                header: "Status",
+                key: "status",
+                showColumnSort: true,
+                render: (row: requisitionRequest) => (
+                  <Status status={row?.status} />
+                ),
+              },
+            ]}
+            showPaginator={true}
+            pagination={pagination}
           />
         </div>
       </div>

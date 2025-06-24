@@ -1,8 +1,9 @@
 import { useCallback } from "react";
 import Select from "../../../components/inputs/select";
 import Filter from "../../../components/filterAndSort/filter";
-import useGetExpenseCategories from "../../../services-hooks/useGetExpenseCategories";
+// import useGetExpenseCategories from "../../../services-hooks/useGetExpenseCategories";
 import ApartmentThroughBuildingSelector from "../../../components/inputs/select/apartment-through-building-selector";
+import useGetRequestCategories from "../../../services-hooks/useGetRequestCategories";
 
 export default function OwnersReportFilterOptions({
   apartmentId,
@@ -21,7 +22,10 @@ export default function OwnersReportFilterOptions({
   buildingId: string;
   setBuildingId: (val: string) => void;
 }) {
-  const { data: expenseCategories } = useGetExpenseCategories({ page: 1 });
+  const { data: expenseCategories } = useGetRequestCategories({
+    page: 1,
+    limit: 200,
+  });
 
   const handleSalesFiltering = useCallback(
     (start_date: string, end_date: string) => {

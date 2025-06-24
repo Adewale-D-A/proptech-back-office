@@ -8,15 +8,16 @@ import reformResources from "../utils/admin/reformResource";
 export default function useGetAllResources() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const { status, rawdata, reformedData } = useAppSelector(
+  const { status, reformedData } = useAppSelector(
     (state) => state.resources.value
   );
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
   const getAllAdmins = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/permissions`);
       const { permissions } = response?.data?.data;
       const result = reformResources({ resource: permissions });

@@ -1,25 +1,33 @@
-import Pagination from "../pagination";
 import { useCallback, useState } from "react";
 import Sort from "../filterAndSort/sort";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import ModalTemplate from "../modal";
 import AddEdit from "../amenities/addEdit";
 import useGetHouseRules from "../../services-hooks/useGetAllRules";
-import NoResult from "../noResult";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { removeHouseRule } from "../../stores/apiData/house-rules";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
+import { houseRule } from "../../types/apiData/houseRules";
 
 export default function RulesLists() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetHouseRules({ page: currentPage });
+  const [{ page, size, sort }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+  });
+  const { data, isLoading, pagination } = useGetHouseRules({
+    page,
+    limit: size,
+    sort,
+  });
   const [selectedId, setSelectedId] = useState("");
 
   const [openDelete, setOpenDelete] = useState(false);
@@ -48,70 +56,64 @@ export default function RulesLists() {
           <h2 className="text-xl font-semibold">Rules Lists</h2>
           <Sort id="extra-options" label="Sort List" />{" "}
         </div>
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {["Title", "Description", "Action"].map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((request, index) => {
-                  return (
-                    <tr key={request?.id} className=" border-b">
-                      <td>{request?.name}</td>
-                      <td>{request?.description}</td>
-                      <td>
-                        <TableActionDropDown>
-                          <>
-                            {rule?.update && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedId(String(request?.id));
-                                    setEditRule(true);
-                                  }}
-                                  className=" p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Edit
-                                </button>
-                              </MenuItem>
-                            )}{" "}
-                            {rule?.delete && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedId(String(request?.id));
-                                    setOpenDelete(true);
-                                  }}
-                                  className="p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Delete
-                                </button>
-                              </MenuItem>
-                            )}
-                          </>
-                        </TableActionDropDown>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="Rules"
+          columns={[
+            {
+              header: "Category Name",
+              key: "category",
+              showColumnSort: true,
+              render: (row: houseRule) => <span>{row?.name}</span>,
+            },
+            {
+              header: "Description",
+              key: "description",
+              showColumnSort: true,
+              render: (row: houseRule) => <span>{row?.description}</span>,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: houseRule) => (
+                <TableActionDropDown>
+                  <>
+                    {rule?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedId(String(row?.id));
+                            setEditRule(true);
+                          }}
+                          className=" p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit
+                        </button>
+                      </MenuItem>
+                    )}{" "}
+                    {rule?.delete && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedId(String(row?.id));
+                            setOpenDelete(true);
+                          }}
+                          className="p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
       <DeleteConfirmation

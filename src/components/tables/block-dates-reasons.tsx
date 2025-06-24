@@ -1,9 +1,7 @@
-import Pagination from "../pagination";
 import { useCallback, useState } from "react";
 import Sort from "../filterAndSort/sort";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import ModalTemplate from "../modal";
-import NoResult from "../noResult";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import useGetBlockedReasons from "../../services-hooks/useGetBlockedReasons";
@@ -12,14 +10,24 @@ import { removeBlockedDatesReason } from "../../stores/apiData/blocked-dates-rea
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
+import { blockedReason } from "../../types/apiData/blocked-reason";
 
 export default function BlockedDatesReasonsListsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetBlockedReasons({ page: currentPage });
+  const [{ page, size, sort }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+  });
+  const { data, isLoading, pagination } = useGetBlockedReasons({
+    page,
+    sort,
+    limit: size,
+  });
 
   const [selectedId, setSelectedId] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
@@ -49,70 +57,63 @@ export default function BlockedDatesReasonsListsTable() {
           <h2 className="text-xl font-semibold">Blocked Date Reasons</h2>
           <Sort id="room-options" label="Sort List" />{" "}
         </div>
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {["Name", "description", "Action"].map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((request, index) => {
-                  return (
-                    <tr key={request?.id} className=" border-b">
-                      <td>{request?.name}</td>
-                      <td>{request?.description}</td>
-                      <td>
-                        <TableActionDropDown>
-                          <>
-                            {blocked_dates_reasons?.update && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedId(String(request?.id));
-                                    setOpenEditBlockedDateReason(true);
-                                  }}
-                                  className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Edit
-                                </button>
-                              </MenuItem>
-                            )}
-                            {blocked_dates_reasons?.delete && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedId(String(request?.id));
-                                    setOpenDelete(true);
-                                  }}
-                                  className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Delete
-                                </button>
-                              </MenuItem>
-                            )}
-                          </>
-                        </TableActionDropDown>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="blocked reason"
+          columns={[
+            {
+              header: "Name",
+              key: "name",
+              showColumnSort: true,
+              render: (row: blockedReason) => <span>{row?.name}</span>,
+            },
+            {
+              header: "Description",
+              key: "description",
+              showColumnSort: true,
+              render: (row: blockedReason) => <span>{row?.description}</span>,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: blockedReason) => (
+                <TableActionDropDown>
+                  <>
+                    {blocked_dates_reasons?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedId(String(row?.id));
+                            setOpenEditBlockedDateReason(true);
+                          }}
+                          className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit
+                        </button>
+                      </MenuItem>
+                    )}
+                    {blocked_dates_reasons?.delete && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedId(String(row?.id));
+                            setOpenDelete(true);
+                          }}
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
       <DeleteConfirmation

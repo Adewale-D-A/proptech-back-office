@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import useAxios from "../useHooks/useAxios";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
 import { updateTaxRateList } from "../stores/apiData/tax-rate-lists";
+import { pagination } from "../types/pagination";
 
 //axios instace interceptor for access token integration and refresh tokens
 export default function useGetAllTaxRateLists({
@@ -21,14 +22,7 @@ export default function useGetAllTaxRateLists({
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
 
-  const [pagination, setPagination] = useState<{
-    current_page: number;
-    last_page: number;
-    per_page: number;
-    total: number;
-    from: number;
-    to: number;
-  }>({} as any);
+  const [pagination, setPagination] = useState<pagination>({} as any);
 
   const getAllTaxRates = useCallback(async () => {
     setIsLoading(true);

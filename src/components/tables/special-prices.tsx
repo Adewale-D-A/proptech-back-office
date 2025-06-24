@@ -1,8 +1,6 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import Pagination from "../pagination";
 import { useAppDispatch } from "../../stores/hooks";
-import NoResult from "../noResult";
 import useGetSpecialPrices from "../../services-hooks/pricing/useGetSpecialPrices";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import useAxios from "../../useHooks/useAxios";
@@ -12,6 +10,10 @@ import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
 import currencyFormat from "../../utils/currency-formatter";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
+import { specialPrices } from "../../types/apiData/specialPrices";
+import paginatedPageSerializer from "../../utils/page-serializer";
 
 export default function SpecialPricesTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -21,20 +23,24 @@ export default function SpecialPricesTable() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedId, setSelectedId] = useState("1");
 
-  const [search, setSearch] = useState("");
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
   }>();
-  // const [sort, setSort] = useState("asc");
-  const [currentPage, setCurrentPage] = useState(1);
 
+  const [{ page, size, sort, search }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+    search: "",
+  });
   const { data, pagination, isLoading } = useGetSpecialPrices({
-    page: currentPage,
+    page,
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,
-    // sort: sort,
+    sort,
     search,
+    limit: size,
   });
 
   // const handleSalesFiltering = useCallback(
@@ -69,75 +75,84 @@ export default function SpecialPricesTable() {
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Special Prices</h2>
           <div>
-            <TableSearch setValue={setSearch} placeholder="Search..." />
+            <TableSearch placeholder="Search..." />
           </div>
         </div>
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {["S/N", "Name", "Price/value", "Type", "Action"].map(
-                    (head) => (
-                      <th key={head}>{head}</th>
-                    )
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => {
-                  return (
-                    <tr key={item?.id} className=" border-b">
-                      <td className=" min-w-16">{index + 1}</td>
-                      <td className=" min-w-16">{item?.name}</td>
-                      <td className=" text-lg  min-w-36">{`${
-                        item?.price_type === "price"
-                          ? currencyFormat(item?.price)
-                          : `${item?.percentage}%`
-                      }`}</td>
-                      <td className=" text-lg  min-w-36">{`${item?.price_type}`}</td>
-
-                      <td>
-                        <TableActionDropDown>
-                          <>
-                            {special_prices?.update && (
-                              <MenuItem>
-                                <Link
-                                  to={`/pricing/edit-special-price/${item?.id}`}
-                                  className="p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Edit
-                                </Link>
-                              </MenuItem>
-                            )}
-                            {special_prices?.update && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => selectForDelete(item?.id)}
-                                  className="text-left p-3 px-4  w-full hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Delete
-                                </button>
-                              </MenuItem>
-                            )}
-                          </>
-                        </TableActionDropDown>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="special prices"
+          columns={[
+            {
+              header: "S/N",
+              key: "sn",
+              render: (row: specialPrices, index) => (
+                <span>
+                  {paginatedPageSerializer({
+                    currentPage: pagination?.current_page,
+                    pageSize: pagination?.per_page,
+                    index: index || 0,
+                  })}
+                </span>
+              ),
+            },
+            {
+              header: "Name",
+              key: "name",
+              showColumnSort: true,
+              render: (row: specialPrices) => <span>{row?.name}</span>,
+            },
+            {
+              header: "Price/value",
+              key: "price_value",
+              showColumnSort: true,
+              render: (row: specialPrices) => (
+                <span>{`${
+                  row?.price_type === "price"
+                    ? currencyFormat(row?.price)
+                    : `${row?.percentage}%`
+                }`}</span>
+              ),
+            },
+            {
+              header: "Type",
+              key: "type",
+              showColumnSort: true,
+              render: (row: specialPrices) => <span>{row?.price_type}</span>,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: specialPrices) => (
+                <TableActionDropDown>
+                  <>
+                    {special_prices?.update && (
+                      <MenuItem>
+                        <Link
+                          to={`/pricing/edit-special-price/${row?.id}`}
+                          className="p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit
+                        </Link>
+                      </MenuItem>
+                    )}
+                    {special_prices?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => selectForDelete(row?.id)}
+                          className="text-left p-3 px-4  w-full hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
 

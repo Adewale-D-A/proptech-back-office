@@ -1,7 +1,5 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import Pagination from "../pagination";
-import NoResult from "../noResult";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import Status from "../status";
 import { useAppDispatch } from "../../stores/hooks";
@@ -18,26 +16,31 @@ import { apartmentInvoiceExportFormater } from "../../utils/export-formerter-fun
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import { invoice } from "../../types/apiData/invoice";
+import TableTemplate from "./table-template";
 
 export default function InvoiceListsTable({ header }: { header: string[] }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const [sort, setSort] = useState("asc");
-  const [search, setSearch] = useState("");
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
   }>();
-  // const [sort, setSort] = useState("asc");
-  const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetApartmentInvoiceLists({
-      page: currentPage,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      sort: sort,
-      search,
-    });
+  const [{ search, page, size, sort }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+    search: "",
+  });
+  const { data, isLoading, pagination } = useGetApartmentInvoiceLists({
+    page,
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    sort,
+    search,
+    limit: size,
+  });
   const handleCustomersFiltering = useCallback(
     (start_date: string, end_date: string) => {
       setFilterDates({ start_date, end_date });
@@ -95,11 +98,11 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Invoice List</h2>
           <div>
-            <TableSearch setValue={setSearch} placeholder="Search..." />
+            <TableSearch placeholder="Search..." />
           </div>
           <div className=" flex items-center gap-2 flex-col md:flex-row">
             <Filter actionHandler={handleCustomersFiltering} />
-            <Sort setSort={setSort} id="sort-by" label="Sort by" />
+            <Sort id="sort-by" label="Sort by" />
             <ExportToCSV
               dataset={data}
               jsonToCSVReformerter={apartmentInvoiceExportFormater}
@@ -107,50 +110,81 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
             />
           </div>
         </div>
-        {data && data.length > 0 ? (
-          <table className=" w-full text-xs overflow-x-auto">
-            <thead className="">
-              <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                {header.map((head) => (
-                  <th key={head}>{head}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="">
-              {data.map((item, index) => {
-                return (
-                  <tr key={item?.id} className=" border-b">
-                    <td>{item?.invoice_number}</td>
-                    <td>{item?.booking_id}</td>
-                    <td>{item?.user?.email}</td>
-                    <td>{formatDate(item?.created_at)}</td>
-                    <td>{item?.created_by}</td>
-                    <td>
-                      <Status status={item?.status} />
-                    </td>
-                    <td>
-                      <TableActionDropDown>
-                        <>
-                          <MenuItem>
-                            <Link
-                              to={`/bookings/booking-details/${item?.booking_id}`}
-                              className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                            >
-                              View Booking
-                            </Link>
-                          </MenuItem>
-                          {invoice?.delete && (
-                            <MenuItem>
-                              <button
-                                type="button"
-                                onClick={() => selectForDelete(item?.id)}
-                                className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                              >
-                                Delete Invoice
-                              </button>
-                            </MenuItem>
-                          )}
-                          {/* {booking_email && (
+        <TableTemplate
+          data={data}
+          isLoading={isLoading}
+          columns={[
+            {
+              header: "Invoice Number",
+              key: "invoice_number",
+              showColumnSort: true,
+              render: (row: invoice) => <span>{row?.invoice_number}</span>,
+            },
+            {
+              header: "Booking ID",
+              key: "booking_id",
+              showColumnSort: true,
+              render: (row: invoice) => (
+                <Link
+                  to={`/bookings/booking-details/edit-reservation/${row?.id}`}
+                  className=" rounded-full p-2 border border-primary"
+                >
+                  {row?.booking_id}
+                </Link>
+              ),
+            },
+            {
+              header: "Emailed To",
+              key: "email_to",
+              showColumnSort: true,
+              render: (row: invoice) => <span>{row?.user?.email}</span>,
+            },
+            {
+              header: "Created On",
+              key: "created_on",
+              showColumnSort: true,
+              render: (row: invoice) => (
+                <span>{formatDate(row?.created_at)}</span>
+              ),
+            },
+            {
+              header: "Created By",
+              key: "created_by",
+              showColumnSort: true,
+              render: (row: invoice) => <span>{row?.created_by}</span>,
+            },
+            {
+              header: "Status",
+              key: "status",
+              showColumnSort: true,
+              render: (row: invoice) => <Status status={row?.status} />,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: invoice) => (
+                <TableActionDropDown>
+                  <>
+                    <MenuItem>
+                      <Link
+                        to={`/bookings/booking-details/${row?.booking_id}`}
+                        className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                      >
+                        View Booking
+                      </Link>
+                    </MenuItem>
+                    {invoice?.delete && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => selectForDelete(row?.id)}
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete Invoice
+                        </button>
+                      </MenuItem>
+                    )}
+                    {/* {booking_email && (
                             <MenuItem>
                               <Link
                                 to={`#`}
@@ -160,32 +194,23 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
                               </Link>
                             </MenuItem>
                           )} */}
-                          {booking_email?.create && (
-                            <MenuItem>
-                              <button
-                                onClick={() => resendInvoice()}
-                                className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                              >
-                                Resend Via E-mail
-                              </button>
-                            </MenuItem>
-                          )}
-                        </>
-                      </TableActionDropDown>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
+                    {booking_email?.create && (
+                      <MenuItem>
+                        <button
+                          onClick={() => resendInvoice()}
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Resend Via E-mail
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
           pagination={pagination}
-          setCurrentPage={setCurrentPage}
-          isLoading={isLoading}
-          label="invoices"
         />
       </div>
       <DeleteConfirmation

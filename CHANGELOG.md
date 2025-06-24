@@ -1,3 +1,21 @@
+##### 24.06.2025
+
+> Update: Manual table replacements with table component (completion)
+> Update: Rate table number of applicable free nights input field addition
+> Feature: Daily room, per time occupancy, occupancy ranking endpoints integrations
+
+##### 23.06.2025
+
+> Updates: Manual table replacements with table component
+> Feature: Store caching with key (more performant option)
+> Feature: Table components addition
+> Feature: Sort table column feature addition
+> Feature: URL query parameter feature addition
+
+##### 21.06.2025
+
+> Update: Phase II requirements updates (development in progress)
+
 ##### 17.06.2025
 
 > Update: Reports building to apartment drill downs addition

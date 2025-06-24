@@ -10,14 +10,16 @@ export default function useGetSafetyAndSecurity({ id }: { id?: string }) {
   const [isFailed, setIsFailed] = useState(false);
 
   const getSafetyAndSecurity = useCallback(async () => {
+    setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/safety/${id}`);
       const { safety } = response?.data?.data;
       setData(safety);
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

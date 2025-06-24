@@ -14,13 +14,15 @@ export default function useGetServicesBreakdown() {
 
   const getServicesBreakdown = useCallback(async () => {
     setIsLoading(true);
+    setIsFailed(false);
     try {
       const response = await axios.get("/admin/dashboard/services-breakdown");
       const { data } = response?.data;
       dispatch(updateAllServiceBreakdown(data));
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 

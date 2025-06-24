@@ -1,5 +1,4 @@
 import { useCallback, useState } from "react";
-import NoResult from "../noResult";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import { useAppDispatch } from "../../stores/hooks";
 import useGetAllTaxRateLists from "../../services-hooks/useGetTaxRatesLists";
@@ -12,14 +11,17 @@ import { openSnackbar } from "../../stores/appFunctionality/snackbar";
 import useAxios from "../../useHooks/useAxios";
 import ModalTemplate from "../modal";
 import AddTax from "../tax/addTax";
-import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
+import { taxRates } from "../../types/apiData/taxRates";
 
 export default function TaxRateLists({ header }: { header: string[] }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllTaxRateLists({ page: currentPage });
+  const [{ page }] = useExtractUrlParams({
+    page: 1,
+  });
+  const { data, isLoading } = useGetAllTaxRateLists({ page });
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedId, setSelectedId] = useState("1");
@@ -87,62 +89,45 @@ export default function TaxRateLists({ header }: { header: string[] }) {
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
           <h2 className="text-xl font-semibold">Tax List</h2>
         </div>
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {header.map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="">
-                {data.map((request, index) => {
-                  return (
-                    <tr key={request?.id} className=" border-b">
-                      <td>{index + 1}</td>
-                      <td>{request?.name}</td>
-                      <td>{request?.rate}</td>
-                      <td>
-                        {formatDate(request?.created_at)}{" "}
-                        {formatTime(request?.created_at)}
-                      </td>
-                      <td></td>
-                      {/* <td className=" group relative">
-                      <span className=" p-2 text-lg">...</span>
-                      <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSelectedId(String(request?.id));
-                            setOpenTaxUpdate(true);
-                          }}
-                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Edit Tax
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSelectedId(String(request?.id));
-                            setOpenDeleteConfirmation(true);
-                          }}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Delete Tax Rate
-                        </button>
-                      </span>
-                    </td> */}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult />
-        )}
+        <TableTemplate
+          data={data}
+          isLoading={isLoading}
+          columns={[
+            {
+              header: "S/N",
+              key: "sn",
+              render: (row: taxRates, index) => <span> {index || 0 + 1}</span>,
+            },
+            {
+              header: "Tax Name",
+              key: "tax_name",
+              showColumnSort: true,
+              render: (row: taxRates) => <span>{row?.name}</span>,
+            },
+            {
+              header: "Tax Rate",
+              key: "tax_rate",
+              render: (row: taxRates) => <span>{row?.rate}</span>,
+            },
+
+            {
+              header: "Created On",
+              key: "created_on",
+              showColumnSort: true,
+              render: (row: taxRates) => (
+                <span>
+                  {formatDate(row?.created_at)} {formatTime(row?.created_at)}
+                </span>
+              ),
+            },
+            {
+              header: "Tax Breakdown",
+              key: "tax_breakdown",
+              render: (row: taxRates) => <span></span>,
+            },
+          ]}
+          showPaginator={false}
+        />
       </div>
       <DeleteConfirmation
         confirmationHandler={deleteApartment}

@@ -1,41 +1,70 @@
 import { useState } from "react";
-import Pagination from "../../pagination";
-import NoResult from "../../noResult";
 import TableSearch from "../../inputs/search/table-search";
 import Status from "../../status";
 import useGetAllBookingsLists from "../../../services-hooks/useGetAllBookingsLists";
-import { BookingFilterPayload } from "../../../types/apiData/bookings/booking-filter-options";
 import formatDate from "../../../utils/isoDateConverter";
 import { Link } from "react-router-dom";
 import BookingsFilterSearch from "../../filterAndSort/bookings-filter";
 import ExportToCSV from "../../export-to-csv";
 import { bookingsExportFormater } from "../../../utils/export-formerter-functions";
+import useExtractUrlParams from "../../../useHooks/extract-url-query-params";
+import TableTemplate from "../table-template";
+import { bookingsById } from "../../../types/apiData/bookings";
+import TableActionDropDown from "../../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 
 export default function BookingsReportListTable() {
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
   }>();
-  const [filter, setFilter] = useState<BookingFilterPayload>();
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("desc");
-  const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllBookingsLists({
-      page: currentPage,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      sort: sort,
+
+  const [
+    {
       search,
-      ...filter,
-    });
+      page,
+      size,
+      sort,
+      channel,
+      currency,
+      room_option,
+      payment_method,
+      status,
+      user_verification,
+    },
+  ] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    search: "",
+    sort: "asc",
+    channel: "",
+    currency: "",
+    room_option: "",
+    payment_method: "",
+    status: "",
+    user_verification: "",
+  });
+  const { data, isLoading, pagination } = useGetAllBookingsLists({
+    page,
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    sort,
+    search,
+    limit: size,
+    channel,
+    currency,
+    room_option,
+    payment_method,
+    status,
+    user_verification,
+  });
   return (
     <div className=" w-full flex flex-col gap-3">
       <div className="w-full flex justify-between gap-4 flex-col md:flex-row">
         <div className=" max-w-md">
-          <TableSearch setValue={setSearch} placeholder="Search..." />
+          <TableSearch placeholder="Search..." />
         </div>
-        <BookingsFilterSearch setData={setFilter} />
+        <BookingsFilterSearch />
       </div>
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5">
         <div className=" w-full justify-between gap-6 flex items-center flex-col lg:flex-row">
@@ -53,67 +82,88 @@ export default function BookingsReportListTable() {
             />
           </div>
         </div>
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {[
-                    "Customer name",
-                    "Apartment",
-                    "Amount",
-                    "Check-in",
-                    "Check-out",
-                    "Status",
-                    "Action",
-                  ].map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item) => {
-                  return (
-                    <tr key={item?.id} className=" border-b">
-                      <td>
-                        {item?.user?.first_name} {item?.user?.last_name}
-                      </td>
-                      <td>{item?.shortlet?.name}</td>
-                      <td>
-                        {item?.currency} {item?.total_price}
-                      </td>
-                      <td>
-                        {formatDate(item?.check_in_date)} {item?.check_in_time}
-                      </td>
-                      <td>
-                        {formatDate(item?.check_out_date)}{" "}
-                        {item?.check_out_time}
-                      </td>
-                      <td>
-                        <Status status={item?.status} />
-                      </td>
-                      <td>
-                        <Link
-                          to={`/bookings/booking-details/${item?.id}`}
-                          className=" px-4 py-2 border font-semibold"
-                        >
-                          View
-                        </Link>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="expenses"
+          columns={[
+            {
+              header: "Customer Name",
+              key: "customer_name",
+              showColumnSort: true,
+              render: (row: bookingsById) => (
+                <Link
+                  to={`/customers/customer-details/${row?.user?.id}`}
+                  className=" underline italic flex items-center gap-2 hover:font-bold transition-all"
+                >
+                  <span>
+                    {row?.user?.first_name} {row?.user?.last_name}
+                  </span>{" "}
+                </Link>
+              ),
+            },
+            {
+              header: "Apartment Name",
+              key: "apartment_name",
+              showColumnSort: true,
+              render: (row: bookingsById) => <span>{row?.shortlet?.name}</span>,
+            },
+            {
+              header: "Amount",
+              key: "amount",
+              showColumnSort: true,
+              render: (row: bookingsById) => (
+                <span>
+                  {row?.currency} {row?.total_price}
+                </span>
+              ),
+            },
+            {
+              header: "Check-in Date",
+              key: "check_in_date",
+              showColumnSort: true,
+              render: (row: bookingsById) => (
+                <span>
+                  {formatDate(row?.check_in_date)} {row?.check_in_time}
+                </span>
+              ),
+            },
+            {
+              header: "Check-out Date",
+              key: "check_out_date",
+              showColumnSort: true,
+              render: (row: bookingsById) => (
+                <span>
+                  {formatDate(row?.check_out_date)} {row?.check_out_time}
+                </span>
+              ),
+            },
+            {
+              header: "Status",
+              key: "status",
+              showColumnSort: true,
+              render: (row: bookingsById) => <Status status={row?.status} />,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: bookingsById) => (
+                <TableActionDropDown>
+                  <>
+                    <MenuItem>
+                      <Link
+                        to={`/bookings/booking-details/${row?.id}`}
+                        className=" px-4 py-2 border font-semibold"
+                      >
+                        View
+                      </Link>
+                    </MenuItem>
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
     </div>

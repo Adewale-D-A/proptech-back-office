@@ -1,9 +1,7 @@
-import Pagination from "../pagination";
 import { useCallback, useState } from "react";
 import Sort from "../filterAndSort/sort";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import ModalTemplate from "../modal";
-import NoResult from "../noResult";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { removeBuildingInList } from "../../stores/apiData/apartment/buildings";
@@ -12,14 +10,24 @@ import AddEditBuildings from "../../pages/apartments/buildings/add-edit-building
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import { building } from "../../types/apiData/apartment/buildings";
+import TableTemplate from "./table-template";
 
 export default function BuildingsListsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetBuildings({ page: currentPage });
+  const [{ page, size, sort }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+  });
+  const { data, isLoading, pagination } = useGetBuildings({
+    page,
+    sort,
+    limit: size,
+  });
 
   const [selectedId, setSelectedId] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
@@ -48,70 +56,63 @@ export default function BuildingsListsTable() {
           <h2 className="text-xl font-semibold">Buildings</h2>
           <Sort id="room-options" label="Sort List" />{" "}
         </div>
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {["Name", "Address", "Action"].map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item) => {
-                  return (
-                    <tr key={item?.id} className=" border-b">
-                      <td>{item?.name}</td>
-                      <td>{item?.address}</td>
-                      <td>
-                        <TableActionDropDown>
-                          <>
-                            {building?.update && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedId(String(item?.id));
-                                    setOpenEdit(true);
-                                  }}
-                                  className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Edit
-                                </button>
-                              </MenuItem>
-                            )}
-                            {building?.delete && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setSelectedId(String(item?.id));
-                                    setOpenDelete(true);
-                                  }}
-                                  className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Delete
-                                </button>
-                              </MenuItem>
-                            )}
-                          </>
-                        </TableActionDropDown>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="buildings"
+          columns={[
+            {
+              header: "Name",
+              key: "name",
+              showColumnSort: true,
+              render: (row: building) => <span>{row?.name}</span>,
+            },
+            {
+              header: "Address",
+              key: "address",
+              showColumnSort: true,
+              render: (row: building) => <span>{row?.address}</span>,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: building) => (
+                <TableActionDropDown>
+                  <>
+                    {building?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedId(String(row?.id));
+                            setOpenEdit(true);
+                          }}
+                          className=" p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit
+                        </button>
+                      </MenuItem>
+                    )}
+                    {building?.delete && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedId(String(row?.id));
+                            setOpenDelete(true);
+                          }}
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
       <DeleteConfirmation

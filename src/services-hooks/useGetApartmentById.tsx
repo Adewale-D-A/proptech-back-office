@@ -21,8 +21,8 @@ export default function useGetApartmentById(id?: string) {
 
   const getApartment = useCallback(async () => {
     setIsLoading(true);
+    setIsFailed(false);
     try {
-      setIsLoading(true);
       const response = await axios.get(`/admin/shortlet/${id}`);
       const { shortlet } = response?.data?.data;
       const {
@@ -109,9 +109,10 @@ export default function useGetApartmentById(id?: string) {
         })
       );
       setData(shortlet);
-      setIsLoading(false);
     } catch (error) {
       setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   }, [id]);
 

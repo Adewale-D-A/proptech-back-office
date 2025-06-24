@@ -1,9 +1,7 @@
-import Pagination from "../pagination";
 import { useCallback, useState } from "react";
 import Sort from "../filterAndSort/sort";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import ModalTemplate from "../modal";
-import NoResult from "../noResult";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import useGetRequestCategories from "../../services-hooks/useGetRequestCategories";
@@ -14,16 +12,25 @@ import LoadingButton from "../button";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import { requestCategories } from "../../types/apiData/request-categories";
+import TableTemplate from "./table-template";
 
 export default function RequestCategoriesistsTable() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sort, setSort] = useState("asc");
 
+  const [{ page, size, sort, search }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+    search: "",
+  });
   const { data, isLoading, pagination } = useGetRequestCategories({
-    page: currentPage,
+    page,
     sort,
+    limit: size,
+    search,
   });
 
   const [selectedId, setSelectedId] = useState("");
@@ -80,68 +87,55 @@ export default function RequestCategoriesistsTable() {
             Maintenance Requests Categories
           </h2>
           <div className=" min-w-40">
-            <Sort setSort={setSort} id="sort-by" label="Sort by" />
+            <Sort id="sort-by" label="Sort by" />
           </div>
         </div>
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {["Amenities Name", "Action"].map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item, index) => {
-                  return (
-                    <tr key={item?.id} className=" border-b">
-                      <td>{item?.name}</td>
-                      <td>
-                        <TableActionDropDown>
-                          <>
-                            {maintenance_request_category?.update && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => openForEdit(String(item?.id))}
-                                  className=" p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Edit
-                                </button>
-                              </MenuItem>
-                            )}
-                            {maintenance_request_category?.delete && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    openForDelete(String(item?.id))
-                                  }
-                                  className="p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Delete
-                                </button>
-                              </MenuItem>
-                            )}
-                          </>
-                        </TableActionDropDown>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="request category"
+          columns={[
+            {
+              header: "Amenities Name",
+              key: "amenities_name",
+              showColumnSort: true,
+              render: (row: requestCategories) => <span>{row?.name}</span>,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: requestCategories) => (
+                <TableActionDropDown>
+                  <>
+                    {maintenance_request_category?.update && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => openForEdit(String(row?.id))}
+                          className=" p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit
+                        </button>
+                      </MenuItem>
+                    )}
+                    {maintenance_request_category?.delete && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => openForDelete(String(row?.id))}
+                          className="p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
       <DeleteConfirmation

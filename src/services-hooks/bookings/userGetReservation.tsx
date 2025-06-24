@@ -11,6 +11,7 @@ export default function useGetReservation({
   sort = "desc",
   search = "",
   type,
+  limit = 20,
 }: {
   page?: number;
   start_date?: string;
@@ -18,6 +19,7 @@ export default function useGetReservation({
   sort?: "desc" | "asc" | string;
   search?: string;
   type: "upcoming" | "latest" | "arriving" | "departing";
+  limit?: number;
 }) {
   const {
     data: upcoming_data,
@@ -31,6 +33,7 @@ export default function useGetReservation({
     start_date: type === "upcoming" ? start_date : undefined,
     end_date: type === "upcoming" ? end_date : undefined,
     sort: type === "upcoming" ? sort : undefined,
+    limit,
   });
   const {
     data: arriving_data,
@@ -44,6 +47,7 @@ export default function useGetReservation({
     start_date: type === "arriving" ? start_date : undefined,
     end_date: type === "arriving" ? end_date : undefined,
     sort: type === "arriving" ? sort : undefined,
+    limit,
   });
   const {
     data: departing_data,
@@ -57,6 +61,7 @@ export default function useGetReservation({
     start_date: type === "departing" ? start_date : undefined,
     end_date: type === "departing" ? end_date : undefined,
     sort: type === "departing" ? sort : undefined,
+    limit,
   });
   const {
     data: latest_data,
@@ -70,6 +75,7 @@ export default function useGetReservation({
     start_date: type === "latest" ? start_date : undefined,
     end_date: type === "latest" ? end_date : undefined,
     sort: type === "latest" ? sort : undefined,
+    limit,
   });
 
   if (type === "arriving") {

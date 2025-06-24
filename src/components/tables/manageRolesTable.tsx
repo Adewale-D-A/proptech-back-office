@@ -1,10 +1,8 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import NoResult from "../noResult";
 import useAxios from "../../useHooks/useAxios";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-import Pagination from "../pagination";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import useGetRoles from "../../services-hooks/useGetRoles";
 import { removeRolesInList } from "../../stores/apiData/roles-lists";
@@ -12,6 +10,10 @@ import { removeRolesInList } from "../../stores/apiData/roles-lists";
 import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import TableActionDropDown from "../drop-down/table-action-dropdown";
 import { MenuItem } from "@headlessui/react";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import { roles } from "../../types/apiData/roles";
+import TableTemplate from "./table-template";
+import paginatedPageSerializer from "../../utils/page-serializer";
 
 export default function ManageRoleTableData() {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
@@ -25,17 +27,21 @@ export default function ManageRoleTableData() {
     start_date: string;
     end_date: string;
   }>();
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("asc");
-  const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetRoles({
-      page: currentPage,
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      sort: sort,
-      search,
-    });
+
+  const [{ page, size, sort, search }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+    search: "",
+  });
+  const { data, isLoading, pagination } = useGetRoles({
+    page,
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    sort: sort,
+    search,
+    limit: size,
+  });
 
   // handle remove user from list
   const handleDelete = useCallback(async () => {
@@ -81,65 +87,69 @@ export default function ManageRoleTableData() {
             <Sort setSort={setSort} id="sort-by" label="Sort by" />
           </div> */}
         </div>
-        {data?.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  <th>S/N</th>
-                  <th>Name</th>
-                  <th>Guard Name</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((request, index) => {
-                  return (
-                    <tr key={request?.id} className=" border-b">
-                      <td className=" text-gray-500  max-w-xs">{index + 1}</td>
-                      <td className=" max-w-xs">{request?.name}</td>
-                      <td className=" max-w-xs">{request?.guard_name}</td>
-                      <td>
-                        <TableActionDropDown>
-                          <>
-                            {role?.update && (
-                              <MenuItem>
-                                <Link
-                                  to={`/employees/roles/edit/${request?.id}`}
-                                  className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Edit role
-                                </Link>
-                              </MenuItem>
-                            )}
-                            {role?.delete && (
-                              <MenuItem>
-                                <button
-                                  type="button"
-                                  onClick={() => onDeleteClick(request?.id)}
-                                  className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
-                                >
-                                  Delete role
-                                </button>
-                              </MenuItem>
-                            )}
-                          </>
-                        </TableActionDropDown>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult title="No Result" message="No data found for this page" />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="roles"
+          columns={[
+            {
+              header: "S/N",
+              key: "sn",
+              render: (row: roles, index) => (
+                <span>
+                  {paginatedPageSerializer({
+                    currentPage: pagination?.current_page,
+                    pageSize: pagination?.per_page,
+                    index: index || 0,
+                  })}
+                </span>
+              ),
+            },
+            {
+              header: "Name",
+              key: "name",
+              showColumnSort: true,
+              render: (row: roles) => <span>{row?.name}</span>,
+            },
+            {
+              header: "Guard Name",
+              key: "guard_name",
+              showColumnSort: true,
+              render: (row: roles) => <span>{row?.guard_name}</span>,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: roles) => (
+                <TableActionDropDown>
+                  <>
+                    {role?.update && (
+                      <MenuItem>
+                        <Link
+                          to={`/employees/roles/edit/${row?.id}`}
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Edit role
+                        </Link>
+                      </MenuItem>
+                    )}
+                    {role?.delete && (
+                      <MenuItem>
+                        <button
+                          type="button"
+                          onClick={() => onDeleteClick(row?.id)}
+                          className="p-3 px-4 w-full text-left hover:bg-primary/10 transition-all rounded-lg"
+                        >
+                          Delete role
+                        </button>
+                      </MenuItem>
+                    )}
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
 
