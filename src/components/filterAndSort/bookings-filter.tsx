@@ -11,7 +11,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 export default function BookingsFilterSearch({
   setData,
 }: {
-  setData: (payload: BookingFilterPayload) => void;
+  setData?: (payload: BookingFilterPayload) => void;
 }) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,7 +41,7 @@ export default function BookingsFilterSearch({
           status,
           user_verification: userVerification,
         };
-        setData(payload);
+        setData?.(payload);
         let queries: { [key: string]: string } = {};
         searchParams.forEach((value, key) => {
           queries[key] = value;
@@ -64,12 +64,13 @@ export default function BookingsFilterSearch({
   );
 
   const clearFilter = useCallback(() => {
-    setData({
+    setData?.({
       channel: "",
       currency: "",
       room_option: "",
       payment_method: "",
       status: "",
+      user_verification: "",
     });
     setChannel("");
     setCurrency("");

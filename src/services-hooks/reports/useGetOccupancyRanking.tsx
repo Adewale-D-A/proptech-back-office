@@ -1,43 +1,53 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../stores/hooks";
-import useAxios from "../useHooks/useAxios";
-import { pagination } from "../types/pagination";
+import useAxios from "../../useHooks/useAxios";
+import { pagination } from "../../types/pagination";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import {
-  updateSafetyAndSecurity,
+  updateOccuancyRankingReport,
   addToPaginationHistory,
-} from "../stores/apiData/safety-and-security";
-import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
-
+} from "../../stores/apiData/reports/occupancy-ranking";
+import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetSafetyAndSecurities({
+export default function useGetOccupancyRankingReport({
   page = 1,
+  apartmentId,
+  start_date,
+  end_date,
+  group = "",
   limit = 20,
-  sort = "asc",
 }: {
   page?: number;
+  start_date?: string;
+  end_date?: string;
+  apartmentId: string;
+  group?: string;
   limit?: number;
-  sort?: "asc" | "desc" | string;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
   const {
-    status,
     data,
     pagination: store_pagination,
-  } = useAppSelector((state) => state.allSaeftyAndSecurity.value);
+    summary,
+  } = useAppSelector((state) => state.occupancyRankingReports.value);
   const [isLoading, setIsLoading] = useState(false);
+  //   const [data, setData] = useState<revenueReportList[]>([]);
   const [isFailed, setIsFailed] = useState(false);
 
   const [pagination, setPagination] = useState<pagination>({} as any);
-  const getSafetyAndSecurity = useCallback(
+
+  const getOccupancyRankingReports = useCallback(
     async (skipCache?: boolean, limitless?: number) => {
       setIsLoading(true);
       setIsFailed(false);
       try {
         const queryDataset = {
           page: Number(page),
+          start_date: start_date,
+          end_date: end_date,
+          shortlet_id: apartmentId,
+          group,
           limit: limitless ? 1000 : Number(limit),
-          sort,
         };
         const queryKey = JSON.stringify(queryDataset);
         const { queryString } = ApiQueryParamsExtractor({
@@ -50,12 +60,19 @@ export default function useGetSafetyAndSecurities({
         );
         if (foundPage) {
           setPagination(foundPage?.pagination_data);
-          dispatch(updateSafetyAndSecurity({ data: foundPage?.data }));
+          dispatch(
+            updateOccuancyRankingReport({
+              data: foundPage?.data,
+              summary: foundPage?.summary,
+            })
+          );
         } else {
-          const response = await axios.get(`/admin/safety?${queryString}`);
-          const { safety } = response?.data?.data;
+          const response = await axios.get(
+            `/admin/report/occupancy-ranking?${queryString}`
+          );
+          const { report, summary } = response?.data?.data;
           const { data, current_page, last_page, per_page, total, from, to } =
-            safety;
+            report;
           const paginationDataset = {
             current_page,
             last_page,
@@ -65,12 +82,13 @@ export default function useGetSafetyAndSecurities({
             to,
             length: data?.length,
           };
-          dispatch(updateSafetyAndSecurity({ data }));
+          dispatch(updateOccuancyRankingReport({ data, summary }));
           dispatch(
             addToPaginationHistory({
               pagination_data: paginationDataset,
               data: data,
               key: queryKey,
+              summary,
             })
           );
           setPagination(paginationDataset);
@@ -81,19 +99,20 @@ export default function useGetSafetyAndSecurities({
         setIsLoading(false);
       }
     },
-    [page, limit, sort]
+    [page, apartmentId, start_date, end_date, group, limit]
   );
 
   useEffect(() => {
-    getSafetyAndSecurity();
-  }, [page, limit, sort]);
+    getOccupancyRankingReports();
+  }, [page, apartmentId, start_date, end_date, group, limit]);
 
   return {
     data,
+    summary,
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getSafetyAndSecurity,
+    retryFunction: getOccupancyRankingReports,
     pagination,
   };
 }

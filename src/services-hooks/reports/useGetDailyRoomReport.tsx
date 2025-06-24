@@ -1,43 +1,51 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../stores/hooks";
-import useAxios from "../useHooks/useAxios";
-import { pagination } from "../types/pagination";
+import useAxios from "../../useHooks/useAxios";
+import { pagination } from "../../types/pagination";
+import { useAppDispatch, useAppSelector } from "../../stores/hooks";
 import {
-  updateSafetyAndSecurity,
+  updateDailyRoomReport,
   addToPaginationHistory,
-} from "../stores/apiData/safety-and-security";
-import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
-
+} from "../../stores/apiData/reports/daily-room-report";
+import ApiQueryParamsExtractor from "../../utils/api-query-params-extractor";
 //axios instace interceptor for access token integration and refresh tokens
-export default function useGetSafetyAndSecurities({
+export default function useGetDailyRoomReport({
   page = 1,
+  apartmentId,
+  start_date,
+  end_date,
+  group = "",
   limit = 20,
-  sort = "asc",
 }: {
   page?: number;
+  start_date?: string;
+  end_date?: string;
+  apartmentId: string;
+  group?: string;
   limit?: number;
-  sort?: "asc" | "desc" | string;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
-  const {
-    status,
-    data,
-    pagination: store_pagination,
-  } = useAppSelector((state) => state.allSaeftyAndSecurity.value);
+  const { data, pagination: store_pagination } = useAppSelector(
+    (state) => state.dailyRoomReport.value
+  );
   const [isLoading, setIsLoading] = useState(false);
+  //   const [data, setData] = useState<revenueReportList[]>([]);
   const [isFailed, setIsFailed] = useState(false);
 
   const [pagination, setPagination] = useState<pagination>({} as any);
-  const getSafetyAndSecurity = useCallback(
+
+  const getDailyRoomReport = useCallback(
     async (skipCache?: boolean, limitless?: number) => {
       setIsLoading(true);
       setIsFailed(false);
       try {
         const queryDataset = {
           page: Number(page),
+          start_date: start_date,
+          end_date: end_date,
+          shortlet_id: apartmentId,
+          group,
           limit: limitless ? 1000 : Number(limit),
-          sort,
         };
         const queryKey = JSON.stringify(queryDataset);
         const { queryString } = ApiQueryParamsExtractor({
@@ -50,12 +58,13 @@ export default function useGetSafetyAndSecurities({
         );
         if (foundPage) {
           setPagination(foundPage?.pagination_data);
-          dispatch(updateSafetyAndSecurity({ data: foundPage?.data }));
+          dispatch(updateDailyRoomReport({ data: foundPage?.data }));
         } else {
-          const response = await axios.get(`/admin/safety?${queryString}`);
-          const { safety } = response?.data?.data;
+          const response = await axios.get(
+            `/admin/report/daily-room-report?${queryString}`
+          );
           const { data, current_page, last_page, per_page, total, from, to } =
-            safety;
+            response?.data?.data;
           const paginationDataset = {
             current_page,
             last_page,
@@ -65,7 +74,7 @@ export default function useGetSafetyAndSecurities({
             to,
             length: data?.length,
           };
-          dispatch(updateSafetyAndSecurity({ data }));
+          dispatch(updateDailyRoomReport({ data }));
           dispatch(
             addToPaginationHistory({
               pagination_data: paginationDataset,
@@ -81,19 +90,19 @@ export default function useGetSafetyAndSecurities({
         setIsLoading(false);
       }
     },
-    [page, limit, sort]
+    [page, apartmentId, start_date, end_date, group, limit]
   );
 
   useEffect(() => {
-    getSafetyAndSecurity();
-  }, [page, limit, sort]);
+    getDailyRoomReport();
+  }, [page, apartmentId, start_date, end_date, group, limit]);
 
   return {
     data,
     isLoading,
     isFailed,
     setIsFailed,
-    retryFunction: getSafetyAndSecurity,
+    retryFunction: getDailyRoomReport,
     pagination,
   };
 }

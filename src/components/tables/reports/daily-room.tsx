@@ -2,15 +2,15 @@ import { useCallback, useState } from "react";
 import Filter from "../../filterAndSort/filter";
 import Select from "../../inputs/select";
 import LoadingButton from "../../button";
-import { revenueReportList } from "../../../types/apiData/reports";
-import NoResult from "../../noResult";
-import Pagination from "../../pagination";
+import { dailyRoomReportList } from "../../../types/apiData/reports";
 import formatDate from "../../../utils/isoDateConverter";
 import useGetRevenueReport from "../../../services-hooks/reports/revenue";
-import useGetReportSummary from "../../../services-hooks/reports/report-summary";
 import ExportToCSV from "../../export-to-csv";
 import { revenueReportExportFormater } from "../../../utils/export-formerter-functions";
 import ApartmentThroughBuildingSelector from "../../inputs/select/apartment-through-building-selector";
+import TableTemplate from "../table-template";
+import useExtractUrlParams from "../../../useHooks/extract-url-query-params";
+import useGetDailyRoomReport from "../../../services-hooks/reports/useGetDailyRoomReport";
 
 export default function DailyRoomReportTable() {
   const [type, setType] = useState("");
@@ -22,26 +22,22 @@ export default function DailyRoomReportTable() {
 
   const [apartmentId, setApartmentId] = useState("");
   const [buildingId, setBuildingId] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetRevenueReport({
-      page: currentPage,
-      apartmentId: buildingId && apartmentId ? String(apartmentId) : "",
-      start_date: filterDates?.start_date,
-      end_date: filterDates?.end_date,
-      group: "day",
-    });
+  const [{ page, size }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+  });
+  const { data, isLoading, retryFunction, pagination } = useGetDailyRoomReport({
+    page,
+    apartmentId: buildingId && apartmentId ? String(apartmentId) : "",
+    start_date: filterDates?.start_date,
+    end_date: filterDates?.end_date,
+    group: "day",
+    limit: size,
+  });
 
   const handleLoadData = useCallback(() => {
     retryFunction();
   }, [apartmentId]);
-
-  const { data: reportSummary } = useGetReportSummary({
-    apartmentId: String(apartmentId || ""),
-    start_date: filterDates?.start_date,
-    end_date: filterDates?.end_date,
-  });
 
   const handleCustomersFiltering = useCallback(
     (start_date: string, end_date: string) => {
@@ -94,105 +90,95 @@ export default function DailyRoomReportTable() {
         </div>
       </div>
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 overflow-auto ">
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {[
-                    "Date",
-                    "Rooms Sold",
-                    "Nights Books",
-                    "Total Bookings",
-                    "%Occupancy",
-                    "IBE Revenue",
-                    "OTA Revenue",
-                    "ADR",
-                    "REVPAR",
-                    "Taxes/Fees",
-                  ].map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="">
-                {data.map((request: revenueReportList, index: number) => {
-                  return (
-                    <tr key={index} className=" border-b">
-                      <td>{formatDate(request?.date)}</td>
-                      <td>{request?.rooms_sold}</td>
-                      <td>{request?.nights_booked}</td>
-                      <td> </td>
-                      <td>{request?.occupancy_rate}</td>
-                      <td>{request?.ibe_revenue}</td>
-                      <td>{request?.ota_revenue}</td>
-                      <td>{request?.adr}</td>
-                      <td>{request?.revpar}</td>
-                      <td>{request?.taxes}</td>
-                    </tr>
-                  );
-                })}
-                <tr className=" border-b font-semibold">
-                  <td>Total</td>
-                  <td></td>
-                  <td>{reportSummary?.total_nights_booked}</td>
-                  <td>{reportSummary?.total_bookings}</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>{reportSummary?.total_revenue}</td>
-                </tr>
-              </tbody>
-            </table>
-            <div className=" flex items-center gap-4 font-semibold flex-wrap">
-              {[
-                {
-                  id: 1,
-                  label: "Arriving",
-                  value: 0,
-                },
-                {
-                  id: 2,
-                  label: "Departing",
-                  value: 0,
-                },
-                {
-                  id: 3,
-                  label: "Stayover",
-                  value: 0,
-                },
-                {
-                  id: 4,
-                  label: "Breakfast",
-                  value: 0,
-                },
-                {
-                  id: 5,
-                  label: "Lunch",
-                  value: 0,
-                },
-                {
-                  id: 6,
-                  label: "Dinner",
-                  value: 0,
-                },
-              ].map((item) => (
-                <h6 key={item?.id}>
-                  {item?.label} {item?.value}
-                </h6>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="Daily room reports"
+          columns={[
+            {
+              header: "Type",
+              key: "date",
+              showColumnSort: true,
+              render: (row: dailyRoomReportList) => <span>{row?.type}</span>,
+            },
+            {
+              header: "Room",
+              key: "rooms_sold",
+              showColumnSort: true,
+              render: (row: dailyRoomReportList) => (
+                <span>{row?.shortlet_name}</span>
+              ),
+            },
+            {
+              header: "Customer Name",
+              key: "customer_name",
+              showColumnSort: true,
+              render: (row: dailyRoomReportList) => (
+                <span>{row?.occupant_name}</span>
+              ),
+            },
+            {
+              header: "Guests",
+              key: "guests",
+              showColumnSort: true,
+              render: (row: dailyRoomReportList) => (
+                <span>{row?.number_of_guests}</span>
+              ),
+            },
+            // {
+            //   header: "Rate Plan",
+            //   key: "rate_plan",
+            //   showColumnSort: true,
+            //   render: (row: dailyRoomReportList) => (
+            //     <span>{row?.occupancy_rate}</span>
+            //   ),
+            // },
+            // {
+            //   header: "Meal Plan",
+            //   key: "meal_plan",
+            //   showColumnSort: true,
+            //   render: (row: dailyRoomReportList) => (
+            //     <span>{row?.occupant_name}</span>
+            //   ),
+            // },
+            {
+              header: "Channel",
+              key: "channel",
+              showColumnSort: true,
+              render: (row: dailyRoomReportList) => <span>{row?.channel}</span>,
+            },
+            {
+              header: "Check In",
+              key: "check_in",
+              showColumnSort: true,
+              render: (row: dailyRoomReportList) => (
+                <span>{formatDate(row?.check_in_date)}</span>
+              ),
+            },
+            {
+              header: "Check Out",
+              key: "check_out",
+              showColumnSort: true,
+              render: (row: dailyRoomReportList) => (
+                <span>{formatDate(row?.check_out_date)}</span>
+              ),
+            },
+            {
+              header: "Nights",
+              key: "nights",
+              showColumnSort: true,
+              render: (row: dailyRoomReportList) => (
+                <span>{row?.number_of_days}</span>
+              ),
+            },
+            {
+              header: "Notes",
+              key: "notes",
+              showColumnSort: true,
+              render: (row: dailyRoomReportList) => <span>{row?.notes}</span>,
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
     </div>

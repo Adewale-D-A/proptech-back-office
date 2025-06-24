@@ -2,8 +2,6 @@ import { useCallback, useState } from "react";
 import useGetAllOwnersReport from "../../../services-hooks/reports/useGetAllOwnersReport";
 import BinIcon from "../../../assets/icons/bin-icon";
 import PenIcon from "../../../assets/icons/pen";
-import NoResult from "../../noResult";
-import Pagination from "../../pagination";
 import useAxios from "../../../useHooks/useAxios";
 import { useAppDispatch } from "../../../stores/hooks";
 import { removeOwnersReportInList } from "../../../stores/apiData/reports/owners-report";
@@ -18,6 +16,10 @@ import ExportToCSV from "../../export-to-csv";
 import { ownersReportExportFormater } from "../../../utils/export-formerter-functions";
 import currencyFormat from "../../../utils/currency-formatter";
 import Sort from "../../filterAndSort/sort";
+import useExtractUrlParams from "../../../useHooks/extract-url-query-params";
+import TableTemplate from "../table-template";
+import { ownersReport } from "../../../types/apiData/reports";
+import TableActionDropDown from "../../drop-down/table-action-dropdown";
 
 export default function OwnersReportSummaryTableList() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -26,9 +28,6 @@ export default function OwnersReportSummaryTableList() {
   const [selectedId, setSelectedId] = useState("");
   const [openDelete, setOpenDelete] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const [sort, setSort] = useState("desc");
   const [apartmentId, setApartmentId] = useState("");
   const [buildingId, setBuildingId] = useState("");
   const [category, setCategory] = useState("");
@@ -37,12 +36,18 @@ export default function OwnersReportSummaryTableList() {
     end_date: string;
   }>();
 
+  const [{ page, size, sort }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "desc",
+  });
   const { data, isLoading, pagination } = useGetAllOwnersReport({
-    page: currentPage,
+    page,
     sort,
+    limit: size,
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,
-    shortlet_id: String(apartmentId || ""),
+    shortlet_id: buildingId && apartmentId ? String(apartmentId) : "",
     expense_category_id: category,
   });
 
@@ -93,12 +98,7 @@ export default function OwnersReportSummaryTableList() {
               </div>
               <div className=" flex items-center gap-2">
                 <div className="w-fit min-w-28">
-                  <Sort
-                    id="owners-summary-sort"
-                    label=""
-                    defaultValue="desc"
-                    setSort={setSort}
-                  />
+                  <Sort id="owners-summary-sort" label="" defaultValue="desc" />
                 </div>
                 <ExportToCSV
                   dataset={data}
@@ -114,53 +114,58 @@ export default function OwnersReportSummaryTableList() {
                 />
               </div>
             </div>
-            {data && data?.length > 0 ? (
-              <div className=" w-full overflow-x-auto">
-                <table className=" w-full">
-                  <thead>
-                    <tr>
-                      {["Expense", "Amount", "Note", "Action"].map((head) => (
-                        <th key={head}>{head}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="">
-                    {data?.map((item) => {
-                      return (
-                        <tr key={item?.id} className=" border-b">
-                          <td>{item?.expense_category?.name}</td>
-                          <td>{currencyFormat(item?.amount || 0)}</td>
-                          <td>{item?.note}</td>
-                          <td>
-                            <div className=" flex items-center gap-4">
-                              <button
-                                title="edit"
-                                onClick={() => openForEdit(item?.id)}
-                              >
-                                <PenIcon />
-                              </button>
-                              <button
-                                title="delete"
-                                onClick={() => handleOpenDelete(item?.id)}
-                              >
-                                <BinIcon className=" size-6 text-red-500" />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            ) : (
-              <NoResult />
-            )}
-            <Pagination
-              pagination={pagination}
-              setCurrentPage={setCurrentPage}
+
+            <TableTemplate
+              data={data}
               isLoading={isLoading}
-              label="owners report"
+              columns={[
+                {
+                  header: "Expense",
+                  key: "expense",
+                  showColumnSort: true,
+                  render: (row: ownersReport) => (
+                    <span>{row?.expense_category?.name}</span>
+                  ),
+                },
+                {
+                  header: "Amount",
+                  key: "amount",
+                  showColumnSort: true,
+                  render: (row: ownersReport) => (
+                    <span>{currencyFormat(row?.amount || 0)}</span>
+                  ),
+                },
+                {
+                  header: "Note",
+                  key: "note",
+                  showColumnSort: true,
+                  render: (row: ownersReport) => <span>{row?.note}</span>,
+                },
+                {
+                  header: "Action",
+                  key: "action",
+                  render: (row: ownersReport) => (
+                    <TableActionDropDown>
+                      <div className=" flex items-center gap-4">
+                        <button
+                          title="edit"
+                          onClick={() => openForEdit(row?.id)}
+                        >
+                          <PenIcon />
+                        </button>
+                        <button
+                          title="delete"
+                          onClick={() => handleOpenDelete(row?.id)}
+                        >
+                          <BinIcon className=" size-6 text-red-500" />
+                        </button>
+                      </div>
+                    </TableActionDropDown>
+                  ),
+                },
+              ]}
+              showPaginator={true}
+              pagination={pagination}
             />
           </div>
         </div>

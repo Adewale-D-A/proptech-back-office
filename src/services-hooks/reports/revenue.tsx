@@ -29,9 +29,7 @@ export default function useGetRevenueReport({
     (state) => state.revenueReports.value
   );
   const [isLoading, setIsLoading] = useState(false);
-  //   const [data, setData] = useState<revenueReportList[]>([]);
   const [isFailed, setIsFailed] = useState(false);
-
   const [pagination, setPagination] = useState<pagination>({} as any);
 
   const getRevenueReports = useCallback(

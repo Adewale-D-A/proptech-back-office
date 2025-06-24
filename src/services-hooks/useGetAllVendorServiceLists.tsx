@@ -13,9 +13,11 @@ import ApiQueryParamsExtractor from "../utils/api-query-params-extractor";
 export default function useGetAllVendorServiceLists({
   page = 1,
   limit = 20,
+  sort = "asc",
 }: {
   page?: number;
   limit?: number;
+  sort?: "asc" | "desc" | string;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -34,6 +36,7 @@ export default function useGetAllVendorServiceLists({
         const queryDataset = {
           limit: limitless ? 1000 : Number(limit),
           page: Number(page),
+          sort,
         };
         const queryKey = JSON.stringify(queryDataset);
         const { queryString } = ApiQueryParamsExtractor({
@@ -82,12 +85,12 @@ export default function useGetAllVendorServiceLists({
         setIsLoading(false);
       }
     },
-    [page, limit]
+    [page, limit, sort]
   );
 
   useEffect(() => {
     getAllVendorServiceList();
-  }, [page, limit]);
+  }, [page, limit, sort]);
 
   return {
     data,

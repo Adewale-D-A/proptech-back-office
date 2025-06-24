@@ -25,9 +25,7 @@ export default function BookingsListTable({
   }>();
   const [currentPage, setCurrentPage] = useState(1);
   const [limit, setLimit] = useState(20);
-  const [{ page, size, sort }] = useExtractUrlParams({
-    page: 1,
-    size: 20,
+  const [{ sort }] = useExtractUrlParams({
     sort: "asc",
   });
 

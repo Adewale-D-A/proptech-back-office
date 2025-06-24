@@ -35,7 +35,6 @@ export default function RequisitionRequestTable() {
     start_date: string;
     end_date: string;
   }>();
-  const [currentPage, setCurrentPage] = useState(1);
   const [selectedId, setSelectedId] = useState("");
   const [requisitionItem, setRequistionItem] = useState<requisitionRequest>(
     {} as any

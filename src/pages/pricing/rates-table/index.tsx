@@ -54,6 +54,7 @@ export default function RateTable() {
   const [to, setTo] = useState("");
   const [rate, setRate] = useState("");
   const [cautionFee, setCautionFee] = useState("");
+  const [freeNights, setFreeNights] = useState("");
   const [selectedAprt, setSelectedApt] = useState<apartmentById>({} as any);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -68,6 +69,7 @@ export default function RateTable() {
           to: to,
           price: rate,
           caution_fee: cautionFee,
+          // free_nights: freeNights
         });
         dispatch(
           openSnackbar({
@@ -84,7 +86,7 @@ export default function RateTable() {
         setIsSubmitting(false);
       }
     },
-    [selectedAprt, rate, cautionFee, from, to]
+    [selectedAprt, rate, cautionFee, from, to, freeNights]
   );
 
   return (
@@ -171,6 +173,14 @@ export default function RateTable() {
                   setValue={setCautionFee}
                   id="caution-fee"
                   placeholder="Enter Custom Caution Fee"
+                />
+                <TextInput
+                  inputType="number"
+                  isRequired={true}
+                  value={freeNights}
+                  setValue={setFreeNights}
+                  id="free-nights"
+                  placeholder="Enter number of free nights applicable"
                 />
                 <LoadingButton
                   label="Insert"

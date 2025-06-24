@@ -2,21 +2,19 @@ import { useCallback, useState } from "react";
 import Filter from "../../filterAndSort/filter";
 import Select from "../../inputs/select";
 import LoadingButton from "../../button";
-import { revenueReportList } from "../../../types/apiData/reports";
-import NoResult from "../../noResult";
-import Pagination from "../../pagination";
+import { occupancyRankingReportList } from "../../../types/apiData/reports";
 import CalendarIcon from "../../../assets/icons/calendar";
-import UserPlusIcon from "../../../assets/icons/user-plus";
 import UsersIcon from "../../../assets/icons/users";
 import DashboardCard from "../../cards/dashboard-cards";
 import BarChart from "../../charts/bar-chart";
 import ChartIcon from "../../../assets/icons/chart";
-import formatDate from "../../../utils/isoDateConverter";
-import useGetRevenueReport from "../../../services-hooks/reports/revenue";
-import useGetReportSummary from "../../../services-hooks/reports/report-summary";
 import ExportToCSV from "../../export-to-csv";
 import { revenueReportExportFormater } from "../../../utils/export-formerter-functions";
 import ApartmentThroughBuildingSelector from "../../inputs/select/apartment-through-building-selector";
+import useGetOccupancyRankingReport from "../../../services-hooks/reports/useGetOccupancyRanking";
+import useExtractUrlParams from "../../../useHooks/extract-url-query-params";
+import TableTemplate from "../table-template";
+import currencyFormat from "../../../utils/currency-formatter";
 
 export default function OccupancyRankingReportTable() {
   const [group, setGroup] = useState("");
@@ -28,25 +26,24 @@ export default function OccupancyRankingReportTable() {
   }>();
   const [apartmentId, setApartmentId] = useState("");
   const [buildingId, setBuildingId] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isLoading, retryFunction, pagination } = useGetRevenueReport({
-    page: currentPage,
-    apartmentId: buildingId && apartmentId ? String(apartmentId) : "",
-    start_date: filterDates?.start_date,
-    end_date: filterDates?.end_date,
-    group: group,
+  const [{ page, size }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
   });
+  const { data, summary, isLoading, retryFunction, pagination } =
+    useGetOccupancyRankingReport({
+      page,
+      apartmentId: buildingId && apartmentId ? String(apartmentId) : "",
+      start_date: filterDates?.start_date,
+      end_date: filterDates?.end_date,
+      group: group,
+      limit: size,
+    });
 
   const handleLoadData = useCallback(() => {
     retryFunction();
   }, [apartmentId]);
-
-  const { data: reportSummary } = useGetReportSummary({
-    apartmentId: buildingId && apartmentId ? String(apartmentId) : "",
-    start_date: filterDates?.start_date,
-    end_date: filterDates?.end_date,
-  });
 
   const handleCustomersFiltering = useCallback(
     (start_date: string, end_date: string) => {
@@ -128,68 +125,94 @@ export default function OccupancyRankingReportTable() {
           {/* table view ONLY*/}
           {!(viewType === "chart") && (
             <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 overflow-auto ">
-              {data && data.length > 0 ? (
-                <div className=" w-full overflow-x-auto">
-                  <table className=" w-full">
-                    <thead>
-                      <tr>
-                        {[
-                          "Date",
-                          "Rooms Sold",
-                          "Nights Books",
-                          "Total Bookings",
-                          "%Occupancy",
-                          "IBE Revenue",
-                          "OTA Revenue",
-                          "ADR",
-                          "REVPAR",
-                          "Taxes/Fees",
-                        ].map((head) => (
-                          <th key={head}>{head}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {data.map((request: revenueReportList, index: number) => {
-                        return (
-                          <tr key={index} className=" border-b">
-                            <td>{formatDate(request?.date)}</td>
-                            <td>{request?.rooms_sold}</td>
-                            <td>{request?.nights_booked}</td>
-                            <td> </td>
-                            <td>{request?.occupancy_rate}</td>
-                            <td>{request?.ibe_revenue}</td>
-                            <td>{request?.ota_revenue}</td>
-                            <td>{request?.adr}</td>
-                            <td>{request?.revpar}</td>
-                            <td>{request?.taxes}</td>
-                          </tr>
-                        );
-                      })}
-                      <tr className=" border-b font-semibold">
-                        <td>Total</td>
-                        <td></td>
-                        <td>{reportSummary?.total_nights_booked}</td>
-                        <td>{reportSummary?.total_bookings}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>{reportSummary?.total_revenue}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <NoResult />
-              )}
-              <Pagination
-                pagination={pagination}
-                setCurrentPage={setCurrentPage}
+              <TableTemplate
+                data={data}
                 isLoading={isLoading}
-                label="Entries"
-              />
+                columns={[
+                  {
+                    header: "Date",
+                    key: "date",
+                    showColumnSort: true,
+                    render: (row: occupancyRankingReportList) => (
+                      <span>{row?.date}</span>
+                    ),
+                  },
+                  {
+                    header: "Rooms Sold",
+                    key: "rooms_sold",
+                    showColumnSort: true,
+                    render: (row: occupancyRankingReportList) => (
+                      <span>{row?.rooms_sold}</span>
+                    ),
+                  },
+                  {
+                    header: "Nights Booked",
+                    key: "nights_booked",
+                    showColumnSort: true,
+                    render: (row: occupancyRankingReportList) => (
+                      <span>{row?.nights_booked}</span>
+                    ),
+                  },
+                  {
+                    header: "Nights Available",
+                    key: "nights_available",
+                    showColumnSort: true,
+                    render: (row: occupancyRankingReportList) => (
+                      <span>{row?.nights_available}</span>
+                    ),
+                  },
+                  {
+                    header: "Occupancy Rate",
+                    key: "occupancy_rate",
+                    showColumnSort: true,
+                    render: (row: occupancyRankingReportList) => (
+                      <span>{row?.occupancy_rate}</span>
+                    ),
+                  },
+                  {
+                    header: "Revenue",
+                    key: "revenue",
+                    showColumnSort: true,
+                    render: (row: occupancyRankingReportList) => (
+                      <span>{row?.revenue}</span>
+                    ),
+                  },
+                ]}
+                showPaginator={true}
+                pagination={pagination}
+              />{" "}
+              {/* <table className=" w-full">
+                <thead>
+                  <tr className=" opacity-0">
+                    {[
+                      "Date",
+                      "Rooms Sold",
+                      "Nights Booked",
+                      "Nights Available",
+                      "Occupancy Rate",
+                      "Revenue",
+                    ].map((head) => (
+                      <th key={head}>{head}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className=" border-b font-semibold">
+                    <td>Total</td>
+                    <td></td>
+                    <td>{reportSummary?.total_nights_booked}</td>
+                    <td>{reportSummary?.total_bookings}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{reportSummary?.total_revenue}</td>
+                  </tr>
+                </tbody>
+              </table> */}
+              {/* <Pagination pagination={pagination} isLoading={isLoading} /> */}
             </div>
           )}
           {/* chart ONLY*/}
@@ -208,24 +231,24 @@ export default function OccupancyRankingReportTable() {
                     {
                       id: 1,
                       icon: <CalendarIcon className="w-5 h-5" />,
-                      label: "Total Revenue Rate",
-                      value: `N${reportSummary?.total_revenue}`,
+                      label: "Occupancy",
+                      value: summary?.[0]?.occupancy_rate,
                       theme: "text-[#26397B] bg-[#26397B]/20",
-                    },
-                    {
-                      id: 2,
-                      icon: <UserPlusIcon className="w-5 h-5" />,
-                      label: "Total Bookings",
-                      value: reportSummary?.total_bookings,
-                      theme: "text-[#017EFF] bg-[#017EFF]/20",
                     },
                     {
                       id: 3,
                       icon: <UsersIcon className="w-5 h-5" />,
-                      label: "Total Nights Booked",
-                      value: reportSummary?.total_nights_booked,
+                      label: "Revenue",
+                      value: currencyFormat(summary?.[0]?.revenue),
                       theme: "text-[#017EFF] bg-[#017EFF]/20",
                     },
+                    // {
+                    //   id: 2,
+                    //   icon: <UserPlusIcon className="w-5 h-5" />,
+                    //   label: "Total Bookings",
+                    //   value: 0,
+                    //   theme: "text-[#017EFF] bg-[#017EFF]/20",
+                    // },
                   ].map((item) => (
                     <DashboardCard
                       key={item?.id}
@@ -242,19 +265,11 @@ export default function OccupancyRankingReportTable() {
                 <div className=" border p-5 rounded-md h-full w-full flex justify-center">
                   <BarChart
                     data={{
-                      labels: [
-                        "MONDAY",
-                        "TUESDAY",
-                        "WEDNESDAY",
-                        "THURSDAY",
-                        "FRIDAY",
-                        "SATURDAY",
-                        "SUNDAY",
-                      ],
+                      labels: data.map((item) => item?.date),
                       datasets: [
                         {
                           label: "Occupancy Ranking",
-                          data: [0, 0, 0, 0, 0, 0, 0],
+                          data: data.map((item) => item?.occupancy_rate),
                           backgroundColor: "#2E4393",
                           indexAxis: "x",
                           borderRadius: 50,

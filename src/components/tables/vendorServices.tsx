@@ -1,13 +1,17 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import Pagination from "../pagination";
-import NoResult from "../noResult";
 import Search from "../inputs/search";
 import FilterSearch from "../filterAndSort/filter-search";
 import { useAppDispatch } from "../../stores/hooks";
 import DeleteConfirmation from "../infoModal/delete-confirmation";
 import useGetAllVendorServiceLists from "../../services-hooks/useGetAllVendorServiceLists";
 import { removeVendorServicesInList } from "../../stores/apiData/vendor-services-lists";
+import useExtractUrlParams from "../../useHooks/extract-url-query-params";
+import TableTemplate from "./table-template";
+import { vendorService } from "../../types/apiData/vendorServices";
+import paginatedPageSerializer from "../../utils/page-serializer";
+import TableActionDropDown from "../drop-down/table-action-dropdown";
+import { MenuItem } from "@headlessui/react";
 
 export default function VendorServiceListTable({
   header,
@@ -15,9 +19,16 @@ export default function VendorServiceListTable({
   header: string[];
 }) {
   const dispatch = useAppDispatch();
-  const [currentPage, setCurrentPage] = useState(1);
-  const { data, isLoading, isFailed, setIsFailed, retryFunction, pagination } =
-    useGetAllVendorServiceLists({ page: currentPage });
+  const [{ page, size, sort }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+    sort: "asc",
+  });
+  const { data, isLoading, pagination } = useGetAllVendorServiceLists({
+    page,
+    sort,
+    limit: size,
+  });
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteId, setDeleteId] = useState("1");
@@ -43,73 +54,101 @@ export default function VendorServiceListTable({
           />
           <FilterSearch />
         </div>
-        {data && data.length > 0 ? (
-          <table className=" w-full text-xs  overflow-x-auto">
-            <thead className="">
-              <tr className=" text-left bg-gray-200 text-gray-500 rounded-lg">
-                {header.map((head) => (
-                  <th key={head}>{head}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="">
-              {data.map((request, index) => {
-                return (
-                  <tr key={request?.id} className=" border-b">
-                    <td>{index + 1}</td>
-                    <td>{request?.vendorName}</td>
-                    <td>{request?.serviceType}</td>
-                    <td>{request?.description}</td>
-                    <td>{request?.date}</td>
-                    <td>{request?.price}</td>
-                    <td>{request?.bookingNo}</td>
-                    <td className=" group relative">
-                      <span className=" p-2 text-lg">...</span>
-                      <span className="z-10 text-center group-hover:flex hidden w-52 bg-white text-sm absolute right-0 top-0 rounded-lg shadow-lg flex-col">
-                        <Link
-                          to={`/additional-services/vendor-details/${request?.id}`}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          View Service
-                        </Link>
-                        <Link
-                          to={`#`}
-                          className=" p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Mark As Resolved
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setDeleteId(request?.id);
-                            setOpenDeleteConfirmation(true);
-                          }}
-                          className="p-3 px-4 hover:bg-primary/10 transition-all rounded-lg"
-                        >
-                          Delete Service
-                        </button>
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={{
-            current_page: 1,
-            last_page: 2,
-            per_page: 20,
-            total: 24,
-            from: 1,
-            to: 1,
-          }}
-          setCurrentPage={setCurrentPage}
-          isLoading={false}
-          label="Requests"
+
+        <TableTemplate
+          data={data}
+          isLoading={isLoading}
+          columns={[
+            {
+              header: "S/N",
+              key: "sn",
+              render: (row: vendorService, index) => (
+                <span>
+                  {paginatedPageSerializer({
+                    currentPage: pagination?.current_page,
+                    pageSize: pagination?.per_page,
+                    index: index || 0,
+                  })}
+                </span>
+              ),
+            },
+            {
+              header: "Vendor Name",
+              key: "name",
+              showColumnSort: true,
+              render: (row: vendorService) => <span>{row?.vendorName}</span>,
+            },
+            {
+              header: "Service Type",
+              key: "price_value",
+              showColumnSort: true,
+              render: (row: vendorService) => <span>{row?.serviceType}</span>,
+            },
+            {
+              header: "Description",
+              key: "type",
+              showColumnSort: true,
+              render: (row: vendorService) => <span>{row?.description}</span>,
+            },
+            {
+              header: "Date Created",
+              key: "type",
+              showColumnSort: true,
+              render: (row: vendorService) => <span>{row?.date}</span>,
+            },
+            {
+              header: "Price Per Person",
+              key: "type",
+              showColumnSort: true,
+              render: (row: vendorService) => <span>{row?.price}</span>,
+            },
+            {
+              header: "No of Bookings",
+              key: "type",
+              showColumnSort: true,
+              render: (row: vendorService) => <span>{row?.bookingNo}</span>,
+            },
+            {
+              header: "Action",
+              key: "action",
+              render: (row: vendorService) => (
+                <TableActionDropDown>
+                  <>
+                    <MenuItem>
+                      <Link
+                        to={`/additional-services/vendor-details/${row?.id}`}
+                        className="p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
+                      >
+                        View Service
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link
+                        to={`#`}
+                        className="p-3 px-4 text-left w-full hover:bg-primary/10 transition-all rounded-lg"
+                      >
+                        Mark As Resolved
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setDeleteId(row?.id);
+                          setOpenDeleteConfirmation(true);
+                        }}
+                        className="text-left p-3 px-4  w-full hover:bg-primary/10 transition-all rounded-lg"
+                      >
+                        Delete Service
+                      </button>
+                    </MenuItem>
+                  </>
+                </TableActionDropDown>
+              ),
+            },
+          ]}
+          showPaginator={true}
+          pagination={pagination}
         />
       </div>
 

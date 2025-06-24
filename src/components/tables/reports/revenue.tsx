@@ -1,39 +1,35 @@
 import { useCallback, useState } from "react";
 import Filter from "../../filterAndSort/filter";
-// import Search from "../../inputs/search";
 import LoadingButton from "../../button";
-// import { apartmentById } from "../../../types/apiData/apartment";
-// import ExportSelect from "../../inputs/select/exportSelect";
 import { revenueReportList } from "../../../types/apiData/reports";
-import NoResult from "../../noResult";
 import Pagination from "../../pagination";
 import formatDate from "../../../utils/isoDateConverter";
 import useGetRevenueReport from "../../../services-hooks/reports/revenue";
 import useGetReportSummary from "../../../services-hooks/reports/report-summary";
-// import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
-import { useAppDispatch } from "../../../stores/hooks";
-import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
 import ExportToCSV from "../../export-to-csv";
 import { revenueReportExportFormater } from "../../../utils/export-formerter-functions";
 import ApartmentThroughBuildingSelector from "../../inputs/select/apartment-through-building-selector";
+import useExtractUrlParams from "../../../useHooks/extract-url-query-params";
+import TableTemplate from "../table-template";
 
 export default function RevenueReportTable() {
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
   }>();
-  const dispatch = useAppDispatch();
-  // const [apartment, setApartment] = useState<apartmentById>({} as any);
-  const [currentPage, setCurrentPage] = useState(1);
-
   const [apartmentId, setApartmentId] = useState("");
   const [buildingId, setBuildingId] = useState("");
 
+  const [{ page, size }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+  });
   const { data, isLoading, retryFunction, pagination } = useGetRevenueReport({
-    page: currentPage,
+    page,
     apartmentId: buildingId && apartmentId ? String(apartmentId) : "",
     start_date: filterDates?.start_date,
     end_date: filterDates?.end_date,
+    limit: size,
   });
 
   const handleLoadData = useCallback(() => {
@@ -84,68 +80,130 @@ export default function RevenueReportTable() {
       </div>
       {/* table */}{" "}
       <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 overflow-auto ">
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {[
-                    "Date",
-                    "Rooms Sold",
-                    "Nights Books",
-                    "Total Bookings",
-                    "%Occupancy",
-                    "IBE Revenue",
-                    "OTA Revenue",
-                    "ADR",
-                    "REVPAR",
-                    "Taxes/Fees",
-                  ].map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((item: revenueReportList, index: number) => {
-                  return (
-                    <tr key={index} className=" border-b">
-                      <td>{formatDate(item?.date)}</td>
-                      <td>{item?.rooms_sold}</td>
-                      <td>{item?.nights_booked}</td>
-                      <td>{item?.rooms_sold}</td>
-                      <td>{item?.occupancy_rate}</td>
-                      <td>{item?.ibe_revenue}</td>
-                      <td>{item?.ota_revenue}</td>
-                      <td>{item?.adr}</td>
-                      <td>{item?.revpar}</td>
-                      <td>{item?.taxes}</td>
-                    </tr>
-                  );
-                })}
-                <tr className=" border-b font-semibold">
-                  <td>Total</td>
-                  <td></td>
-                  <td>{reportSummary?.total_nights_booked}</td>
-                  <td>{reportSummary?.total_bookings}</td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>{reportSummary?.total_revenue}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <NoResult title="No data found" message="No data available" />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
+        <TableTemplate
+          data={data}
           isLoading={isLoading}
-          label="Revenue report"
-        />
+          columns={[
+            {
+              header: "Date",
+              key: "date",
+              showColumnSort: true,
+              render: (row: revenueReportList) => (
+                <span>{formatDate(row?.date)}</span>
+              ),
+            },
+            {
+              header: "Rooms Sold",
+              key: "rooms",
+              showColumnSort: true,
+              render: (row: revenueReportList) => (
+                <span>{row?.rooms_sold}</span>
+              ),
+            },
+            {
+              header: "Nights Books",
+              key: "nights_booked",
+              showColumnSort: true,
+              render: (row: revenueReportList) => (
+                <span>{row?.nights_booked}</span>
+              ),
+            },
+            {
+              header: "Total Bookings",
+              key: "total_bookings",
+              showColumnSort: true,
+              render: (row: revenueReportList) => (
+                <span>{row?.rooms_sold}</span>
+              ),
+            },
+            {
+              header: "%Occupancy",
+              key: "occupancy",
+              showColumnSort: true,
+              render: (row: revenueReportList) => (
+                <span>{row?.occupancy_rate}</span>
+              ),
+            },
+            {
+              header: "IBE Revenue",
+              key: "ibe_revenue",
+              showColumnSort: true,
+              render: (row: revenueReportList) => (
+                <span>{row?.ibe_revenue}</span>
+              ),
+            },
+            {
+              header: "OTA Revenue",
+              key: "ota",
+              showColumnSort: true,
+              render: (row: revenueReportList) => (
+                <span>{row?.ota_revenue}</span>
+              ),
+            },
+            {
+              header: "ADR",
+              key: "adr",
+              showColumnSort: true,
+              render: (row: revenueReportList) => <span>{row?.adr}</span>,
+            },
+            {
+              header: "REVPAR",
+              key: "revpar",
+              showColumnSort: true,
+              render: (row: revenueReportList) => <span>{row?.revpar}</span>,
+            },
+            {
+              header: "Taxes/Fees",
+              key: "tax",
+              showColumnSort: true,
+              render: (row: revenueReportList) => <span>{row?.taxes}</span>,
+            },
+            {
+              header: "Revenue",
+              key: "revenue",
+              showColumnSort: true,
+              render: (row: revenueReportList) => <span>{row?.revenue}</span>,
+            },
+          ]}
+          showPaginator={false}
+        />{" "}
+        <table className=" w-full">
+          <thead>
+            <tr className=" opacity-0">
+              {[
+                "Date",
+                "Rooms Sold",
+                "Nights Books",
+                "Total Bookings",
+                "%Occupancy",
+                "IBE Revenue",
+                "OTA Revenue",
+                "ADR",
+                "REVPAR",
+                "Taxes/Fees",
+                "Revenue",
+              ].map((head) => (
+                <th key={head}>{head}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr className=" border-b font-semibold">
+              <td>Total</td>
+              <td></td>
+              <td>{reportSummary?.total_nights_booked}</td>
+              <td>{reportSummary?.total_bookings}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>{reportSummary?.total_revenue}</td>
+            </tr>
+          </tbody>
+        </table>
+        <Pagination pagination={pagination} isLoading={isLoading} />
       </div>
     </div>
   );

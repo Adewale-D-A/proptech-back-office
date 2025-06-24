@@ -1,3 +1,9 @@
+##### 24.06.2025
+
+> Update: Manual table replacements with table component (completion)
+> Update: Rate table number of applicable free nights input field addition
+> Feature: Daily room, per time occupancy, occupancy ranking endpoints integrations
+
 ##### 23.06.2025
 
 > Updates: Manual table replacements with table component

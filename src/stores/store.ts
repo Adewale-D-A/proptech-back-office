@@ -64,6 +64,9 @@ import requestsCategoriesData from "./apiData/requests-categories";
 
 // report
 import revenueReports from "./apiData/reports/revenue";
+import occupancyRankingReports from "./apiData/reports/occupancy-ranking";
+import dailyRoomReport from "./apiData/reports/daily-room-report";
+import perTimeOccupancyeport from "./apiData/reports/per-time-occupancy";
 import maintenanceExpensesReports from "./apiData/reports/maintenenace-expenses";
 import bookingsReportReports from "./apiData/reports/bookings-report";
 import generatorRuntimeReporteports from "./apiData/reports/generator-runtime";
@@ -159,6 +162,9 @@ export const adminStore = () => {
       requesCategories: requestsCategoriesData,
       // reports
       revenueReports: revenueReports,
+      occupancyRankingReports: occupancyRankingReports,
+      dailyRoomReport: dailyRoomReport,
+      perTimeOccupancyReport: perTimeOccupancyeport,
       maintenanceExpensesReports: maintenanceExpensesReports,
       bookingsReportReports: bookingsReportReports,
       generatorRuntimeReporteports: generatorRuntimeReporteports,

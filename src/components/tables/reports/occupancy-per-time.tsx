@@ -1,40 +1,35 @@
 import { useCallback, useState } from "react";
 import LoadingButton from "../../button";
 import Filter from "../../filterAndSort/filter";
-// import Search from "../../inputs/search";
-// import ExportSelect from "../../inputs/select/exportSelect";
 import TimeRangeSelector from "../../inputs/select/timeRange";
-import { apartmentById } from "../../../types/apiData/apartment";
-import NoResult from "../../noResult";
-import Pagination from "../../pagination";
 import formatDate from "../../../utils/isoDateConverter";
 import useGetOccupancyPerTimeReport from "../../../services-hooks/reports/occupancy-per-time";
-import useGetReportSummary from "../../../services-hooks/reports/report-summary";
-import Status from "../../status";
-import { useAppDispatch } from "../../../stores/hooks";
-import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
-import ApartmentSingleSearch from "../../inputs/search/apartment-single-search";
 import ExportToCSV from "../../export-to-csv";
 import { occupancyPerTimeReportExportFormater } from "../../../utils/export-formerter-functions";
 import ApartmentThroughBuildingSelector from "../../inputs/select/apartment-through-building-selector";
+import useExtractUrlParams from "../../../useHooks/extract-url-query-params";
+import TableTemplate from "../table-template";
+import { occupancyTimeReportList } from "../../../types/apiData/reports";
 
 export default function OccupancyPerTimeReportTable() {
-  const dispatch = useAppDispatch();
   const [filterDates, setFilterDates] = useState<{
     start_date: string;
     end_date: string;
   }>();
   const [apartmentId, setApartmentId] = useState("");
   const [buildingId, setBuildingId] = useState("");
-  const [apartment, setApartment] = useState<apartmentById>({} as any);
-  const [currentPage, setCurrentPage] = useState(1);
 
+  const [{ page, size }] = useExtractUrlParams({
+    page: 1,
+    size: 20,
+  });
   const { data, isLoading, retryFunction, pagination } =
     useGetOccupancyPerTimeReport({
-      page: currentPage,
+      page,
       apartmentId: buildingId && apartmentId ? String(apartmentId) : "",
       start_date: filterDates?.start_date,
       end_date: filterDates?.end_date,
+      limit: size,
     });
 
   const handleLoadData = useCallback(() => {
@@ -88,83 +83,74 @@ export default function OccupancyPerTimeReportTable() {
           />
         </div>
       </div>
-      {/* table */}{" "}
-      <div className="w-full rounded-lg border md:p-5 flex flex-col gap-5 overflow-auto ">
-        {data && data.length > 0 ? (
-          <div className=" w-full overflow-x-auto">
-            <table className=" w-full">
-              <thead>
-                <tr>
-                  {[
-                    "Date",
-                    "Apartment",
-                    "Occupancy Status",
-                    "Occupant Name",
-                    "Number of Guests",
-                    "Check-in Date",
-                    "Check-out Date",
-                  ].map((head) => (
-                    <th key={head}>{head}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((request, index) => {
-                  return (
-                    <tr key={index} className=" border-b">
-                      <td>{formatDate(request?.date)}</td>
-                      <td>{request?.shortlet_name}</td>
-                      <td>
-                        <Status status={request?.occupancy_status} />
-                      </td>
-                      <td>{request?.occupant_name}</td>
-                      <td>{request?.number_of_guests}</td>
-                      <td>{formatDate(request?.check_in_date)}</td>
-                      <td>{formatDate(request?.check_out_date)}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            {/* <div className=" flex items-center gap-4 font-semibold flex-wrap">
-              {[
-                {
-                  id: 1,
-                  label: "Occupied",
-                  value: 0,
-                },
-                {
-                  id: 2,
-                  label: "Vacant",
-                  value: 0,
-                },
-                {
-                  id: 3,
-                  label: "No of Guests",
-                  value: 0,
-                },
-                {
-                  id: 4,
-                  label: "No of Nights",
-                  value: 0,
-                },
-              ].map((item) => (
-                <h6 key={item?.id}>
-                  {item?.label} {item?.value}
-                </h6>
-              ))}
-            </div> */}
-          </div>
-        ) : (
-          <NoResult />
-        )}
-        <Pagination
-          pagination={pagination}
-          setCurrentPage={setCurrentPage}
-          isLoading={isLoading}
-          label="Occupancy per time report"
-        />
-      </div>
+      <TableTemplate
+        data={data}
+        isLoading={isLoading}
+        columns={[
+          {
+            header: "Date",
+            key: "date",
+            showColumnSort: true,
+            render: (row: occupancyTimeReportList) => (
+              <span>{formatDate(row?.date)}</span>
+            ),
+          },
+          {
+            header: "Apartment",
+            key: "apartment",
+            showColumnSort: true,
+            render: (row: occupancyTimeReportList) => (
+              <span>{row?.shortlet_name}</span>
+            ),
+          },
+          {
+            header: "Occupancy Status",
+            key: "occupancy_status",
+            showColumnSort: true,
+            render: (row: occupancyTimeReportList) => (
+              <span>{row?.occupancy_status}</span>
+            ),
+          },
+          {
+            header: "Occupant Name",
+            key: "occupant_name",
+            showColumnSort: true,
+            render: (row: occupancyTimeReportList) => (
+              <span>{row?.occupant_name}</span>
+            ),
+          },
+          {
+            header: "Number of Guests",
+            key: "no_of_guest",
+            showColumnSort: true,
+            render: (row: occupancyTimeReportList) => (
+              <span>{row?.number_of_guests}</span>
+            ),
+          },
+          {
+            header: "Check-in Date",
+            key: "check_in",
+            showColumnSort: true,
+            render: (row: occupancyTimeReportList) => (
+              <span>
+                {row?.check_in_date ? formatDate(row?.check_in_date) : ""}
+              </span>
+            ),
+          },
+          {
+            header: "Check-out Date",
+            key: "check_out",
+            showColumnSort: true,
+            render: (row: occupancyTimeReportList) => (
+              <span>
+                {row?.check_in_date ? formatDate(row?.check_out_date) : ""}
+              </span>
+            ),
+          },
+        ]}
+        showPaginator={true}
+        pagination={pagination}
+      />
     </div>
   );
 }
