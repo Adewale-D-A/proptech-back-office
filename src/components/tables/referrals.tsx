@@ -117,7 +117,7 @@ export default function ReferralsTable() {
               {
                 header: "Referred By",
                 key: "reffered_by",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: referrals) => (
                   <div className=" flex flex-col">
                     <span className=" capitalize font-semibold text-lg">

@@ -75,37 +75,37 @@ export default function VendorServiceListTable({
             {
               header: "Vendor Name",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: vendorService) => <span>{row?.vendorName}</span>,
             },
             {
               header: "Service Type",
               key: "price_value",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: vendorService) => <span>{row?.serviceType}</span>,
             },
             {
               header: "Description",
               key: "type",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: vendorService) => <span>{row?.description}</span>,
             },
             {
               header: "Date Created",
               key: "type",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: vendorService) => <span>{row?.date}</span>,
             },
             {
               header: "Price Per Person",
               key: "type",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: vendorService) => <span>{row?.price}</span>,
             },
             {
               header: "No of Bookings",
               key: "type",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: vendorService) => <span>{row?.bookingNo}</span>,
             },
             {

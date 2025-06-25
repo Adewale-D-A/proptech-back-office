@@ -92,7 +92,7 @@ export default function RatingsAndReviewsTable() {
             {
               header: "Question",
               key: "question",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: ratingsAndReviews) => <span>{row?.question}</span>,
             },
             {

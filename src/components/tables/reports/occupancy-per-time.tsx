@@ -90,7 +90,7 @@ export default function OccupancyPerTimeReportTable() {
           {
             header: "Date",
             key: "date",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: occupancyTimeReportList) => (
               <span>{formatDate(row?.date)}</span>
             ),
@@ -98,7 +98,7 @@ export default function OccupancyPerTimeReportTable() {
           {
             header: "Apartment",
             key: "apartment",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: occupancyTimeReportList) => (
               <span>{row?.shortlet_name}</span>
             ),
@@ -106,7 +106,7 @@ export default function OccupancyPerTimeReportTable() {
           {
             header: "Occupancy Status",
             key: "occupancy_status",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: occupancyTimeReportList) => (
               <span>{row?.occupancy_status}</span>
             ),
@@ -114,7 +114,7 @@ export default function OccupancyPerTimeReportTable() {
           {
             header: "Occupant Name",
             key: "occupant_name",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: occupancyTimeReportList) => (
               <span>{row?.occupant_name}</span>
             ),
@@ -122,7 +122,7 @@ export default function OccupancyPerTimeReportTable() {
           {
             header: "Number of Guests",
             key: "no_of_guest",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: occupancyTimeReportList) => (
               <span>{row?.number_of_guests}</span>
             ),
@@ -130,7 +130,7 @@ export default function OccupancyPerTimeReportTable() {
           {
             header: "Check-in Date",
             key: "check_in",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: occupancyTimeReportList) => (
               <span>
                 {row?.check_in_date ? formatDate(row?.check_in_date) : ""}
@@ -140,7 +140,7 @@ export default function OccupancyPerTimeReportTable() {
           {
             header: "Check-out Date",
             key: "check_out",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: occupancyTimeReportList) => (
               <span>
                 {row?.check_in_date ? formatDate(row?.check_out_date) : ""}

@@ -114,7 +114,7 @@ export default function ManageAdminUsersTable() {
             {
               header: "Name",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: admin) => (
                 <span>
                   {row?.first_name} {row?.last_name}
@@ -130,7 +130,7 @@ export default function ManageAdminUsersTable() {
             {
               header: "Role",
               key: "role",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: admin) => <span>{row?.role_id}</span>,
             },
             {

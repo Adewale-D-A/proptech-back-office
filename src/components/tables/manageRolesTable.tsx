@@ -107,13 +107,13 @@ export default function ManageRoleTableData() {
             {
               header: "Name",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: roles) => <span>{row?.name}</span>,
             },
             {
               header: "Guard Name",
               key: "guard_name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: roles) => <span>{row?.guard_name}</span>,
             },
             {

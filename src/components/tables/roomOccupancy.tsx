@@ -34,7 +34,7 @@ export default function RoomOccupancyListTable({}: {}) {
           {
             header: "S/N",
             key: "sn",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: reservations, index) => (
               <span>
                 {" "}
@@ -49,13 +49,13 @@ export default function RoomOccupancyListTable({}: {}) {
           {
             header: "Apartment Name",
             key: "apartment_name",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: reservations) => <span>{row?.shortlet?.name}</span>,
           },
           {
             header: "Customer Name",
             key: "customer_name",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: reservations) => (
               <span>
                 {" "}
@@ -66,7 +66,7 @@ export default function RoomOccupancyListTable({}: {}) {
           {
             header: "Amount Paid",
             key: "amount_paid",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: reservations) => (
               <span>
                 {row?.currency} {row?.total_price}
@@ -77,7 +77,7 @@ export default function RoomOccupancyListTable({}: {}) {
           {
             header: "Check-in Date",
             key: "check_in_date",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: reservations) => (
               <span>{formatDate(row?.check_in_date)}</span>
             ),
@@ -85,7 +85,7 @@ export default function RoomOccupancyListTable({}: {}) {
           {
             header: "Check-out Date",
             key: "check_out_date",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: reservations) => (
               <span>{formatDate(row?.check_out_date)}</span>
             ),

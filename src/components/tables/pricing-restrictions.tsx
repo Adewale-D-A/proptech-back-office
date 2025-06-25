@@ -98,13 +98,13 @@ export default function PricingRestrictionsTable() {
             {
               header: "Name",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: restriction) => <span>{row?.name}</span>,
             },
             {
               header: "Min Nights",
               key: "min_nights",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: restriction) => (
                 <span> {row?.min_no_of_nights}</span>
               ),
@@ -112,7 +112,7 @@ export default function PricingRestrictionsTable() {
             {
               header: "Max Nights",
               key: "max_nights",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: restriction) => (
                 <span> {row?.max_no_of_nights}</span>
               ),

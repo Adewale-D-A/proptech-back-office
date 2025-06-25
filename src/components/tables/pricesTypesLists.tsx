@@ -70,19 +70,19 @@ export default function PriceTypeList({ header }: { header: string[] }) {
             {
               header: "Price Attributes",
               key: "price_attributes",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: priceTypes) => <span>{row?.attributes}</span>,
             },
             {
               header: "Tax Rates",
               key: "tax_rates",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: priceTypes) => <span>{row?.rate}</span>,
             },
             {
               header: "Restrictions",
               key: "restrictions",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: priceTypes) => (
                 <span>
                   {row?.isBreakfastIncluded ? (
@@ -96,7 +96,7 @@ export default function PriceTypeList({ header }: { header: string[] }) {
             {
               header: "Breakfast Included",
               key: "breakfast_included",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: priceTypes) => (
                 <span>
                   {row?.isRefundable ? (
@@ -110,7 +110,7 @@ export default function PriceTypeList({ header }: { header: string[] }) {
             // {
             //   header: "Refundable",
             //   key: "refundable",
-            //   showColumnSort: true,
+            //   showColumnSort: false,
             //   render: (row: priceTypes) => (
             //     <span>{row?.applicable_shortlet_count}</span>
             //   ),

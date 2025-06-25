@@ -63,13 +63,13 @@ export default function SafetyAndSecurityList() {
             {
               header: "Category Name",
               key: "category",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: safetyAndSecurity) => <span>{row?.name}</span>,
             },
             {
               header: "Description",
               key: "description",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: safetyAndSecurity) => (
                 <span>{row?.description}</span>
               ),

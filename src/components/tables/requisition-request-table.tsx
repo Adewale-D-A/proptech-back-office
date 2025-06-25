@@ -162,7 +162,7 @@ export default function RequisitionRequestTable() {
               {
                 header: "Requesting Employee",
                 key: "requesting_employee",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: requisitionRequest) => (
                   <div className=" flex gap-2 items-center min-w-36">
                     <img
@@ -182,7 +182,7 @@ export default function RequisitionRequestTable() {
               {
                 header: "Apartment",
                 key: "apartment_name",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: requisitionRequest) => (
                   <span> {row?.shortlet?.name}</span>
                 ),
@@ -190,14 +190,14 @@ export default function RequisitionRequestTable() {
               {
                 header: "Amount",
                 key: "amount",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: requisitionRequest) => <span>{row?.amount}</span>,
               },
 
               {
                 header: "Currency",
                 key: "currency",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: requisitionRequest) => (
                   <span>{row?.currency}</span>
                 ),
@@ -205,7 +205,7 @@ export default function RequisitionRequestTable() {
               {
                 header: "Request Date",
                 key: "request_date",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: requisitionRequest) => (
                   <span>{formatDate(row?.created_at)}</span>
                 ),
@@ -213,7 +213,7 @@ export default function RequisitionRequestTable() {
               {
                 header: "Paid",
                 key: "paid",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: requisitionRequest) => (
                   <Status
                     status={"requisition_payment_state"}
@@ -226,7 +226,7 @@ export default function RequisitionRequestTable() {
               {
                 header: "Status",
                 key: "status",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: requisitionRequest) => (
                   <Status status={row?.status} />
                 ),

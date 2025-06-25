@@ -122,7 +122,7 @@ export default function OwnersReportSummaryTableList() {
                 {
                   header: "Expense",
                   key: "expense",
-                  showColumnSort: true,
+                  showColumnSort: false,
                   render: (row: ownersReport) => (
                     <span>{row?.expense_category?.name}</span>
                   ),
@@ -130,7 +130,7 @@ export default function OwnersReportSummaryTableList() {
                 {
                   header: "Amount",
                   key: "amount",
-                  showColumnSort: true,
+                  showColumnSort: false,
                   render: (row: ownersReport) => (
                     <span>{currencyFormat(row?.amount || 0)}</span>
                   ),
@@ -138,7 +138,7 @@ export default function OwnersReportSummaryTableList() {
                 {
                   header: "Note",
                   key: "note",
-                  showColumnSort: true,
+                  showColumnSort: false,
                   render: (row: ownersReport) => <span>{row?.note}</span>,
                 },
                 {

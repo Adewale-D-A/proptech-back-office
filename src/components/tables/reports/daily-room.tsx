@@ -97,13 +97,13 @@ export default function DailyRoomReportTable() {
             {
               header: "Type",
               key: "date",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: dailyRoomReportList) => <span>{row?.type}</span>,
             },
             {
               header: "Room",
               key: "rooms_sold",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: dailyRoomReportList) => (
                 <span>{row?.shortlet_name}</span>
               ),
@@ -111,7 +111,7 @@ export default function DailyRoomReportTable() {
             {
               header: "Customer Name",
               key: "customer_name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: dailyRoomReportList) => (
                 <span>{row?.occupant_name}</span>
               ),
@@ -119,7 +119,7 @@ export default function DailyRoomReportTable() {
             {
               header: "Guests",
               key: "guests",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: dailyRoomReportList) => (
                 <span>{row?.number_of_guests}</span>
               ),
@@ -127,7 +127,7 @@ export default function DailyRoomReportTable() {
             // {
             //   header: "Rate Plan",
             //   key: "rate_plan",
-            //   showColumnSort: true,
+            //   showColumnSort: false,
             //   render: (row: dailyRoomReportList) => (
             //     <span>{row?.occupancy_rate}</span>
             //   ),
@@ -135,7 +135,7 @@ export default function DailyRoomReportTable() {
             // {
             //   header: "Meal Plan",
             //   key: "meal_plan",
-            //   showColumnSort: true,
+            //   showColumnSort: false,
             //   render: (row: dailyRoomReportList) => (
             //     <span>{row?.occupant_name}</span>
             //   ),
@@ -143,13 +143,13 @@ export default function DailyRoomReportTable() {
             {
               header: "Channel",
               key: "channel",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: dailyRoomReportList) => <span>{row?.channel}</span>,
             },
             {
               header: "Check In",
               key: "check_in",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: dailyRoomReportList) => (
                 <span>{formatDate(row?.check_in_date)}</span>
               ),
@@ -157,7 +157,7 @@ export default function DailyRoomReportTable() {
             {
               header: "Check Out",
               key: "check_out",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: dailyRoomReportList) => (
                 <span>{formatDate(row?.check_out_date)}</span>
               ),
@@ -165,7 +165,7 @@ export default function DailyRoomReportTable() {
             {
               header: "Nights",
               key: "nights",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: dailyRoomReportList) => (
                 <span>{row?.number_of_days}</span>
               ),
@@ -173,7 +173,7 @@ export default function DailyRoomReportTable() {
             {
               header: "Notes",
               key: "notes",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: dailyRoomReportList) => <span>{row?.notes}</span>,
             },
           ]}

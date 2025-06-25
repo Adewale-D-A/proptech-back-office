@@ -61,7 +61,7 @@ export default function BookingsListTable({
           {
             header: "ID",
             key: "name",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: reservations) => (
               <Link
                 to={`/bookings/booking-details/edit-reservation/${row?.id}`}
@@ -74,7 +74,7 @@ export default function BookingsListTable({
           {
             header: "Customer Name",
             key: "name",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: reservations) => (
               <span>
                 {row?.user?.first_name} {row?.user?.last_name}
@@ -84,13 +84,13 @@ export default function BookingsListTable({
           {
             header: "Rooms",
             key: "name",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: reservations) => <span>{row?.shortlet?.name}</span>,
           },
           {
             header: type === "departing" ? "Check-out" : "Check-in",
             key: "name",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: reservations) => (
               <span>
                 {type === "departing"
@@ -102,7 +102,7 @@ export default function BookingsListTable({
           {
             header: variant === "action" ? "Action" : "Status",
             key: "name",
-            showColumnSort: true,
+            showColumnSort: false,
             render:
               variant === "action"
                 ? (row: reservations) => (

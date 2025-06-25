@@ -107,7 +107,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
             {
               header: "Customer Name",
               key: "customer_name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: requests) => (
                 <span>
                   {row?.user?.first_name} {row?.user?.last_name}
@@ -117,13 +117,13 @@ export default function RequestsListTable({ header }: { header: string[] }) {
             {
               header: "Apartment Name",
               key: "apartment_name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: requests) => <span>{row?.shortlet?.name}</span>,
             },
             {
               header: "Date of Request",
               key: "date_of_request",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: requests) => (
                 <span>
                   {formatDate(row?.created_at)} {formatTime(row?.created_at)}
@@ -134,19 +134,19 @@ export default function RequestsListTable({ header }: { header: string[] }) {
             {
               header: "Request Type",
               key: "request_type",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: requests) => <span>{row?.subject}</span>,
             },
             {
               header: "Description",
-              showColumnSort: true,
+              showColumnSort: false,
               key: "description",
               render: (row: requests) => <span>{row?.description}</span>,
             },
             {
               header: "Escalated Status",
               key: "escalated_status",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: requests) => (
                 <Status
                   status="additional-service-escalte"
@@ -159,7 +159,7 @@ export default function RequestsListTable({ header }: { header: string[] }) {
             {
               header: "Status",
               key: "status",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: requests) => <Status status={row?.status} />,
             },
             {

@@ -106,7 +106,7 @@ export default function ApartmentTable({ title }: { title: string }) {
             {
               header: "Apartment Info",
               key: "apt_info",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: apartment) => (
                 <div className=" flex gap-2 items-center min-w-36">
                   <img
@@ -127,7 +127,7 @@ export default function ApartmentTable({ title }: { title: string }) {
             {
               header: "Price per Night",
               key: "price_per_night",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: apartment) => (
                 <span>{`${row?.currency} ${row?.price}`}</span>
               ),
@@ -135,7 +135,7 @@ export default function ApartmentTable({ title }: { title: string }) {
             {
               header: "Last Booking",
               key: "last_booking",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: apartment) => (
                 <span>
                   {row?.last_booking_date
@@ -149,13 +149,13 @@ export default function ApartmentTable({ title }: { title: string }) {
             {
               header: "Total Bookings",
               key: "total_bookings",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: apartment) => <span>{row?.no_of_bookings}</span>,
             },
             {
               header: "Availability Status",
               key: "availability_status",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: apartment) => (
                 <Status status={row?.availability_status} />
               ),

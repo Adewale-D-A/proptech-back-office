@@ -98,7 +98,7 @@ export default function LocationGroupTable() {
             {
               header: "Name",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: locationGrouping) => <span>{row?.name}</span>,
             },
             {

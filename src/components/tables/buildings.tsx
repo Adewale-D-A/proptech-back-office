@@ -63,13 +63,13 @@ export default function BuildingsListsTable() {
             {
               header: "Name",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: building) => <span>{row?.name}</span>,
             },
             {
               header: "Address",
               key: "address",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: building) => <span>{row?.address}</span>,
             },
             {

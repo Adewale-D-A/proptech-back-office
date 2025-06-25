@@ -92,7 +92,7 @@ export default function ExpenseCategoriesistsTable() {
             {
               header: "Name",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: requestCategories) => <span>{row?.name}</span>,
             },
             {

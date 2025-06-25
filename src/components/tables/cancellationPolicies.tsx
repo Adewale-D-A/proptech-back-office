@@ -98,7 +98,7 @@ export default function CancellationPoliciesTable() {
             {
               header: "Name",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: canecllationPolicy) => <span>{row?.name}</span>,
             },
             {
