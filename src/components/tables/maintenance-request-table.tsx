@@ -158,7 +158,7 @@ export default function MaintenanceRequestTable() {
               {
                 header: "Requesting Employee",
                 key: "requesting_employee",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: maintenanceRequestsById) => (
                   <div className=" flex gap-2 items-center min-w-36">
                     <img
@@ -180,7 +180,7 @@ export default function MaintenanceRequestTable() {
               {
                 header: "Apartment",
                 key: "apartmnet",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: maintenanceRequestsById) => (
                   <span>{row?.shortlet?.name}</span>
                 ),
@@ -188,7 +188,7 @@ export default function MaintenanceRequestTable() {
               {
                 header: "Category",
                 key: "category",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: maintenanceRequestsById) => (
                   <span>{row?.category?.name}</span>
                 ),
@@ -197,7 +197,7 @@ export default function MaintenanceRequestTable() {
               {
                 header: "Request Date",
                 key: "request_date",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: maintenanceRequestsById) => (
                   <span>{formatDate(row?.request_date)}</span>
                 ),
@@ -205,7 +205,7 @@ export default function MaintenanceRequestTable() {
               {
                 header: "Status",
                 key: "status",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: maintenanceRequestsById) => (
                   <Status status={row?.status} />
                 ),

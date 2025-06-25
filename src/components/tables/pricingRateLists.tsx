@@ -83,7 +83,7 @@ export default function PriceRateList({
             {
               header: "Rates Per Nights",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: rateList) => (
                 <span>{row?.number_of_nights} Nights</span>
               ),
@@ -97,7 +97,7 @@ export default function PriceRateList({
             {
               header: "Free Nights",
               key: "free_nights",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: rateList) => <span></span>,
             },
             {

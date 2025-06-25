@@ -62,13 +62,13 @@ export default function ExtraOptionTable() {
             {
               header: "Name of Option",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: extraOption) => <span>{row?.name}</span>,
             },
             {
               header: "Description",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: extraOption) => <span>{row?.description}</span>,
             },
             {

@@ -87,7 +87,7 @@ export default function RevenueReportTable() {
             {
               header: "Date",
               key: "date",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: revenueReportList) => (
                 <span>{formatDate(row?.date)}</span>
               ),
@@ -95,7 +95,7 @@ export default function RevenueReportTable() {
             {
               header: "Rooms Sold",
               key: "rooms",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: revenueReportList) => (
                 <span>{row?.rooms_sold}</span>
               ),
@@ -103,7 +103,7 @@ export default function RevenueReportTable() {
             {
               header: "Nights Books",
               key: "nights_booked",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: revenueReportList) => (
                 <span>{row?.nights_booked}</span>
               ),
@@ -111,7 +111,7 @@ export default function RevenueReportTable() {
             {
               header: "Total Bookings",
               key: "total_bookings",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: revenueReportList) => (
                 <span>{row?.rooms_sold}</span>
               ),
@@ -119,7 +119,7 @@ export default function RevenueReportTable() {
             {
               header: "%Occupancy",
               key: "occupancy",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: revenueReportList) => (
                 <span>{row?.occupancy_rate}</span>
               ),
@@ -127,7 +127,7 @@ export default function RevenueReportTable() {
             {
               header: "IBE Revenue",
               key: "ibe_revenue",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: revenueReportList) => (
                 <span>{row?.ibe_revenue}</span>
               ),
@@ -135,7 +135,7 @@ export default function RevenueReportTable() {
             {
               header: "OTA Revenue",
               key: "ota",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: revenueReportList) => (
                 <span>{row?.ota_revenue}</span>
               ),
@@ -143,25 +143,25 @@ export default function RevenueReportTable() {
             {
               header: "ADR",
               key: "adr",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: revenueReportList) => <span>{row?.adr}</span>,
             },
             {
               header: "REVPAR",
               key: "revpar",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: revenueReportList) => <span>{row?.revpar}</span>,
             },
             {
               header: "Taxes/Fees",
               key: "tax",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: revenueReportList) => <span>{row?.taxes}</span>,
             },
             {
               header: "Revenue",
               key: "revenue",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: revenueReportList) => <span>{row?.revenue}</span>,
             },
           ]}

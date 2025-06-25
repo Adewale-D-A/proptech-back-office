@@ -159,7 +159,7 @@ export default function EmployeesLists() {
               {
                 header: "Employee",
                 key: "employee",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: admin) => (
                   <div className=" flex gap-2 items-center min-w-36">
                     <img
@@ -181,7 +181,7 @@ export default function EmployeesLists() {
               {
                 header: "Role",
                 key: "role",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: admin) => <span>{row?.role?.name}</span>,
               },
               {

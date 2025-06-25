@@ -64,13 +64,13 @@ export default function BlockedDatesReasonsListsTable() {
             {
               header: "Name",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: blockedReason) => <span>{row?.name}</span>,
             },
             {
               header: "Description",
               key: "description",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: blockedReason) => <span>{row?.description}</span>,
             },
             {

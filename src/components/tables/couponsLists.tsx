@@ -101,13 +101,13 @@ export default function CouponList({ header }: { header: string[] }) {
             {
               header: "Coupon Type",
               key: "coupon_type",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: coupons) => <span>{row?.type}</span>,
             },
             {
               header: "Validity Dates",
               key: "validity_dates",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: coupons) => (
                 <span>
                   {formatDate(row?.start_date)} - {formatDate(row?.end_date)}

@@ -129,7 +129,7 @@ export default function MaintenanceExpensesReportListTable() {
               {
                 header: "ID",
                 key: "date",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: requisitionRequest) => (
                   <span className=" rounded-full p-2 border border-primary">
                     {row?.id}
@@ -139,7 +139,7 @@ export default function MaintenanceExpensesReportListTable() {
               {
                 header: "Payment Date",
                 key: "payment_date",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: requisitionRequest) => (
                   <span>{row?.date_paid}</span>
                 ),
@@ -147,7 +147,7 @@ export default function MaintenanceExpensesReportListTable() {
               {
                 header: "Apartment",
                 key: "apartment",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: requisitionRequest) => (
                   <span>{row?.shortlet?.name}</span>
                 ),
@@ -155,7 +155,7 @@ export default function MaintenanceExpensesReportListTable() {
               {
                 header: "Category",
                 key: "category",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: requisitionRequest) => (
                   <span>{row?.category?.name}</span>
                 ),
@@ -163,19 +163,19 @@ export default function MaintenanceExpensesReportListTable() {
               {
                 header: "Item",
                 key: "item",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: requisitionRequest) => <span>{row?.item}</span>,
               },
               {
                 header: "Total amount",
                 key: "total_amount",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: requisitionRequest) => <span>{row?.amount}</span>,
               },
               {
                 header: "Status",
                 key: "status",
-                showColumnSort: true,
+                showColumnSort: false,
                 render: (row: requisitionRequest) => (
                   <Status status={row?.status} />
                 ),

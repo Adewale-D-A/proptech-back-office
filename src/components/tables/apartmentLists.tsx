@@ -92,7 +92,7 @@ export default function ApartmentListsTable() {
             {
               header: "Apartment Name",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: apartment) => (
                 <div className=" flex gap-2 items-center min-w-36">
                   <img
@@ -113,13 +113,13 @@ export default function ApartmentListsTable() {
             {
               header: "No of Guests",
               key: "no_guests",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: apartment) => <span>{row?.max_guests} Guests</span>,
             },
             {
               header: "Category",
               key: "category",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: apartmentById) => (
                 <span>{row?.room_option?.name}</span>
               ),
@@ -144,7 +144,7 @@ export default function ApartmentListsTable() {
             {
               header: "Status",
               key: "status",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: apartment) => (
                 <Status status={row?.availability_status} />
               ),

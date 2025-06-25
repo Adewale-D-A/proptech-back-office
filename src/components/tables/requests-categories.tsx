@@ -98,7 +98,7 @@ export default function RequestCategoriesistsTable() {
             {
               header: "Amenities Name",
               key: "amenities_name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: requestCategories) => <span>{row?.name}</span>,
             },
             {

@@ -132,7 +132,7 @@ export default function OccupancyRankingReportTable() {
                   {
                     header: "Date",
                     key: "date",
-                    showColumnSort: true,
+                    showColumnSort: false,
                     render: (row: occupancyRankingReportList) => (
                       <span>{row?.date}</span>
                     ),
@@ -140,7 +140,7 @@ export default function OccupancyRankingReportTable() {
                   {
                     header: "Rooms Sold",
                     key: "rooms_sold",
-                    showColumnSort: true,
+                    showColumnSort: false,
                     render: (row: occupancyRankingReportList) => (
                       <span>{row?.rooms_sold}</span>
                     ),
@@ -148,7 +148,7 @@ export default function OccupancyRankingReportTable() {
                   {
                     header: "Nights Booked",
                     key: "nights_booked",
-                    showColumnSort: true,
+                    showColumnSort: false,
                     render: (row: occupancyRankingReportList) => (
                       <span>{row?.nights_booked}</span>
                     ),
@@ -156,7 +156,7 @@ export default function OccupancyRankingReportTable() {
                   {
                     header: "Nights Available",
                     key: "nights_available",
-                    showColumnSort: true,
+                    showColumnSort: false,
                     render: (row: occupancyRankingReportList) => (
                       <span>{row?.nights_available}</span>
                     ),
@@ -164,7 +164,7 @@ export default function OccupancyRankingReportTable() {
                   {
                     header: "Occupancy Rate",
                     key: "occupancy_rate",
-                    showColumnSort: true,
+                    showColumnSort: false,
                     render: (row: occupancyRankingReportList) => (
                       <span>{row?.occupancy_rate}</span>
                     ),
@@ -172,7 +172,7 @@ export default function OccupancyRankingReportTable() {
                   {
                     header: "Revenue",
                     key: "revenue",
-                    showColumnSort: true,
+                    showColumnSort: false,
                     render: (row: occupancyRankingReportList) => (
                       <span>{row?.revenue}</span>
                     ),

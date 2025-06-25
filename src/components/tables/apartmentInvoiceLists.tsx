@@ -117,13 +117,13 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
             {
               header: "Invoice Number",
               key: "invoice_number",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: invoice) => <span>{row?.invoice_number}</span>,
             },
             {
               header: "Booking ID",
               key: "booking_id",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: invoice) => (
                 <Link
                   to={`/bookings/booking-details/edit-reservation/${row?.id}`}
@@ -136,13 +136,13 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
             {
               header: "Emailed To",
               key: "email_to",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: invoice) => <span>{row?.user?.email}</span>,
             },
             {
               header: "Created On",
               key: "created_on",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: invoice) => (
                 <span>{formatDate(row?.created_at)}</span>
               ),
@@ -150,13 +150,13 @@ export default function InvoiceListsTable({ header }: { header: string[] }) {
             {
               header: "Created By",
               key: "created_by",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: invoice) => <span>{row?.created_by}</span>,
             },
             {
               header: "Status",
               key: "status",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: invoice) => <Status status={row?.status} />,
             },
             {

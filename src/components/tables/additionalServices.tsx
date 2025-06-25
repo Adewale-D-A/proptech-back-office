@@ -102,7 +102,7 @@ export default function AdditionalServiceListTable({
             {
               header: "Customer Name",
               key: "customer_name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: additionalService) => (
                 <span>
                   {row?.user?.first_name} {row?.user?.last_name}
@@ -112,7 +112,7 @@ export default function AdditionalServiceListTable({
             {
               header: "Apartment Name",
               key: "apartment_name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: additionalService) => (
                 <span>{row?.booking?.shortlet?.name} Guests</span>
               ),
@@ -120,7 +120,7 @@ export default function AdditionalServiceListTable({
             {
               header: "Date of Request",
               key: "date_of_request",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: additionalService) => (
                 <span>{formatDate(row?.created_at)}</span>
               ),
@@ -128,7 +128,7 @@ export default function AdditionalServiceListTable({
             {
               header: "Service Type",
               key: "service_type",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: additionalService) => (
                 <span>{row?.service_type?.name}</span>
               ),
@@ -136,7 +136,7 @@ export default function AdditionalServiceListTable({
             {
               header: "Description",
               key: "description",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: additionalService) => (
                 <span>{row?.description}</span>
               ),
@@ -144,7 +144,7 @@ export default function AdditionalServiceListTable({
             {
               header: "Escalated Status",
               key: "escalated_status",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: additionalService) => (
                 <Status
                   status="additional-service-escalte"
@@ -157,7 +157,7 @@ export default function AdditionalServiceListTable({
             {
               header: "Status",
               key: "status",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: additionalService) => (
                 <Status status={row?.status} />
               ),

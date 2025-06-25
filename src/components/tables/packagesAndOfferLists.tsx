@@ -79,13 +79,13 @@ export default function PackagesAndOfferList({ header }: { header: string[] }) {
             {
               header: "Package Name",
               key: "package_name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: packagesAndOffers) => <span>{row?.name}</span>,
             },
             {
               header: "From This Date",
               key: "from_date",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: packagesAndOffers) => (
                 <span>{formatDate(row?.start_date)}</span>
               ),
@@ -93,7 +93,7 @@ export default function PackagesAndOfferList({ header }: { header: string[] }) {
             {
               header: "To this Date",
               key: "to_date",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: packagesAndOffers) => (
                 <span>{formatDate(row?.start_date)}</span>
               ),
@@ -101,13 +101,13 @@ export default function PackagesAndOfferList({ header }: { header: string[] }) {
             {
               header: "Price",
               key: "price",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: packagesAndOffers) => <span>{row?.price}</span>,
             },
             {
               header: "No of Rooms Affected",
               key: "rooms_affected",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: packagesAndOffers) => (
                 <span>{row?.applicable_shortlet_count}</span>
               ),

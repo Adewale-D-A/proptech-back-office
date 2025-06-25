@@ -89,7 +89,7 @@ export default function BookingsReportListTable() {
             {
               header: "Customer Name",
               key: "customer_name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: bookingsById) => (
                 <Link
                   to={`/customers/customer-details/${row?.user?.id}`}
@@ -104,13 +104,13 @@ export default function BookingsReportListTable() {
             {
               header: "Apartment Name",
               key: "apartment_name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: bookingsById) => <span>{row?.shortlet?.name}</span>,
             },
             {
               header: "Amount",
               key: "amount",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: bookingsById) => (
                 <span>
                   {row?.currency} {row?.total_price}
@@ -120,7 +120,7 @@ export default function BookingsReportListTable() {
             {
               header: "Check-in Date",
               key: "check_in_date",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: bookingsById) => (
                 <span>
                   {formatDate(row?.check_in_date)} {row?.check_in_time}
@@ -130,7 +130,7 @@ export default function BookingsReportListTable() {
             {
               header: "Check-out Date",
               key: "check_out_date",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: bookingsById) => (
                 <span>
                   {formatDate(row?.check_out_date)} {row?.check_out_time}
@@ -140,7 +140,7 @@ export default function BookingsReportListTable() {
             {
               header: "Status",
               key: "status",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: bookingsById) => <Status status={row?.status} />,
             },
             {

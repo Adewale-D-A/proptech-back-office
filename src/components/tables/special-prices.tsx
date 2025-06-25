@@ -98,13 +98,13 @@ export default function SpecialPricesTable() {
             {
               header: "Name",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: specialPrices) => <span>{row?.name}</span>,
             },
             {
               header: "Price/value",
               key: "price_value",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: specialPrices) => (
                 <span>{`${
                   row?.price_type === "price"
@@ -116,7 +116,7 @@ export default function SpecialPricesTable() {
             {
               header: "Type",
               key: "type",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: specialPrices) => <span>{row?.price_type}</span>,
             },
             {

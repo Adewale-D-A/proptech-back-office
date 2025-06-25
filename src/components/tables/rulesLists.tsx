@@ -64,13 +64,13 @@ export default function RulesLists() {
             {
               header: "Category Name",
               key: "category",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: houseRule) => <span>{row?.name}</span>,
             },
             {
               header: "Description",
               key: "description",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: houseRule) => <span>{row?.description}</span>,
             },
             {

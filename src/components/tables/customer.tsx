@@ -70,7 +70,7 @@ export default function CustomersListTable() {
           {
             header: "ID",
             key: "id",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: customersById) => (
               <span className=" rounded-full p-2 border border-primary text-sm">
                 {row?.id}
@@ -80,7 +80,7 @@ export default function CustomersListTable() {
           {
             header: "First Name",
             key: "first_name",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: customersById) => (
               <span className="text-sm">{row?.first_name}</span>
             ),
@@ -88,7 +88,7 @@ export default function CustomersListTable() {
           {
             header: "Last Name",
             key: "last_name",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: customersById) => (
               <span className="text-sm">{row?.last_name}</span>
             ),
@@ -103,7 +103,7 @@ export default function CustomersListTable() {
           {
             header: "Total Booking",
             key: "total_bookings",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: customersById) => (
               <span className="text-sm">{row?.total_bookings}</span>
             ),
@@ -111,7 +111,7 @@ export default function CustomersListTable() {
           {
             header: "Identity Verified",
             key: "identity_verified",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: customersById) => (
               <Status
                 status="identity"
@@ -124,7 +124,7 @@ export default function CustomersListTable() {
           {
             header: "User Type",
             key: "usertype",
-            showColumnSort: true,
+            showColumnSort: false,
             render: (row: customersById) => <span>{row?.type}</span>,
           },
           {

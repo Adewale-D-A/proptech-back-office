@@ -62,13 +62,13 @@ export default function RoomOptionTable() {
             {
               header: "Category Name",
               key: "category",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: roomOption, index) => <span>{row?.name}</span>,
             },
             {
               header: "Description",
               key: "description",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: roomOption) => <span>{row?.description}</span>,
             },
             {

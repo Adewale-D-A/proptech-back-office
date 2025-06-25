@@ -101,7 +101,7 @@ export default function TaxRateLists({ header }: { header: string[] }) {
             {
               header: "Tax Name",
               key: "tax_name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: taxRates) => <span>{row?.name}</span>,
             },
             {
@@ -113,7 +113,7 @@ export default function TaxRateLists({ header }: { header: string[] }) {
             {
               header: "Created On",
               key: "created_on",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: taxRates) => (
                 <span>
                   {formatDate(row?.created_at)} {formatTime(row?.created_at)}

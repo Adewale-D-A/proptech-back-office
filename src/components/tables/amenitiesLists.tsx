@@ -65,7 +65,7 @@ export default function AmenitiesListsTable() {
             {
               header: "Amenities Name",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: amenity) => <span>{row?.name}</span>,
             },
             {
@@ -76,7 +76,7 @@ export default function AmenitiesListsTable() {
             {
               header: "Text",
               key: "text",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: amenity) => <span>{row?.description}</span>,
             },
             {

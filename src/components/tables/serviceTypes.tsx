@@ -103,13 +103,13 @@ export default function ServiceTypeTable() {
             {
               header: "Name",
               key: "name",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: serviceType) => <span>{row?.name}</span>,
             },
             {
               header: "Price",
               key: "price",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: serviceType) => (
                 <span>
                   {" "}
@@ -120,7 +120,7 @@ export default function ServiceTypeTable() {
             {
               header: "Description",
               key: "description",
-              showColumnSort: true,
+              showColumnSort: false,
               render: (row: serviceType) => <span>{row?.description}</span>,
             },
             {
