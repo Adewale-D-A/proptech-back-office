@@ -69,7 +69,7 @@ export default function RateTable() {
           to: to,
           price: rate,
           caution_fee: cautionFee,
-          // free_nights: freeNights
+          free_nights: freeNights,
         });
         dispatch(
           openSnackbar({

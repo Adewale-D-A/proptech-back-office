@@ -139,6 +139,7 @@ import ExpenseCategoriesListView from "./pages/reports/owners/expense-categories
 import BuildingsListView from "./pages/apartments/buildings";
 import AssignApartmentToOwner from "./pages/customers/assign-apartment";
 import CancellationPoliciesView from "./pages/apartments/cancellation-policy";
+import ViewRequisitionRequest from "./pages/requests/requisition-requests/view-requisition-request";
 
 function App() {
   const { show } = useAppSelector((state) => state.snackbar.value);
@@ -442,6 +443,10 @@ function App() {
             <Route
               path="/requests/maintenance-requests/view-maintenance/:id"
               element={<ViewMaintenanceRequest />}
+            />
+            <Route
+              path="/requests/requisition-requests/view-requisition/:id"
+              element={<ViewRequisitionRequest />}
             />
 
             {/* calendar */}

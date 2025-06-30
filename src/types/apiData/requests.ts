@@ -41,3 +41,20 @@ export type requestById = {
   isEscalated: string;
   status: string;
 };
+
+export interface requestLogs {
+  id: number;
+  admin_id: number;
+  maintenance_request_id: number;
+  requisition_request_id: number;
+  message: string;
+  created_at: string;
+  updated_at: string;
+  admin: {
+    id: number;
+    first_name: string;
+    last_name: string;
+    department: string;
+    profile_photo: string;
+  };
+}

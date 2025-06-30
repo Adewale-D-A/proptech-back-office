@@ -124,7 +124,7 @@ export default function OwnersReportSummaryTableList() {
                   key: "expense",
                   showColumnSort: false,
                   render: (row: ownersReport) => (
-                    <span>{row?.expense_category?.name}</span>
+                    <span>{row?.category?.name}</span>
                   ),
                 },
                 {

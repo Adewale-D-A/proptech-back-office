@@ -103,8 +103,8 @@ export interface ownersReport {
   building: locationGrouping;
   shortlet_id: number;
   shortlet: apartment;
-  expense_category_id: number;
-  expense_category: requestCategories;
+  category_id: number;
+  category: requestCategories;
   amount: number;
   currency: string;
   date: string;

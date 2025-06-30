@@ -54,6 +54,8 @@ run **npm start** (start application on port:3000)
 
 [backend main api doc](https://documenter.getpostman.com/view/36930652/2sAXjNXAMk)
 
+[v2 USERS STORY](https://docs.google.com/spreadsheets/d/1BLla_PvrEx2xv8q9yS8gVRLPLNHQncjuxDTvBzFKCCI/edit?usp=sharing)
+
 [FIGMA File](https://www.figma.com/design/foJk9S0rCJImkVXY0EgxId/proptech?node-id=4400-64&node-type=&t=ZI2UUvFyHO0J3pWZ-0)
 
 [Super App + Additions](https://www.figma.com/design/sJXTHB9vabVu6hd3TXH9uk/99-APPs?node-id=396-44772&p=f&t=96dXJsuOSOwwVNLx-0)

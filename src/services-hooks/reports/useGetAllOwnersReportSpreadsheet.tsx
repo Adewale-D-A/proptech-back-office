@@ -55,7 +55,7 @@ export default function useGetAllOwnersReportSpreadsheet({
             : "",
           building_id,
           apartment_id,
-          expense_category_id,
+          category_id: expense_category_id,
         },
       });
       const response = await axios.get(

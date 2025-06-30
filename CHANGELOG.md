@@ -1,3 +1,9 @@
+##### 30.06.2025
+
+> Update: Owner's report category keys updates
+> Update: Requests (maintenance, requisition), request logs addition
+> Update: Requisition requests detailed page
+
 ##### 24.06.2025
 
 > Update: Manual table replacements with table component (completion)

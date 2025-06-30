@@ -18,7 +18,7 @@ import CloseRequest from "../../../../components/infoModal/close-request";
 import CancelIcon from "../../../../assets/icons/cancel";
 import ChatHistory from "../../../../components/chat/chat-history";
 import useGetMaintenanceRequestById from "../../../../services-hooks/useGetMaintenanceRequestById";
-import formatDate from "../../../../utils/isoDateConverter";
+import formatDate, { formatTime } from "../../../../utils/isoDateConverter";
 import EyeIcon from "../../../../assets/icons/eye";
 import ImageViewer from "../../../../components/image-view";
 import { replaceMaintenanceRequestInList } from "../../../../stores/apiData/maintenance-requests";
@@ -163,49 +163,50 @@ export default function ViewMaintenanceRequest() {
   );
 
   return (
-    <section className="w-full flex gap-4 ">
-      <div className="flex-1 px-5 flex flex-col gap-5">
+    <section className="w-full flex flex-col lg:flex-row gap-4 ">
+      <div className="flex-1 flex flex-col gap-5">
         <h2 className="text-[#101828] font-bold text-lg pb-2">
           {data?.shortlet?.name}
         </h2>
         <Status status="Request" />
-        {status?.status?.toLowerCase() === "closed" ? (
-          <ClosedMaintenanceRequest
-            status={String(status?.status || "")}
-            reason={String(status?.reason || "")}
-          />
-        ) : status?.status?.toLowerCase() === "approved" ? (
-          <ApprovedStatus
-            status={String(status?.status || "")}
-            reason={String(status?.reason || "")}
-          />
-        ) : (
-          <div className="py-4 flex gap-3">
-            <LoadingButton
-              label="Convert to Requisition"
-              isLoading={false}
-              type="button"
-              clickHandler={() => setOpenConvertToRequisition(true)}
-              startIcon={<DoubleCheckIcon />}
+        <div className="w-full flex-col lg:flex-row gap-2 lg:gap-5">
+          {status?.status?.toLowerCase() === "closed" ? (
+            <ClosedMaintenanceRequest
+              status={String(status?.status || "")}
+              reason={String(status?.reason || "")}
             />
-            <LoadingButton
-              label="Close request"
-              isLoading={false}
-              type="button"
-              clickHandler={() => setOpenCloseRequest(true)}
-              startIcon={<CheckIcon />}
+          ) : status?.status?.toLowerCase() === "approved" ? (
+            <ApprovedStatus
+              status={String(status?.status || "")}
+              reason={String(status?.reason || "")}
             />
-            <LoadingButton
-              type="button"
-              label="Deny request"
-              variant={3}
-              disabled={false}
-              isLoading={isClosing}
-              clickHandler={() => denyRequest("denied", "Denied")}
-              className=" bg-[#F2F4F7] text-[#344054]"
-              startIcon={<CancelIcon />}
-            />
-            {/* <LoadingButton
+          ) : (
+            <div className="py-4 flex flex-col lg:flex-row gap-3">
+              <LoadingButton
+                label="Convert to Requisition"
+                isLoading={false}
+                type="button"
+                clickHandler={() => setOpenConvertToRequisition(true)}
+                startIcon={<DoubleCheckIcon />}
+              />
+              <LoadingButton
+                label="Close request"
+                isLoading={false}
+                type="button"
+                clickHandler={() => setOpenCloseRequest(true)}
+                startIcon={<CheckIcon />}
+              />
+              <LoadingButton
+                type="button"
+                label="Deny request"
+                variant={3}
+                disabled={false}
+                isLoading={isClosing}
+                clickHandler={() => denyRequest("denied", "Denied")}
+                className=" bg-[#F2F4F7] text-[#344054]"
+                startIcon={<CancelIcon />}
+              />
+              {/* <LoadingButton
             type="button"
             label="Delete"
             variant={3}
@@ -215,10 +216,11 @@ export default function ViewMaintenanceRequest() {
             className=" bg-[#FEF3F2] text-[#B42318]"
             startIcon={<BinIcon />}
           /> */}
-          </div>
-        )}
-        <div className="py-5 flex w-full gap-4">
-          <div className="border border-[#E4E7EC] rounded-[12px] p-4 w-1/2  space-y-7 ">
+            </div>
+          )}
+        </div>
+        <div className="w-full py-5 flex flex-col gap-3 lg:flex-row">
+          <div className="border border-[#E4E7EC] rounded-[12px] p-4 w-full lg:w-1/2  space-y-7 ">
             <div className="flex justify-between items-center">
               <p className=" text-[#667085] text-xs font-normal">Apartment</p>
               <p className="text-[#101828] font-medium text-right text-xs">
@@ -294,7 +296,7 @@ export default function ViewMaintenanceRequest() {
               </div>
             </div>
           </div>
-          <div className="border border-[#E4E7EC] rounded-[12px] p-2.5 w-1/2  ">
+          <div className="border border-[#E4E7EC] rounded-[12px] p-2.5 w-full lg:w-1/2  ">
             <ChatHistory variant={"dm"} />
           </div>
         </div>
@@ -309,10 +311,10 @@ export default function ViewMaintenanceRequest() {
           </div>
 
           <p className=" text-[#98A2B3] font-medium text-xs max-w-[250px]">
-            See all previous repair history in this category
+            See all previous history of this request
           </p>
         </div>
-        <div className="flex gap-3 justify-between">
+        {/* <div className="flex gap-3 justify-between">
           <Select
             isRequired={true}
             value={category}
@@ -335,24 +337,29 @@ export default function ViewMaintenanceRequest() {
           >
             <option value="">All time</option>
           </Select>
-        </div>
-        <p className=" text-[#98A2B3] font-bold text-xs py-3">
+        </div> */}
+        {/* <p className=" text-[#98A2B3] font-bold text-xs py-3">
           This item has been requested <span className="text-[#344054]">0</span>{" "}
           times{" "}
-        </p>
+        </p> */}
         <div className="space-y-3 divide-y pb-10">
-          {[].map((item, index) => (
-            <div key={index} className="flex justify-between pt-3">
-              <div className="space-y-1">
-                <p className="text-[#1D2939] font-semibold text-xs">
-                  Sep 15th, 2024
+          {data?.request_logs?.map((item) => (
+            <div
+              key={item?.id}
+              className="flex justify-between pt-3 border-b py-5 text-sm"
+            >
+              <div className="space-y-1 text-[#1D2939]">
+                <p>
+                  <span className="font-bold">Date: </span>{" "}
+                  {formatDate(item?.created_at)}, {formatTime(item?.created_at)}
                 </p>
-                <p className="text-[#98A2B3] font-normal text-xs">HVAC</p>
-                <p className="text-[#98A2B3] font-normal text-xs">#13,000</p>
-              </div>
-              <div>
-                {" "}
-                <Status status="Paid" />
+                <p>
+                  <span className="font-bold">Action:</span> {item?.message}
+                </p>
+                <p>
+                  <span className="font-bold">Employee:</span>{" "}
+                  {item?.admin?.first_name} {item?.admin?.last_name}
+                </p>
               </div>
             </div>
           ))}
