@@ -54,7 +54,7 @@ export default function useGetAllOwnersReport({
           end_date: end_date,
           building_id,
           shortlet_id,
-          expense_category_id,
+          category_id: expense_category_id,
           limit: limitless ? 1000 : Number(limit),
         };
         const queryKey = JSON.stringify(queryDataset);

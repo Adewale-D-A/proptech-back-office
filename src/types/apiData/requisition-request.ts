@@ -1,4 +1,5 @@
 import { customersById } from "./customers";
+import { requestLogs } from "./requests";
 
 export interface requisitionRequest {
   id: number;
@@ -47,6 +48,7 @@ export interface requisitionRequest {
     created_at: string;
     updated_at: string;
   }[];
+  request_logs: requestLogs[];
 }
 
 export interface requisitionRequestFormMain {

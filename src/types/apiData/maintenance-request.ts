@@ -1,3 +1,4 @@
+import { requestLogs } from "./requests";
 import { roles } from "./roles";
 
 export interface maintenanceRequest {
@@ -70,4 +71,5 @@ export interface maintenanceRequestsById {
     created_at: string;
     updated_at: string;
   }[];
+  request_logs: requestLogs[];
 }

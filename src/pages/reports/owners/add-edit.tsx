@@ -52,7 +52,7 @@ export default function AddEditOwnersReport({
       setBuildingId(String(data?.building_id || ""));
       setAmount(String(data?.amount || ""));
       setApartmentId(String(data?.shortlet_id || ""));
-      setExpenseId(String(data?.expense_category_id || ""));
+      setExpenseId(String(data?.category_id || ""));
       setAdditionalNotes(data?.note || "");
     }
   }, [id, data]);
@@ -64,7 +64,7 @@ export default function AddEditOwnersReport({
       const payload = {
         building_id: buildingId,
         shortlet_id: apartmentId,
-        expense_category_id: expenseId,
+        category_id: expenseId,
         amount: amount,
         date: date,
         note: additionalNotes,
@@ -79,13 +79,12 @@ export default function AddEditOwnersReport({
           const { owner_report } = response?.data?.data;
           const result = {
             ...owner_report,
-            expense_category: {
-              id: owner_report?.expense_category_id,
+            category: {
+              id: owner_report?.category_id,
               name:
                 expenseCategories?.find(
                   (item) =>
-                    String(item?.id) ===
-                    String(owner_report?.expense_category_id)
+                    String(item?.id) === String(owner_report?.category_id)
                 )?.name || "",
             },
           };
@@ -101,13 +100,12 @@ export default function AddEditOwnersReport({
           const { owner_report } = response?.data?.data;
           const result = {
             ...owner_report,
-            expense_category: {
-              id: owner_report?.expense_category_id,
+            category: {
+              id: owner_report?.category_id,
               name:
                 expenseCategories?.find(
                   (item) =>
-                    String(item?.id) ===
-                    String(owner_report?.expense_category_id)
+                    String(item?.id) === String(owner_report?.category_id)
                 )?.name || "",
             },
           };

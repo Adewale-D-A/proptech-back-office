@@ -20,6 +20,8 @@ import useGetResourceAccessChecker from "../../utils/admin/useAccessChecker";
 import Sort from "../filterAndSort/sort";
 import useExtractUrlParams from "../../useHooks/extract-url-query-params";
 import TableTemplate from "./table-template";
+import { Link } from "react-router-dom";
+import { Eye } from "lucide-react";
 // import BinIcon from "../../assets/icons/bin-icon";
 // import DeleteConfirmation from "../infoModal/delete-confirmation";
 // import useAxios from "../../useHooks/useAxios";
@@ -248,6 +250,14 @@ export default function RequisitionRequestTable() {
                       <button title="edit" onClick={() => openForEdit(row)}>
                         <PenIcon />
                       </button>
+                    )}
+                    {requisition_request?.view && (
+                      <Link
+                        to={`/requests/requisition-requests/view-requisition/${row?.id}`}
+                        className=" hover:scale-110 transition-all hover:text-primary"
+                      >
+                        <Eye />
+                      </Link>
                     )}
                     {/* <button
                               title="delete"

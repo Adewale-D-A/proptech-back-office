@@ -47,15 +47,17 @@ export default function ImageCarousel({
   return (
     <div className="w-full relative">
       <div className="w-full h-96 bg-gray-500/30 rounded-md relative">
-        <img
-          src={
-            images?.length > 0
-              ? images[currentImgIndex]?.url
-              : imageArray[currentImgIndex]
-          }
-          alt={"Apartment Image"}
-          className="w-full h-full object-cover rounded-md"
-        />
+        <div className=" w-full h-full overflow-y-auto">
+          <img
+            src={
+              images?.length > 0
+                ? images[currentImgIndex]?.url
+                : imageArray[currentImgIndex]
+            }
+            alt={"Apartment Image"}
+            className="w-full h-auto rounded-md"
+          />
+        </div>
         <div className="w-full flex gap-5 justify-center items-center my-2 absolute bottom-3 left-0">
           {Array.from({ length: images?.length }, (_, index) => {
             return (
