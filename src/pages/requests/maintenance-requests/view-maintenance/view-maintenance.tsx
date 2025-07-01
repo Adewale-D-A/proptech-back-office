@@ -405,7 +405,7 @@ export default function ViewMaintenanceRequest() {
         open={openImage}
         setOpen={setOpenImage}
         showXicon={true}
-        title="View Reqeust Images"
+        title="View Request Image(s)"
         className=" max-w-screen-sm"
       >
         <ImageViewer
