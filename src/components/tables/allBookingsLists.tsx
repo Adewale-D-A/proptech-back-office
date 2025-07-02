@@ -46,7 +46,7 @@ export default function AllBookingsListTable({ header }: { header: string[] }) {
     page: 1,
     size: 20,
     search: "",
-    sort: "asc",
+    sort: "desc",
     channel: "",
     currency: "",
     room_option: "",

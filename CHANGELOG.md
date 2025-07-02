@@ -1,3 +1,8 @@
+##### 02.06.2025
+
+> Bug fix: Bookings overview table keys fix
+> Bug fix: Bookings verified/no verified filter update
+
 ##### 30.06.2025
 
 > Update: Owner's report category keys updates
