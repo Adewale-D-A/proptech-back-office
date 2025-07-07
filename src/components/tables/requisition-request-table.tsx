@@ -22,6 +22,8 @@ import useExtractUrlParams from "../../useHooks/extract-url-query-params";
 import TableTemplate from "./table-template";
 import { Link } from "react-router-dom";
 import { Eye } from "lucide-react";
+import StatusFilter from "../filterAndSort/status-filter";
+import PaidFilter from "../filterAndSort/paid-filter";
 // import BinIcon from "../../assets/icons/bin-icon";
 // import DeleteConfirmation from "../infoModal/delete-confirmation";
 // import useAxios from "../../useHooks/useAxios";
@@ -51,11 +53,13 @@ export default function RequisitionRequestTable() {
     page: 1,
     limit: 1000,
   });
-  const [{ page, size, sort, search }] = useExtractUrlParams({
+  const [{ page, size, sort, search, paid, status }] = useExtractUrlParams({
     page: 1,
     size: 20,
     sort: "desc",
     search: "",
+    paid: "",
+    status: "",
   });
   const { data, isLoading, retryFunction, pagination } =
     useGetRequisitionRequests({
@@ -66,6 +70,8 @@ export default function RequisitionRequestTable() {
       sort,
       category,
       limit: size,
+      paid,
+      status,
     });
   const handleFiltering = useCallback(
     (start_date: string, end_date: string) => {
@@ -111,11 +117,11 @@ export default function RequisitionRequestTable() {
   return (
     <>
       <div className="w-full flex flex-col gap-5">
-        <div className="w-full flex items-center flex-col md:flex-row justify-between gap-3">
+        <div className="w-full flex items-end flex-col md:flex-row justify-between gap-3">
           <div className=" max-w-md">
             <TableSearch placeholder="Search..." />
           </div>
-          <div className=" flex items-center gap-3 flex-col md:flex-row">
+          <div className=" flex items-end gap-3 flex-col md:flex-row">
             <Select
               isRequired={true}
               value={category}
@@ -129,8 +135,12 @@ export default function RequisitionRequestTable() {
                 </option>
               ))}
             </Select>
-            <div className=" min-w-40">
-              <Sort id="sort-by" label="Sort by" defaultValue="desc" />
+            <div className=" flex items-end gap-2 flex-col lg:flex-row">
+              <PaidFilter />
+              <StatusFilter />
+              <div className=" min-w-40">
+                <Sort id="sort-by" label="Sort by" defaultValue="desc" />
+              </div>
             </div>
             <Filter actionHandler={handleFiltering} />
           </div>

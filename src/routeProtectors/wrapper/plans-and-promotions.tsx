@@ -7,10 +7,7 @@ import LoadingButton from "../../components/button";
 import useAxios from "../../useHooks/useAxios";
 import { useAppDispatch } from "../../stores/hooks";
 import { openSnackbar } from "../../stores/appFunctionality/snackbar";
-import {
-  addTaxRateToList,
-  replaceTaxRateInList,
-} from "../../stores/apiData/tax-rate-lists";
+import { replaceTaxRateInList } from "../../stores/apiData/tax-rate-lists";
 import PlusIcon from "../../assets/icons/plus";
 import LinkButton from "../../components/button/linkButton";
 import ModalTemplate from "../../components/modal";

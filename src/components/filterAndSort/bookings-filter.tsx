@@ -79,6 +79,20 @@ export default function BookingsFilterSearch({
     setPayment("");
     setStatus("");
     setDate("");
+    setUserVerification("");
+    let queries: { [key: string]: string } = {};
+    searchParams.forEach((value, key) => {
+      queries[key] = value;
+    });
+    const params = new URLSearchParams(queries);
+    params.set("channel", "");
+    params.set("currency", "");
+    params.set("room_option", "");
+    params.set("payment_method", "");
+    params.set("status", "");
+    params.set("user_verification", "");
+    navigate(location.pathname + "?" + params.toString());
+    setOpen(false);
   }, []);
 
   return (

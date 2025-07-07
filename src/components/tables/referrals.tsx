@@ -14,6 +14,7 @@ import { referalsExportFormater } from "../../utils/export-formerter-functions";
 import useExtractUrlParams from "../../useHooks/extract-url-query-params";
 import TableTemplate from "./table-template";
 import { referrals } from "../../types/apiData/referrals";
+import { Link } from "react-router-dom";
 
 export default function ReferralsTable() {
   const axios = useAxios({ disableErrMssg: false, disableSuccMssg: false });
@@ -137,7 +138,23 @@ export default function ReferralsTable() {
                   <span>{formatDate(row?.created_at)}</span>
                 ),
               },
-
+              {
+                header: "Booking ID",
+                key: "booking_id",
+                render: (row: referrals) => (
+                  <Link
+                    to={`/bookings/booking-details/edit-reservation/${row?.booking_id}`}
+                    className=" rounded-full p-2 border border-primary"
+                  >
+                    {row?.booking_id}
+                  </Link>
+                ),
+              },
+              {
+                header: "Apartment",
+                key: "apartment",
+                render: (row: referrals) => <span>{row?.shortlet?.name}</span>,
+              },
               {
                 header: "Referral Code",
                 key: "referral_code",

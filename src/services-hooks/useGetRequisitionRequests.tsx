@@ -18,6 +18,7 @@ export default function useGetRequisitionRequests({
   category = "",
   paid,
   limit = 20,
+  status,
 }: {
   page?: number;
   start_date?: string;
@@ -25,8 +26,15 @@ export default function useGetRequisitionRequests({
   sort?: "desc" | "asc" | string;
   search?: string;
   category?: string;
-  paid?: "yes" | "no" | "";
+  paid?: "yes" | "no" | string;
   limit?: number;
+  status?:
+    | "pending"
+    | "approved"
+    | "processing"
+    | "closed"
+    | "declined"
+    | string;
 }) {
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });
   const dispatch = useAppDispatch();
@@ -48,6 +56,7 @@ export default function useGetRequisitionRequests({
           start_date: start_date,
           end_date: end_date,
           sort,
+          status,
           search: search,
           category_id: category,
           paid,
@@ -98,12 +107,12 @@ export default function useGetRequisitionRequests({
         setIsLoading(false);
       }
     },
-    [page, start_date, end_date, sort, search, category, paid, limit]
+    [page, start_date, end_date, sort, search, category, paid, limit, status]
   );
 
   useEffect(() => {
     getAllRequisitionRequests();
-  }, [page, start_date, end_date, sort, search, category, paid, limit]);
+  }, [page, start_date, end_date, sort, search, category, paid, limit, status]);
 
   return {
     data,

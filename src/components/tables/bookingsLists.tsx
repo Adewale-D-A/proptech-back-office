@@ -60,7 +60,7 @@ export default function BookingsListTable({
         columns={[
           {
             header: "ID",
-            key: "name",
+            key: "id",
             showColumnSort: false,
             render: (row: reservations) => (
               <Link
@@ -73,7 +73,7 @@ export default function BookingsListTable({
           },
           {
             header: "Customer Name",
-            key: "name",
+            key: "customer_name",
             showColumnSort: false,
             render: (row: reservations) => (
               <span>
@@ -83,13 +83,13 @@ export default function BookingsListTable({
           },
           {
             header: "Rooms",
-            key: "name",
+            key: "rooms",
             showColumnSort: false,
             render: (row: reservations) => <span>{row?.shortlet?.name}</span>,
           },
           {
             header: type === "departing" ? "Check-out" : "Check-in",
-            key: "name",
+            key: "check_in_out",
             showColumnSort: false,
             render: (row: reservations) => (
               <span>
@@ -101,7 +101,7 @@ export default function BookingsListTable({
           },
           {
             header: variant === "action" ? "Action" : "Status",
-            key: "name",
+            key: "action",
             showColumnSort: false,
             render:
               variant === "action"

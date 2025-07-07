@@ -13,6 +13,8 @@ import NoResult from "../../../components/noResult";
 import LinkButton from "../../../components/button/linkButton";
 import WriteIcon from "../../../assets/icons/write";
 import { openSnackbar } from "../../../stores/appFunctionality/snackbar";
+import TextAreaInput from "../../../components/inputs/textArea";
+import purgeEmptyPayload from "../../../utils/remove-empty-payload";
 
 const breadCrumb = [
   {
@@ -47,6 +49,7 @@ export default function CustomerDetail() {
     );
   }, [isLoading, isFailed, setIsFailed, retryFunction]);
   const [approvalStatus, setApprovalStatus] = useState("approved");
+  const [rejectionReason, setRejectionReason] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const verifyIdentity = useCallback(
@@ -54,9 +57,17 @@ export default function CustomerDetail() {
       e.preventDefault();
       try {
         setSubmitting(true);
-        await axios.put(`/admin/user/verify-identity/${id}`, {
+        const payload = {
           status: approvalStatus, // approved or rejected
-        });
+          rejection_reason: rejectionReason,
+        } as {
+          status: string;
+          rejection_reason?: string;
+        };
+        if (approvalStatus === "approved") {
+          delete payload.rejection_reason;
+        }
+        await axios.put(`/admin/user/verify-identity/${id}`, payload);
         dispatch(
           openSnackbar({
             message: "Customer identity successfully verified",
@@ -68,7 +79,7 @@ export default function CustomerDetail() {
         setSubmitting(false);
       }
     },
-    [id, approvalStatus]
+    [id, approvalStatus, rejectionReason]
   );
 
   return (
@@ -163,6 +174,16 @@ export default function CustomerDetail() {
                     <option value="approved">Approve</option>
                     <option value="rejected">Reject</option>
                   </Select>
+                  {approvalStatus === "rejected" && (
+                    <TextAreaInput
+                      value={rejectionReason}
+                      setValue={setRejectionReason}
+                      id="rejection-reason"
+                      label="Reason for rejection"
+                      isRequired={true}
+                      placeholder="Reason for rejecting ID"
+                    />
+                  )}
                   <div className=" w-fit">
                     <LoadingButton
                       type="submit"

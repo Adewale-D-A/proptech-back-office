@@ -11,6 +11,7 @@ export type coupons = {
   applicable_shortlets: { id: string; name: string }[];
   applicable_users: { id: string; name: string }[];
   price: number;
+  allows_stacking: boolean;
   percentage: number;
   currency: string;
   minimum_amount: number;
