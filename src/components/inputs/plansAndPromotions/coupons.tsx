@@ -18,6 +18,7 @@ import {
   clearRemovableIdStore,
   clearRemovableIdStore2,
 } from "../../../stores/inAppDataInterations/addEditApartmentInfo";
+import Switch from "../../switch";
 
 export default function AddNewCoupon({
   setOpen,
@@ -55,7 +56,7 @@ export default function AddNewCoupon({
   const [percentage, setPercentage] = useState("");
   const [minAmount, setMinAmount] = useState("");
   const [maxAmount, setMaxAmount] = useState("");
-
+  const [allowStacking, setAllowStacking] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // populate data authomatically
@@ -74,6 +75,7 @@ export default function AddNewCoupon({
         percentage,
         minimum_amount,
         maximum_amount,
+        allows_stacking,
       } = data;
       const startDateValue = formatDateToString(new Date(start_date));
       const endDateValue = formatDateToString(new Date(end_date));
@@ -90,6 +92,7 @@ export default function AddNewCoupon({
       setPercentage(String(percentage || ""));
       setMinAmount(String(minimum_amount || ""));
       setMaxAmount(String(maximum_amount || ""));
+      setAllowStacking(Boolean(allows_stacking));
     }
   }, [id, data]);
 
@@ -124,6 +127,7 @@ export default function AddNewCoupon({
         maximum_amount: maxAmount,
         remove_shortlets: removedAptIdSet,
         remove_users: removedUsersIdSet,
+        allows_stacking: allowStacking,
       };
 
       // conditionally filter payload based on the coupon parameters
@@ -201,6 +205,7 @@ export default function AddNewCoupon({
     [
       id,
       code,
+      allowStacking,
       startDate,
       endDate,
       apartmentApplicability,
@@ -317,6 +322,15 @@ export default function AddNewCoupon({
             defaultValues={data?.applicable_users}
           />
         )}
+
+        <div className=" w-full flex items-center gap-3">
+          <h6 className=" text-lg">Allow stacking</h6>
+          <Switch
+            id="allow-stacking"
+            value={allowStacking}
+            setValue={setAllowStacking}
+          />
+        </div>
         <div className=" grid grid-cols-1  md:grid-cols-2 gap-3">
           {/* type */}
           <Select

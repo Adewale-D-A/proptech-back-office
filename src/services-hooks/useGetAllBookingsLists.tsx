@@ -125,7 +125,6 @@ export default function useGetAllBookingsLists({
   );
 
   useEffect(() => {
-    console.log("got here");
     getAllBookingstList();
   }, [
     page,

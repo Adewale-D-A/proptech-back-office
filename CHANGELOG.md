@@ -1,4 +1,11 @@
-##### 02.06.2025
+##### 07.07.2025
+
+> Feature: Referral rate setting addition
+> Update: Referral table booking and apartment columns added
+> Update: Coupon 'allow tracking' feature added
+> Update: Filter requisition by paid and statuses added
+
+##### 02.07.2025
 
 > Bug fix: Bookings overview table keys fix
 > Bug fix: Bookings verified/no verified filter update
