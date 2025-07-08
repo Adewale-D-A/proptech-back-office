@@ -23,7 +23,7 @@ export default function PackagesAndOffers() {
     dispatch(
       updatePageProperties({
         breadCrumb,
-        pageTitle: "Packagegs & Offers",
+        pageTitle: "Packages & Offers",
         pageDescription: "Packages and offers",
         isLoading: false,
         failedToLoad: false,
