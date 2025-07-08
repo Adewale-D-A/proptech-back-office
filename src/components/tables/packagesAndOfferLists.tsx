@@ -95,7 +95,7 @@ export default function PackagesAndOfferList({ header }: { header: string[] }) {
               key: "to_date",
               showColumnSort: false,
               render: (row: packagesAndOffers) => (
-                <span>{formatDate(row?.start_date)}</span>
+                <span>{formatDate(row?.end_date)}</span>
               ),
             },
             {
