@@ -295,7 +295,7 @@ export default function AddNewPackageAndOffer() {
                 setValue={setValidityEndDate}
                 id="validity-end-date"
                 placeholder="Validity End Date"
-                label="Check-in Date"
+                label="Check-out Date"
                 readonly={Boolean(id)}
               />
               {/* <CheckboxInput
