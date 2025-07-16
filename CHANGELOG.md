@@ -1,6 +1,6 @@
 ##### 16.07.2025
 
-> Fetaure: Discount codes options for bookings and apartment rate calculations
+> Feature: Discount codes options for bookings and apartment rate calculations
 
 ##### 07.07.2025
 
