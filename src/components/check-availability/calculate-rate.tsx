@@ -3,6 +3,8 @@ import LoadingButton from "../button";
 import DateInput from "../inputs/dateInput";
 import useAxios from "../../useHooks/useAxios";
 import TimeInput from "../inputs/timeInput";
+import TextInput from "../inputs/textInput";
+import currencyFormat from "../../utils/currency-formatter";
 
 export default function CalculateRate({
   apartmentId,
@@ -16,6 +18,7 @@ export default function CalculateRate({
   const [checkinTime, setCheckinTime] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [checkoutTime, setCheckoutTime] = useState("");
+  const [discountCode, setDiscountCode] = useState("");
 
   const [calculating, setCalculating] = useState(false);
   const [rateResult, setRateResult] = useState<{
@@ -41,6 +44,7 @@ export default function CalculateRate({
             // shortlet_id: apartmentId,
             check_in_day: checkInDate,
             check_out_day: checkOutDate,
+            discount_code: discountCode,
             // check_in_time: checkinTime,
             // check_out_time: checkoutTime,
           }
@@ -52,7 +56,14 @@ export default function CalculateRate({
         setCalculating(false);
       }
     },
-    [apartmentId, checkInDate, checkOutDate, checkinTime, checkoutTime]
+    [
+      apartmentId,
+      checkInDate,
+      discountCode,
+      checkOutDate,
+      checkinTime,
+      checkoutTime,
+    ]
   );
 
   return (
@@ -60,16 +71,16 @@ export default function CalculateRate({
       {rateResult?.base_cost ? (
         <div className="w-full flex flex-col gap-3">
           <span>
-            <b>Cost: </b> {rateResult?.base_cost}
+            <b>Cost: </b> {currencyFormat(rateResult?.base_cost)}
           </span>
           <span>
-            <b>Caution Fee: </b> {rateResult?.caution_fee}
+            <b>Caution Fee: </b> {currencyFormat(rateResult?.caution_fee)}
           </span>
           <span>
-            <b>Tax Fee: </b> {rateResult?.tax_fee}
+            <b>Tax Fee: </b> {currencyFormat(rateResult?.tax_fee)}
           </span>
           <span className=" font-semibold text-lg">
-            <b>TOTAL: </b> {rateResult?.total_cost}
+            <b>TOTAL: </b> {currencyFormat(rateResult?.total_cost)}
           </span>
           <LoadingButton
             type="button"
@@ -120,6 +131,14 @@ export default function CalculateRate({
               id="check-out-time"
               placeholder="Check-out Time"
               label="Check-out Time"
+            />
+            <TextInput
+              inputType="text"
+              isRequired={false}
+              value={discountCode}
+              setValue={setDiscountCode}
+              id="discount-code"
+              placeholder="Discount Code"
             />
           </div>
           <LoadingButton

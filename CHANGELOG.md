@@ -1,3 +1,7 @@
+##### 16.07.2025
+
+> Feature: Discount codes options for bookings and apartment rate calculations
+
 ##### 07.07.2025
 
 > Feature: Referral rate setting addition
