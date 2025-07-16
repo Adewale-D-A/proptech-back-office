@@ -67,6 +67,7 @@ export default function QuickReservationFlow({
   const { data } = useAppSelector((state) => state.assignCustomer.value);
   const [apartment, setApartment] = useState<apartmentById>({} as any);
   const [checkInDate, setCheckInDate] = useState("");
+  const [discountCode, setDiscountCode] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [checkInTime, setCheckInTime] = useState("");
   const [checkOutTime, setCheckOutTime] = useState("");
@@ -160,6 +161,7 @@ export default function QuickReservationFlow({
           check_in_time: checkInTime,
           check_out_time: checkOutTime,
           number_of_guests: guestNo,
+          discount_code: discountCode,
           // "custom_rate" : {
           //     "booking_cost" : 50000,
           //     "tax_fee" : 5000,
@@ -221,6 +223,7 @@ export default function QuickReservationFlow({
     [
       apartment_id,
       apartment,
+      discountCode,
       apartment_info,
       checkInDate,
       checkOutDate,
@@ -406,6 +409,14 @@ export default function QuickReservationFlow({
             >
               <option value="">Select Custom Rate</option>
             </Select> */}
+            <TextInput
+              inputType="text"
+              isRequired={false}
+              value={discountCode}
+              setValue={setDiscountCode}
+              id="discount-code"
+              placeholder="Discount Code"
+            />
             <TextInput
               inputType="email"
               isRequired={true}
