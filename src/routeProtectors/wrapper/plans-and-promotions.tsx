@@ -41,20 +41,20 @@ export default function PlansAndPromotionsTabWrapper() {
     //   label: "Types of Prices",
     //   url: "/plans-and-promotions/types-of-prices",
     // },
-    {
-      id: 3,
-      icon: <PercentageBadgeIcon />,
-      label: "Coupons",
-      url: "/plans-and-promotions/coupons",
-      hide: !coupon?.view,
-    },
-    {
-      id: 4,
-      icon: <GiftIcon />,
-      label: "Package & Offers",
-      url: "/plans-and-promotions/packages-and-offers",
-      hide: !offer?.view,
-    },
+    // {
+    //   id: 3,
+    //   icon: <PercentageBadgeIcon />,
+    //   label: "Coupons",
+    //   url: "/plans-and-promotions/coupons",
+    //   hide: !coupon?.view,
+    // },
+    // {
+    //   id: 4,
+    //   icon: <GiftIcon />,
+    //   label: "Package & Offers",
+    //   url: "/plans-and-promotions/packages-and-offers",
+    //   hide: !offer?.view,
+    // },
   ];
   const location = useLocation();
   const axios = useAxios({ disableSuccMssg: false, disableErrMssg: false });

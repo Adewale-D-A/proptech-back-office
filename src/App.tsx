@@ -33,7 +33,7 @@ import EditCustomerVerifiationPage from "./pages/customers/edit-customer/custome
 import EditCustomerCompanyPage from "./pages/customers/edit-customer/customer-company";
 import EditCustomerSalesChannelPage from "./pages/customers/edit-customer/customer-sales-channels";
 import AddNewInvoice from "./pages/invoices/add-invoice";
-import AddNewPackageAndOffer from "./pages/plans-and-promotions/package-and-offers/add-new-package-and-offer";
+import AddNewPackageAndOffer from "./pages/pricing/package-and-offers/add-new-package-and-offer";
 import AdditionalServiceDetailsById from "./pages/additional-services/99apartment-services/service-details";
 import VendorServiceDetailsById from "./pages/additional-services/vendor-services/vendor-details";
 import NewBookings from "./pages/bookings/new-booking";
@@ -83,10 +83,10 @@ import NewPricingRestrictions from "./pages/pricing/pricing-restriction";
 // PACKAGES AND OFFERS
 import PlansAndPromotionsTabWrapper from "./routeProtectors/wrapper/plans-and-promotions";
 
-import TaxRates from "./pages/plans-and-promotions/tax-rates";
+import TaxRates from "./pages/pricing/tax-rates";
 import PricesTypes from "./pages/plans-and-promotions/price-types";
-import Coupons from "./pages/plans-and-promotions/coupons";
-import PackagesAndOffers from "./pages/plans-and-promotions/package-and-offers";
+import Coupons from "./pages/pricing/coupons";
+import PackagesAndOffers from "./pages/pricing/package-and-offers";
 
 // CHAT MODULE
 import ChatsTabWrapper from "./routeProtectors/wrapper/chat";
@@ -378,6 +378,12 @@ function App() {
                 path="/pricing/restrictions"
                 element={<NewPricingRestrictions />}
               />
+              <Route path="/pricing/tax-rates" element={<TaxRates />} />
+              <Route path="/pricing/coupons" element={<Coupons />} />
+              <Route
+                path="/pricing/packages-and-offers"
+                element={<PackagesAndOffers />}
+              />
             </Route>
 
             <Route
@@ -396,33 +402,21 @@ function App() {
               path="/pricing/edit-restriction/:id"
               element={<EditRestriction />}
             />
+            <Route
+              path="/pricing/package-and-offer/add-new-package-and-offer"
+              element={<AddNewPackageAndOffer />}
+            />
+            <Route
+              path="/pricing/package-and-offer/edit-new-package-and-offer/:id"
+              element={<AddNewPackageAndOffer />}
+            />
             {/* plans and promotions flows wrapper */}
             <Route element={<PlansAndPromotionsTabWrapper />}>
-              <Route
-                path="/plans-and-promotions/tax-rates"
-                element={<TaxRates />}
-              />
               <Route
                 path="/plans-and-promotions/types-of-prices"
                 element={<PricesTypes />}
               />
-              <Route
-                path="/plans-and-promotions/coupons"
-                element={<Coupons />}
-              />
-              <Route
-                path="/plans-and-promotions/packages-and-offers"
-                element={<PackagesAndOffers />}
-              />
             </Route>
-            <Route
-              path="/plans-and-promotions/package-and-offer/add-new-package-and-offer"
-              element={<AddNewPackageAndOffer />}
-            />
-            <Route
-              path="/plans-and-promotions/package-and-offer/edit-new-package-and-offer/:id"
-              element={<AddNewPackageAndOffer />}
-            />
             {/* requests */}
             <Route element={<RequestsTabWrapper />}>
               <Route

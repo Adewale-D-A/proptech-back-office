@@ -1,5 +1,6 @@
 ##### 16.07.2025
 
+> Feature: Plans and promotions items moved to pricing module
 > Feature: Discount codes options for bookings and apartment rate calculations
 
 ##### 07.07.2025
