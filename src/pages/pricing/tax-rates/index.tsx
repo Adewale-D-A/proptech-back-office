@@ -6,8 +6,8 @@ import TaxRateLists from "../../../components/tables/taxRateLists";
 
 const breadCrumb = [
   {
-    url: "#",
-    label: "Plans & Promotions",
+    url: "/pricing/tax-rates",
+    label: "Pricing",
     icon: <PercentageBadgeIcon />,
   },
   {

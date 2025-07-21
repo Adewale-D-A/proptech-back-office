@@ -7,8 +7,8 @@ import CouponList from "../../../components/tables/couponsLists";
 
 const breadCrumb = [
   {
-    url: "#",
-    label: "Plans & Promotions",
+    url: "/pricing/coupons",
+    label: "Pricing",
     icon: <PercentageBadgeIcon />,
   },
   {
@@ -37,19 +37,17 @@ export default function Coupons() {
   return (
     <section className="w-full flex flex-col items-center my-5">
       <div className="w-full max-w-screen-xl flex flex-col gap-10">
-        <div>
-          <CouponList
-            header={[
-              "Coupon Code",
-              "Coupon Type",
-              "Validity Dates",
-              "Number of Apartments",
-              "Number of Users",
-              "Validity",
-              "Action",
-            ]}
-          />
-        </div>
+        <CouponList
+          header={[
+            "Coupon Code",
+            "Coupon Type",
+            "Validity Dates",
+            "Number of Apartments",
+            "Number of Users",
+            "Validity",
+            "Action",
+          ]}
+        />
       </div>
     </section>
   );

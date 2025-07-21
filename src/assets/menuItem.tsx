@@ -302,7 +302,13 @@ export default function NavigationMenuItems() {
           url: "/pricing/overview",
           label: "Pricing",
           value: "pricing",
-          show: rateList?.view || specialPricing?.view || restriction?.view,
+          show:
+            rateList?.view ||
+            specialPricing?.view ||
+            restriction?.view ||
+            coupon?.view ||
+            offer?.view ||
+            tax?.view,
           icon: <ReceiptIcon />,
           hasSubMenu: false,
           subMenu: [
@@ -316,25 +322,25 @@ export default function NavigationMenuItems() {
             },
           ],
         },
-        {
-          id: 7,
-          url: "/plans-and-promotions/tax-rates",
-          label: "Plans & Promotions",
-          value: "plans-and-promotions",
-          show: tax?.view || coupon?.view || offer?.view,
-          icon: <PercentageIcon />,
-          hasSubMenu: false,
-          subMenu: [
-            {
-              url: "#",
-              label: "",
-              value: "",
-              show: true,
-              icon: "",
-              id: 1.1,
-            },
-          ],
-        },
+        // {
+        //   id: 7,
+        //   url: "/plans-and-promotions/types-of-prices",
+        //   label: "Plans & Promotions",
+        //   value: "plans-and-promotions",
+        //   show: tax?.view || coupon?.view || offer?.view,
+        //   icon: <PercentageIcon />,
+        //   hasSubMenu: false,
+        //   subMenu: [
+        //     {
+        //       url: "#",
+        //       label: "",
+        //       value: "",
+        //       show: true,
+        //       icon: "",
+        //       id: 1.1,
+        //     },
+        //   ],
+        // },
         {
           id: 15,
           url: "/requests/maintenance-requests",

@@ -32,7 +32,7 @@ import LinkButton from "../../../../components/button/linkButton";
 
 const breadCrumb = [
   {
-    url: "/plans-and-promotions/packages-and-offers",
+    url: "/pricing/packages-and-offers",
     label: "Plans & Promotions",
     icon: <PercentageBadgeIcon />,
   },
@@ -143,7 +143,7 @@ export default function AddNewPackageAndOffer() {
   }, [data]);
 
   // const saveAndClose = useCallback(() => {
-  //   navigate("/plans-and-promotions/packages-and-offers");
+  //   navigate("/pricing/packages-and-offers");
   // }, []);
 
   const handleSubmit = useCallback(
@@ -203,7 +203,7 @@ export default function AddNewPackageAndOffer() {
           })
         );
         dispatch(clearRemovableIdStore());
-        navigate("/plans-and-promotions/packages-and-offers");
+        navigate("/pricing/packages-and-offers");
       } catch (error) {
       } finally {
         setIsSubmitting(false);
@@ -246,7 +246,7 @@ export default function AddNewPackageAndOffer() {
               clickHandler={() => saveAndClose()}
             /> */}
             <LinkButton
-              url="/plans-and-promotions/packages-and-offers"
+              url="/pricing/packages-and-offers"
               label="Close"
               variant={2}
             />
