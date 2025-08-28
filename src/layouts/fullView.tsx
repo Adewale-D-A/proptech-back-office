@@ -57,9 +57,6 @@ function FullMenuView() {
                   className="w-full h-auto"
                 />
               </Link>
-              <div className={`text-center ${fullView ? "block" : "hidden"}`}>
-                <h5 className=" font-extrabold text-xl">99Apartments</h5>
-              </div>
             </div>
 
             {fullView && (
