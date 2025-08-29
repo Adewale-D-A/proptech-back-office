@@ -33,11 +33,11 @@ th {
 }
 
 .toggle-input:checked + .slider {
-  background-color: #2e4393;
+  background-color: #8f7f65;
 }
 
 .toggle-input:focus + .slider {
-  box-shadow: 0 0 1px #2e4393;
+  box-shadow: 0 0 1px #8f7f65;
 }
 
 .toggle-input:checked + .slider:before {
@@ -86,7 +86,7 @@ th {
 }
 thead > tr{
   text-align: left;
-  background-color: rgb(46, 67, 147, 0.9);
+  background-color: #8f7f65;
   color: white;
   text-align: left;
 }
@@ -96,5 +96,5 @@ tbody > tr > td{
 }
 
 tbody > tr:nth-child(even){
-  background-color: rgb(46, 67, 147, 0.1)
+  background-color: rgba(46, 67, 147, 0.1)
 }

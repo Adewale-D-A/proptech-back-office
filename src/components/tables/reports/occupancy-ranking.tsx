@@ -270,7 +270,7 @@ export default function OccupancyRankingReportTable() {
                         {
                           label: "Occupancy Ranking",
                           data: data.map((item) => item?.occupancy_rate),
-                          backgroundColor: "#2E4393",
+                          backgroundColor: "#8f7f65",
                           indexAxis: "x",
                           borderRadius: 50,
                         },

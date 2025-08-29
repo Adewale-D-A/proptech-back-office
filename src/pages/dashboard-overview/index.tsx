@@ -171,7 +171,7 @@ export default function DashboardOverview() {
                       {
                         label: "Sales Analytics",
                         data: stats,
-                        backgroundColor: "#2E4393",
+                        backgroundColor: "#8f7f65",
                         indexAxis: "x",
                         borderRadius: 50,
                       },
@@ -202,7 +202,7 @@ export default function DashboardOverview() {
                     {
                       label: "Top Countries",
                       data: [582, 482, 402, 350, 350],
-                      backgroundColor: "#2E4393",
+                      backgroundColor: "#8f7f65",
                       indexAxis: "y",
                       borderRadius: 50,
                     },
@@ -230,7 +230,7 @@ export default function DashboardOverview() {
                         {
                           label: "",
                           data: pieChart.map((item) => item?.percentage) || [0],
-                          backgroundColor: ["#FFA500", "#2E4393"],
+                          backgroundColor: ["#FFA500", "#8f7f65"],
                         },
                       ],
                     }}

@@ -189,7 +189,7 @@ export default function BookingsOverview() {
                   {
                     label: "Weekly Bookings",
                     data: weekly_booking?.map((item) => item?.count),
-                    backgroundColor: "#2E4393",
+                    backgroundColor: "#8f7f65",
                     indexAxis: "x",
                     borderRadius: 50,
                   },
