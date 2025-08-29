@@ -286,7 +286,7 @@ export default function DashboardOverview() {
       ) : (
         <div className=" w-full px-5 flex items-center justify-center bg-primary/15 rounded-lg h-[calc(100vh-300px)]">
           <h1 className=" text-2xl md:text-5xl text-center font-semibold text-gray-400 italic">
-            Welcome to 99Apartment Admin
+            Welcome to The Spotlagos Admin
           </h1>
         </div>
       )}
